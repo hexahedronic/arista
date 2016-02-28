@@ -1,0 +1,2 @@
+-- arista: RolePlay FrameWork --
+arista = {}

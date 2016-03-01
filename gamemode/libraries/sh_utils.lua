@@ -50,6 +50,7 @@ do
 		number = "Int",
 		string = "String",
 		boolean = "Bool",
+		Player = "Entity",
 	}
 
 	function arista.utils.typeToNet(var)

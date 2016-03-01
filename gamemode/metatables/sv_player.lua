@@ -1,5 +1,11 @@
 local player = FindMetaTable("Player")
 
+function player:databaseAristaVar(var)
+	self._databaseVars = self._databaseVars or {}
+
+	self._databaseVars[var] = self:getAristaVar(var)
+end
+
 ---
 -- Load a player's data from the SQL database, overwriting any data already loaded on the player. Performs it's actions in a threaded query.
 -- If the player's data has not been loaded after 30 seconds, it will call itself again
@@ -31,13 +37,14 @@ function player:isArrested()
 end
 
 function player:isUnconscious()
+	return self:getAristaVar("unconscious")
 end
 
 function player:isTied()
 end
 
 function player:getRagdoll()
-	return self._ragdoll
+	return self.ragdoll and self.ragdoll.entity
 end
 
 -- Maybe?
@@ -46,7 +53,7 @@ end
 end]]
 
 function player:isStuck()
-	return player:getAristaVar("stuckInWorld")
+	return self:getAristaVar("stuckInWorld")
 end
 
 function player:useDisallowed()
@@ -61,27 +68,27 @@ end
 -- Give a player access to a the flag(s) specified
 -- @param flaglist A list of flags with no spaces or delimiters
 function player:giveAccess(flaglist)
-	--[[local flag,access;
-	access = self.cider._Access;
+	--[[local flag,access
+	access = self.cider._Access
 	for i = 1, flaglist:len() do
-		flag = flaglist:sub(i,i);
+		flag = flaglist:sub(i,i)
 		if (not access:find(flag)) then
-			access = access .. flag;
+			access = access .. flag
 		end
 	end
-	self.cider._Access = access;]]
+	self.cider._Access = access]]
 end
 
 ---
 -- Take away away a player's access to the flag(s) specified
 -- @param flaglist A list of flags with no spaces or delimiters
 function player:takeAccess(flaglist)
-	--[[local access;
-	access = self.cider._Access;
+	--[[local access
+	access = self.cider._Access
 	for i = 1, flaglist:len() do
-		access = access:gsub(flaglist:sub(i,i), "");
+		access = access:gsub(flaglist:sub(i,i), "")
 	end
-	self.cider._Access = access;]]
+	self.cider._Access = access]]
 end
 
 ---
@@ -92,18 +99,18 @@ end
 -- @param reason Why they have been blacklisted.
 -- @param blacklister Who blacklisted them. Preferably a string (the name), can also take a player.
 function player:blacklist(kind, thing, time, reason, blacklister)
-	--[[local blacklist;
+	--[[local blacklist
 	if (type(blacklister) == "Player") then
-		blacklister = blacklister:Name();
+		blacklister = blacklister:Name()
 	end
-	blacklist = self.cider._Blacklist[kind];
-	blacklist = blacklist or {};
+	blacklist = self.cider._Blacklist[kind]
+	blacklist = blacklist or {}
 	blacklist[thing] = {
 		time = os.time() + time * 60,
 		reason = reason,
 		admin = blacklister
 	}
-	self.cider._Blacklist[kind] = blacklist;]]
+	self.cider._Blacklist[kind] = blacklist]]
 end
 
 ---
@@ -111,14 +118,14 @@ end
 -- @param kind What kind of activity. Can be one of "cat","item","cmd" or "team". In order: Item category, specific item, command or specific team/job.
 -- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
 function player:removeBlacklist(kind, thing)
-	--[[local blacklist;
-	blacklist = self.cider._Blacklist[kind];
+	--[[local blacklist
+	blacklist = self.cider._Blacklist[kind]
 	if (blacklist) then
-		blacklist[thing] = nil;
+		blacklist[thing] = nil
 		if (table.Count(blacklist) == 0) then
-			blacklist = nil;
+			blacklist = nil
 		end
-		self.cider._Blacklist[kind] = blacklist;
+		self.cider._Blacklist[kind] = blacklist
 	end]]
 end
 
@@ -129,15 +136,15 @@ end
 -- @param unsellable If the player should be prevented from selling this door.
 function player:giveDoor(door, name, unsellable)
 	--[[if (not (cider.entity.isDoor(door) and cider.entity.isOwnable(door))) then
-		return;
+		return
 	end
-	door._Unsellable = unsellable;
-	cider.entity.setOwnerPlayer(door, self);
+	door._Unsellable = unsellable
+	cider.entity.setOwnerPlayer(door, self)
 	if (name and name ~= "") then
-		cider.entity.setName(door, name);
+		cider.entity.setName(door, name)
 	end
-	door:UnLock();
-	door:EmitSound("doors/door_latch3.wav");
+	door:UnLock()
+	door:EmitSound("doors/door_latch3.wav")
 	self:AddCount("doors",door)]]
 end
 
@@ -147,17 +154,17 @@ end
 -- @param norefund If true, do not give the player a refund
 function player:takeDoor(door, norefund)
 	--[[if (not cider.entity.isDoor(door) or cider.entity.getOwner(door) ~= self) then
-		return;
+		return
 	end
 	-- Unlock the door so that people can use it again and play the door latch sound.
 	door:UnLock()
-	door:EmitSound("doors/door_latch3.wav");
+	door:EmitSound("doors/door_latch3.wav")
 	-- Remove our access to it
 	cider.entity.takeAccessPlayer(door,self)
 	self:TakeCount("doors", door)
 	-- Give the player a refund for the door if we're not forcing it to be taken.
 	if (not norefund) then
-		self:GiveMoney(GM.Config["Door Cost"] / 2);
+		self:GiveMoney(GM.Config["Door Cost"] / 2)
 	end]]
 end
 
@@ -175,49 +182,49 @@ do
 	-- @param tojoin What team to join
 	-- @return success or failure, failure message.
 	function player:joinTeam(tojoin)
-		--[[local oldteam;
-		tojoin = cider.team.get(tojoin);
+		--[[local oldteam
+		tojoin = cider.team.get(tojoin)
 		if (not tojoin) then
-			return false, "That is not a valid team!";
+			return false, "That is not a valid team!"
 		elseif (self:Blacklisted("team",tojoin.index) > 0) then
-			self:BlacklistAlert("team", tojoin.index, tojoin.name);
-			return false;
+			self:BlacklistAlert("team", tojoin.index, tojoin.name)
+			return false
 		end
-		timer.Violate(self:UniqueID().." holster");
-		oldteam = self:Team();
-		GM:Log(EVENT_TEAM, "%s changed team from %q to %q.", self:Name(), cider.team.query(oldteam, "name", "Unconnected / Joining"), tojoin.name);
-		self._NextChangeTeam[oldteam] = CurTime() + cider.team.query(oldteam, "waiting", 300); -- Make it so we can't join our old team for x seconds (default 5 mins)
-		self:SetTeam(tojoin.index);
-		self._Job = tojoin.name;
-		self:SetNWString("Job", self._Job);
+		timer.Violate(self:UniqueID().." holster")
+		oldteam = self:Team()
+		GM:Log(EVENT_TEAM, "%s changed team from %q to %q.", self:Name(), cider.team.query(oldteam, "name", "Unconnected / Joining"), tojoin.name)
+		self._NextChangeTeam[oldteam] = CurTime() + cider.team.query(oldteam, "waiting", 300) -- Make it so we can't join our old team for x seconds (default 5 mins)
+		self:SetTeam(tojoin.index)
+		self._Job = tojoin.name
+		self:SetNWString("Job", self._Job)
 		if ((self._JobTimeExpire or 0) > CurTime()) then
-			self._JobTimeExpire = 0;
-			self._JobTimeLimit = 0;
-			timer.Stop("Job Timelimit: "..self:UniqueID());
+			self._JobTimeExpire = 0
+			self._JobTimeLimit = 0
+			timer.Stop("Job Timelimit: "..self:UniqueID())
 		end if (tojoin.timelimit != 0) then
-			self._JobTimeExpire = tojoin.timelimit + CurTime();
-			self._JobTimeLimit = tojoin.timelimit;
-			timer.Create("Job Timelimit: "..self:UniqueID(), tojoin.timelimit, 1, jobtimer, self);
+			self._JobTimeExpire = tojoin.timelimit + CurTime()
+			self._JobTimeLimit = tojoin.timelimit
+			timer.Create("Job Timelimit: "..self:UniqueID(), tojoin.timelimit, 1, jobtimer, self)
 		end
 		-- Change our salary.
-		self._Salary = tojoin.salary;
-		gamemode.Call("PlayerAdjustSalary", self);
+		self._Salary = tojoin.salary
+		gamemode.Call("PlayerAdjustSalary", self)
 
 		-- Tell the client they can't join this team again.
-		umsg.Start("TeamChange", self);
-		umsg.Char(oldteam);
-		umsg.End();
+		umsg.Start("TeamChange", self)
+		umsg.Char(oldteam)
+		umsg.End()
 
 		-- Some tidying up
 		-- Unwarrant the player.
-		self:UnWarrant();
+		self:UnWarrant()
 		-- Call the hook to tell various things we've changed team
-		gamemode.Call("PlayerChangedTeams", self, oldteam, tojoin.index);
+		gamemode.Call("PlayerChangedTeams", self, oldteam, tojoin.index)
 		-- Silently kill the player.
-		self._ChangeTeam = oldteam;
-		self:KillSilent();
+		self._ChangeTeam = oldteam
+		self:KillSilent()
 		-- Return true because it was successful.
-		return true;]]
+		return true]]
 	end
 end
 
@@ -244,25 +251,25 @@ end
 -- @param class The warrant type to apply. 'arrest' or 'search'.
 -- @param time Optional, specify the time for the warrant to last
 function player:warrant(class, time)
-	gamemode.Call("PlayerWarranted", self, class, time);
-	--[[self._Warranted = class;
-	self:SetNWString("Warrant", class);
-	local expires = time or (class == "arrest" and GM.Config["Arrest Warrant Expire Time"] or GM.Config["Search Warrant Expire Time"]);
+	gamemode.Call("PlayerWarranted", self, class, time)
+	--[[self._Warranted = class
+	self:SetNWString("Warrant", class)
+	local expires = time or (class == "arrest" and GM.Config["Arrest Warrant Expire Time"] or GM.Config["Search Warrant Expire Time"])
 	-- Prevents any unplesant bugs due to user error.
 	if expires <= 0 then
 		expires = 0.1
 	end
-	self:SetCSVar(CLASS_LONG, "_WarrantExpireTime", CurTime() + expires);
-	timer.Create("Warrant Expire: "..self:UniqueID(), expires, 1, warranttimer, self, class);]]
+	self:SetCSVar(CLASS_LONG, "_WarrantExpireTime", CurTime() + expires)
+	timer.Create("Warrant Expire: "..self:UniqueID(), expires, 1, warranttimer, self, class)]]
 end
 
 ---
 -- Removes the player's warrant
 function player:unWarrant()
 	gamemode.Call("PlayerUnWarranted", self)
-	--[[self._Warranted = nil;
-	self:SetNWString("Warrant", "");
-	timer.Stop("Warrant Expire: "..self:UniqueID());]]
+	--[[self._Warranted = nil
+	self:SetNWString("Warrant", "")
+	timer.Stop("Warrant Expire: "..self:UniqueID())]]
 end
 
 local uptr, downtr = Vector(0, 0, 256), Vector(0, 0, -1024)
@@ -283,18 +290,17 @@ end
 -- Causes the player to leave a trail of blood behind them
 -- @param time How many seconds they should bleed for. 0 or nil for infinite bleeding.
 function player:bleed(time)
-	--timer.Start("Bleeding: "..self:UniqueID(), 0.25, (seconds or 0) * 4, dobleed, self);
+	timer.Start("Bleeding " .. self:UniqueID(), 0.25, (seconds or 0) * 4, function() dobleed(self) end)
 end
 
 ---
 -- Stops the player bleeding immediately.
 function player:stopBleeding()
-	--timer.Stop("Bleeding: "..self:UniqueID());
+	timer.Destroy("Bleeding " .. self:UniqueID())
 end
 
 local function doforce(ragdoll, velocity)
 	if IsValid(ragdoll) and IsValid(ragdoll:GetPhysicsObject()) then
-		--print("setting ",ragdoll,"'s velocity to ",velocity);
 		ragdoll:GetPhysicsObject():SetVelocity(velocity)
 	end
 end
@@ -304,6 +310,7 @@ end
 -- @param velocity What velocity to give to the ragdoll on spawning
 function player:knockOut(time, velocity)
 	if self:isUnconscious() then return end -- Don't knock us out if we're out already
+
 	if self:InVehicle() then -- This shit goes crazy if you ragdoll in a car. Do not do it.
 		self:ExitVehicle()
 	end
@@ -328,190 +335,206 @@ function player:knockOut(time, velocity)
 	end
 
 	-- Set preliminary data
-	--[[ragdoll:SetModel(model);
-	ragdoll:SetPos(self:GetPos());
-	angles = self:GetAngles();
-	angles.p = 0;
-	ragdoll:SetAngles(angles);
-	ragdoll:Spawn();
+		ragdoll:SetModel(model)
+		ragdoll:SetPos(self:GetPos())
+		local angles = self:GetAngles()
+			angles.p = 0
+		ragdoll:SetAngles(angles)
+	ragdoll:Spawn()
+
 	-- Stops the ragdoll colliding with players, to prevent accidental/intentional stupid deaths.
 	ragdoll:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
 	-- Gief to world to prevent people picking it up and waving it about
-	cider.propprotection.GiveToWorld(ragdoll);
+	--cider.propprotection.GiveToWorld(ragdoll)
+
 	-- Pose the ragdoll in the same shape as us
 	for i, matrix in pairs(bones) do
-		ragdoll:SetBoneMatrix(i, matrix);
+		ragdoll:SetBoneMatrix(i, matrix)
 	end
 	-- Try to send it flying in the same direction as us.
-	timer.Create("Ragdoll Force Application "..self:UniqueID(), 0.05, 5, doforce, ragdoll, (velocity or self:GetVelocity()) * 2);
+	timer.Create("Ragdoll Force Application "..self:UniqueID(), 0.05, 5, function()
+		doforce(ragdoll, (velocity or self:GetVelocity()) * 2)
+	end)
 
 	-- Make it look even more like us.
-	ragdoll:SetSkin		(self:GetSkin()		);
-	ragdoll:SetColor	(self:GetColor()	);
-	ragdoll:SetMaterial	(self:GetMaterial()	);
-	if (self:IsOnFire()) then
-		ragdoll:Ignite(16, 0);
+	ragdoll:SetSkin(self:GetSkin())
+	ragdoll:SetColor(self:GetColor())
+	ragdoll:SetMaterial(self:GetMaterial())
+
+	if self:IsOnFire() then
+		ragdoll:Ignite(16, 0)
 	end
 
 	-- Allow other parts of the script to associate it with us.
-	ragdoll:SetNWEntity ("Player", self		);
-	ragdoll._Player = self;
+	ragdoll:networkAristaVar("player", self)
 
 	-- Allow other parts of the script to associate us with it
 	self.ragdoll = {
-		entity	= ragdoll;
-		health	= self:Health();
-		model	= self:GetModel();
-		skin	= self:GetSkin();
-		team	= self:Team();
-	};
+		entity	= ragdoll,
+		health	= self:Health(),
+		model	= self:GetModel(),
+		skin	= self:GetSkin(),
+		team	= self:Team(),
+	}
 
 	-- We've got some stuff to perform if this isn't a corpse.
-	if (self:Alive()) then
+	if self:Alive() then
 		-- Take the player's weapons away for later returnage
-		self:TakeWeapons();
+		self:takeWeapons()
+
 		-- If we're being forced down for a while, tell the client.
-		if (time and time > 0) then
-			self._KnockoutPeriod = CurTime() + time;
-			self:SetCSVar(CLASS_LONG, "_KnockoutPeriod", self._KnockoutPeriod);
+		if time and time > 0 then
+			local period = CurTime() + time
+			self:setAristaVar("knockOutPeriod", period)
 		end
 	end
+
 	-- Get us ready for spectation
-	self:StripWeapons();
-	self:Flashlight(false);
-	self:CrosshairDisable();
-	self:StopBleeding();
+	self:StripWeapons()
+	self:Flashlight(false)
+	self:CrosshairDisable()
+	self:stopBleeding()
 
 	-- Spectate!
-	self:SpectateEntity(ragdoll);
-	self:Spectate(OBS_MODE_CHASE);
+	self:SpectateEntity(ragdoll)
+	self:Spectate(OBS_MODE_CHASE)
 
 	-- Set some infos for everyone else
-	self:SetNWBool("KnockedOut", true);
-	self:SetNWEntity("Ragdoll", ragdoll);
-	gamemode.Call("PlayerKnockedOut", self);]]
+	self:setAristaVar("unconscious", true)
+	self:setAristaVar("ragdoll", ragdoll)
+
+	gamemode.Call("PlayerKnockedOut", self)
 end
 
 ---
 -- Wakes a player up (unragdolls them) immediately
 -- @param reset If set, do not give the player back the things they had when they were knocked out.
 function player:wakeUp(reset)
-	--[[if (not self.ragdoll) then return end
+	if not self.ragdoll or table.Count(self.ragdoll) == 0 then return end
+
 	-- If the player is on a different team to the one they were on when they were knocked out, respawn them. TODO: Why do this?
-	if (self:Team() ~= self.ragdoll.team) then
-		self.ragdoll.team = self:Team();
-		self:Spawn();
-		return;
-	end
+	--[[if (self:Team() ~= self.ragdoll.team) then
+		self.ragdoll.team = self:Team()
+		self:Spawn()
+		return
+	end]]
+
 	-- Get us out of this spectation
-	self:UnSpectate();
-	self:CrosshairEnable();
+	self:UnSpectate()
+	self:CrosshairEnable()
+
+	local ragdoll = self:getRagdoll()
+
 	-- If we're not doing a reset, then there are things we need to do like giving the player stuff back
-	if (not reset) then
+	if not reset then
 		-- Do a light spawn so basic variables are set up
-		self:LightSpawn();
+		self:lightSpawn()
 		-- Get our weapons back
-		self:ReturnWeapons();
+		self:returnWeapons()
+
 		-- Set the basic info we stored
-		self:SetHealth(self.ragdoll.health);
+		self:SetHealth(self.ragdoll.health or 100)
+
 		-- Duplicate the ragdoll's current state if it exists
-		local ragdoll = self:GetRagdollEntity();
-		if (IsValid(ragdoll)) then
-			self:SetPos(ragdoll:GetPos());
-			self:SetModel(ragdoll:GetModel());
-			self:SetSkin(ragdoll:GetSkin());
-			self:SetColor(ragdoll:GetColor());
-			self:SetMaterial(ragdoll:GetMaterial());
+		if IsValid(ragdoll) then
+			self:SetPos(ragdoll:GetPos())
+			self:SetModel(ragdoll:GetModel())
+			self:SetSkin(ragdoll:GetSkin())
+			self:SetColor(ragdoll:GetColor())
+			self:SetMaterial(ragdoll:GetMaterial())
 		else -- Otherwise set the state we were in to start with
-			self:SetModel(self.ragdoll.model);
-			self:SetSkin(self.ragdoll.skin);
+			self:SetModel(self.ragdoll.model)
+			self:SetSkin(self.ragdoll.skin)
 		end
 	end
+
 	-- If the ragdoll exists, remove it.
-	if (IsValid(self:GetRagdollEntity())) then
-		self:GetRagdollEntity():Remove();
+	if IsValid(ragdoll) then
+		ragdoll:Remove()
 	end
+
 	-- Wipe the ragdoll table
-	self.ragdoll = {};
+	self.ragdoll = {}
 	-- Reset the various knockout state vars
-	self._Stunned = false;
-	self._Tripped = false;
-	self._Sleeping= false;
+	--self._Stunned = false
+	--self._Tripped = false
+	--self._Sleeping= false
 
 	-- Set some infos for everyone else
-	self:SetNWBool("KnockedOut", false);
-	self:SetNWEntity("Ragdoll", ragdoll);
-	gamemode.Call("PlayerWokenUp", self);]]
+	self:setAristaVar("unconscious", false)
+	self:setAristaVar("ragdoll", NULL)
+
+	gamemode.Call("PlayerWokenUp", self)
 end
 
 ---
 -- Takes a player's weapons away and stores them in a table for later returnal
 -- @param noitems Do not save any items the player has equipped
 function player:takeWeapons(noitems)
-	--[[local class;
+	--[[local class
 	for _, weapon in pairs(self:GetWeapons()) do
-		class = weapon:GetClass();
+		class = weapon:GetClass()
 		if (not (noitems and GM.Items[class])) then
-			self._StoredWeapons[class] = true;
+			self._StoredWeapons[class] = true
 		end
 	end
 	if (IsValid(self:GetActiveWeapon())) then
-		self._StoredWeapon = self:GetActiveWeapon():GetClass();
+		self._StoredWeapon = self:GetActiveWeapon():GetClass()
 	else
-		self._StoredWeapon = nil;
+		self._StoredWeapon = nil
 	end
-	self:StripWeapons();]]
+	self:StripWeapons()]]
 end
 
 ---
 -- Gives a player their stored weapons back
 function player:returnWeapons()
 	--[[if (not gamemode.Call("PlayerCanRecieveWeapons", self)) then
-		return false;
+		return false
 	end
 	for class in pairs(self._StoredWeapons) do
-		self:Give(class);
-		self._StoredWeapons[class] = nil;
+		self:Give(class)
+		self._StoredWeapons[class] = nil
 	end
 	if (self._StoredWeapon) then
-		self:SelectWeapon(self._StoredWeapon);
-		self._StoredWeapon = nil;
+		self:SelectWeapon(self._StoredWeapon)
+		self._StoredWeapon = nil
 	else
-		self:SelectWeapon("cider_hands");
+		self:SelectWeapon("cider_hands")
 	end]]
 end
 
 ---
 -- incapacitates a player - drops their movement speed, prevents them from jumping or doing most things.
 function player:incapacitate()
-	--[[self:SetRunSpeed( GM.Config["Incapacitated Speed"]);
-	self:SetWalkSpeed(GM.Config["Incapacitated Speed"]);
-	self:SetJumpPower(0);
-	self:SetNWBool("Incapacitated", true);]]
+	--[[self:SetRunSpeed( GM.Config["Incapacitated Speed"])
+	self:SetWalkSpeed(GM.Config["Incapacitated Speed"])
+	self:SetJumpPower(0)
+	self:SetNWBool("Incapacitated", true)]]
 end
 
 ---
 -- Recapacitates a player, letting them walk, run and jump like normal
 function player:recapacitate()
 	--[[if (not gamemode.Call("PlayerCanBeRecapacitated", self)) then
-		return false;
+		return false
 	end
-	self:SetRunSpeed( GM.Config["Run Speed" ]);
-	self:SetWalkSpeed(GM.Config["Walk Speed"]);
-	self:SetJumpPower(GM.Config["Jump Power"]);
-	self:SetNWBool   ("Incapacitated",  false);
-	return true;]]
+	self:SetRunSpeed( GM.Config["Run Speed" ])
+	self:SetWalkSpeed(GM.Config["Walk Speed"])
+	self:SetJumpPower(GM.Config["Jump Power"])
+	self:SetNWBool   ("Incapacitated",  false)
+	return true]]
 end
 
 ---
 -- Ties a player up so they cannot do anything but walk about
 function player:tieUp()
 	--[[if self:isTied() then return end
-	self:Incapacitate();
-	self:TakeWeapons();
-	self:SetNWBool("Tied", true);
-	self:Flashlight(false);]]
+	self:Incapacitate()
+	self:TakeWeapons()
+	self:SetNWBool("Tied", true)
+	self:Flashlight(false)]]
 end
 
 ---
@@ -519,47 +542,47 @@ end
 -- @param reset If true, do not give the player their weapons back
 function player:unTie(reset)
 	--[[if (not reset and not self:isTied()) then return end
-	self:SetNWBool("Tied", false);
+	self:SetNWBool("Tied", false)
 	if (not reset) then
-		self:Recapacitate();
-		self:ReturnWeapons();
+		self:Recapacitate()
+		self:ReturnWeapons()
 	end]]
 end
 
 local function arrestTimer(ply)
 	--[[if (not IsValid(ply)) then return end
-	ply:UnArrest(true);
-	ply:Notify("Your arrest time has finished!");
-	ply:Spawn(); -- Let the player out of jail]]
+	ply:UnArrest(true)
+	ply:Notify("Your arrest time has finished!")
+	ply:Spawn() -- Let the player out of jail]]
 end
 ---
 -- Arrest a player so they cannot do most things, then unarrest them a bit later
 -- @param time Optional - Specify how many seconds the player should be arrested for. Will default to the player's ._ArrestTime var
 function player:arrest(time)
 	--[[if (self:Arrested()) then return end
-	gamemode.Call("PlayerArrested", self);
-	self.cider._Arrested = true;
-	self:SetNWBool("Arrested", true);
-	timer.Create("UnArrest: "..self:UniqueID(), time or self._ArrestTime, 1, arresttimer, self);
-	self:SetCSVar(CLASS_LONG, "_UnarrestTime", CurTime() + (time or self._ArrestTime));
-	self:Incapacitate();
-	self:TakeWeapons(true);
-	self:StripAmmo();
-	self:Flashlight(false);
-	self:UnWarrant();
-	self:UnTie(true);]]
+	gamemode.Call("PlayerArrested", self)
+	self.cider._Arrested = true
+	self:SetNWBool("Arrested", true)
+	timer.Create("UnArrest: "..self:UniqueID(), time or self._ArrestTime, 1, arresttimer, self)
+	self:SetCSVar(CLASS_LONG, "_UnarrestTime", CurTime() + (time or self._ArrestTime))
+	self:Incapacitate()
+	self:TakeWeapons(true)
+	self:StripAmmo()
+	self:Flashlight(false)
+	self:UnWarrant()
+	self:UnTie(true)]]
 end
 ---
 -- Unarrest an arrested player before their timer has run out.
 function player:unArrest(reset)
 	--[[if (not self:Arrested()) then return end
-	gamemode.Call("PlayerUnArrested", self);
-	self.cider._Arrested = false;
-	self:SetNWBool("Arrested", false);
-	timer.Stop("UnArrest: "..self:UniqueID());
+	gamemode.Call("PlayerUnArrested", self)
+	self.cider._Arrested = false
+	self:SetNWBool("Arrested", false)
+	timer.Stop("UnArrest: "..self:UniqueID())
 	if (not reset) then
-		self:Recapacitate();
-		self:ReturnWeapons();
+		self:Recapacitate()
+		self:ReturnWeapons()
 	end]]
 end
 
@@ -573,22 +596,22 @@ end
 -- @param any Whether to search for any flag on the list (return true at the first flag found), or for every flag on the list. (return false on the first flag not found)
 -- @return true on succes, false on failure.
 function player:hasAccess(flaglist, any)
-	--[[local access, teamaccess, flag;
-	access = self.cider._Access;
-	teamaccess = cider.team.query(self:Team(),"access","");
+	--[[local access, teamaccess, flag
+	access = self.cider._Access
+	teamaccess = cider.team.query(self:Team(),"access","")
 	for i = 1, flaglist:len() do
-		flag = flaglist:sub(i,i);
+		flag = flaglist:sub(i,i)
 		if(flag == GM.Config["Default Access"]
 		or GM.FlagFunctions[flag] and GM.FlagFunctions[flag](self)
 		or access:find(flag)
 		or teamaccess:find(flag)) then
-			if (any) then return true; end -- If 'any' is selected, then return true whenever we get a match
+			if (any) then return true end -- If 'any' is selected, then return true whenever we get a match
 		elseif (not any) then -- If 'any' is not selected we don't get a match, return false.
-			return false;
+			return false
 		end
 	end
 	-- If 'any' is selected and none have matched, return false. If 'any' is not selected and we have matched every flag return true.
-	return not any;]]
+	return not any]]
 end
 
 ---
@@ -598,18 +621,18 @@ end
 -- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
 -- @return 0 if the player is not blacklisted, otherwise the time in seconds, the reason and the name of the blacklister.
 function player:isBlacklisted(kind, thing)
-	--[[local blacklist,time;
-	blacklist = self.cider._Blacklist[kind];
+	--[[local blacklist,time
+	blacklist = self.cider._Blacklist[kind]
 	if (not (blacklist and blacklist[thing])) then
-		return 0;
+		return 0
 	end
-	blacklist = blacklist[thing];
-	time = blacklist.time - os.time();
+	blacklist = blacklist[thing]
+	time = blacklist.time - os.time()
 	if (time <= 0) then
-		self:UnBlacklist(kind, thing);
-		return 0;
+		self:UnBlacklist(kind, thing)
+		return 0
 	end
-	return time / 60, blacklist.reason, blacklist.admin;]]
+	return time / 60, blacklist.reason, blacklist.admin]]
 end
 
 ---
@@ -617,7 +640,7 @@ end
 -- @param amount The amount of money to compare the player's against
 -- @returns True if they have more, false if not.
 function player:canAfford(amount)
-	--return self.cider._Money >= amount;
+	--return self.cider._Money >= amount
 end
 
 ----------------------------
@@ -631,31 +654,31 @@ end
 -- TODO: Remove this and set up a frequency based thingy.
 -- @param words The words the player should send in the radio message
 function player:sayRadio(words)
-	--[[local recipients, mteam, gang;
-	iteam = self:Team();
-	gang = cider.team.getGang(iteam);
+	--[[local recipients, mteam, gang
+	iteam = self:Team()
+	gang = cider.team.getGang(iteam)
 	-- If we're in a gang, send the message to them, otherwise just to our teammates.
 	if (gang) then
-		recipients = cider.team.getGangMembers(cider.team.getGroupByTeam(iteam), gang);
+		recipients = cider.team.getGangMembers(cider.team.getGroupByTeam(iteam), gang)
 	else
-		recipients = team.GetPlayers(iteam);
+		recipients = team.GetPlayers(iteam)
 	end
 	-- Call a hook to allow plugins to adjust who also gets the message.
-	gamemode.Call("PlayerAdjustRadioRecipients", self, words, recipients);
+	gamemode.Call("PlayerAdjustRadioRecipients", self, words, recipients)
 
 	-- Compile a list of those who can't hear the voice
 	local nohear = {}
 	-- Loop through every recipient and add the message to their chatbox
 	for _,ply in pairs(recipients) do
-		cider.chatBox.add(ply, self, "radio", words);
-		nohear[ply] = true;
+		cider.chatBox.add(ply, self, "radio", words)
+		nohear[ply] = true
 	end
 
 	-- Tell everyone nearby that we just said a waydio
-	local pos = self:GetPos();
+	local pos = self:GetPos()
 	for _,ply in pairs(player.GetAll()) do
 		if (not nohear[ply] and ply:GetPos():Distance(pos) <= GM.Config["Talk Radius"]) then
-			cider.chatBox.add(ply, self, "loudradio", words);
+			cider.chatBox.add(ply, self, "loudradio", words)
 		end
 	end]]
 end
@@ -664,17 +687,17 @@ end
 -- Adds an emote to the chatbox coming from the player
 -- @param words What the emote should say
 function player:emote(words)
-	--cider.chatBox.addInRadius(self, "me", words, self:GetPos(), GM.Config["Talk Radius"]);
+	--cider.chatBox.addInRadius(self, "me", words, self:GetPos(), GM.Config["Talk Radius"])
 end
 
 ---
 -- Adds an amount of money to the player's money count and triggers an alert on the client.
 -- @param amount How much money to add (can be negative)
 function player:giveMoney(amount)
-	--self.cider._Money = math.max(self.cider._Money + amount, 0);
-	--SendUserMessage("MoneyAlert", self, amount);
+	--self.cider._Money = math.max(self.cider._Money + amount, 0)
+	--SendUserMessage("MoneyAlert", self, amount)
 end
---umsg.PoolString("MoneyAlert");
+--umsg.PoolString("MoneyAlert")
 
 ---
 -- Causes a player to put all their weapons into their inventory instantly. If a weapon will not fit, it is dropped at their feet to reduce loss.
@@ -683,25 +706,25 @@ function player:holsterAll()
 		self:ExitVehicle() -- This fixes a suprisingly high number of glitches
 	end
 
-	--[[local class;
+	--[[local class
 	for _, weapon in pairs(self:GetWeapons()) do
-		class = weapon:GetClass();
-		self:StripWeapon(class);
+		class = weapon:GetClass()
+		self:StripWeapon(class)
 		if (GM.Items[class]) then
 			if (gamemode.Call("PlayerCanHolster", self, class, true) and cider.inventory.update(self, class, 1)) then
 				-- ...
 			elseif (gamemode.Call("PlayerCanDrop", self, class, true)) then
-				GM.Items[class]:Make(self:GetPos(), 1);
+				GM.Items[class]:Make(self:GetPos(), 1)
 			end
 		end
 	end
-	self:SelectWeapon("cider_hands");]]
+	self:SelectWeapon("cider_hands")]]
 end
 
 ---
 -- Lightly spawn a player (Do not reset any important vars)
 function player:lightSpawn()
-	--self._LightSpawn = true;
+	self:setAristaVar("lightSpawn", true)
 	self:Spawn()
 end
 
@@ -715,39 +738,39 @@ local angle_zero = Angle(0, 0, 0)
 -- @param key The name of the variable to set on the client
 -- @param value The value to set
 function player:setCSVar(class, key, value)
-	--[[local var;
-	var = key .. "_" ..class;
+	--[[local var
+	var = key .. "_" ..class
 	if (self.CSVars[var] == nil or self.CSVars ~= value) then
-		umsg.Start("CSVar", self);
-			umsg.Char(class);
-			umsg.String(key);
+		umsg.Start("CSVar", self)
+			umsg.Char(class)
+			umsg.String(key)
 			if (class == CLASS_STRING) then
-				value = value or "";
-				umsg.String(value);
+				value = value or ""
+				umsg.String(value)
 			elseif (class == CLASS_LONG) then
-				value = value or 0;
-				umsg.Long(value);
+				value = value or 0
+				umsg.Long(value)
 			elseif (class == CLASS_SHORT) then
-				value = value or 0;
-				umsg.Short(value);
+				value = value or 0
+				umsg.Short(value)
 			elseif (class == CLASS_CHAR) then
-				value = value or 0;
-				umsg.Char(value);
+				value = value or 0
+				umsg.Char(value)
 			elseif (class == CLASS_FLOAT) then
-				value = value or 0;
-				umsg.Float(value);
+				value = value or 0
+				umsg.Float(value)
 			elseif (class == CLASS_BOOL) then
-				value = tobool(value);
-				umsg.Bool(value);
+				value = tobool(value)
+				umsg.Bool(value)
 			elseif (class == CLASS_VECTOR) then
-				value = value or vector_origin;
-				umsg.Vector(value);
+				value = value or vector_origin
+				umsg.Vector(value)
 			elseif (class == CLASS_ANGLE) then
-				value = value or angle_zero;
-				umsg.Angle(value);
+				value = value or angle_zero
+				umsg.Angle(value)
 			end
-		umsg.End();
-		self.CSVars[var] = value;
+		umsg.End()
+		self.CSVars[var] = value
 	end]]
 end
 
@@ -757,13 +780,13 @@ end
 -- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
 -- @param name The name of what it is
 function player:blacklistAlert(kind, thing, name)
-	--[[local time, reason, admin = self:Blacklisted(kind, thing);
+	--[[local time, reason, admin = self:Blacklisted(kind, thing)
 	if (time >= 1440) then
-		time = math.ceil(time / 1440) .. " days";
+		time = math.ceil(time / 1440) .. " days"
 	elseif (time >= 60) then
-		time = math.ceil(time / 60) .. " hours";
+		time = math.ceil(time / 60) .. " hours"
 	else
-		time = time .. " minutes";
+		time = time .. " minutes"
 	end
-	self:Notify("You have been blacklisted from using " .. tostring(name) .. " by " .. admin .. " for " .. time .. " for '" .. reason .. "'!");]]
+	self:Notify("You have been blacklisted from using " .. tostring(name) .. " by " .. admin .. " for " .. time .. " for '" .. reason .. "'!")]]
 end

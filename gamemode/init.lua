@@ -461,6 +461,9 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
 
 	ply:networkAristaVar("nextSpawnTime", CurTime())
+	ply:networkAristaVar("knockOutPeriod", 0)
+	ply:networkAristaVar("unconcious", false)
+	ply:networkAristaVar("ragdoll", NULL)
 
 	-- Incase we have changed default database info.
 	if success then
@@ -888,7 +891,7 @@ function GM:EntityTakeDamage(entity, damageinfo)
 		if entity:isUnconscious() and IsValid(ragdoll) then
 			gamemode.Call("EntityTakeDamage", ragdoll, damageinfo)
 		else
-			if attacker:IsVehicle() then
+			if attacker:IsVehicle() and attacker:GetVelocity():Length() > 300 then
 				entity:knockOut(10, attacker:GetVelocity())
 
 				damageinfo:SetDamage(0)
@@ -921,7 +924,7 @@ function GM:EntityTakeDamage(entity, damageinfo)
 			end
 
 			if entity:InVehicle() then
-				if damageinfo:IsExplosionDamage() and (not damageInfo:GetDamage() or damageInfo:GetDamage() == 0) then
+				if damageinfo:IsExplosionDamage() and (not damageinfo:GetDamage() or damageinfo:GetDamage() == 0) then
 					damageinfo:SetDamage(99)
 				end
 
@@ -932,8 +935,8 @@ function GM:EntityTakeDamage(entity, damageinfo)
 				end
 			end
 
-			if class:find("prop_physics", 1, true) and arista.config.vars.preventPropKill and not damageInfo:IsFallDamage() then
-				damageInfo:SetDamage(0)
+			if class:find("prop_", 1, true) and arista.config.vars.preventPropKill and not damageinfo:IsFallDamage() then
+				damageinfo:SetDamage(0)
 
 				return
 			end
@@ -979,10 +982,10 @@ function GM:EntityTakeDamage(entity, damageinfo)
 	--[[elseif ( entity:IsNPC() ) then
 		if (attacker:IsPlayer() and ValidEntity( attacker:GetActiveWeapon() )
 		and attacker:GetActiveWeapon():GetClass() == "weapon_crowbar") then
-			damageInfo:SetDamage(25)
+			damageinfo:SetDamage(25)
 		end
 		local smiter = attacker:GetClass()
-		local damage = damageInfo:GetDamage()
+		local damage = damageinfo:GetDamage()
 		local smitee = entity:GetClass()
 		local weapon = "."
 		local text = "%s damaged a %s for %G damage%s"
@@ -995,9 +998,9 @@ function GM:EntityTakeDamage(entity, damageinfo)
 		GM:Log(EVENT_DAMAGE,text,smiter,smitee,damage,weapon)
 	elseif cider.container.isContainer(entity) and entity:Health() > 0 then
 		-- Fookin Boogs.		v
-		damageInfo:SetDamageForce(vector0)
+		damageinfo:SetDamageForce(vector0)
 		local smiter = attacker:GetClass()
-		local damage = damageInfo:GetDamage()
+		local damage = damageinfo:GetDamage()
 		local smitee = cider.container.getName(entity)
 		local weapon = "."
 		local text = "%s damaged a %s for %G damage%s"
@@ -1007,8 +1010,8 @@ function GM:EntityTakeDamage(entity, damageinfo)
 				weapon = " with a "..attacker:GetActiveWeapon():GetClass()
 			end
 		end
-		print(entity:Health(),damageInfo:GetDamage())
-		entity:SetHealth(entity:Health()-damageInfo:GetDamage())
+		print(entity:Health(),damageinfo:GetDamage())
+		entity:SetHealth(entity:Health()-damageinfo:GetDamage())
 		print(entity:Health())
 		if entity:Health() <= 0 then
 			text = "%s destroyed a %s with %G damage%s"
@@ -1030,7 +1033,7 @@ function GM:EntityTakeDamage(entity, damageinfo)
 		end
 
 		-- Set the damage to the amount we're given.
-		--damageInfo:SetDamage(amount)
+		--damageinfo:SetDamage(amount)
 
 		-- Check if the attacker is not a player.
 		if not attacker:IsPlayer() then
@@ -1103,9 +1106,11 @@ function GM:EntityTakeDamage(entity, damageinfo)
 	local finalDmg = math.Round(damageinfo:GetDamage())
 
 	if entity:IsPlayer() then
-		arista.logs.event(arista.logs.E.LOG, arista.logs.E.DAMAGE, entity:Name(), "(", entity:SteamID(), ")", " was damaged for ", finalDmg, " by ", attacker, " (using ", inflictor, ")")
+		local inf = inflictor ~= attacker and " (using " .. tostring(inflictor) .. ")." or "."
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.DAMAGE, entity:Name(), "(", entity:SteamID(), ")", " was damaged for ", finalDmg, " by ", attacker, inf)
 	else
-		arista.logs.event(arista.logs.E.LOG, arista.logs.E.DAMAGE, entity, " was damaged for ", finalDmg, " by ", attacker, " (using ", inflictor, ")")
+		local inf = inflictor ~= attacker and " (using " .. tostring(inflictor) .. ")." or "."
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.DAMAGE, entity, " was damaged for ", finalDmg, " by ", attacker, inf)
 	end
 end
 

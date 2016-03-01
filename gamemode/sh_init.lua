@@ -22,6 +22,8 @@ arista.gamemode = {
 }
 
 -- Stupid garry compat.
+GM.Name = arista.gamemode.name
+
 GM.Author = arista.gamemode.author
 GM.Email = arista.gamemode.email
 GM.Website = arista.gamemode.website

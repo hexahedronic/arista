@@ -3,7 +3,16 @@ AddCSLuaFile()
 local entity = FindMetaTable("Entity")
 
 function entity:isPlayerRagdoll()
-	return self._player and IsValid(self._player)
+	local ply = self:getRagdollPlayer()
+	return ply and IsValid(ply)
+end
+
+function entity:getRagdollPlayer()
+	return self._player or NULL
+end
+
+function entity:isCorpse()
+	return self._corpse
 end
 
 function entity:physgunForbidden()

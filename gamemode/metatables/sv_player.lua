@@ -36,12 +36,17 @@ end
 function player:isTied()
 end
 
+function player:getRagdoll()
+	return self._ragdoll
+end
+
 -- Maybe?
 --[[function player:isHandcuffed()
 	return self:isTied(true)
 end]]
 
-function player:isStuck(worldonly)
+function player:isStuck()
+	return player:getAristaVar("stuckInWorld")
 end
 
 function player:useDisallowed()

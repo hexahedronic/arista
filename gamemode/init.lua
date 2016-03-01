@@ -715,6 +715,10 @@ function GM:PlayerSpawn(ply)
 	end
 end
 
+-- Called when player is done being handled by us.
+function GM:PostPlayerSpawn(ply)
+end
+
 -- Called when a ply should take damage.
 function GM:PlayerShouldTakeDamage(ply, attacker)
 	return true
@@ -801,7 +805,7 @@ function GM:PlayerDeath(ply, inflictor, attacker, fall)
 	ply:knockOut()
 
 	-- Set their next spawn time.
-	local spawnTime = ply:getAristaVar("spawnTime")
+	local spawnTime = ply:getAristaVar("spawnTime") or arista.config:getDefault("spawnTime")
 	ply:setAristaVar("nextSpawnTime", CurTime() + spawnTime)
 
 	local class = attacker:GetClass()
@@ -811,9 +815,9 @@ function GM:PlayerDeath(ply, inflictor, attacker, fall)
 		local wep = attacker:GetActiveWeapon()
 
 		if IsValid(wep) then
-			arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by ", attacker, "(", attacker:SteamID(), ") using ", wep, ".")
+			arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by ", attacker:Name(), "(", attacker:SteamID(), ") using ", wep, ".")
 		else
-			arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by ", attacker, "(", attacker:SteamID(), ").")
+			arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by ", attacker:Name(), "(", attacker:SteamID(), ").")
 		end
 	elseif attacker:IsVehicle() then
 		local name = attacker:GetClass()
@@ -842,145 +846,137 @@ function GM:PlayerDeath(ply, inflictor, attacker, fall)
 	elseif attacker:GetClass():find("prop_physics", 1, true) then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by a prop (", attacker:GetModel(), ").")
 	else
-		arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by ", attacker".")
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by ", attacker, ".")
 	end
-end
-
-/*
-local function donttazemebro(class)
-	return class:find'cider' or class:find'prop';
 end
 
 -- Called when an entity takes damage.
-local vector0 = Vector(5,0,0)
-function GM:EntityTakeDamage(entity, inflictor, attacker, amount, damageInfo)
-	if !entity or !inflictor or !attacker or entity == NULL or inflictor == NULL or attacker == NULL then
-		ErrorNoHalt("Something went wrong in EntityTakeDamage: "..tostring(entity).." "..tostring(inflictor).." "..tostring(attacker).." "..tostring(amount).."\n")
+local vector0 = Vector(5, 0, 0)
+function GM:EntityTakeDamage(entity, damageinfo)
+	local attacker = damageinfo:GetAttacker()
+	local inflictor = damageinfo:GetInflictor()
+
+	if not entity or not attacker or not inflictor or not entity == NULL or not attacker == NULL or not inflictor == NULL then
+		arista.logs.logNoPrefix(arista.logs.E.ERROR, "Invalid entity in EntityTakeDamage! ", entity, attacker, inflictor)
+
 		return
 	end
-	--print("OW!",tostring(entity).." "..tostring(inflictor).." "..tostring(attacker).." "..tostring(amount))
-	local logme = false
-	if (attacker:IsPlayer() and ValidEntity( attacker:GetActiveWeapon() )) then
-		if attacker:GetActiveWeapon():GetClass() == "weapon_stunstick" then
-			damageInfo:SetDamage(10)
-		elseif attacker:GetActiveWeapon():GetClass() == "weapon_crowbar" then
-			if entity:IsPlayer() then
-				damageInfo:SetDamage(0)
-				return false
-			else
-				damageInfo:SetDamage(10)
+
+	local class = attacker:GetClass()
+
+	if attacker:IsPlayer() then
+		local wep = attacker:GetActiveWeapon()
+
+		if IsValid(wep) then
+			local class = wep:GetClass()
+
+			if class == "weapon_stunstick" or class == "weapon_crowbar" then
+				damageinfo:SetDamage(10)
 			end
 		end
+
+		if attacker:GetMoveType() == MOVETYPE_NOCLIP or attacker:isStuck() or (entity:IsPlayer() and entity:GetMoveType() == MOVETYPE_NOCLIP and not entity:InVehicle()) then
+			damageinfo:SetDamage(0)
+
+			return false
+		end
 	end
-	if (attacker:IsPlayer()	and (attacker:GetMoveType()	== MOVETYPE_NOCLIP or attacker._StuckInWorld))
-	or (entity:IsPlayer()	and entity:GetMoveType()	== MOVETYPE_NOCLIP and not entity:InVehicle())
-	or (entity:IsPlayer()	and entity._Physgunnin) then
-		damageInfo:SetDamage(0)
-		return false
-	end
-	local asplode = false
-	local asplodeent = nil
-	if inflictor:GetClass() == "npc_tripmine" and ValidEntity(inflictor._planter) then
-		print"Trippy!"
-		damageInfo:SetAttacker(inflictor._planter)
-		attacker = inflictor._planter
-		asplode = true
-		asplodeent = "tripmine"
-	elseif attacker:GetClass() == "cider_breach" and ValidEntity(attacker._Planter) then
-		damageInfo:SetAttacker(attacker._Planter)
-		attacker = attacker._Planter
-		asplode = true
-		asplodeent = "breach"
-	end
-	if ( entity:IsPlayer() ) then
-		if (entity:KnockedOut()) then
-			if ( ValidEntity(entity.ragdoll.entity) ) then
-				hook.Call("EntityTakeDamage",GAMEMODE, entity.ragdoll.entity, inflictor, attacker, damageInfo:GetDamage(), damageInfo)
-			end
+
+	if entity:IsPlayer() then
+		local ragdoll = entity:getRagdoll()
+
+		if entity:isUnconscious() and IsValid(ragdoll) then
+			gamemode.Call("EntityTakeDamage", ragdoll, damageinfo)
 		else
-			-- :/ hacky
-			if attacker:IsVehicle() and attacker:GetClass() ~= "prop_vehicle_prisoner_pod" then
-				--print(attacker:GetClass())
-				entity:KnockOut(10,attacker:GetVelocity());
-				damageInfo:SetDamage(0)
-				local smitee = entity:GetName()
-				local weapon = "."
-				local isplayer = false
-				local smiter = "an unoccupied "
-				if attacker:GetDriver():IsValid() then
-					isplayer = true
-					smiter = attacker:GetDriver():Name()
-					weapon = " in a "
-					if attacker.VehicleName then
-						weapon = weapon..attacker.VehicleName
-					else
-						weapon = weapon..attacker:GetClass()
-					end
+			if attacker:IsVehicle() then
+				entity:knockOut(10, attacker:GetVelocity())
+
+				damageinfo:SetDamage(0)
+
+				local name = attacker:GetClass()
+
+				if attacker.DisplayName then
+					name = attacker.DisplayName
 				elseif attacker.VehicleName then
-					smiter = smiter..attacker.VehicleName
-				else
-					smiter = smiter..attacker:GetClass()
+					name = attacker.VehicleName
+				elseif attacker.PrintName then
+					name = attacker.PrintName
 				end
-				local text = "%s knocked over %s%s"
-				if isplayer then
-					GM:Log(EVENT_PLAYERDAMAGE,text,smiter,smitee,weapon)
+
+				local car = "."
+				local driver = "An unoccupied "
+
+				if attacker:validDriver() then
+					local driv = attacker:GetDriver()
+					driver = driv:Name() .. "(" .. driv:SteamID() .. ")"
+					car = " in a "
+
+					car = car .. name
 				else
-					GM:Log(EVENT_DAMAGE,text,smiter,smitee,weapon)
+					driver = driver .. name
 				end
+
+				arista.logs.event(arista.logs.E.LOG, arista.logs.E.DAMAGE, driver, " knocked over ", entity:Name(), "(", entity:SteamID(), ")", car)
 				return
 			end
+
 			if entity:InVehicle() then
-				if damageInfo:IsExplosionDamage() and (!damageInfo:GetDamage() or damageInfo:GetDamage() == 0) then
-					damageInfo:SetDamage(100)
+				if damageinfo:IsExplosionDamage() and (not damageInfo:GetDamage() or damageInfo:GetDamage() == 0) then
+					damageinfo:SetDamage(99)
 				end
-				if damageInfo:GetDamage()< 1 then
-					damageInfo:SetDamage(0)
+
+				if damageinfo:GetDamage() < 1 then
+					damageinfo:SetDamage(0)
+
 					return
 				end
 			end
-			if attacker:GetClass():find"cider" or self.Config["Anti propkill"] and not damageInfo:IsFallDamage() and attacker:GetClass():find("prop_physics") then
+
+			if class:find("prop_physics", 1, true) and arista.config.vars.preventPropKill and not damageInfo:IsFallDamage() then
 				damageInfo:SetDamage(0)
+
 				return
 			end
 
+			local lasthit = entity:getAristaVar("lastHitGroup")
+
 			-- Check if the player has a last hit group defined.
-			if entity._LastHitGroup and ( not attacker:IsPlayer() or (ValidEntity(attacker:GetActiveWeapon()) and attacker:GetActiveWeapon():GetClass() ~= "cider_hands")) then
-				if (entity._LastHitGroup == HITGROUP_HEAD) then
-					damageInfo:ScaleDamage( self.Config["Scale Head Damage"] )
-				elseif (entity._LastHitGroup == HITGROUP_CHEST or entity._LastHitGroup == HITGROUP_GENERIC) then
-					damageInfo:ScaleDamage( self.Config["Scale Chest Damage"] )
-				elseif (
-				entity._LastHitGroup == HITGROUP_LEFTARM or
-				entity._LastHitGroup == HITGROUP_RIGHTARM or
-				entity._LastHitGroup == HITGROUP_LEFTLEG or
-				entity._LastHitGroup == HITGROUP_RIGHTLEG or
-				entity._LastHitGroup == HITGROUP_GEAR) then
-					damageInfo:ScaleDamage( self.Config["Scale Limb Damage"] )
+			if lasthit and (not attacker:IsPlayer() or (IsValid(attacker:GetActiveWeapon()) and not attacker:GetActiveWeapon():GetClass():find("hands", 1, true))) then
+				if lasthit == HITGROUP_HEAD then
+					damageinfo:ScaleDamage(arista.config.vars.headDmgScale)
+				elseif lasthit == HITGROUP_CHEST or lasthit == HITGROUP_GENERIC then
+					damageinfo:ScaleDamage(arista.config.vars.normalDmgScale)
+				elseif lasthit == HITGROUP_STOMACH or lasthit == HITGROUP_RIGHTARM or lasthit == HITGROUP_LEFTARM then
+					damageinfo:ScaleDamage(arista.config.vars.stomachDmgScale)
+				else
+					damageinfo:ScaleDamage(arista.config.vars.legDmgScale)
 				end
 
 				-- Set the last hit group to nil so that we don't use it again.
-				entity._LastHitGroup = nil
+				entity:setAristaVar("lastHitGroup", nil)
 			end
 
 			-- Check if the player is supposed to scale damage.
-			if (entity._ScaleDamage) then damageInfo:ScaleDamage(entity._ScaleDamage) end
-			logme = true
+			if entity:getAristaVar("scaleDamage") then damageinfo:ScaleDamage(entity:getAristaVar("scaleDamage")) end
+
 			if entity:InVehicle() then
-				entity:SetHealth(entity:Health()-damageInfo:GetDamage()) --Thanks gayry for breaking teh pains in vehicles.
-				damageInfo:SetDamage(0) -- stop the engine doing anything odd
+				entity:SetHealth(entity:Health() - damageinfo:GetDamage()) --Thanks gayry for breaking teh pains in vehicles.
+				damageinfo:SetDamage(0)
+
 				-- Check to see if the player's health is less than 0 and that the player is alive.
-				if ( entity:Health() <= 0 and entity:Alive() ) then
+				if entity:Health() <= 0 and entity:Alive() then
 					entity:KillSilent()
 
 					-- Call some gamemode hooks to fake the player's death.
-					hook.Call("DoPlayerDeath",GAMEMODE, entity, attacker, damageInfo)
-					hook.Call("PlayerDeath",GAMEMODE, entity, inflictor, attacker, damageInfo:IsFallDamage())
+					gamemode.Call("DoPlayerDeath", entity, attacker, damageinfo)
+					gamemode.Call("PlayerDeath", entity, inflictor, attacker, damageinfo:IsFallDamage())
 				end
 			end
+
 			-- Make the player bleed.
-			entity:Bleed(self.Config["Bleed Time"])
+			entity:bleed(arista.config.vars.bleedTime)
 		end
-	elseif ( entity:IsNPC() ) then
+	--[[elseif ( entity:IsNPC() ) then
 		if (attacker:IsPlayer() and ValidEntity( attacker:GetActiveWeapon() )
 		and attacker:GetActiveWeapon():GetClass() == "weapon_crowbar") then
 			damageInfo:SetDamage(25)
@@ -1019,65 +1015,70 @@ function GM:EntityTakeDamage(entity, inflictor, attacker, amount, damageInfo)
 			entity:SetHealth(0)
 			entity:TakeDamage(1)
 		end
-		GM:Log(EVENT_DAMAGE,text,smiter,smitee,damage,weapon)
+		GM:Log(EVENT_DAMAGE,text,smiter,smitee,damage,weapon)]]
+		-- todo: readd these damage checks
+
 	-- Check if the entity is a knocked out player.
-	elseif ( ValidEntity(entity._Player) and not entity._Corpse) then
-		local ply = entity._Player
+	elseif entity:isPlayerRagdoll() and not entity:isCorpse() then
+		local ply = entity:getRagdollPlayer()
+
 		-- If they were just ragdolled, give them 2 seconds of damage immunity
-		if ply.ragdoll.time and ply.ragdoll.time > CurTime() then
-			damageInfo:SetDamage(0)
+		if entity._time and entity._time > CurTime() then
+			damageinfo:SetDamage(0)
+
 			return false
 		end
+
 		-- Set the damage to the amount we're given.
-		damageInfo:SetDamage(amount)
+		--damageInfo:SetDamage(amount)
 
 		-- Check if the attacker is not a player.
-		if ( !attacker:IsPlayer() ) then
-			if attacker ==GetWorldEntity() and inflictor == player then --hunger
---				player:SetHealth( math.max(player:Health() - damageInfo:GetDamage()	, 0) )
---				player.ragdoll.health = player:Health()
---				return
-			elseif ( attacker == GetWorldEntity() ) then
-				if ( ( entity._NextWorldDamage and entity._NextWorldDamage > CurTime() )
-				or damageInfo:GetDamage() <= 10 ) then return end
+		if not attacker:IsPlayer() then
+			if attacker:IsWorld() then
+				if (entity._nextWorldDamage and entity._nextWorldDamage > CurTime()) or damageinfo:GetDamage() <= 10 then return end
 
 				-- Set the next world damage to be 1 second from now.
-				entity._NextWorldDamage = CurTime() + 1
-			elseif attacker:GetClass():find"cider" or attacker:GetClass():find("prop") then
-				damageInfo:SetDamage(0)
+				entity._nextWorldDamage = CurTime() + 1
+			elseif class:find("prop") then
+				damageinfo:SetDamage(0)
+
 				return
 			else
-				if (damageInfo:GetDamage() <= 25) then return end
+				if damageinfo:GetDamage() <= 25 then
+					return
+				end
 			end
 		else
-			if not damageInfo:IsBulletDamage() then
-				damageInfo:SetDamage(0)
+			if not damageinfo:IsBulletDamage() then
+				damageinfo:SetDamage(0)
+
 				return false
 			end
-			damageInfo:ScaleDamage( self.Config["Scale Ragdoll Damage"] )
+
+			damageinfo:ScaleDamage(arista.config.vars.ragdollDmgScale)
 		end
 
 		-- Check if the player is supposed to scale damage.
-		if (entity._Player._ScaleDamage and attacker ~= GetWorldEntity()) then damageInfo:ScaleDamage(entity._Player._ScaleDamage) end
+		if ply:getAristaVar("scaleDamage") and not attacker:IsWorld() then damageinfo:ScaleDamage(ply:getAristaVar("scaleDamage")) end
 
 		-- Take the damage from the player's health.
-		ply:SetHealth( math.max(ply:Health() - damageInfo:GetDamage(), 0) )
+		ply:SetHealth(math.max(ply:Health() - damageinfo:GetDamage(), 0))
 
 		-- Set the player's conscious health.
-		ply.ragdoll.health = ply:Health()
+		entity.health = ply:Health()
 
 		-- Create new effect data so that we can create a blood impact at the damage position.
 		local effectData = EffectData()
-			effectData:SetOrigin( damageInfo:GetDamagePosition() )
+			effectData:SetOrigin(damageinfo:GetDamagePosition())
 		util.Effect("BloodImpact", effectData)
 
-		-- Loop from 1 to 4 so that we can draw some blood decals around the ragdoll.
+		-- Loop from 1 to 2 so that we can draw some blood decals around the ragdoll.
 		for i = 1, 2 do
 			local trace = {}
 
 			-- Set some settings and information for the trace.
-			trace.start = damageInfo:GetDamagePosition()
-			trace.endpos = trace.start + (damageInfo:GetDamageForce() + (VectorRand() * 16) * 128)
+			trace.start = damageinfo:GetDamagePosition()
+			trace.endpos = trace.start + (damageinfo:GetDamageForce() + (VectorRand() * 16) * 128)
 			trace.filter = entity
 
 			-- Create the trace line from the set information.
@@ -1088,69 +1089,33 @@ function GM:EntityTakeDamage(entity, inflictor, attacker, amount, damageInfo)
 		end
 
 		-- Check to see if the player's health is less than 0 and that the player is alive.
-		if ( ply:Health() <= 0 and ply:Alive() ) then
+		if ply:Health() <= 0 and ply:Alive() then
 			ply:KillSilent()
 
 			-- Call some gamemode hooks to fake the player's death.
-			hook.Call("DoPlayerDeath",GAMEMODE, ply, attacker, damageInfo)
-			hook.Call("PlayerDeath",GAMEMODE, ply, inflictor, attacker, damageInfo:IsFallDamage())
+			gamemode.Call("DoPlayerDeath", ply, attacker, damageinfo)
+			gamemode.Call("PlayerDeath", ply, inflictor, attacker, damageinfo:IsFallDamage())
 		end
+
 		entity = ply
-		logme = true
 	end
-	if logme then
-		local smiter = attacker:GetClass()
-		local damage = damageInfo:GetDamage()
-		local smitee = entity:GetName()
-		local weapon = "."
-		local isplayer = false
-		if attacker:IsPlayer() then
-			isplayer = true
-			smiter = attacker:GetName()
-			if asplode then
-				weapon = " with a "..asplodeent
-			elseif ValidEntity( attacker:GetActiveWeapon() ) then
-				weapon = " with "..attacker:GetActiveWeapon():GetClass()
-			end
-		elseif attacker:IsVehicle() then
-			smiter = "an unoccupied "
-			if attacker:GetDriver():IsValid() then
-				isplayer = true
-				smiter = attacker:GetDriver():Name()
-				weapon = " in a "
-				if attacker.VehicleName then
-					weapon = weapon..attacker.VehicleName
-				else
-					weapon = weapon..attacker:GetClass()
-				end
-			elseif attacker.VehicleName then
-				smiter = smiter..attacker.VehicleName
-			else
-				smiter = smiter..attacker:GetClass()
-			end
-		elseif damageInfo:IsFallDamage() then
-			smiter = "The ground"
-		elseif attacker:IsWorld() and entity == inflictor then
-			smiter = "Hunger"
-		elseif smiter == "prop_physics" then
-			smiter = "a prop ("..attacker:GetModel()..")"
-		end
-		local text = "%s damaged %s for %G damage%s"
 
-		if isplayer then
-			GM:Log(EVENT_PLAYERDAMAGE,text,smiter,smitee,damage,weapon)
-		else
-			GM:Log(EVENT_DAMAGE,text,smiter,smitee,damage,weapon)
-		end
+	local finalDmg = math.Round(damageinfo:GetDamage())
+
+	if entity:IsPlayer() then
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.DAMAGE, entity:Name(), "(", entity:SteamID(), ")", " was damaged for ", finalDmg, " by ", attacker, " (using ", inflictor, ")")
+	else
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.DAMAGE, entity, " was damaged for ", finalDmg, " by ", attacker, " (using ", inflictor, ")")
 	end
 end
+
 -- Return the damage done by a fall
-function GM:GetFallDamage( ply, vel )
+function GM:GetFallDamage(ply, vel)
 	local val = 580  --No idea. This was taken from the C++ source though, aparently
-	return (vel-val)*(100/(1024-val))
+	return (vel - val) * (100 / (1024 - val))
 end
 
-
+/*
 -- Called when a player's weapons should be given.
 function GM:PlayerLoadout(ply)
 	if ( ply:HasAccess("t") ) then ply:Give("gmod_tool") end

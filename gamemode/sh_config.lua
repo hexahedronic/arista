@@ -34,6 +34,16 @@ arista.config.vars = {
 	localVoice = false,
 	-- Amount to multiply donators salary by.
 	donatorMult = 2,
+	-- If you want to stop props killing people.
+	preventPropKill = true,
+	-- Amount of time (by default) people should bleed for.
+	bleedTime = 3,
+	-- Respective hitgroup region damage multipliers.
+	headDmgScale = 3,
+	stomachDmgScale = 1.25,
+	normalDmgScale = 1,
+	legDmgScale = 0.75,
+	ragdollDmgScale = 1,
 }
 
 function arista.config:getDefault(var)

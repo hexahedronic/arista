@@ -26,15 +26,15 @@ arista.logs.colors = {
 
 function arista.logs.log(level, ...)
 	MsgC(arista.logs.colors.arista, "[ arista ] ", arista.logs.colors.grey, level .. ": ", arista.logs.colors.white, ...)
-	MsgN()
+	MsgN("")
 end
 
 function arista.logs.logNoPrefix(level, ...)
 	MsgC(arista.logs.colors.grey, level .. ": ", arista.logs.colors.white, ...)
-	MsgN()
+	MsgN("")
 end
 
 function arista.logs.event(level, type, ...)
 	MsgC(arista.logs.colors.grey, level .. " | " .. type .. ": ", arista.logs.colors.white, ...)
-	MsgN()
+	MsgN("")
 end

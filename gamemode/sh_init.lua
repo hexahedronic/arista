@@ -155,7 +155,7 @@ function GM:PhysgunDrop(ply, entity)
 end
 
 function GM:OnPhysgunFreeze(weapon, phys, entity, ply)
-	if entity:IsVehicle() and not entity:isTouchable() then
+	if entity:IsVehicle() and not entity:isTouchable(ply) then
 		return false
 	end
 

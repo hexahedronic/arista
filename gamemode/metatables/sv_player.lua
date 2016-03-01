@@ -6,6 +6,10 @@ function player:databaseAristaVar(var)
 	self._databaseVars[var] = self:getAristaVar(var)
 end
 
+function player:hasTripped()
+	return self:getAristaVar("tripped")
+end
+
 ---
 -- Load a player's data from the SQL database, overwriting any data already loaded on the player. Performs it's actions in a threaded query.
 -- If the player's data has not been loaded after 30 seconds, it will call itself again
@@ -354,7 +358,7 @@ function player:knockOut(time, velocity)
 	end
 	-- Try to send it flying in the same direction as us.
 	timer.Create("Ragdoll Force Application "..self:UniqueID(), 0.05, 5, function()
-		doforce(ragdoll, (velocity or self:GetVelocity()) * 2)
+		doforce(ragdoll, (velocity or self:GetVelocity()) * 100)
 	end)
 
 	-- Make it look even more like us.

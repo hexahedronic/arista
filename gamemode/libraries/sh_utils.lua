@@ -10,6 +10,7 @@ function arista.utils.nextFrame(func, ...)
 end
 
 function arista.utils.isAdmin(ply, super)
+	if not ply or not IsValid(ply) then return end
 	return (super and ply:IsSuperAdmin()) or ply:IsAdmin()
 end
 

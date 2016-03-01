@@ -465,6 +465,12 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("unconcious", false)
 	ply:networkAristaVar("ragdoll", NULL)
 
+	ply:setAristaVar("nextChangeTeam", {})
+	ply:setAristaVar("nextUse", {})
+	ply:setAristaVar("gunCounts", {})
+	ply:setAristaVar("storedWeapons", {})
+	ply:setAristaVar("freshWeapons", {})
+
 	-- Incase we have changed default database info.
 	if success then
 		local changed = false
@@ -1184,7 +1190,6 @@ function GM:PlayerSwitchFlashlight(ply, on)
 	return not (ply:isArrested() or ply:isUnconscious() or ply:isTied())
 end
 
-/*
 -- Called when the player presses their use key (normally e) on a usable entity.
 -- What specifies that an entity is usable is so far unknown, for instance some physics props are usable and others are not.
 -- This hook is called once per tick while the player holds the use key down on some entities. Keep this in mind if you are going to notify them of something.
@@ -1209,42 +1214,61 @@ function GM:PlayerUse(ply, ent)
 end
 
 function GM:PlayerCanJoinTeam(ply, teamid)
-	local teamdata = cider.team.get(teamid);
-	if (not teamdata) then
-		return false; -- If it's not a valid team (by our standards) then don't join it.
+	local teamdata-- = cider.team.get(teamid);
+	-- todo: cider team here
+	if not teamdata then
+		return false -- If it's not a valid team (by our standards) then don't join it.
 	end
-	teamid = teamdata.index;
+
+	teamid = teamdata.index
+
+	local nextChange = ply:getAristaVar("nextChangeTeam") or {}
+
 	-- Run a series of checks
-	if ((ply._NextChangeTeam[teamid] or 0) > CurTime()) then
-		ply:Notify("You must wait " .. string.ToMinutesSeconds(ply._NextChangeTeam[teamid] - CurTime()) .. " before you can become a " .. teamdata.name .. "!", 1);
-		return false;
-	elseif (ply:Warranted()) then
-		ply:Notify("You cannot change teams while warranted!", 1);
-		return false;
-	elseif (ply:Arrested()) then
-		ply:Notify("You cannot change teams while arrested!", 1);
-		return false;
-	elseif (ply:Tied()) then
-		ply:Notify("You cannot change teams while tied up!", 1);
+	if (nextChange[teamid] or 0) > CurTime() then
+		--ply:Notify("You must wait " .. string.ToMinutesSeconds(ply._NextChangeTeam[teamid] - CurTime()) .. " before you can become a " .. teamdata.name .. "!", 1)
+		-- todo: language
+
 		return false
-	elseif (not gamemode.Call("PlayerCanDoSomething", ply, true)) then
-		return false;
+	elseif ply:isWarranted() then
+		ply:notify("You cannot change teams while warranted!")
+
+		return false
+	elseif ply:isArrested() then
+		ply:notify("You cannot change teams while arrested!")
+
+		return false
+	elseif ply:isTied() then
+		ply:notify("You cannot change teams while tied up!")
+
+		return false
+	elseif gamemode.Call("PlayerCanDoSomething", ply, true) == false then
+		return false
 	end
-	-- Ask the shared hook which handles the complex gang related tings.
-	return self:PlayerCanJoinTeamShared(ply, teamid);
+
+	-- Ask the shared hook which handles the complex gang related things.
+	return self:PlayerCanJoinTeamShared(ply, teamid)
 end
 
 function GM:PlayerDisconnected(ply)
 	GM:Log(EVENT_PUBLICEVENT, "%s (%s) disconnected.", ply:Name(), ply:SteamID())
-	cider.entity.saveAccess(ply)
-	ply:HolsterAll()
+	--cider.entity.saveAccess(ply)
+	--  Access incase of rejoin
+
+	-- Holseter all weapons.
+	ply:holsterAll()
+
 	-- Get rid of any inconvenient ragdolls
-	ply:WakeUp(true)
-	ply:SaveData()
+	ply:wakeUp(true)
+
+	-- Save data.
+	ply:saveData()
+
 	-- Call the base class function.
-	self.BaseClass:PlayerDisconnected(ply)
+	return self.BaseClass:PlayerDisconnected(ply)
 end
 
+/*
 -- Called when a player says something.
 -- TODO: Move to command library
 function GM:PlayerSay(ply, text, public)

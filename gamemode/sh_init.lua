@@ -11,10 +11,12 @@ DeriveGamemode("Sandbox")
 
 -- This replaces GM/GAMEMODE.
 arista.gamemode = {
-	name = "arista RolePlay FrameWork",
+	name = "arista Framework",
 	author = "kuromeku, Lexi, Q2F2, Ghosty",
 	email = "N/A",
 	website = "https://github.com/hexahedronic/arista/",
+
+	info = "A re-write of AppleJack (https://github.com/Lexicality/applejack-old)",
 
 	folder = GM.Folder .. "/",
 	luaFolder = GM.Folder:sub(11, -1) .. "/",
@@ -27,6 +29,8 @@ GM.Name = arista.gamemode.name
 GM.Author = arista.gamemode.author
 GM.Email = arista.gamemode.email
 GM.Website = arista.gamemode.website
+
+GM.Info = arista.gamemode.info
 
 GM.Folder = arista.gamemode.folder
 GM.LuaFolder = arista.gamemode.luaFolder

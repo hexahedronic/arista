@@ -460,6 +460,8 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("knockOutTime", arista.config:getDefault("knockOutTime"))
 	ply:networkAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
 
+	ply:networkAristaVar("nextSpawnTime", CurTime())
+
 	-- Incase we have changed default database info.
 	if success then
 		local changed = false
@@ -597,40 +599,68 @@ function GM:PlayerCanGainFrag(ply, victim)
 	return true
 end
 
--- Called when a player's model should be set.
-function GM:PlayerSetModel(ply)
-	local customModel = ply:getAristaVar("customModel")
-	local team = ply:Team()
+do
+	local fallbackModels = {
+		"models/player/group01/female_01.mdl",
+		"models/player/group01/female_02.mdl",
+		"models/player/group01/female_04.mdl",
+		"models/player/group01/female_05.mdl",
+		"models/player/group01/female_06.mdl",
+		"models/player/group01/male_01.mdl",
+		"models/player/group01/male_02.mdl",
+		"models/player/group01/male_03.mdl",
+		"models/player/group01/male_04.mdl",
+		"models/player/group01/male_05.mdl",
+		"models/player/group01/male_06.mdl",
+		"models/player/group01/male_07.mdl",
+		"models/player/group01/male_08.mdl",
+		"models/player/group01/male_09.mdl",
+	}
 
-	if customModel then
-		if istable(customModel) and customModel[ply:Team()] then
-			ply:SetModel(customModel[ply:Team()])
-		else
-			ply:SetModel(customModel)
-		end
+	local function fallback(ply)
+		arista.logs.logNoPrefix(arista.logs.E.WARNING, ply:Name(), "(", ply:SteamID(), ") failed to locate a valid playermodel, so was randomly selected from fallbacks.")
 
-		return true
+		ply:SetModel(table.Random(fallbackModels))
 	end
 
-	local models = false--cider.team.query(ply:Team(), "models")
-	-- todo: getting models
+	-- Called when a player's model should be set.
+	function GM:PlayerSetModel(ply)
+		local customModel = ply:getAristaVar("customModel")
+		local team = ply:Team()
 
-	-- Check if the models table exists.
-	if models then
-		local gen = ply:getAristaVar("gender"):lower()
-		models = models[gen]
+		if customModel then
+			if istable(customModel) and customModel[ply:Team()] then
+				ply:SetModel(customModel[ply:Team()])
+			else
+				ply:SetModel(customModel)
+			end
 
-		-- Check if the models table exists for this gender.
+			return true
+		end
+
+		local models = false--cider.team.query(ply:Team(), "models")
+		-- todo: getting models
+
+		-- Check if the models table exists.
 		if models then
-			local genModels = ply._modelChoices[gen] or {}
-			if not genModels[team] then return end
+			local gen = ply:getAristaVar("gender"):lower()
+			models = models[gen]
 
-			local model = models[genModels[team]]
+			-- Check if the models table exists for this gender.
+			if models then
+				local genModels = ply._modelChoices[gen] or {}
+				if not genModels[team] then return end
 
-			-- Set the player's model to the we got.
-			ply:SetModel(model)
+				local model = models[genModels[team]]
+
+				-- Set the player's model to the we got.
+				ply:SetModel(model)
+			else
+				-- Mayonaise is not a gender?
+				fallback(ply)
+			end
 		else
-			-- Mayonaise is not a gender?
+			fallback(ply)
 		end
 	end
 end
@@ -698,47 +728,55 @@ function GM:PlayerTraceAttack(ply, damageInfo, direction, trace)
 	return false
 end
 
-/*
 -- Called just before a ply dies.
 function GM:DoPlayerDeath(ply, attacker, damageInfo)
-	ply._Deaded = true
+	ply:setAristaVar("dead", true)
+
+	-- Fixes issues.
 	if ply:InVehicle() then
 		ply:ExitVehicle()
 	end
-	if ValidEntity(ply._BackGun) then
-		ply._BackGun:Remove()
+
+	local backGun = ply:getAristaVar("backGun")
+	if IsValid(backGun) then
+		backGun:Remove()
 	end
-	for k, v in pairs( ply:GetWeapons() ) do
+
+	for k, v in pairs(ply:GetWeapons()) do
 		local class = v:GetClass()
 
 		-- Check if this is a valid item.
-		if (self.Items[class]) then
+		--[[if (self.Items[class]) then
 			if ( hook.Call("PlayerCanDrop",GAMEMODE, ply, class, true, attacker) ) then
 				self.Items[class]:Make(ply:GetPos(), 1);
 			end
-		end
+		end]]
 	end
-	if #ply._StoredWeapons >= 1 then
-		for _, v in pairs(ply._StoredWeapons) do
+
+	local storedWeapons = ply:getAristaVar("storedWeapons")
+	if storedWeapons and #storedWeapons > 0 then
+		for _, v in pairs(storedWeapons) do
 			local class = v
 
 			-- Check if this is a valid item.
-			if (self.Items[class]) then
+			--[[if (self.Items[class]) then
 				if ( hook.Call("PlayerCanDrop",GAMEMODE, ply, class, true, attacker) ) then
 					self.Items[class]:Make(ply:GetPos(), 1);
 				end
-			end
+			end]]
 		end
-		ply._StoredWeapons = {}
+
+		ply:setAristaVar("storedWeapons", {})
 	end
 
 	-- Unwarrant them, unarrest them and stop them from bleeding.
-	if (ply ~= attacker and attacker:IsPlayer()) then
-		ply:UnWarrant();
+	if ply ~= attacker and attacker:IsPlayer() then
+		ply:unWarrant()
 	end
-	ply:UnArrest(true);
-	ply:UnTie(true);
-	ply:StopBleeding()
+
+	ply:unArrest(true)
+	ply:unTie(true)
+	ply:stopBleeding()
 
 	-- Strip the ply's weapons and ammo.
 	ply:StripWeapons()
@@ -748,61 +786,67 @@ function GM:DoPlayerDeath(ply, attacker, damageInfo)
 	ply:AddDeaths(1)
 
 	-- Check it the attacker is a valid entity and is a ply.
-	if ( ValidEntity(attacker) and attacker:IsPlayer() ) then
-		if (ply ~= attacker) then
-			if ( hook.Call("PlayerCanGainFrag",GAMEMODE, attacker, ply) ) then
+	if IsValid(attacker) and attacker:IsPlayer() and ply ~= attacker then
+			local res = gamemode.Call("PlayerCanGainFrag", attacker, ply)
+
+			if res then
 				attacker:AddFrags(1)
 			end
-		end
 	end
 end
 
 -- Called when a ply dies.
-function GM:PlayerDeath(ply, inflictor, attacker, ragdoll,fall)
-
-	-- Knock out the ply to simulate their death. (Even if they're allready a ragdoll, we need to handle the multiple raggies.
-	ply:KnockOut();
+function GM:PlayerDeath(ply, inflictor, attacker, fall)
+	-- Knock out the ply to simulate their death. (Even if they're allready a ragdoll, we need to handle the multiple raggies.)
+	ply:knockOut()
 
 	-- Set their next spawn time.
-	ply.NextSpawnTime = CurTime() + ply._SpawnTime
+	local spawnTime = ply:getAristaVar("spawnTime")
+	ply:setAristaVar("nextSpawnTime", CurTime() + spawnTime)
 
-	-- Set it so that we can the next spawn time client side.
-	ply:SetCSVar(CLASS_LONG, "_NextSpawnTime", ply.NextSpawnTime)
+	local class = attacker:GetClass()
 
 	-- Check if the attacker is a ply.
-	local formattext,text1,text2,text3,pvp = "",ply:GetName(),"",""
-	if ( attacker:IsPlayer() ) then
-		pvp,text1,text2,formattext = true,attacker:Name(),ply:Name(),"%s killed %s"
-		if ( ValidEntity( attacker:GetActiveWeapon() ) ) then
-			formattext,text3 = formattext.." with a %s.",attacker:GetActiveWeapon():GetClass()
+	if attacker:IsPlayer() then
+		local wep = attacker:GetActiveWeapon()
+
+		if IsValid(wep) then
+			arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by ", attacker, "(", attacker:SteamID(), ") using ", wep, ".")
 		else
-			formattext = formattext.."."
+			arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by ", attacker, "(", attacker:SteamID(), ").")
 		end
-	elseif( attacker:IsVehicle() ) then
-		local formattext,text1,text2 = "%s was run over by a %s",ply:Name(),attacker:GetClass();
+	elseif attacker:IsVehicle() then
+		local name = attacker:GetClass()
+
 		if attacker.DisplayName then
-			text2 = attacker.DisplayName
+			name = attacker.DisplayName
 		elseif attacker.VehicleName then
-			text2 = attacker.VehicleName
+			name = attacker.VehicleName
+		elseif attacker.PrintName then
+			name = attacker.PrintName
 		end
-		if ( ValidEntity( attacker:GetDriver()) and attacker:GetDriver():IsPlayer()) then
-			pvp = true
-			formattext,text3 = formattext.." driven by %s",attacker:GetDriver():Name()
+
+		if attacker:validDriver() then
+			local driver = attacker:GetDriver()
+
+			arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was ran over by ", driver:Name(), "(", driver:SteamID(), ") in a ", name,  ".")
 		end
+
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was ran over by a ", name,  ".")
 	elseif fall then
-		formattext = "%s fell to a clumsy death."
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") fell to their death.")
 	elseif attacker:IsWorld() and ply == inflictor then
-		formattext = "%s starved to death."
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") starved to death.")
 	elseif attacker:GetClass() == "worldspawn" then
-		formattext = "%s was killed by the map."
-	elseif attacker:GetClass() == "prop_physics" then
-		formattext,text2 = "%s was killed with a physics object. (%s)",attacker:GetModel()
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by the map.")
+	elseif attacker:GetClass():find("prop_physics", 1, true) then
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by a prop (", attacker:GetModel(), ").")
 	else
-		formattext,text1,text2 = "%s killed %s.",attacker:GetClass(),ply:Name()
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.KILL, ply:Name(), "(", ply:SteamID(), ") was killed by ", attacker".")
 	end
-	GM:Log(EVENT_DEATH,formattext,text1,text2,text3)
 end
 
+/*
 local function donttazemebro(class)
 	return class:find'cider' or class:find'prop';
 end

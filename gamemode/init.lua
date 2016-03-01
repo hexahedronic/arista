@@ -56,8 +56,6 @@ function GM:InitPostEntity()
 		arista._internaldata.entities[entity] = entity
 	end
 
-	-- todo: Send entities to client to eliminate weird visual issues with physguning things.
-
 	arista.utils.nextFrame(gamemode.Call, "LoadData") -- Tell plugins to load their datas a frame after this.
 	arista._internaldata.initSuccess = true
 
@@ -459,11 +457,16 @@ function GM:PlayerDataLoaded(ply, success)
 
 	ply:networkAristaVar("knockOutTime", arista.config:getDefault("knockOutTime"))
 	ply:networkAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
+	ply:networkAristaVar("arrestTime", arista.config:getDefault("arrestTime"))
+
+	ply:networkAristaVar("unconcious", false)
+	ply:networkAristaVar("incapacitated", false)
+
+	ply:networkAristaVar("ragdoll", NULL)
 
 	ply:networkAristaVar("nextSpawnTime", CurTime())
 	ply:networkAristaVar("knockOutPeriod", 0)
-	ply:networkAristaVar("unconcious", false)
-	ply:networkAristaVar("ragdoll", NULL)
+	ply:networkAristaVar("unarrestTime", 0)
 
 	ply:setAristaVar("nextChangeTeam", {})
 	ply:setAristaVar("nextUse", {})
@@ -560,6 +563,15 @@ function GM:PlayerInitialSpawn(ply)
 					net.WriteUInt(team, 8)
 					net.WriteUInt(choice, 8)
 				end
+			end
+		net.Send(ply)
+
+
+		net.Start("arista_sendMapEntities")
+			net.WriteUInt(table.Count(arista._internaldata.entities), 8)
+
+			for k, v in pairs(arista._internaldata.entities) do
+				net.WriteEntity(v)
 			end
 		net.Send(ply)
 
@@ -1179,9 +1191,9 @@ function GM:ShutDown()
 	ErrorNoHalt(os.date().." - Server shutting down\n")
 	ErrorNoHalt("----------------------\n")
 
-	for k, v in pairs(player.GetAll() ) do
+	for k, v in pairs(player.GetAll()) do
 		v:holsterAll()
-		ply:saveData()
+		v:saveData()
 	end
 end
 
@@ -1194,23 +1206,31 @@ end
 -- What specifies that an entity is usable is so far unknown, for instance some physics props are usable and others are not.
 -- This hook is called once per tick while the player holds the use key down on some entities. Keep this in mind if you are going to notify them of something.
 function GM:PlayerUse(ply, ent)
-	if (ply:KnockedOut()) then
+	if ply:isUnconscious() then
 		-- If you're unconsious, you can't use things.
 		return false
-	elseif (ply:Arrested() or ply:Tied() or ply._Stunned) then
+	elseif ply:isArrested() or ply:isTied() or ply:isStunned() then
 		-- Prevent spam
-		if (not ply._NextNotify or CurTime() > ply._NextNotify) then
-			ply:Notify("You cannot use that while in this state!", 1);
-			ply._NextNotify = CurTime() + 1;
+		local nextNotify = ply:getAristaVar("nextNotify")
+
+		if not nextNotify or CurTime() > nextNotify then
+			ply:notify("You cannot use that while in this state!")
+			-- todo: language
+
+			ply:setAristaVar("nextNotify", CurTime() + 1)
 		end
+
 		-- If you're arrested, tied, or stunned you can't use things. (no hands!)
-		return false;
-	elseif (cider.entity.isDoor(ent) and not gamemode.Call("PlayerCanUseDoor", ply, ent)) then
+		return false
+	elseif --[[cider.entity.isDoor(ent)]] false and not gamemode.Call("PlayerCanUseDoor", ply, ent) then
+		-- todo: doors
+
 		-- If the hook says you can't open the door then don't let you. (Prevents doors that should be locked from glitching open)
-		return false;
+		return false
 	end
-	-- Let sandbox/base deal with everything else~
-	return self.BaseClass:PlayerUse(ply, ent);
+
+	-- Let sandbox/base deal with everything else.
+	return self.BaseClass:PlayerUse(ply, ent)
 end
 
 function GM:PlayerCanJoinTeam(ply, teamid)
@@ -1251,9 +1271,11 @@ function GM:PlayerCanJoinTeam(ply, teamid)
 end
 
 function GM:PlayerDisconnected(ply)
-	GM:Log(EVENT_PUBLICEVENT, "%s (%s) disconnected.", ply:Name(), ply:SteamID())
+	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ")  has disconnected.")
+
+	-- Access incase of rejoin
 	--cider.entity.saveAccess(ply)
-	--  Access incase of rejoin
+	-- todo: access
 
 	-- Holseter all weapons.
 	ply:holsterAll()
@@ -1268,11 +1290,12 @@ function GM:PlayerDisconnected(ply)
 	return self.BaseClass:PlayerDisconnected(ply)
 end
 
-/*
 -- Called when a player says something.
 -- TODO: Move to command library
 function GM:PlayerSay(ply, text, public)
-	if string.find(text,"@@@@") then
+	return text
+	-- todo: fix
+	--[[if string.find(text,"@@@@") then
 		RunConsoleCommand("kickid", ply:UserID(), "Spam")
 	end
 	--print(ply, text,text:sub(-7), public)
@@ -1337,14 +1360,15 @@ function GM:PlayerSay(ply, text, public)
 		end
 	end
 	-- Return an empty string so the text doesn't show.
-	return ""
+	return ""]]
 end
 
 -- Called when a player attempts suicide.
 function GM:CanPlayerSuicide(ply)
-	return false;
+	return false
 end
 
+/*
 local function utwin(ply, ent)
 	if (IsValid(ply)) then
 		ply:Emote("somehow manages to cut through the rope and puts " .. ply._GenderWord .. " knife away, job done.");
@@ -1384,24 +1408,18 @@ function GM:KeyPress(ply, key)
 		elseif( ply:KnockedOut() and (ply._KnockoutPeriod or 0) <= CurTime() and ply:Alive()) then
 			ply:WakeUp();
 		end
-	elseif (key == IN_USE) then
+	elseif key == IN_USE then
 		-- Grab what's infront of us.
 		local ent = ply:GetEyeTraceNoCursor().Entity
-		if (not IsValid(ent)) then
-			return;
-		elseif (IsValid(ent._Player)) then
-			ent = ent._Player;
+
+		if not IsValid(ent) then
+			return
+		elseif IsValid(ent._Player) then
+			ent = ent._Player
 		end
-		if (ent:IsPlayer()
-		and ply:KeyDown(IN_SPEED)
-		and gamemode.Call("PlayerCanUntie", ply, ent)
-		and ent:GetPos():Distance(ply:GetPos()) < 200) then
-			ply:Emote("starts ineffectually sawing at " .. ent:Name() .. "'s bonds with a butter knife");
-			timer.Conditional(ply:UniqueID() .. " untying timer", self.Config['UnTying Timeout'], uttest, utwin, utfail, ply, ent, ply:GetPos(), ent:GetPos());
-			ply._UnTying = true;
-			ent._beUnTied = true;
+
 		--[[~ Open mah doors ~]]--
-		elseif cider.entity.isDoor(ent) and ent:GetClass() ~= "prop_door_rotating" and gamemode.Call("PlayerCanUseDoor", ply, ent) then
+		if cider.entity.isDoor(ent) and ent:GetClass() ~= "prop_door_rotating" and gamemode.Call("PlayerCanUseDoor", ply, ent) then
 			cider.entity.openDoor(ent,0);
 		--[[~ Crank dem Containers Boi ~]]--
 		elseif cider.container.isContainer(ent) and gamemode.Call("PlayerCanUseContainer", ply, ent) then

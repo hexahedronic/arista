@@ -10,6 +10,8 @@ arista.config.defaults = {
 	knockOutTime = 60,
 	-- Time until respawn.
 	spawnTime = 30,
+	-- Time arrested for.
+	arrestTime = 300,
 }
 
 -- Stuff that's saved in the database, if you want to fuck with it, then
@@ -44,6 +46,15 @@ arista.config.vars = {
 	normalDmgScale = 1,
 	legDmgScale = 0.75,
 	ragdollDmgScale = 1,
+	-- Respective speeds for normal movement or when incapacictated,
+	incapacitatedRunSpeed = 120,
+	incapacitatedWalkSpeed = 100,
+	runSpeed = 220,
+	walkSpeed = 180,
+	jumpPower = 200,
+	-- Warrant expire times.
+	searchWarrantTime = 220,
+	arrestWarrantTime = 360,
 }
 
 function arista.config:getDefault(var)

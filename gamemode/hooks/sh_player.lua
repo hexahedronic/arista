@@ -114,9 +114,9 @@ end
 
 -- Called when a player attempts to noclip.
 function GM:PlayerNoClip(ply)
-	if ply:isArrested() or ply:isUnconscious() or ply:isTied() or not arista.utils.isAdmin(ply) then
+	if ply:isArrested() or ply:isUnconscious() or ply:isTied() then
 		return false
 	end
 
-	return true
+	return arista.utils.isAdmin(ply)
 end

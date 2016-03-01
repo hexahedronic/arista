@@ -6,10 +6,6 @@ function player:databaseAristaVar(var)
 	self._databaseVars[var] = self:getAristaVar(var)
 end
 
-function player:hasTripped()
-	return self:getAristaVar("tripped")
-end
-
 ---
 -- Load a player's data from the SQL database, overwriting any data already loaded on the player. Performs it's actions in a threaded query.
 -- If the player's data has not been loaded after 30 seconds, it will call itself again
@@ -36,28 +32,8 @@ function player:isDonator()
 	return donator and donator > 0
 end
 
--- todo: port/add these stubs
-function player:isArrested()
-end
-
-function player:isUnconscious()
-	return self:getAristaVar("unconscious")
-end
-
-function player:isTied()
-end
-
 function player:getRagdoll()
 	return self.ragdoll and self.ragdoll.entity
-end
-
--- Maybe?
---[[function player:isHandcuffed()
-	return self:isTied(true)
-end]]
-
-function player:isStuck()
-	return self:getAristaVar("stuckInWorld")
 end
 
 function player:useDisallowed()
@@ -131,6 +107,7 @@ function player:removeBlacklist(kind, thing)
 		end
 		self.cider._Blacklist[kind] = blacklist
 	end]]
+	-- todo: doors
 end
 
 ---
@@ -150,6 +127,7 @@ function player:giveDoor(door, name, unsellable)
 	door:UnLock()
 	door:EmitSound("doors/door_latch3.wav")
 	self:AddCount("doors",door)]]
+	-- todo: doors
 end
 
 ---
@@ -229,6 +207,8 @@ do
 		self:KillSilent()
 		-- Return true because it was successful.
 		return true]]
+
+		-- todo: team/job stuff
 	end
 end
 
@@ -236,11 +216,12 @@ end
 -- Demotes a player from their current team.
 function player:demote()
 	self:holsterAll()
-	--[[if cider.team.getGroupLevel(self:Team()) == 1 then
-		self:JoinTeam(TEAM_DEFAULT)
-	else
-		self:JoinTeam(cider.team.getGroupBase(cider.team.getGroupByTeam(self:Team())))
-	end]]
+
+	--if cider.team.getGroupLevel(self:Team()) == 1 then
+		self:joinTeam(TEAM_DEFAULT)
+	--else
+	--	self:JoinTeam(cider.team.getGroupBase(cider.team.getGroupByTeam(self:Team())))
+	--end
 end
 
 local function warrantTimer(ply)
@@ -256,24 +237,28 @@ end
 -- @param time Optional, specify the time for the warrant to last
 function player:warrant(class, time)
 	gamemode.Call("PlayerWarranted", self, class, time)
-	--[[self._Warranted = class
-	self:SetNWString("Warrant", class)
-	local expires = time or (class == "arrest" and GM.Config["Arrest Warrant Expire Time"] or GM.Config["Search Warrant Expire Time"])
+
+	self:setAristaVar("warrant", class)
+	local expires = time or (class == "arrest" and arista.config.vars.arrestWarrantTime or arista.config.vars.searchWarrantTime)
+
 	-- Prevents any unplesant bugs due to user error.
 	if expires <= 0 then
 		expires = 0.1
 	end
-	self:SetCSVar(CLASS_LONG, "_WarrantExpireTime", CurTime() + expires)
-	timer.Create("Warrant Expire: "..self:UniqueID(), expires, 1, warranttimer, self, class)]]
+
+	self:setAristaVar("warrantExpireTime", CurTime() + expires)
+	-- todo: networkme
+
+	timer.Create("Warrant Expire " .. self:UniqueID(), expires, 1, function() warrantTimer(self, class) end)
 end
 
 ---
 -- Removes the player's warrant
 function player:unWarrant()
 	gamemode.Call("PlayerUnWarranted", self)
-	--[[self._Warranted = nil
-	self:SetNWString("Warrant", "")
-	timer.Stop("Warrant Expire: "..self:UniqueID())]]
+
+	self:setAristaVar("warrant", nil)
+	timer.Destroy("Warrant Expire " .. self:UniqueID())
 end
 
 local uptr, downtr = Vector(0, 0, 256), Vector(0, 0, -1024)
@@ -356,10 +341,13 @@ function player:knockOut(time, velocity)
 	for i, matrix in pairs(bones) do
 		ragdoll:SetBoneMatrix(i, matrix)
 	end
+	-- todo: not working
+
 	-- Try to send it flying in the same direction as us.
 	timer.Create("Ragdoll Force Application "..self:UniqueID(), 0.05, 5, function()
 		doforce(ragdoll, (velocity or self:GetVelocity()) * 100)
 	end)
+	-- todo: nasty timer
 
 	-- Make it look even more like us.
 	ragdoll:SetSkin(self:GetSkin())
@@ -423,6 +411,7 @@ function player:wakeUp(reset)
 		self:Spawn()
 		return
 	end]]
+	-- todo: ??
 
 	-- Get us out of this spectation
 	self:UnSpectate()
@@ -476,118 +465,158 @@ end
 -- Takes a player's weapons away and stores them in a table for later returnal
 -- @param noitems Do not save any items the player has equipped
 function player:takeWeapons(noitems)
-	--[[local class
+	local stored = {}
+
 	for _, weapon in pairs(self:GetWeapons()) do
-		class = weapon:GetClass()
-		if (not (noitems and GM.Items[class])) then
-			self._StoredWeapons[class] = true
-		end
+		local class = weapon:GetClass()
+
+		--if not (noitems and GM.Items[class]) then
+			stored[class] = true
+		--end
 	end
+
+	self:setAristaVar("storedWeapons", stored)
+
+	--[[
 	if (IsValid(self:GetActiveWeapon())) then
 		self._StoredWeapon = self:GetActiveWeapon():GetClass()
 	else
 		self._StoredWeapon = nil
-	end
-	self:StripWeapons()]]
+	end]]
+	-- todo: fix em'
+
+	self:StripWeapons()
 end
 
 ---
 -- Gives a player their stored weapons back
 function player:returnWeapons()
-	--[[if (not gamemode.Call("PlayerCanRecieveWeapons", self)) then
+	local res = gamemode.Call("PlayerCanRecieveWeapons", self)
+
+	if res == false then
 		return false
 	end
-	for class in pairs(self._StoredWeapons) do
+
+	local storedWeapons = self:getAristaVar("storedWeapons")
+
+	for class in pairs(storedWeapons) do
 		self:Give(class)
-		self._StoredWeapons[class] = nil
 	end
-	if (self._StoredWeapon) then
+
+	self:setAristaVar("storedWeapons", {})
+
+	--[[if (self._StoredWeapon) then
 		self:SelectWeapon(self._StoredWeapon)
 		self._StoredWeapon = nil
 	else
-		self:SelectWeapon("cider_hands")
+		--self:SelectWeapon("cider_hands")
 	end]]
+	-- todo: fix
 end
 
 ---
 -- incapacitates a player - drops their movement speed, prevents them from jumping or doing most things.
 function player:incapacitate()
-	--[[self:SetRunSpeed( GM.Config["Incapacitated Speed"])
-	self:SetWalkSpeed(GM.Config["Incapacitated Speed"])
+	self:SetRunSpeed(arista.config.vars.incapacitatedRunSpeed)
+	self:SetWalkSpeed(arista.config.vars.incapacitatedWalkSpeed)
 	self:SetJumpPower(0)
-	self:SetNWBool("Incapacitated", true)]]
+	self:setAristaVar("incapacitated", true)
+	-- todo: networkme
 end
 
 ---
 -- Recapacitates a player, letting them walk, run and jump like normal
 function player:recapacitate()
-	--[[if (not gamemode.Call("PlayerCanBeRecapacitated", self)) then
+	local res = gamemode.Call("PlayerCanBeRecapacitated", self)
+
+	if res == false then
 		return false
 	end
-	self:SetRunSpeed( GM.Config["Run Speed" ])
-	self:SetWalkSpeed(GM.Config["Walk Speed"])
-	self:SetJumpPower(GM.Config["Jump Power"])
-	self:SetNWBool   ("Incapacitated",  false)
-	return true]]
+
+	self:SetRunSpeed(arista.config.vars.runSpeed)
+	self:SetWalkSpeed(arista.config.vars.walkSpeed)
+	self:SetJumpPower(arista.config.vars.jumpPower)
+	self:setAristaVar("incapacitated", false)
+
+	return true
 end
 
 ---
 -- Ties a player up so they cannot do anything but walk about
 function player:tieUp()
-	--[[if self:isTied() then return end
-	self:Incapacitate()
-	self:TakeWeapons()
-	self:SetNWBool("Tied", true)
-	self:Flashlight(false)]]
+	if self:isTied() then return end
+
+	self:incapacitate()
+	self:takeWeapons()
+
+	self:setAristaVar("tied", true)
+	-- todo: networkme
+
+	self:Flashlight(false)
 end
 
 ---
 -- Unties a player so that they can do things again
 -- @param reset If true, do not give the player their weapons back
 function player:unTie(reset)
-	--[[if (not reset and not self:isTied()) then return end
-	self:SetNWBool("Tied", false)
-	if (not reset) then
-		self:Recapacitate()
-		self:ReturnWeapons()
-	end]]
+	if not reset and not self:isTied() then return end
+
+	self:setAristaVar("tied", false)
+
+	if not reset then
+		self:recapacitate()
+		self:returnWeapons()
+	end
 end
 
 local function arrestTimer(ply)
-	--[[if (not IsValid(ply)) then return end
-	ply:UnArrest(true)
-	ply:Notify("Your arrest time has finished!")
-	ply:Spawn() -- Let the player out of jail]]
+	if not IsValid(ply) then return end
+	ply:unArrest(true)
+	ply:notify("Your arrest time has finished!")
+	-- todo: language
+
+	ply:Spawn()
 end
+
 ---
 -- Arrest a player so they cannot do most things, then unarrest them a bit later
 -- @param time Optional - Specify how many seconds the player should be arrested for. Will default to the player's ._ArrestTime var
 function player:arrest(time)
-	--[[if (self:Arrested()) then return end
 	gamemode.Call("PlayerArrested", self)
-	self.cider._Arrested = true
-	self:SetNWBool("Arrested", true)
-	timer.Create("UnArrest: "..self:UniqueID(), time or self._ArrestTime, 1, arresttimer, self)
-	self:SetCSVar(CLASS_LONG, "_UnarrestTime", CurTime() + (time or self._ArrestTime))
-	self:Incapacitate()
-	self:TakeWeapons(true)
+
+	self:setAristaVar("arrested", true)
+
+	local arrestTime = time or self:getAristaVar("arrestTime")
+	timer.Create("UnArrest " .. self:UniqueID(), arrestTime, 1, function() arrestTimer(self) end)
+
+	self:setAristaVar("unarrestTime", CurTime() + arrestTime)
+	-- todo: networkme
+
+	self:incapacitate()
+
+	self:takeWeapons(true)
 	self:StripAmmo()
+
 	self:Flashlight(false)
-	self:UnWarrant()
-	self:UnTie(true)]]
+
+	self:unWarrant()
+	self:unTie(true)
 end
 ---
 -- Unarrest an arrested player before their timer has run out.
 function player:unArrest(reset)
-	--[[if (not self:Arrested()) then return end
+	if not self:isArrested() then return end
 	gamemode.Call("PlayerUnArrested", self)
-	self.cider._Arrested = false
-	self:SetNWBool("Arrested", false)
-	timer.Stop("UnArrest: "..self:UniqueID())
-	if (not reset) then
-		self:Recapacitate()
-		self:ReturnWeapons()
-	end]]
+
+	self:setAristaVar("arrested", false)
+	self:setAristaVar("unarrestTime", 0)
+
+	timer.Destroy("UnArrest "..self:UniqueID())
+
+	if not reset then
+		self:recapacitate()
+		self:returnWeapons()
+	end
 end
 
 ----------------------------
@@ -639,12 +668,16 @@ function player:isBlacklisted(kind, thing)
 	return time / 60, blacklist.reason, blacklist.admin]]
 end
 
+function player:getMoney()
+	return self:getAristaVar("money")
+end
+
 ---
 -- Convienence function: Checks if a player has more (or equal) money than the amount specified.
 -- @param amount The amount of money to compare the player's against
 -- @returns True if they have more, false if not.
 function player:canAfford(amount)
-	--return self.cider._Money >= amount
+	return self:getMoney() >= amount
 end
 
 ----------------------------
@@ -730,52 +763,6 @@ end
 function player:lightSpawn()
 	self:setAristaVar("lightSpawn", true)
 	self:Spawn()
-end
-
-
-local angle_zero = Angle(0, 0, 0)
-
--- This is getting replace with player:setAristaVar and player:networkAristaVar
----
--- Sets a variable clientside on the player. Will not send the same value twice.
--- @param class One of the CLASS_ enums indicating the kind of variable
--- @param key The name of the variable to set on the client
--- @param value The value to set
-function player:setCSVar(class, key, value)
-	--[[local var
-	var = key .. "_" ..class
-	if (self.CSVars[var] == nil or self.CSVars ~= value) then
-		umsg.Start("CSVar", self)
-			umsg.Char(class)
-			umsg.String(key)
-			if (class == CLASS_STRING) then
-				value = value or ""
-				umsg.String(value)
-			elseif (class == CLASS_LONG) then
-				value = value or 0
-				umsg.Long(value)
-			elseif (class == CLASS_SHORT) then
-				value = value or 0
-				umsg.Short(value)
-			elseif (class == CLASS_CHAR) then
-				value = value or 0
-				umsg.Char(value)
-			elseif (class == CLASS_FLOAT) then
-				value = value or 0
-				umsg.Float(value)
-			elseif (class == CLASS_BOOL) then
-				value = tobool(value)
-				umsg.Bool(value)
-			elseif (class == CLASS_VECTOR) then
-				value = value or vector_origin
-				umsg.Vector(value)
-			elseif (class == CLASS_ANGLE) then
-				value = value or angle_zero
-				umsg.Angle(value)
-			end
-		umsg.End()
-		self.CSVars[var] = value
-	end]]
 end
 
 ---

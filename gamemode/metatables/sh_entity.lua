@@ -2,6 +2,19 @@ AddCSLuaFile()
 
 local entity = FindMetaTable("Entity")
 
+function entity:isSealed()
+	return false
+end
+
+function entity:isJammed()
+	return false
+end
+
+function entity:isLocked()
+	return false
+end
+-- todo: stubs
+
 function entity:isPlayerRagdoll()
 	local ply = self:getRagdollPlayer()
 	return ply and IsValid(ply)

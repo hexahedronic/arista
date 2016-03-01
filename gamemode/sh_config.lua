@@ -29,6 +29,11 @@ arista.config.database = {
 	donator = 0,
 }
 
+arista.config.vars = {
+	-- Use localised voice chat.
+	localVoice = false,
+}
+
 function arista.config:getDefault(var)
 	return self.defaults[var]
 end

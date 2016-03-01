@@ -8,18 +8,22 @@ arista.content.addFiles()
 game.ConsoleCommand("mp_falldamage 1\n")
 game.ConsoleCommand("sbox_godmode 0\n")
 
---[[
+
 -- Check to see if local voice is enabled.
-if (GM.Config["Local Voice"]) then
+if arista.config.vars.localVoice then
 	game.ConsoleCommand("sv_voiceenable 1\n")
 	game.ConsoleCommand("sv_alltalk 1\n")
 	game.ConsoleCommand("sv_voicecodec voice_speex\n")
 	game.ConsoleCommand("sv_voicequality 5\n")
 end
-]]
 
 -- Some useful ConVars that can be changed in game.
 --CreateConVar("cider_ooc", 1)
+
+do
+	util.AddNetworkString("arista_sendMapEntities")
+	util.AddNetworkString("arista_playerInitialized")
+end
 
 do
 	--[[
@@ -472,7 +476,8 @@ function GM:PlayerDataLoaded(ply, success)
 	ply._IdleKick				= CurTime() + self.Config["Autokick time"];]]
 
 	ply:networkAristaVar("job", arista.config:getDefault("job"))
-	ply:networkAristaVar("gender", "male") -- THAT'S SEXIST!!1111111
+	ply:networkAristaVar("salary", 0)
+	ply:networkAristaVar("gender", "Male") -- THAT'S SEXIST!!1111111
 
 	ply:networkAristaVar("knockOutTime", arista.config:getDefault("knockOutTime"))
 	ply:networkAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
@@ -506,14 +511,16 @@ function GM:PlayerDataLoaded(ply, success)
 		if not ply:IsValid() then return end
 
 		-- Check if the player is arrested.
-		--if (ply.cider._Arrested) then
-		--	ply:Arrest();
-		--end
-		-- We can now start updating the player's data.
-		--ply._UpdateData = true
+		if ply:getAristaVar("arrested") then
+			ply:arrest()
+		end
 
-		-- Send a user message to remove the loading screen.
-		--umsg.Start("cider.player.initialized", ply) umsg.End()
+		-- We can now start updating the player's data.
+		ply._updateData = true
+
+		-- Send a net message to remove the loading screen.
+		net.Start("arista_playerInitialized")
+		net.Send(ply)
 	end)
 end
 

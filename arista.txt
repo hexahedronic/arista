@@ -1,0 +1,5 @@
+"arista"
+{
+	"title"			"arista RolePlay FrameWork"
+	"version"		"GIT"
+}

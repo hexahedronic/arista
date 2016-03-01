@@ -1,2 +1,2 @@
 -- arista: RolePlay FrameWork --
--- Nothing here yet
+include("sh_init.lua")

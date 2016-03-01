@@ -6,6 +6,10 @@ arista.config = {}
 arista.config.defaults = {
 	-- The job that each player starts with.
 	job = "Citizen",
+	-- Time knocked out for.
+	knockOutTime = 60,
+	-- Time until respawn.
+	spawnTime = 30,
 }
 
 -- Stuff that's saved in the database, if you want to fuck with it, then

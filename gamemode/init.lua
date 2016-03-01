@@ -368,48 +368,52 @@ function GM:PlayerAuthed(ply, steamid)
 	elseif name:find('"') then
 		ply:Kick('Please take the " out of your name.')
 	end
+	-- todo: language?? maybe, i mean, it's not like they can choose their kick msg xd
 
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, name, "(", steamid, ") has been authed by steam.")
 end
 
 -- Called when the player has initialized.
 function GM:PlayerInitialized(ply)
-	--[[if (ply.cider._Donator and ply.cider._Donator > 0) then
-		local expire = math.max(ply.cider._Donator - os.time(), 0)
+	local donator = ply:getAristaVar("donator")
+
+	if donator and donator > 0 then
+		local expire = math.max(donator - os.time(), 0)
 
 		-- Check if the expire time is greater than 0.
-		if (expire > 0) then
-			local days = math.floor( ( (expire / 60) / 60 ) / 24 )
+		if expire > 0 then
+			local days = math.floor(((expire / 60) / 60) / 24)
 			local hours = string.format("%02.f", math.floor(expire / 3600))
 			local minutes = string.format("%02.f", math.floor(expire / 60 - (hours * 60)))
 			local seconds = string.format("%02.f", math.floor(expire - hours * 3600 - minutes * 60))
 
 			-- Give them their access.
-			ply:GiveAccess("tpew")
+			--ply:giveAccess("tpew")
+			-- todo: access.
 
 			-- Check if we still have at least 1 day.
-			if (days > 0) then
-				ply:Notify("Your Donator status expires in "..days.." day(s).")
+			if days > 0 then
+				ply:notify("Your Donator status expires in %d day(s).", days)
 			else
-				ply:Notify("Your Donator status expires in "..hours.." hour(s) "..minutes.." minute(s) and "..seconds.." second(s).")
+				ply:Notify("Your Donator status expires in %d hour(s) %d minute(s) and %d second(s).", hours, minutes, seconds)
 			end
+			-- todo: language
 
 			-- Set some Donator only player variables.
-			ply._SpawnTime = self.Config["Spawn Time"] / 2
-		--	ply._ArrestTime = self.Config["Arrest Time"] / 2
-			ply._KnockOutTime = self.Config["Knock Out Time"] / 2
+			ply:setAristaVar("knockOutTime", arista.config:getDefault("knockOutTime") / 2)
+			ply:setAristaVar("spawnTime", arista.config:getDefault("spawnTime") / 2)
 		else
-			ply.cider._Donator = 0
+			ply:setAristaVar("donator", 0)
 
 			-- Take away their access and save their data.
-			ply:TakeAccess("tpew")
-			ply:SaveData();
+			--ply:takeAccess("tpew")
+			ply:saveData()
 
 			-- Notify the player about how their Donator status has expired.
-			ply:Notify("Your Donator status has expired!", 1)
+			ply:notify("Your Donator status has expired!")
+			-- todo: language.
 		end
-	end]]
-	-- todo: readd builtin donation system
+	end
 
 	-- Make the player a Citizen to begin with.
 	ply:joinTeam(TEAM_DEFAULT)
@@ -419,11 +423,8 @@ function GM:PlayerInitialized(ply)
 
 	-- Restore access to any entity the player owned that is currently unowned
 	--cider.entity.restoreAccess(ply)
-	--[[
-	for _,ent in ipairs(cider.entity.getEntsAccess(player)) do
-		cider.entity.accessChangedPlayer(ent,player,true)
-	end
-	--]]
+	-- todo: restore access for rejoins
+
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") finished connecting.")
 end
 
@@ -472,6 +473,9 @@ function GM:PlayerDataLoaded(ply, success)
 
 	ply:networkAristaVar("job", arista.config:getDefault("job"))
 	ply:networkAristaVar("gender", "male") -- THAT'S SEXIST!!1111111
+
+	ply:networkAristaVar("knockOutTime", arista.config:getDefault("knockOutTime"))
+	ply:networkAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
 
 	-- Incase we have changed default database info.
 	if success then

@@ -247,7 +247,6 @@ function player:warrant(class, time)
 	end
 
 	self:setAristaVar("warrantExpireTime", CurTime() + expires)
-	-- todo: networkme
 
 	timer.Create("Warrant Expire " .. self:UniqueID(), expires, 1, function() warrantTimer(self, class) end)
 end
@@ -477,13 +476,12 @@ function player:takeWeapons(noitems)
 
 	self:setAristaVar("storedWeapons", stored)
 
-	--[[
-	if (IsValid(self:GetActiveWeapon())) then
-		self._StoredWeapon = self:GetActiveWeapon():GetClass()
+	local wep = self:GetActiveWeapon()
+	if IsValid(wep) then
+		self:setAristaVar("storedWeapon", wep:GetClass())
 	else
-		self._StoredWeapon = nil
-	end]]
-	-- todo: fix em'
+		self:setAristaVar("storedWeapon", nil)
+	end
 
 	self:StripWeapons()
 end
@@ -505,13 +503,14 @@ function player:returnWeapons()
 
 	self:setAristaVar("storedWeapons", {})
 
-	--[[if (self._StoredWeapon) then
-		self:SelectWeapon(self._StoredWeapon)
-		self._StoredWeapon = nil
+	local wep = self:getAristaVar("storedWeapon")
+	if wep then
+		self:SelectWeapon(wep)
+		self:setAristaVar("storedWeapon", nil)
 	else
 		--self:SelectWeapon("cider_hands")
-	end]]
-	-- todo: fix
+	end
+	-- todo: hands
 end
 
 ---
@@ -521,7 +520,6 @@ function player:incapacitate()
 	self:SetWalkSpeed(arista.config.vars.incapacitatedWalkSpeed)
 	self:SetJumpPower(0)
 	self:setAristaVar("incapacitated", true)
-	-- todo: networkme
 end
 
 ---
@@ -550,7 +548,6 @@ function player:tieUp()
 	self:takeWeapons()
 
 	self:setAristaVar("tied", true)
-	-- todo: networkme
 
 	self:Flashlight(false)
 end
@@ -590,7 +587,6 @@ function player:arrest(time)
 	timer.Create("UnArrest " .. self:UniqueID(), arrestTime, 1, function() arrestTimer(self) end)
 
 	self:setAristaVar("unarrestTime", CurTime() + arrestTime)
-	-- todo: networkme
 
 	self:incapacitate()
 

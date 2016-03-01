@@ -459,6 +459,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
 	ply:networkAristaVar("arrestTime", arista.config:getDefault("arrestTime"))
 
+	ply:networkAristaVar("tied", false)
 	ply:networkAristaVar("unconcious", false)
 	ply:networkAristaVar("incapacitated", false)
 
@@ -467,6 +468,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("nextSpawnTime", CurTime())
 	ply:networkAristaVar("knockOutPeriod", 0)
 	ply:networkAristaVar("unarrestTime", 0)
+	ply:networkAristaVar("warrantExpireTime", 0)
 
 	ply:setAristaVar("nextChangeTeam", {})
 	ply:setAristaVar("nextUse", {})

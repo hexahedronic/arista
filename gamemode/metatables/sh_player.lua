@@ -9,7 +9,7 @@ function player:setAristaVar(var, val)
 	self._databaseVars = self._databaseVars or {}
 	self._varsToNetwork = self._varsToNetwork or {}
 
-	if self._databaseVars[var] then
+	if self._databaseVars[var] ~= nil then
 		self._databaseVars[var] = val
 	end
 
@@ -19,7 +19,7 @@ function player:setAristaVar(var, val)
 		local ty = type(val)
 
 		if ty ~= netType and ty ~= valType then
-			arista.logs.event(arista.logs.E.FATAL, arista.logs.E.NETEVENT, "ATTEMPTING TO NETWORK DIFFERING DATATYPE FOR VAR '" .. var .. "' <t=", ty, "><s=", netType, "> ON ", self:Name(), "(", self:SteamID(), ").")
+			arista.logs.event(arista.logs.E.FATAL, arista.logs.E.NETEVENT, "ATTEMPTING TO NETWORK DIFFERING DATATYPE FOR VAR '", var, "' <t=", ty, "><s=", netType, "> ON ", self:Name(), "(", self:SteamID(), ").")
 
 			return
 		end
@@ -35,11 +35,7 @@ function player:databaseAristaVar(var)
 
 	self._databaseVars = self._databaseVars or {}
 
-	if self._databaseVars[var] then
-		arista.logs.event(arista.logs.E.WARNING, arista.logs.E.NETEVENT, "Re-'databasing' variable '" .. var .. "' on ", self:Name(), "(", self:SteamID(), ").")
-	end
-
-	self._databaseVars[var] = self:getAristaVar(var) or true
+	self._databaseVars[var] = self:getAristaVar(var)
 end
 
 function player:getAristaVar(var)
@@ -62,7 +58,7 @@ end
 if CLIENT then
 
 local function createTypeNetworker(class)
-	arista.logs.logNoPrefix(arista.logs.E.DEBUG, "Creating networker for '" .. class .. "' (player.getArista" .. class .. ").")
+	arista.logs.logNoPrefix(arista.logs.E.DEBUG, "Creating networker for '", class, "' (player.getArista", class, ").")
 
 	player["getArista" .. class] = function(self, key)
 		return self["GetNW2" .. class](self, "arista_" .. key)

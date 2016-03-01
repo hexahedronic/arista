@@ -10,7 +10,6 @@ function arista.database.savePlayer(ply, create)
 	local data = ply._databaseVars
 	if create then
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") has been recreated for the database.")
-		gamemode.Call("PlayerAddedToDatabase", ply)
 
 		return
 	end
@@ -43,17 +42,19 @@ function arista.database.loadPlayer(ply)
 	arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") is now being loaded.")
 
 	local f = function(tbl)
-		gamemode.Call("PlayerDataLoaded", ply, tbl ~= nil)
 
-		if not tbl then return end
-		arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") has been loaded from the database.")
+		if tbl then
+			arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") has been loaded from the database.")
 
-		for k, v in pairs(tbl) do
-			arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") had database key '" .. k .. "' initalized as '" .. tostring(v) .. "'.")
+			for k, v in pairs(tbl) do
+				arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") had database key '", k, "' loaded as '", v, "'.")
 
-			ply:networkAristaVar(k, v)
-			ply:databaseAristaVar(k)
+				ply:networkAristaVar(k, v)
+				ply:databaseAristaVar(k)
+			end
 		end
+
+		gamemode.Call("PlayerDataLoaded", ply, tbl ~= nil)
 	end
 
 	arista.database.fetchPlayer(ply, f)

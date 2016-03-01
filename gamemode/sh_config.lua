@@ -2,11 +2,14 @@ AddCSLuaFile()
 
 arista.config = {}
 
+-- Default stuff.
 arista.config.defaults = {
 	-- The job that each player starts with.
 	job = "Citizen",
 }
 
+-- Stuff that's saved in the database, if you want to fuck with it, then
+-- fuck with it before your first run (pdata self-corrects, SQL is likely to break).
 arista.config.database = {
 	-- The money that each player starts with.
 	money = 0,
@@ -16,6 +19,10 @@ arista.config.database = {
 	inventorySize = 40,
 	-- The detailed information each player begins with.
 	details = "",
+	-- This is so if they rejoin they are still in jail.
+	arrested = false,
+	-- Donator time.
+	donator = 0,
 }
 
 function arista.config:getDefault(var)

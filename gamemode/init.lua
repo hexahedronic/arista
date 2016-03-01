@@ -471,6 +471,26 @@ function GM:PlayerDataLoaded(ply, success)
 	ply._IdleKick				= CurTime() + self.Config["Autokick time"];]]
 
 	ply:networkAristaVar("job", arista.config:getDefault("job"))
+	ply:networkAristaVar("gender", "male") -- THAT'S SEXIST!!1111111
+
+	-- Incase we have changed default database info.
+	if success then
+		local changed = false
+
+		for k, v in pairs(arista.config.database) do
+			if ply:getAristaVar(k) == nil then
+				arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") had database key '", k, "' initalized as '", v, "' (was missing).")
+
+				ply:networkAristaVar(k, v)
+				ply:databaseAristaVar(k)
+
+				changed = true
+			end
+		end
+
+		-- Save fixed data.
+		if changed then ply:saveData() end
+	end
 
 	-- Call a hook for the gamemode.
 	if not ply._inited then gamemode.Call("PlayerInitialized", ply) end
@@ -493,10 +513,11 @@ function GM:PlayerDataLoaded(ply, success)
 	end)
 end
 
+-- Mainly for the purpose of wiping data, since we fix missing vars when data loaded.
 function GM:PlayerAddedToDatabase(ply)
 	-- Player is new, add them to database.
 	for k, v in pairs(arista.config.database) do
-		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") had database key '" .. k .. "' initalized as '" .. v .. "'.")
+		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") had database key '", k, "' initalized as '", v, "'.")
 
 		ply:networkAristaVar(k, v)
 		ply:databaseAristaVar(k)

@@ -20,6 +20,12 @@ function player:notify(format, ...)
 	-- and let client sort it out.
 end
 
+function player:isDonator()
+	local donator = ply:getAristaVar("donator")
+
+	return donator and donator > 0
+end
+
 -- todo: port/add these stubs
 function player:isArrested()
 end

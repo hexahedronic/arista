@@ -32,6 +32,8 @@ arista.config.database = {
 arista.config.vars = {
 	-- Use localised voice chat.
 	localVoice = false,
+	-- Amount to multiply donators salary by.
+	donatorMult = 2,
 }
 
 function arista.config:getDefault(var)

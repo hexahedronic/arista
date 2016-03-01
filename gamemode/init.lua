@@ -20,34 +20,12 @@ end
 -- Some useful ConVars that can be changed in game.
 --CreateConVar("cider_ooc", 1)
 
+-- Net Messages
 do
 	util.AddNetworkString("arista_sendMapEntities")
 	util.AddNetworkString("arista_playerInitialized")
-end
-
-do
-	--[[
-	-- Store the old hook.Call function.
-	local hookCall = hook.Call
-
-	-- Overwrite the hook.Call function.
-	function hook.Call(name, gm, ply, text, ...) -- the wonders of lau :v:
-		if (name == "PlayerSay") then text = string.Replace(text, "$q", "\"") end
-
-		-- Call the original hook.Call function.
-		return hookCall(name, gm, ply, text, ...)
-	end
-	local m = FindMetaTable("Player")
-	if m then
-		function m:mGive(class)
-			local w = ents.Create(class)
-			w:SetPos(self:GetPos() + Vector(0,0,30))
-			w:Spawn()
-		end
-	end]]
-
-	-- No longer need to fix numpad, since it's fixed in gmod
-	-- https://github.com/garrynewman/garrysmod/blob/master/garrysmod/lua/includes/modules/numpad.lua#L126
+	util.AddNetworkString("arista_modelChoices")
+	util.AddNetworkString("arista_laws")
 end
 
 -- Called when the server initializes.
@@ -541,9 +519,10 @@ end
 function GM:PlayerInitialSpawn(ply)
 	if not IsValid(ply) then return end
 
+	-- Load database data.
 	ply:loadData()
 
-	ply._ModelChoices = {}
+	ply._modelChoices = {}
 	--[[for _,team in pairs(cider.team.stored) do
 		for gender,models in pairs(team.models) do
 			ply._ModelChoices[gender] = ply._ModelChoices[gender] or {}
@@ -556,54 +535,41 @@ function GM:PlayerInitialSpawn(ply)
 		end
 	end]]
 
-	--[[timer.Simple(0.2, function()
-		if ValidEntity(ply) then
-			umsg.Start("cider_ModelChoices",ply)
-				umsg.Short(table.Count(ply._ModelChoices))
+	arista.utils.nextFrame(function()
+		if not ply:IsValid() then return end
 
-				for name,gender in pairs(ply._ModelChoices) do
-					umsg.String(name)
-					umsg.Short(#gender)
+		net.Start("arista_modelChoices")
+			net.WriteUInt(table.Count(ply._modelChoices), 8)
 
-					for team,choice in ipairs(gender) do
-						umsg.Short(team)
-						umsg.Short(choice)
-					end
+			for name, gender in pairs(ply._modelChoices) do
+				net.WriteString(name)
+				net.WriteUInt(#gender, 8)
+
+				for team,choice in pairs(gender) do
+					net.WriteUInt(team, 8)
+					net.WriteUInt(choice, 8)
 				end
-			umsg.End()
+			end
+		net.Send(ply)
 
-			datastream.StreamToClients(ply, "cider_Laws", cider.laws.stored) -- The laws has been updating bro
-		else
-			--ErrorNoHalt"!!!\n"
-			--print(player)
-		end
-	end)]]
-
-	-- A table to store every contraband entity.
-	local contraband = {}
-
-	-- Loop through each contraband class.
-	--for k, v in pairs( self.Config["Contraband"] ) do
-	--	table.Add( contraband, ents.FindByClass(k) )
-	--end
-
-	-- Loop through all of the contraband.
-	--for k, v in pairs(contraband) do
-	--	if (ply:UniqueID() == v._UniqueID) then v:SetPlayer(ply) end
-	--end
+		net.Start("arista_laws")
+			net.WriteString("the laws") -- todo: laws go here
+		net.Send(ply)
+	end)
 
 	-- Kill them silently until we've loaded the data.
 	ply:KillSilent()
 end
 
-/*
 -- Called every frame that a player is dead.
 function GM:PlayerDeathThink(ply)
-	if (!ply._Initialized) then return true end
+	if not ply._inited then return true end
 
 	-- Check if the player is a bot.
-	if (ply:SteamID() == "BOT") then
-		if (ply.NextSpawnTime and CurTime() >= ply.NextSpawnTime) then ply:Spawn() end
+	if ply:IsBot() then
+		if ply.NextSpawnTime and CurTime() >= ply.NextSpawnTime then
+			ply:Spawn()
+		end
 	end
 
 	-- Return the base class function.
@@ -612,8 +578,10 @@ end
 
 -- Called when a player's salary should be adjusted.
 function GM:PlayerAdjustSalary(ply)
-	if (ply.cider._Donator and ply.cider._Donator > 0) then
-		ply._Salary = (ply._Salary or 1) * 2
+	if ply:isDonator() then
+		local current = ply:getAristaVar("salary") or 1
+
+		ply:setAristaVar("salary", current * arista.config.vars.donatorMult)
 	end
 end
 
@@ -622,88 +590,115 @@ function GM:PlayerAdjustRadioRecipients(ply, text, recipients)
 end
 
 -- Called when a player attempts to join a gang
-function GM:PlayerCanJoinGang(ply,teamID,gangID)
+function GM:PlayerCanJoinGang(ply, teamid, gangid)
 end
 -- Called when a player should gain a frag.
-function GM:PlayerCanGainFrag(ply, victim) return true end
+function GM:PlayerCanGainFrag(ply, victim)
+	return true
+end
 
 -- Called when a player's model should be set.
 function GM:PlayerSetModel(ply)
-	if ply.cider._Misc.custommodel and ply.cider._Misc.custommodel[ply:Team()] then
-		ply:SetModel(ply.cider._Misc.custommodel[ply:Team()])
+	local customModel = ply:getAristaVar("customModel")
+	local team = ply:Team()
+
+	if customModel then
+		if istable(customModel) and customModel[ply:Team()] then
+			ply:SetModel(customModel[ply:Team()])
+		else
+			ply:SetModel(customModel)
+		end
+
 		return true
 	end
-	local models = cider.team.query(ply:Team(), "models")
+
+	local models = false--cider.team.query(ply:Team(), "models")
+	-- todo: getting models
 
 	-- Check if the models table exists.
-	if (models) then
-		models = models[ string.lower(ply._Gender) ]
+	if models then
+		local gen = ply:getAristaVar("gender"):lower()
+		models = models[gen]
 
 		-- Check if the models table exists for this gender.
-		if (models) then
-			local model = models[ ply._ModelChoices[string.lower(ply._Gender)][ply:Team()] ]
-		--	print(model,player._ModelChoices[string.lower(player._Gender)][player:Team()])
+		if models then
+			local genModels = ply._modelChoices[gen] or {}
+			if not genModels[team] then return end
+
+			local model = models[genModels[team]]
+
 			-- Set the player's model to the we got.
 			ply:SetModel(model)
+		else
+			-- Mayonaise is not a gender?
 		end
 	end
 end
 
+function GM:PlayerReSpawn(ply)
+	--[[ply._Ammo = {}
+	ply._Sleeping = false
+	ply._Stunned = false
+	ply._Tripped = false
+	ply._ScaleDamage = 1
+	ply._HideHealthEffects = false
+	ply._CannotBeWarranted = CurTime() + 15
+	ply._Deaded = nil]]
+end
+
 -- Called when a player spawns.
 function GM:PlayerSpawn(ply)
-	if (ply._Initialized) then
-		if (ply._NextSpawnGender ~= "") then
-			ply._Gender = ply._NextSpawnGender ply._NextSpawnGender = ""
-			ply._GenderWord = ply._NextSpawnGenderWord ply._NextSpawnGenderWord = ""
+	if ply._inited then
+		local nextGender = ply:getAristaVar("nextGender") or ""
+
+		if nextGender ~= "" then
+			ply:setAristaVar("nextGender", "")
+			ply:setAristaVar("gender", nextGender)
 		end
 
 		-- Set it so that the ply does not drop weapons.
 		ply:ShouldDropWeapon(false)
 
 		-- Check if we're not doing a light spawn.
-		if (!ply._LightSpawn) then
-			ply:Recapacitate();
+		if not ply:getAristaVar("lightSpawn") then
+			ply:recapacitate()
 
 			-- Set some of the ply's variables.
-			-- ply._Ammo = {}
-			ply._Sleeping = false
-			ply._Stunned = false
-			ply._Tripped = false
-			ply._ScaleDamage = 1
-			ply._HideHealthEffects = false
-			ply._CannotBeWarranted = CurTime() + 15
-			ply._Deaded = nil
+			gamemode.Call("PlayerReSpawn", ply)
 
 			-- Make the ply become conscious again.
-			ply:WakeUp(true);
-			--ply:UnSpectate()
+			ply:wakeUp(true)
+
 			-- Set the ply's model and give them their loadout.
 			self:PlayerSetModel(ply)
 			self:PlayerLoadout(ply)
 		end
 
 		-- Call a gamemode hook for when the ply has finished spawning.
-		hook.Call("PostPlayerSpawn",GAMEMODE, ply, ply._LightSpawn, ply._ChangeTeam)
+		gamemode.Call("PostPlayerSpawn", ply, ply:getAristaVar("lightSpawn"), ply:getAristaVar("changeTeam"))
 
 		-- Set some of the ply's variables.
-		ply._LightSpawn = false
-		ply._ChangeTeam = false
+		ply:setAristaVar("lightSpawn", false)
+		ply:setAristaVar("changeTeam", false)
 	else
 		ply:KillSilent()
 	end
 end
 
 -- Called when a ply should take damage.
-function GM:PlayerShouldTakeDamage(ply, attacker) return true end
+function GM:PlayerShouldTakeDamage(ply, attacker)
+	return true
+end
 
 -- Called when a ply is attacked by a trace.
 function GM:PlayerTraceAttack(ply, damageInfo, direction, trace)
-	ply._LastHitGroup = trace.HitGroup
+	ply:setAristaVar("lastHitGroup", trace.HitGroup)
 
 	-- Return false so that we don't override internals.
 	return false
 end
 
+/*
 -- Called just before a ply dies.
 function GM:DoPlayerDeath(ply, attacker, damageInfo)
 	ply._Deaded = true

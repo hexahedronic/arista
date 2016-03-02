@@ -337,7 +337,7 @@ function player:knockOut(time, velocity)
 	--cider.propprotection.GiveToWorld(ragdoll)
 
 	-- Pose the ragdoll in the same shape as us
-	for i, matrix in pairs(bones) do
+	for i, matrix in ipairs(bones) do
 		ragdoll:SetBoneMatrix(i, matrix)
 	end
 	-- todo: not working
@@ -470,7 +470,7 @@ end
 function player:takeWeapons(noitems)
 	local stored = {}
 
-	for _, weapon in pairs(self:GetWeapons()) do
+	for _, weapon in ipairs(self:GetWeapons()) do
 		local class = weapon:GetClass()
 
 		--if not (noitems and GM.Items[class]) then
@@ -501,7 +501,7 @@ function player:returnWeapons()
 
 	local storedWeapons = self:getAristaVar("storedWeapons")
 
-	for class in pairs(storedWeapons) do
+	for class in ipairs(storedWeapons) do
 		self:Give(class)
 	end
 

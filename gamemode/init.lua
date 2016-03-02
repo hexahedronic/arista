@@ -49,7 +49,7 @@ end
 
 -- Called when all of the map entities have been initialized.
 function GM:InitPostEntity()
-	for i, entity in pairs(ents.GetAll()) do
+	for i, entity in ipairs(ents.GetAll()) do
 		--if cider.entity.isDoor(entity) then
 			--cider.entity.makeOwnable(entity)
 		--end
@@ -311,7 +311,7 @@ function GM:IsListenServer()
 		return isListen
 	end
 
-	for k, v in pairs(player.GetAll()) do
+	for k, v in ipairs(player.GetAll()) do
 		if v:IsListenServerHost() then
 			isListen = true
 
@@ -764,7 +764,7 @@ function GM:DoPlayerDeath(ply, attacker, damageInfo)
 		backGun:Remove()
 	end
 
-	for k, v in pairs(ply:GetWeapons()) do
+	for k, v in ipairs(ply:GetWeapons()) do
 		local class = v:GetClass()
 
 		-- Check if this is a valid item.
@@ -777,7 +777,7 @@ function GM:DoPlayerDeath(ply, attacker, damageInfo)
 
 	local storedWeapons = ply:getAristaVar("storedWeapons")
 	if storedWeapons and #storedWeapons > 0 then
-		for _, v in pairs(storedWeapons) do
+		for _, v in ipairs(storedWeapons) do
 			local class = v
 
 			-- Check if this is a valid item.
@@ -1183,7 +1183,7 @@ function GM:ShutDown()
 	ErrorNoHalt(os.date().." - Server shutting down\n")
 	ErrorNoHalt("----------------------\n")
 
-	for k, v in pairs(player.GetAll()) do
+	for k, v in ipairs(player.GetAll()) do
 		v:holsterAll()
 		v:saveData()
 	end
@@ -1509,7 +1509,7 @@ end
 -- Create a timer to automatically clean up decals.
 function GM.ClearDecals()
 	if arista.config.vars.clearDecals then
-		for k, v in pairs(player.GetAll()) do
+		for k, v in ipairs(player.GetAll()) do
 			v:ConCommand("r_cleardecals\n")
 		end
 	end

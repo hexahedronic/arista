@@ -47,10 +47,8 @@ function arista.eventHooks.keyPress(ply, key)
 			ent = ent:getRagdollPlayer()
 		end
 
-		local res = gamemode.Call("PlayerCanUntie", ply, ent)
-
 		-- 200 ^ 2, more efficent
-		if ent:IsPlayer() and ply:KeyDown(IN_SPEED) and res and ent:GetPos():DistToSqr(ply:GetPos()) < 40000 then
+		if ent:IsPlayer() and ply:KeyDown(IN_SPEED) and gamemode.Call("PlayerCanUntie", ply, ent) and ent:GetPos():DistToSqr(ply:GetPos()) < 40000 then
 			ply:emote("starts ineffectively sawing at <N>'s bonds with a butter knife.", ent)
 
 			timer.Conditional(ply:UniqueID() .. " untying timer", arista.config.vars.untyingTime, test, succeed, fail, ply, ent, ply:GetPos(), ent:GetPos())

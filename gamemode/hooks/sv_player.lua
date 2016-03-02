@@ -316,7 +316,7 @@ end
 -- @param door The door in question
 -- @return True if they can, false if they can't.
 function GM:PlayerCanRamDoor(ply, door)
-	if (door._Jammed or door._Sealed) then
+	--[[if (door._Jammed or door._Sealed) then
 		ply:Notify("You cannot ram this door!", 1);
 		return false;
 	elseif (cider.entity.isOwned(door)) then
@@ -331,8 +331,10 @@ function GM:PlayerCanRamDoor(ply, door)
 		end
 		ply:Notify("You do not have the authority to ram this door.", 1);
 		return false;
-	end
-	return true;
+	end]]
+	-- todo: doors
+
+	return true
 end
 
 ---
@@ -341,9 +343,11 @@ end
 -- @param door The door in question
 -- @return True if they can, false if they can't.
 function GM:PlayerCanUseDoor(ply, door)
-	if ent:isJammed() or ent:isSealed() or ply:GetPos():Distance(ply:GetEyeTraceNoCursor().HitPos) > 128 then
-		return false;
+	-- 128 ^ 2
+	if ent:isJammed() or ent:isSealed() or ply:GetPos():DistToSqr(ply:GetEyeTraceNoCursor().HitPos) > 16384 then
+		return false
 	end
+
 	return not ent:isLocked()
 end
 
@@ -353,7 +357,8 @@ end
 -- @param ent The container in question
 -- @return True if they can, false if they can't.
 function GM:PlayerCanUseContainer(ply, ent)
-	return ply:GetEyeTraceNoCursor().HitPos:Distance(ply:EyePos()) < 129 and not (ent:isLocked() or ent:isSealed())
+	-- 129 ^ 2
+	return ply:GetEyeTraceNoCursor().HitPos:DistToSqr(ply:EyePos()) < 16641 and not (ent:isLocked() or ent:isSealed())
 end
 
 ---

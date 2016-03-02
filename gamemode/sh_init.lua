@@ -53,6 +53,9 @@ function gamemode.Call(name, ...)
 	return hook.Call(name, gm, ...)
 end
 
+include("libraries/logs.lua")
+include("libraries/file.lua")
+
 --includecs("sh_enumerations.lua")
 include("sh_config.lua")
 
@@ -76,9 +79,6 @@ end
 function GM:CanPenetrate(trace, force, swep)
 	return force > 7.5
 end
-
-include("libraries/logs.lua")
-include("libraries/file.lua")
 
 arista.file.loadDir("extensions/", "Extension", "Extensions")
 

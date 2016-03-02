@@ -33,7 +33,7 @@ local levelValues = {
 }
 
 local function canPrint(level)
-	return (levelValues[level] or 2) <= (levelValues[arista.config.vars.warningLevel] or 2)
+	return (levelValues[level] or 2) >= (levelValues[arista.config.vars.warningLevel] or 2)
 end
 
 function arista.logs.log(level, ...)

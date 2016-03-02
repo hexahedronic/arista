@@ -504,6 +504,7 @@ function GM:PlayerCanSayIC(ply, text)
 	if not ply:Alive() or (ply:isUnconscious() and not ply:hasTripped()) then
 		ply:notify("You cannot talk in this state!")
 		-- todo: lang
+
 		return false
 	end
 

@@ -1,5 +1,5 @@
 "arista"
 {
-	"title"			"arista RolePlay FrameWork"
+	"title"			"arista Framework"
 	"version"		"GIT"
 }

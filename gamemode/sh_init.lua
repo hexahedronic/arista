@@ -12,11 +12,17 @@ DeriveGamemode("Sandbox")
 -- This replaces GM/GAMEMODE.
 arista.gamemode = {
 	name = "arista Framework",
-	author = "kuromeku, Lexi, Q2F2, Ghosty",
+	author = "kuromeku, Lexi, Q2F2, et al.",
 	email = "N/A",
 	website = "https://github.com/hexahedronic/arista/",
 
-	info = "A re-write of AppleJack (https://github.com/Lexicality/applejack-old)",
+	info = [[
+	A re-write of AppleJack (https://github.com/Lexicality/applejack-old).
+	This gamemode consists mostly of applejack's code (which was built on cider),
+	and we only take credit for the modifications made, not the source material.
+
+	DO NOT REMOVE KURO OR LEXI FROM THE AUTHOR FIELD.
+	]],
 
 	folder = GM.Folder .. "/",
 	luaFolder = GM.Folder:sub(11, -1) .. "/",

@@ -59,3 +59,16 @@ function arista.eventHooks.keyPress(ply, key)
 	end
 end
 hook.Add("KeyPress", "arista.eventHooks.keyPress", arista.eventHooks.keyPress)
+
+function arista.eventHooks.playerChangedTeams(ply)
+	if not IsValid(ply) then return end
+
+	net.Start("arista_wipeAccess")
+	net.Send(ply)
+
+	timer.Simple(1, function()
+		if not IsValid(ply) then return end
+		arista.entity.updatePlayerAccess(ply)
+	end)
+end
+hook.Add("PlayerChangedTeams", "arista.eventHooks.playerChangedTeams", arista.eventHooks.playerChangedTeams)

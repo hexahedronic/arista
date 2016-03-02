@@ -20,13 +20,15 @@ end
 -- Some useful ConVars that can be changed in game.
 --CreateConVar("cider_ooc", 1)
 
--- Net Messages
+-- Net Messages, seems like a lot since they also replace umsgs (umsg is depreciated)
 do
 	util.AddNetworkString("arista_sendMapEntities")
 	util.AddNetworkString("arista_playerInitialized")
 	util.AddNetworkString("arista_modelChoices")
 	util.AddNetworkString("arista_laws")
 	util.AddNetworkString("arista_notify")
+	util.AddNetworkString("arista_wipeAccess")
+	util.AddNetworkString("arista_incomingAccess")
 end
 
 -- Called when the server initializes.

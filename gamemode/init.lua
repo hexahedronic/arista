@@ -26,6 +26,7 @@ do
 	util.AddNetworkString("arista_playerInitialized")
 	util.AddNetworkString("arista_modelChoices")
 	util.AddNetworkString("arista_laws")
+	util.AddNetworkString("arista_notify")
 end
 
 -- Called when the server initializes.
@@ -571,9 +572,9 @@ function GM:PlayerInitialSpawn(ply)
 
 
 		net.Start("arista_sendMapEntities")
-			net.WriteUInt(table.Count(arista._internaldata.entities), 8)
+			net.WriteUInt(table.Count(arista._internaldata.entities), 16)
 
-			for k, v in pairs(arista._internaldata.entities) do
+			for k, v in ipairs(arista._internaldata.entities) do
 				net.WriteEntity(v)
 			end
 		net.Send(ply)

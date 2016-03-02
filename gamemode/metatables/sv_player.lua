@@ -24,6 +24,16 @@ function player:notify(format, ...)
 	-- todo: code here, language system is gonna be
 	-- clientsided, so forward all arguments (tostring'ed) and format
 	-- and let client sort it out.
+	local args = {...}
+
+	net.Start("arista_notify")
+		net.WriteString(format)
+		net.WriteUInt(#args, 8)
+
+		for k, v in ipairs(args) do
+			net.WriteString(v)
+		end
+	net.Send(self)
 end
 
 function player:isDonator()

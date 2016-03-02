@@ -51,7 +51,12 @@ end
 include("sh_config.lua")
 
 -- Check if we're running on the server.
-if SERVER then include("sv_config.lua") end
+if SERVER then
+	include("sv_config.lua")
+	AddCSLuaFile("cl_language.lua")
+else
+	include("cl_language.lua")
+end
 
 -- This needs to be here, since it may not get defined, but gets called regardless.
 function GM:LibrariesLoaded()

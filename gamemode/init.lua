@@ -461,7 +461,6 @@ function GM:PlayerDataLoaded(ply, success)
 
 	ply:networkAristaVar("job", arista.config:getDefault("job"))
 	ply:networkAristaVar("salary", 0)
-	ply:networkAristaVar("gender", "Male") -- THAT'S SEXIST!!1111111
 
 	ply:networkAristaVar("knockOutTime", arista.config:getDefault("knockOutTime"))
 	ply:networkAristaVar("spawnTime", arista.config:getDefault("spawnTime"))

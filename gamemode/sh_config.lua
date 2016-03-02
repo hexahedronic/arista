@@ -29,6 +29,8 @@ arista.config.database = {
 	arrested = false,
 	-- Donator time.
 	donator = 0,
+	-- Gender.
+	gender = "Male",
 }
 
 arista.config.vars = {
@@ -67,6 +69,8 @@ arista.config.vars = {
 	doorJam = 10,
 	-- Maximum money you can have.
 	maxMoney = 10^12,
+	-- Radius you can talk to people in.
+	talkRadius = 300,
 }
 
 function arista.config:getDefault(var)

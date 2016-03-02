@@ -15,7 +15,6 @@ function player:canAfford(amount)
 	return self:getMoney() >= amount
 end
 
-
 function player:hasTripped()
 	if CLIENT then return self:getAristaBool("tripped") end
 	return self:getAristaVar("tripped")
@@ -59,6 +58,11 @@ end
 function player:getGender()
 	if CLIENT then return self:getAristaString("gender") end
 	return self:getAristaVar("gender")
+end
+
+function player:getDetails()
+	if CLIENT then return self:getAristaString("details") end
+	return self:getAristaVar("details")
 end
 
 function player:isWarranted()

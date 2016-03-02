@@ -590,13 +590,6 @@ end
 function GM:PlayerDeathThink(ply)
 	if not ply._inited then return true end
 
-	-- Check if the player is a bot.
-	if ply:IsBot() then
-		if ply.NextSpawnTime and CurTime() >= ply.NextSpawnTime then
-			ply:Spawn()
-		end
-	end
-
 	-- Return the base class function.
 	return self.BaseClass:PlayerDeathThink(ply)
 end

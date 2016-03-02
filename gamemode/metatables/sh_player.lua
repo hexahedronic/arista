@@ -2,6 +2,20 @@ AddCSLuaFile()
 
 local player = FindMetaTable("Player")
 
+function player:getMoney()
+	if CLIENT then return self:getAristaInt("money") end
+	return self:getAristaVar("money")
+end
+
+---
+-- Convienence function: Checks if a player has more (or equal) money than the amount specified.
+-- @param amount The amount of money to compare the player's against
+-- @returns True if they have more, false if not.
+function player:canAfford(amount)
+	return self:getMoney() >= amount
+end
+
+
 function player:hasTripped()
 	if CLIENT then return self:getAristaBool("tripped") end
 	return self:getAristaVar("tripped")

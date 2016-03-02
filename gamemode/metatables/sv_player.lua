@@ -678,18 +678,6 @@ function player:isBlacklisted(kind, thing)
 	return time / 60, blacklist.reason, blacklist.admin]]
 end
 
-function player:getMoney()
-	return self:getAristaVar("money")
-end
-
----
--- Convienence function: Checks if a player has more (or equal) money than the amount specified.
--- @param amount The amount of money to compare the player's against
--- @returns True if they have more, false if not.
-function player:canAfford(amount)
-	return self:getMoney() >= amount
-end
-
 ----------------------------
 --    Action Functions    --
 ----------------------------
@@ -751,14 +739,21 @@ function player:emote(words, other)
 	--cider.chatBox.addInRadius(self, "me", words, self:GetPos(), GM.Config["Talk Radius"])
 end
 
+function player:setMoney(amount)
+	local amt = math.Clamp(amount, 0, arista.config.vars.maxMoney)
+	self:setAristaVar("money", amt)
+end
+
 ---
 -- Adds an amount of money to the player's money count and triggers an alert on the client.
 -- @param amount How much money to add (can be negative)
 function player:giveMoney(amount)
-	--self.cider._Money = math.max(self.cider._Money + amount, 0)
-	--SendUserMessage("MoneyAlert", self, amount)
+	local money = self:getMoney()
+	self:setMoney(money + amount)
+
+	net.Start("arista_moneyAlert")
+	net.Send(self)
 end
---umsg.PoolString("MoneyAlert")
 
 ---
 -- Causes a player to put all their weapons into their inventory instantly. If a weapon will not fit, it is dropped at their feet to reduce loss.

@@ -65,6 +65,8 @@ arista.config.vars = {
 	doorAutoClose = 15,
 	-- If a door gets jammed, how long for?
 	doorJam = 10,
+	-- Maximum money you can have.
+	maxMoney = 10^12,
 }
 
 function arista.config:getDefault(var)

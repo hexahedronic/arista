@@ -727,6 +727,10 @@ function GM:PlayerSpawn(ply)
 			self:PlayerLoadout(ply)
 		end
 
+		player_manager.OnPlayerSpawn(ply)
+
+		ply:SetupHands()
+
 		-- Call a gamemode hook for when the ply has finished spawning.
 		gamemode.Call("PostPlayerSpawn", ply, ply:getAristaVar("lightSpawn"), ply:getAristaVar("changeTeam"))
 
@@ -1132,12 +1136,6 @@ function GM:EntityTakeDamage(entity, damageinfo)
 		local inf = inflictor ~= attacker and " (using " .. tostring(inflictor) .. ")." or "."
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.DAMAGE, entity, " was damaged for ", finalDmg, " by ", attacker, inf)
 	end
-end
-
--- Return the damage done by a fall
-function GM:GetFallDamage(ply, vel)
-	local val = 580  --No idea. This was taken from the C++ source though, aparently
-	return (vel - val) * (100 / (1024 - val))
 end
 
 -- Called when a player's weapons should be given.

@@ -378,7 +378,11 @@ function player:knockOut(time, velocity)
 		if time and time > 0 then
 			local period = CurTime() + time
 			self:setAristaVar("knockOutPeriod", period)
+		else
+			self:setAristaVar("knockOutPeriod", 0)
 		end
+	else
+		ragdoll:networkAristaVar("corpse", true)
 	end
 
 	-- Get us ready for spectation

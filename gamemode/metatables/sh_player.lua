@@ -3,33 +3,38 @@ AddCSLuaFile()
 local player = FindMetaTable("Player")
 
 function player:hasTripped()
-	if CLIENT then return self:getAristaString("tripped") end
+	if CLIENT then return self:getAristaBool("tripped") end
 	return self:getAristaVar("tripped")
 end
 
 function player:isStunned()
-	if CLIENT then return self:getAristaString("stunned") end
+	if CLIENT then return self:getAristaBool("stunned") end
 	return self:getAristaVar("stunned")
 end
 
 function player:isStuck()
-	if CLIENT then return self:getAristaString("stuckInWorld") end
+	if CLIENT then return self:getAristaBool("stuckInWorld") end
 	return self:getAristaVar("stuckInWorld")
 end
 
 function player:isArrested()
-	if CLIENT then return self:getAristaString("arrested") end
+	if CLIENT then return self:getAristaBool("arrested") end
 	return self:getAristaVar("arrested")
 end
 
 function player:isUnconscious()
-	if CLIENT then return self:getAristaString("unconscious") end
+	if CLIENT then return self:getAristaBool("unconscious") end
 	return self:getAristaVar("unconscious")
 end
 
 function player:isTied()
-	if CLIENT then return self:getAristaString("tied") end
+	if CLIENT then return self:getAristaBool("tied") end
 	return self:getAristaVar("tied")
+end
+
+function player:isIncapacitated()
+	if CLIENT then return self:getAristaBool("incapacitated") end
+	return self:getAristaVar("incapacitated")
 end
 
 function player:getGender()

@@ -825,6 +825,7 @@ function GM:PlayerDeath(ply, inflictor, attacker, fall)
 	-- Set their next spawn time.
 	local spawnTime = ply:getAristaVar("spawnTime") or arista.config:getDefault("spawnTime")
 	ply:setAristaVar("nextSpawnTime", CurTime() + spawnTime)
+	ply.NextSpawnTime = CurTime() + spawnTime
 
 	local class = attacker:GetClass()
 
@@ -1282,7 +1283,6 @@ function GM:PlayerDisconnected(ply)
 end
 
 -- Called when a player says something.
--- TODO: Move to command library
 function GM:PlayerSay(ply, text, public)
 	return text
 	-- todo: fix
@@ -1359,45 +1359,22 @@ function GM:CanPlayerSuicide(ply)
 	return false
 end
 
-/*
-local function utwin(ply, ent)
-	if (IsValid(ply)) then
-		ply:Emote("somehow manages to cut through the rope and puts " .. ply._GenderWord .. " knife away, job done.");
-		ply._Untying = false;
-	end if (IsValid(ent)) then
-		ent:Emote("shakes the remains of the rope from " .. ent._GenderWord .. " wrists and rubs them");
-		ent:UnTie();
-		ent._beUnTied = false;
-	end
-	gamemode.Call("PlayerUnTied", ply, ent);
-end
-
-local function utfail(ply, ent)
-	if (IsValid(ent) and ent:Alive()) then
-		ent:Emote("manages to dislodge " .. ply:Name() .. "'s attempts.");
-		ent._beUnTied = false;
-	end if (IsValid(ply) and ply:Alive()) then
-		ply:Emote("swears and gives up.");
-		ply._UnTying = false;
-	end
-end
-
-local function uttest(ply, ent, ppos, epos)
-	return IsValid(ply) and ply:Alive() and ply:GetPos() == ppos and IsValid(ent) and ent:Alive() and ent:GetPos() == epos;
-end
-
 -- Called when a player presses a key.
 function GM:KeyPress(ply, key)
-	ply._IdleKick = CurTime() + self.Config["Autokick time"]
-	if (key == IN_JUMP) then
-		if( ply._StuckInWorld) then
-			ply:HolsterAll()
+	--ply._IdleKick = CurTime() + self.Config["Autokick time"]
+
+	if key == IN_JUMP then
+		if ply:isStuck() then
+			ply:holsterAll()
+
 			-- Spawn them lightly now that we holstered their weapons.
 			local health = ply:Health()
-			ply:LightSpawn();
-			ply:SetHealth(health) -- Stop people abusing map glitches
-		elseif( ply:KnockedOut() and (ply._KnockoutPeriod or 0) <= CurTime() and ply:Alive()) then
-			ply:WakeUp();
+			ply:lightSpawn()
+			ply:SetHealth(health)
+		elseif ply:isUnconscious() and ply:Alive() and (ply:getAristaVar("knockOutPeriod") or 0) <= CurTime() then
+			ply:wakeUp()
+
+			ply:setAristaVar("knockoutPeriod", 0)
 		end
 	elseif key == IN_USE then
 		-- Grab what's infront of us.
@@ -1405,31 +1382,15 @@ function GM:KeyPress(ply, key)
 
 		if not IsValid(ent) then
 			return
-		elseif IsValid(ent._Player) then
-			ent = ent._Player
+		elseif ent:isPlayerRagdoll() then
+			ent = ent:getRagdollPlayer()
 		end
 
-		--[[~ Open mah doors ~]]--
-		if cider.entity.isDoor(ent) and ent:GetClass() ~= "prop_door_rotating" and gamemode.Call("PlayerCanUseDoor", ply, ent) then
+		--~ Open mah doors ~
+		--[[if cider.entity.isDoor(ent) and ent:GetClass() ~= "prop_door_rotating" and gamemode.Call("PlayerCanUseDoor", ply, ent) then
 			cider.entity.openDoor(ent,0);
-		--[[~ Crank dem Containers Boi ~]]--
+		--~ Crank dem Containers Boi ~
 		elseif cider.container.isContainer(ent) and gamemode.Call("PlayerCanUseContainer", ply, ent) then
-			--[[
-				tab = {
-					contents = {
-						cider_usp45 = 2,
-						chinese_takeout = 4,
-						money = 20000, -- Money is now an item for containers, so put the player's money in the inventory window. (It's not in there by default)
-						boxed_pocket = 5
-					},
-					meta = {
-						io = 3, -- READ_ONLY = 0, TAKE_ONLY = 1, PUT_ONLY = 2, TAKE_PUT = 3
-						filter = {money,weapon_crowbar}, -- Only these can be put in here, if nil then ignore, but empty means nothing.
-						size = 40, -- Max space for the container
-						entindex = 64, -- You'll probably want it for something
-					}
-				}
-			--]]
 			local contents, io, filter = cider.container.getContents(ent, ply, true);
 			local tab = {
 				contents = contents,
@@ -1442,42 +1403,51 @@ function GM:KeyPress(ply, key)
 				}
 			}
 			datastream.StreamToClients( ply, "cider_Container", tab );
-		end
+		end]]
 	end
 end
 
 function GM:SetPlayerSpeed(ply)
-	if (ply:GetNWBool("Incapacitated") or not ply:Recapacitate()) then
-		ply:Incapacitate();
+	if ply:isIncapacitate() or not ply:recapacitate() then
+		ply:incapacitate()
 	end
 end
 
 -- Called when a player presses F1.
-function GM:ShowHelp(ply) umsg.Start("cider_Menu", ply) umsg.End() end
+function GM:ShowHelp(ply)
+	--umsg.Start("cider_Menu", ply) umsg.End()
+	-- todo: menu
+end
 
 -- Called when a player presses F2.
 function GM:ShowTeam(ply)
 	local door = ply:GetEyeTraceNoCursor().Entity
-	-- Check if the player is aiming at a door.
-	if not(ValidEntity(door)
-	   and cider.entity.isOwnable(door)
-	   and ply:GetPos():Distance( ply:GetEyeTraceNoCursor().HitPos ) <= 128
-	 ) then
-			return
-	end
-	if hook.Call("PlayerCanOwnDoor",GAMEMODE,ply,door) then
-		umsg.Start("cider_BuyDoor",ply)
-		umsg.End()
+
+	-- Check if the player is aiming at a door. 128 ^ 2
+	if not (IsValid(door) and --[[cider.entity.isOwnable(door)]] false and ply:GetPos():DisToSqr(ply:GetEyeTraceNoCursor().HitPos) <= 16384) then
+		-- todo: door
 		return
 	end
-	if not hook.Call("PlayerCanViewEnt",GAMEMODE,ply,door) then
-		ply:Notify("You do not have access to that!",1)
+
+	if gamemode.Call("PlayerCanOwnDoor", ply, door) then
+		--umsg.Start("cider_BuyDoor", ply)
+		--umsg.End()
+		-- todo: buy door
+
 		return
 	end
-	local detailstable = {}
+
+	if not gamemode.Call("PlayerCanViewEnt", ply, door) then
+		ply:notify("You do not have access to that!")
+		-- todo: language
+
+		return
+	end
+
+	--[[local detailstable = {}
 	local owner = cider.entity.getOwner(door)
 	detailstable.access = table.Copy(door._Owner.access)
-	table.insert(detailstable.access,owner)
+	table.insert(detailstable.access, owner)
 	if owner == ply then
 		detailstable.owned = {
 			sellable = tobool(door._isDoor and not door._Unsellable) or nil,
@@ -1486,69 +1456,67 @@ function GM:ShowTeam(ply)
 	end
 	detailstable.owner = cider.entity.getPossessiveName(door)
 	if door._isDoor then
-		detailstable.owner = detailstable.owner.." door"
+		detailstable.owner = detailstable.owner .. " door"
 	else
-		detailstable.owner = detailstable.owner.." "..door:GetNWString("cider_Name","entity")
+		detailstable.owner = detailstable.owner .. " " .. door:GetNWString("cider_Name", "entity")
 	end
-	datastream.StreamToClients(ply,"cider_Access",detailstable)
+	datastream.StreamToClients(ply, "cider_Access", detailstable)]]
 end
 
 function GM:ShowSpare1(ply)
--- ):
 end
 
 -- Called when a ply attempts to spawn a SWEP.
 function GM:PlayerSpawnSWEP(ply, class, weapon)
-	if ply:IsSuperAdmin() then
-		GM:Log(EVENT_SUPEREVENT,"%s spawned a %s",ply:Name(),class)
+	if arista.utils.isAdmin(ply, true) then
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned a weapon (", class, ").")
+
 		return true
 	else
+		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a weapon (", class, ").")
+
 		return false
 	end
 end
 
 -- Called when a player is given a SWEP.
 function GM:PlayerGiveSWEP(ply, class, weapon)
-	if ply:IsSuperAdmin() then
-		GM:Log(EVENT_SUPEREVENT,"%s gave themselves a %s",ply:Name(),class)
+	if arista.utils.isAdmin(ply, true) then
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " gave themselves a weapon (", class, ").")
+
 		return true
 	else
+		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to sgive themselves a weapon (", class, ").")
+
 		return false
 	end
 end
 
 -- Called when attempts to spawn a SENT.
 function GM:PlayerSpawnSENT(ply, class)
-	if ply:IsSuperAdmin() then
-		GM:Log(EVENT_SUPEREVENT,"%s spawned a %s",ply:Name(),class)
+	if arista.utils.isAdmin(ply, true) then
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned a ", class, ".")
+
 		return true
 	else
+		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a ", class, ".")
+
 		return false
 	end
 end
 
 
-
-local timenow = CurTime()
-timer.Create("Timer Checker.t",1,0,function()
-	timenow = CurTime()
-end)
-hook.Add("Think","Timer Checker.h",function()
-	if timenow < CurTime() - 3 then
-		GM:Log(EVENT_ERROR,"Timers have stopped running!")
-		player.NotifyAll("Timers have stopped running! Oh shi-",1)
-		hook.Remove("Think","Timer Checker.h")
-	end
-end)
-
 -- Create a timer to automatically clean up decals.
-timer.Create("Cleanup Decals", 60, 0, function()
-	if ( GM.Config["Cleanup Decals"] ) then
-		for k, v in pairs( player.GetAll() ) do v:ConCommand("r_cleardecals\n") end
+function GM.ClearDecals()
+	if arista.config.vars.clearDecals then
+		for k, v in pairs(player.GetAll()) do
+			v:ConCommand("r_cleardecals\n")
+		end
 	end
-end)
+end
+timer.Create("Cleanup Decals", 60, 0, GM.ClearDecals)
 
-
+/*
 -- Create a timer to give players money for their contraband.
 timer.Create("Earning", GM.Config["Earning Interval"], 0, function()
 	local contratypes = {}
@@ -1634,15 +1602,4 @@ timer.Create("Earning", GM.Config["Earning Interval"], 0, function()
 	player.SaveAll()
 end)
 concommand.Add( "wire_keyboard_press", function(p,c,a) return end )
-
-local servertags = GetConVarString("sv_tags")
-if servertags == nil then
-	servertags = ""
-end
-for _,tag in ipairs(GM.Config["sv_tags"]) do
-	if not string.find(servertags, tag, 1, true) then
-		servertags = servertags..","..tag
-	end
-end
-RunConsoleCommand("sv_tags", servertags )
 */

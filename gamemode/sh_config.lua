@@ -57,6 +57,8 @@ arista.config.vars = {
 	arrestWarrantTime = 360,
 	-- Time taken to perform an action.
 	untyingTime = 50,
+	-- If we should clear decals every 60 seconds.
+	clearDecals = true,
 }
 
 function arista.config:getDefault(var)

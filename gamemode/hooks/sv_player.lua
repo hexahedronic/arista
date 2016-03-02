@@ -1,19 +1,8 @@
---[[
-	~ Serverside Player Hooks ~
-	~ Applejack ~
---]]
----
--- @name GM
--- @class table
--- @description The gamemode table. In this case, the serverside player hooks section of it. This is a reference of every hook that could be called on the player only on the server that the gamemode deals with.
-local GM = GM;
-
 ---
 -- Called when a player's warrant timer ends.
 -- @param ply The player whose warrant just expired
 -- @param class The class of warrant. 'arrest' or 'search'.
 function GM:PlayerWarrantExpired(player, class)
-	-- We don't care
 end
 
 ---
@@ -35,7 +24,7 @@ end
 -- @param reason Why the admin wants to blacklist them
 -- @return true if they can, false if they can't.
 function GM:PlayerCanBlacklist(ply, victim, kind, thing, time, reason)
-	return true; -- There's no actal reason why not.
+	return true -- There's no actal reason why not.
 end
 
 ---
@@ -46,7 +35,7 @@ end
 -- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
 -- @return true if they can, false if they can't.
 function GM:PlayerCanUnBlacklist(ply, target, kind, thing)
-	return true; -- There's no actal reason why not.
+	return true -- There's no actal reason why not.
 end
 
 ---
@@ -59,13 +48,14 @@ end
 -- @param blacklister The admin who blacklisted them.
 function GM:PlayerBlacklisted(ply, kind, thing, time, reason, blacklister)
 	-- If they've been blacklisted from their current team, demote them.
-	if (kind == "team" and ply:Team() == thing) then
-		ply:Demote();
-	elseif (kind == "cat" and thing == CATEGORY_WEAPONS) then -- If they've been blacklisted from using weapons category, blacklist them from every other one too.
+	if kind == "team" and ply:Team() == thing then
+		ply:demote()
+	elseif kind == "cat" and thing == CATEGORY_WEAPONS then -- If they've been blacklisted from using weapons category, blacklist them from every other one too.
 		ply:HolsterAll();
-		ply:Blacklist(kind, CATEGORY_ILLEGAL_WEAPONS, time, reason, blacklister:Name());
-		ply:Blacklist(kind, CATEGORY_POLICE_WEAPONS, time, reason, blacklister:Name());
+		ply:blacklist(kind, CATEGORY_ILLEGAL_WEAPONS, time, reason, blacklister:Name())
+		ply:blacklist(kind, CATEGORY_POLICE_WEAPONS, time, reason, blacklister:Name())
 	end
+	-- todo: categories
 end
 
 ---
@@ -75,10 +65,11 @@ end
 -- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
 -- @param unblacklister The admin who unblacklisted them.
 function GM:PlayerUnBlacklisted(ply, kind, thing, unblacklister)
-	if (kind == "cat" and thing == CATEGORY_WEAPONS) then -- If they've been unblacklisted from using weapons category, we need to unblacklist them from every other one too.
-		ply:UnBlacklist(kind, CATEGORY_ILLEGAL_WEAPONS);
-		ply:UnBlacklist(kind, CATEGORY_POLICE_WEAPONS );
+	if kind == "cat" and thing == CATEGORY_WEAPONS then -- If they've been unblacklisted from using weapons category, we need to unblacklist them from every other one too.
+		ply:unBlacklist(kind, CATEGORY_ILLEGAL_WEAPONS)
+		ply:unBlacklist(kind, CATEGORY_POLICE_WEAPONS)
 	end
+	-- todo: categories
 end
 
 ---
@@ -105,19 +96,22 @@ function GM:PlayerArrest(ply, victim) end
 -- Called when a player unarrests another player.
 -- @param ply The player that did it
 -- @param victim The player that it was done to
-function GM:PlayerUnarrest(ply, victim) end
+function GM:PlayerUnarrest(ply, victim)
+end
 
 ---
 -- Called when a player warrants another player.
 -- @param ply The player that did it
 -- @param victim The player that it was done to
-function GM:PlayerWarrant(ply, victim, class) end
+function GM:PlayerWarrant(ply, victim, class)
+end
 
 ---
 -- Called when a player unwarrants another player.
 -- @param ply The player that did it
 -- @param victim The player that it was done to
-function GM:PlayerUnwarrant(ply, victim) end
+function GM:PlayerUnwarrant(ply, victim)
+end
 
 ---
 -- Called when a player ties up another player.
@@ -129,7 +123,8 @@ function GM:PlayerTied(ply, victim) end
 -- Called when a player unties another player.
 -- @param ply The player that did it
 -- @param victim The player that it was done to
-function GM:PlayerUnTied(ply, victim) end
+function GM:PlayerUnTied(ply, victim)
+end
 
 ---
 -- Called when a player tries to tie another player up
@@ -137,10 +132,11 @@ function GM:PlayerUnTied(ply, victim) end
 -- @param target The player the attempted tie is apon
 -- @return true if they can, false if they can't.
 function GM:PlayerCanTie(ply, target)
-	if (not target:Alive() or target:Tied() or target._beTied or target:Arrested()) then
-		return false;
+	if not target:Alive() or target:isTied() or target._beTied or target:isArrested() then
+		return false
 	end
-	return gamemode.Call("PlayerCanDoSomething", ply);
+
+	return gamemode.Call("PlayerCanDoSomething", ply)
 end
 
 ---
@@ -149,9 +145,10 @@ end
 -- @param target The player the attempted untie is apon
 -- @return true if they can, false if they can't.
 function GM:PlayerCanUntie(ply, target)
-	if (target:Tied() and not target._beUnTied) then
-		return gamemode.Call("PlayerCanDoSomething", ply);
+	if target:isTied() and not target._beUnTied then
+		return gamemode.Call("PlayerCanDoSomething", ply)
 	end
+
 	return false
 end
 
@@ -161,7 +158,8 @@ end
 -- @param door The door the player wants to buy
 -- @return true if they can, false if they can't.
 function GM:PlayerCanOwnDoor(ply, door)
-	return door._isDoor and not( door._Sealed or cider.entity.isOwned(door))
+	-- todo: fix
+	return false --door._isDoor and not( door._Sealed or cider.entity.isOwned(door))
 end
 ---
 -- Called when a player attempts to view an ent's access data.
@@ -169,7 +167,8 @@ end
 -- @param ent The ent the player is trying to view
 -- @return true if they can, false if they can't.
 function GM:PlayerCanViewEnt(ply, ent)
-	return cider.entity.hasAccess(ent, ply);
+	-- todo: fix
+	return false --cider.entity.hasAccess(ent, ply);
 end
 ---
 -- Caled when a player attempts to set the name of an ent
@@ -177,7 +176,8 @@ end
 -- @param ent The entity the player is trying to set on
 -- @return True if they can, false if they can't.
 function GM:PlayerCanSetEntName(ply, ent, name)
-	return ent._isDoor --and name and name ~= "" and not name:find("Sale"));
+	-- todo: fix
+	return false --ent._isDoor --and name and name ~= "" and not name:find("Sale"));
 end
 
 ---
@@ -186,7 +186,8 @@ end
 -- @param door The door in question
 -- @return True if they can, false if they can't.
 function GM:PlayerCanJamDoor(ply, door)
-	return tobool(string.find(door:GetClass(),"func_door"));
+	-- todo: fix
+	return false --tobool(string.find(door:GetClass(),"func_door"));
 end
 
 ---
@@ -196,13 +197,16 @@ end
 -- @param silent Wether to be quiet about it or not
 -- @return True if they can, false if they can't.
 function GM:PlayerCanHolster(ply, class, silent)
-	if (ply._SpawnWeapons[ class] or ply._Equipping) then
-		if (not silent) then
-			ply:Notify("You cannot holster this weapon!", 1);
+	local spawnWeapons = ply:getAristaVar("spawnWeapons") or {}
+	if spawnWeapons[class] or ply:getAristaVar("equiping") then
+		if not silent then
+			ply:notify("You cannot holster this weapon!")
 		end
-		return false;
+
+		return false
 	end
-	return true;
+
+	return true
 end
 
 ---
@@ -212,14 +216,7 @@ end
 -- @param silent Wether to be quiet about it or not
 -- @return True if they can, false if they can't.
 function GM:PlayerCanDrop(ply, class, silent)
-	do return false; end
-	if (ply._SpawnWeapons[class]) then
-		if (not silent) then
-			ply:Notify("You cannot holster this weapon!", 1);
-		end
-		return false;
-	end
-	return true;
+	return false
 end
 
 ---
@@ -228,7 +225,7 @@ end
 -- @param id The UniqueID of the item
 -- @return True if they can, false if they can't.
 function GM:PlayerCanUseItem(ply, id)
-	item = self.Items[id];
+	--[[item = self.Items[id];
 	if (not item) then return false; end
 	if (item.Category) then
 		local cat = item.Category;
@@ -244,13 +241,8 @@ function GM:PlayerCanUseItem(ply, id)
 		ply:BlacklistAlert("item",item.UniqueID,item.Plural);
 		return false;
 	end
-	--[ [ TODO: Why is this needed? I don't think it is tbh
-	if ( ply._SpawnWeapons[item.UniqueID] ) then -- Did we spawn with this weapon?
-		if (not silent) then ply:Notify("You cannot use this weapon!", 1) end
-		return false
-	end
-	--]]
-	return true;
+	]]
+	return true
 end
 
 ---
@@ -303,7 +295,7 @@ end
 -- @param ply The player in question
 -- @param ent The contraband the player just destroyed
 function GM:PlayerDestroyedContraband(ply, ent)
-	local contra = self.Config['Contraband'][ent:GetClass()];
+	--[[local contra = self.Config['Contraband'][ent:GetClass()];
 	if (not contra) then return end
 	ply:GiveMoney(contra.money);
 	ply:Notify("You earned $" .. contra.money .. " for destroying that " .. contra.name .. "!", 0);
@@ -315,7 +307,7 @@ function GM:PlayerDestroyedContraband(ply, ent)
 	else
 		name = "someone";
 	end
-	GM:Log(EVENT_ADMINEVENT, "%s destroyed %s's %s.", ply:Name(), name, contra.name);
+	GM:Log(EVENT_ADMINEVENT, "%s destroyed %s's %s.", ply:Name(), name, contra.name);]]
 end
 
 ---
@@ -455,7 +447,7 @@ end
 ---
 -- Called when a player has been unwarranted either due to direct action or the time expiring
 -- @param ply The player in question
-function GM:PlayerUnwarranted(ply)
+function GM:PlayerUnWarranted(ply)
 end
 
 ---

@@ -727,8 +727,6 @@ function GM:PlayerSpawn(ply)
 			self:PlayerLoadout(ply)
 		end
 
-		player_manager.OnPlayerSpawn(ply)
-
 		ply:SetupHands()
 
 		-- Call a gamemode hook for when the ply has finished spawning.

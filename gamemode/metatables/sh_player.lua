@@ -7,6 +7,11 @@ function player:hasTripped()
 	return self:getAristaVar("tripped")
 end
 
+function player:isSleeping()
+	if CLIENT then return self:getAristaBool("sleeping") end
+	return self:getAristaVar("sleeping")
+end
+
 function player:isStunned()
 	if CLIENT then return self:getAristaBool("stunned") end
 	return self:getAristaVar("stunned")
@@ -47,6 +52,25 @@ function player:isWarranted()
 	return self:getAristaVar("warrant")
 end
 
+function player:useDisallowed()
+	local get = function(var)
+		if CLIENT then return self:getAristaBool(var)
+		else return self:getAristaVar(var) end
+	end
+
+	return get("holdingEnt")
+		or get("equiping")
+		or self:isStunned()
+		or self:isUnconscious()
+		or self:isTied()
+		or self:isArrested()
+		or self:isSleeping()
+		or self:hasTripped()
+end
+
+function player:interactionDisallowed()
+	return self:useDisallowed() or self:isStuck() or self:InVehicle()
+end
 
 function player:getPronouns()
 	local gender = self:getGender()

@@ -344,11 +344,11 @@ end
 -- @return True if they can, false if they can't.
 function GM:PlayerCanUseDoor(ply, door)
 	-- 128 ^ 2
-	if ent:isJammed() or ent:isSealed() or ply:GetPos():DistToSqr(ply:GetEyeTraceNoCursor().HitPos) > 16384 then
+	if door:isJammed() or door:isSealed() or ply:GetPos():DistToSqr(ply:GetEyeTraceNoCursor().HitPos) > 16384 then
 		return false
 	end
 
-	return not ent:isLocked()
+	return not door:isLocked()
 end
 
 ---

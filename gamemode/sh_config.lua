@@ -61,6 +61,10 @@ arista.config.vars = {
 	clearDecals = true,
 	-- What logs to print. arista.logs.E.DEBUG, arista.logs.E.LOG, arista.logs.E.WARNING, arista.logs.E.ERROR, arista.logs.E.FATAL
 	warningLevel = arista.logs.E.DEBUG,
+	-- Time before doors automatically close.
+	doorAutoClose = 15,
+	-- If a door gets jammed, how long for?
+	doorJam = 10,
 }
 
 function arista.config:getDefault(var)

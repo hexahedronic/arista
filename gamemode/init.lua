@@ -29,6 +29,9 @@ do
 	util.AddNetworkString("arista_notify")
 	util.AddNetworkString("arista_wipeAccess")
 	util.AddNetworkString("arista_incomingAccess")
+	util.AddNetworkString("arista_menu")
+	util.AddNetworkString("arista_buyDoor")
+	util.AddNetworkString("arista_access")
 end
 
 -- Called when the server initializes.
@@ -116,7 +119,7 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 
 	if res then
 		arista.entity.makeOwnable(ent)
-		--cider.entity.setOwnerPlayer(ent,ply)
+		--arista.entity.setOwnerPlayer(ent,ply)
 	end
 
 	return self.BaseClass:PlayerSpawnedProp(ply, model, ent)
@@ -406,7 +409,7 @@ function GM:PlayerInitialized(ply)
 	ply._inited = true
 
 	-- Restore access to any entity the player owned that is currently unowned
-	--cider.entity.restoreAccess(ply)
+	--arista.entity.restoreAccess(ply)
 	-- todo: restore access for rejoins
 
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") finished connecting.")
@@ -466,6 +469,9 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("tied", false)
 	ply:networkAristaVar("unconcious", false)
 	ply:networkAristaVar("incapacitated", false)
+	ply:networkAristaVar("stunned", false)
+	ply:networkAristaVar("tripped", false)
+	ply:networkAristaVar("sleeping", false)
 
 	ply:networkAristaVar("ragdoll", NULL)
 
@@ -1205,7 +1211,7 @@ function GM:PlayerUse(ply, ent)
 	if ply:isUnconscious() then
 		-- If you're unconsious, you can't use things.
 		return false
-	elseif ply:isArrested() or ply:isTied() or ply:isStunned() then
+	elseif ply:useDisallowed() then
 		-- Prevent spam
 		local nextNotify = ply:getAristaVar("nextNotify")
 
@@ -1218,8 +1224,7 @@ function GM:PlayerUse(ply, ent)
 
 		-- If you're arrested, tied, or stunned you can't use things. (no hands!)
 		return false
-	elseif --[[cider.entity.isDoor(ent)]] false and not gamemode.Call("PlayerCanUseDoor", ply, ent) then
-		-- todo: doors
+	elseif arista.entity.isDoor(ent) and not gamemode.Call("PlayerCanUseDoor", ply, ent) then
 
 		-- If the hook says you can't open the door then don't let you. (Prevents doors that should be locked from glitching open)
 		return false
@@ -1270,7 +1275,7 @@ function GM:PlayerDisconnected(ply)
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ")  has disconnected.")
 
 	-- Access incase of rejoin
-	--cider.entity.saveAccess(ply)
+	--arista.entity.saveAccess(ply)
 	-- todo: access
 
 	-- Holseter all weapons.
@@ -1391,8 +1396,8 @@ function GM:KeyPress(ply, key)
 		end
 
 		--~ Open mah doors ~
-		--[[if cider.entity.isDoor(ent) and ent:GetClass() ~= "prop_door_rotating" and gamemode.Call("PlayerCanUseDoor", ply, ent) then
-			cider.entity.openDoor(ent,0);
+		--[[if arista.entity.isDoor(ent) and ent:GetClass() ~= "prop_door_rotating" and gamemode.Call("PlayerCanUseDoor", ply, ent) then
+			arista.entity.openDoor(ent,0);
 		--~ Crank dem Containers Boi ~
 		elseif cider.container.isContainer(ent) and gamemode.Call("PlayerCanUseContainer", ply, ent) then
 			local contents, io, filter = cider.container.getContents(ent, ply, true);
@@ -1419,8 +1424,8 @@ end
 
 -- Called when a player presses F1.
 function GM:ShowHelp(ply)
-	--umsg.Start("cider_Menu", ply) umsg.End()
-	-- todo: menu
+	net.Start("arista_menu")
+	net.Send(ply)
 end
 
 -- Called when a player presses F2.
@@ -1428,15 +1433,13 @@ function GM:ShowTeam(ply)
 	local door = ply:GetEyeTraceNoCursor().Entity
 
 	-- Check if the player is aiming at a door. 128 ^ 2
-	if not (IsValid(door) and --[[cider.entity.isOwnable(door)]] false and ply:GetPos():DisToSqr(ply:GetEyeTraceNoCursor().HitPos) <= 16384) then
-		-- todo: door
+	if not (IsValid(door) and arista.entity.isOwnable(door) and ply:GetPos():DistToSqr(ply:GetEyeTraceNoCursor().HitPos) <= 16384) then
 		return
 	end
 
 	if gamemode.Call("PlayerCanOwnDoor", ply, door) then
-		--umsg.Start("cider_BuyDoor", ply)
-		--umsg.End()
-		-- todo: buy door
+		net.Start("arista_buyDoor")
+		net.Send(ply)
 
 		return
 	end
@@ -1448,23 +1451,31 @@ function GM:ShowTeam(ply)
 		return
 	end
 
-	--[[local detailstable = {}
-	local owner = cider.entity.getOwner(door)
-	detailstable.access = table.Copy(door._Owner.access)
+	local detailstable = {}
+
+	detailstable.access = table.Copy(door._owner.access)
+
+	local owner = arista.entity.getOwner(door)
 	table.insert(detailstable.access, owner)
+
 	if owner == ply then
 		detailstable.owned = {
-			sellable = tobool(door._isDoor and not door._Unsellable) or nil,
-			name = hook.Call("PlayerCanSetEntName",GAMEMODE,ply,door) and cider.entity.getName(door) or nil,
+			sellable = tobool(door._isDoor and not door._unsellable) or nil,
+			name = gamemode.Call("PlayerCanSetEntName", ply, door) and arista.entity.getName(door) or nil,
 		}
 	end
-	detailstable.owner = cider.entity.getPossessiveName(door)
+
+	detailstable.owner = arista.entity.getPossessiveName(door)
+
 	if door._isDoor then
 		detailstable.owner = detailstable.owner .. " door"
 	else
 		detailstable.owner = detailstable.owner .. " " .. door:GetNWString("cider_Name", "entity")
 	end
-	datastream.StreamToClients(ply, "cider_Access", detailstable)]]
+
+	net.Start("arista_access")
+		net.WriteTable(detailstable)
+	net.Send(ply)
 end
 
 function GM:ShowSpare1(ply)
@@ -1548,8 +1559,8 @@ timer.Create("Earning", GM.Config["Earning Interval"], 0, function()
 					cplayers[ply].money = cplayers[ply].money + GM.Config["Contraband"][ ent:GetClass() ].money
 				end
 			end
-		elseif cider.entity.isDoor(ent) and cider.entity.isOwned(ent) then
-			local o = cider.entity.getOwner(ent)
+		elseif arista.entity.isDoor(ent) and arista.entity.isOwned(ent) then
+			local o = arista.entity.getOwner(ent)
 			if type(o) == "Player" and ValidEntity(o) then
 				dplayers[o] = dplayers[o] or { 0, {} }
 				-- Increase the amount of tax this player must pay.

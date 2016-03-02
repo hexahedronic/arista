@@ -114,7 +114,7 @@ end
 
 -- Called when a player attempts to noclip.
 function GM:PlayerNoClip(ply)
-	if ply:isArrested() or ply:isUnconscious() or ply:isTied() then
+	if ply:useDisallowed() then
 		return false
 	end
 

@@ -3,17 +3,19 @@ AddCSLuaFile()
 local entity = FindMetaTable("Entity")
 
 function entity:isSealed()
-	return false
+	if CLIENT then return self:getAristaBool("sealed") or false end
+	return self:getAristaVar("sealed") or false
 end
 
 function entity:isJammed()
-	return false
+	if CLIENT then return self:getAristaBool("jammed") or false end
+	return self:getAristaVar("jammed") or false
 end
 
 function entity:isLocked()
-	return false
+	if CLIENT then return self:getAristaBool("locked") or false end
+	return self:getAristaVar("locked") or false
 end
--- todo: stubs
 
 function entity:isPlayerRagdoll()
 	local ply = self:getRagdollPlayer()

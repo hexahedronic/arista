@@ -37,21 +37,13 @@ function player:notify(format, ...)
 end
 
 function player:isDonator()
-	local donator = ply:getAristaVar("donator")
+	local donator = self:getAristaVar("donator")
 
 	return donator and donator > 0
 end
 
 function player:getRagdoll()
 	return self.ragdoll and self.ragdoll.entity
-end
-
-function player:useDisallowed()
-	return self:getAristaVar("stunned") or self:getAristaVar("holdingEnt") or self:getAristaVar("equiping") or self:isUnconscious() or self:isTied()
-end
-
-function player:interactionDisallowed()
-	return self:isArrested() or self:useDisallowed() or self:isStuck() or self:InVehicle()
 end
 
 ---
@@ -126,18 +118,21 @@ end
 -- @param name The name to give the door (optional)
 -- @param unsellable If the player should be prevented from selling this door.
 function player:giveDoor(door, name, unsellable)
-	--[[if (not (cider.entity.isDoor(door) and cider.entity.isOwnable(door))) then
+	if not (arista.entity.isDoor(door) and arista.entity.isOwnable(door)) then
 		return
 	end
-	door._Unsellable = unsellable
-	cider.entity.setOwnerPlayer(door, self)
-	if (name and name ~= "") then
-		cider.entity.setName(door, name)
+
+	door._unsellable = unsellable
+
+	arista.entity.setOwnerPlayer(door, self)
+	self:AddCount("doors", door)
+
+	if name and name ~= "" then
+		arista.entity.setName(door, name)
 	end
-	door:UnLock()
+
+	door:unLock()
 	door:EmitSound("doors/door_latch3.wav")
-	self:AddCount("doors",door)]]
-	-- todo: doors
 end
 
 ---
@@ -145,19 +140,21 @@ end
 -- @param door The door to take the access from
 -- @param norefund If true, do not give the player a refund
 function player:takeDoor(door, norefund)
-	--[[if (not cider.entity.isDoor(door) or cider.entity.getOwner(door) ~= self) then
+	if not arista.entity.isDoor(door) or arista.entity.getOwner(door) ~= self then
 		return
 	end
 	-- Unlock the door so that people can use it again and play the door latch sound.
-	door:UnLock()
+	door:unLock()
 	door:EmitSound("doors/door_latch3.wav")
+
 	-- Remove our access to it
-	cider.entity.takeAccessPlayer(door,self)
+	arista.entity.takeAccessPlayer(door, self)
 	self:TakeCount("doors", door)
+
 	-- Give the player a refund for the door if we're not forcing it to be taken.
-	if (not norefund) then
-		self:GiveMoney(GM.Config["Door Cost"] / 2)
-	end]]
+	if not norefund then
+		--self:giveMoney(GM.Config["Door Cost"] / 2)
+	end
 end
 
 do
@@ -353,7 +350,9 @@ function player:knockOut(time, velocity)
 	-- todo: not working
 
 	-- Try to send it flying in the same direction as us.
-	timer.Create("Ragdoll Force Application "..self:UniqueID(), 0.05, 5, function()
+	local tid = "Ragdoll Force Application " .. self:UniqueID()
+	timer.Create(tid, 0.05, 5, function()
+		if not IsValid(self) then timer.Destroy(tid) return end
 		doforce(ragdoll, (velocity or self:GetVelocity()) * 100)
 	end)
 	-- todo: nasty timer
@@ -462,10 +461,11 @@ function player:wakeUp(reset)
 
 	-- Wipe the ragdoll table
 	self.ragdoll = {}
+
 	-- Reset the various knockout state vars
-	--self._Stunned = false
-	--self._Tripped = false
-	--self._Sleeping= false
+	self:setAristaVar("stunned", false)
+	self:setAristaVar("tripped", false)
+	self:setAristaVar("sleeping", false)
 
 	-- Set some infos for everyone else
 	self:setAristaVar("unconscious", false)
@@ -701,33 +701,36 @@ end
 -- TODO: Remove this and set up a frequency based thingy.
 -- @param words The words the player should send in the radio message
 function player:sayRadio(words)
-	--[[local recipients, mteam, gang
-	iteam = self:Team()
-	gang = cider.team.getGang(iteam)
+	local team = self:Team()
+	local gang = false--cider.team.getGang(iteam)
+	-- todo: gang
+
 	-- If we're in a gang, send the message to them, otherwise just to our teammates.
-	if (gang) then
+	if gang then
 		recipients = cider.team.getGangMembers(cider.team.getGroupByTeam(iteam), gang)
 	else
 		recipients = team.GetPlayers(iteam)
 	end
+
 	-- Call a hook to allow plugins to adjust who also gets the message.
 	gamemode.Call("PlayerAdjustRadioRecipients", self, words, recipients)
 
 	-- Compile a list of those who can't hear the voice
 	local nohear = {}
+
 	-- Loop through every recipient and add the message to their chatbox
-	for _,ply in pairs(recipients) do
-		cider.chatBox.add(ply, self, "radio", words)
+	for _, ply in pairs(recipients) do
+		--cider.chatBox.add(ply, self, "radio", words)
 		nohear[ply] = true
 	end
 
 	-- Tell everyone nearby that we just said a waydio
 	local pos = self:GetPos()
-	for _,ply in pairs(player.GetAll()) do
-		if (not nohear[ply] and ply:GetPos():Distance(pos) <= GM.Config["Talk Radius"]) then
-			cider.chatBox.add(ply, self, "loudradio", words)
-		end
-	end]]
+	for _, ply in pairs(player.GetAll()) do
+		--if (not nohear[ply] and ply:GetPos():Distance(pos) <= GM.Config["Talk Radius"]) then
+		--	cider.chatBox.add(ply, self, "loudradio", words)
+		--end
+	end
 end
 
 ---

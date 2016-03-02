@@ -501,7 +501,7 @@ function player:returnWeapons()
 
 	local storedWeapons = self:getAristaVar("storedWeapons")
 
-	for class in ipairs(storedWeapons) do
+	for class in pairs(storedWeapons) do
 		self:Give(class)
 	end
 

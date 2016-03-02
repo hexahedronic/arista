@@ -59,6 +59,8 @@ arista.config.vars = {
 	untyingTime = 50,
 	-- If we should clear decals every 60 seconds.
 	clearDecals = true,
+	-- What logs to print. arista.logs.E.DEBUG, arista.logs.E.LOG, arista.logs.E.WARNING, arista.logs.E.ERROR, arista.logs.E.FATAL
+	warningLevel = arista.logs.E.DEBUG,
 }
 
 function arista.config:getDefault(var)
@@ -66,4 +68,3 @@ function arista.config:getDefault(var)
 end
 
 -- todo: do a darkrp style 'dont touch the gamemode' config system.
-

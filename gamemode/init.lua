@@ -50,9 +50,10 @@ end
 -- Called when all of the map entities have been initialized.
 function GM:InitPostEntity()
 	for i, entity in ipairs(ents.GetAll()) do
-		--if cider.entity.isDoor(entity) then
-			--cider.entity.makeOwnable(entity)
-		--end
+		if arista.entity.isDoor(entity) then
+			arista.entity.makeOwnable(entity)
+		end
+
 		arista._internaldata.entities[entity] = entity
 	end
 
@@ -111,7 +112,7 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 	local res = gamemode.Call("PropSpawned", model, ent)
 
 	if res then
-		--cider.entity.makeOwnable(ent)
+		arista.entity.makeOwnable(ent)
 		--cider.entity.setOwnerPlayer(ent,ply)
 	end
 

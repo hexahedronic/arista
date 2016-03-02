@@ -2,8 +2,12 @@ AddCSLuaFile()
 
 arista.timer = {}
 
+local conditionals = {}
 function arista.timer.conditional(name, time, conditional, success, failure, ...)
 	local args = {...}
+
+	-- So we can violate it.
+	conditionals[name] = {f = failure, a = args}
 
 	-- todo: VarArgs are finicky, replace this if possible please.
 	local suc = function()
@@ -20,4 +24,12 @@ function arista.timer.conditional(name, time, conditional, success, failure, ...
 		end
 	end
 	timer.Create(strName .. "_tick", 1, time, tick)
+end
+
+function arista.timer.violate(name)
+	timer.Destroy(name)
+	timer.Destroy(name .. "_tick")
+
+	local t = conditionals[name]
+	t.f(unpack(t.a))
 end

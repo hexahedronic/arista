@@ -719,7 +719,18 @@ end
 ---
 -- Adds an emote to the chatbox coming from the player
 -- @param words What the emote should say
-function player:emote(words)
+-- @param other Other person involved, if there is one
+function player:emote(words, other)
+	local pronoun = self:getPronouns()
+	words:gsub("<P>", pronoun)
+
+	if other and IsValid(other) then
+		words:gsub("<N>", other:Name())
+
+		local oPronoun = other:getPronouns()
+		words:gsub("<O>", oPronoun)
+	end
+
 	--cider.chatBox.addInRadius(self, "me", words, self:GetPos(), GM.Config["Talk Radius"])
 end
 

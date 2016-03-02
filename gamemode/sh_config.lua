@@ -55,6 +55,8 @@ arista.config.vars = {
 	-- Warrant expire times.
 	searchWarrantTime = 220,
 	arrestWarrantTime = 360,
+	-- Time taken to perform an action.
+	untyingTime = 50,
 }
 
 function arista.config:getDefault(var)

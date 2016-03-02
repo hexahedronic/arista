@@ -752,6 +752,7 @@ function player:giveMoney(amount)
 	self:setMoney(money + amount)
 
 	net.Start("arista_moneyAlert")
+		net.WriteInt(amount)
 	net.Send(self)
 end
 

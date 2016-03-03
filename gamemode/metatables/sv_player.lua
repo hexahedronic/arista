@@ -353,7 +353,7 @@ function player:knockOut(time, velocity)
 	local tid = "Ragdoll Force Application " .. self:UniqueID()
 	timer.Create(tid, 0.05, 5, function()
 		if not IsValid(self) then timer.Destroy(tid) return end
-		doforce(ragdoll, (velocity or self:GetVelocity()) * 100)
+		doforce(ragdoll, (velocity or self:GetVelocity()) * 5)
 	end)
 	-- todo: nasty timer
 

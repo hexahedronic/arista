@@ -181,8 +181,9 @@ do
 		if not tojoin then
 			return false, "That is not a valid team!"
 			-- todo: language screeeeee
-		elseif self:blacklisted("team", tojoin.index) > 0 then
+		elseif black and black > 0 then
 			self:blacklistAlert("team", tojoin.index, tojoin.name)
+
 			return false
 		end
 
@@ -698,6 +699,7 @@ function player:isBlacklisted(kind, thing)
 		return 0
 	end
 	return time / 60, blacklist.reason, blacklist.admin]]
+	return false
 end
 
 ----------------------------

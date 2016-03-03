@@ -33,6 +33,7 @@ do
 	util.AddNetworkString("arista_buyDoor")
 	util.AddNetworkString("arista_access")
 	util.AddNetworkString("arista_moneyAlert")
+	util.AddNetworkString("arista_teamChange")
 end
 
 -- Called when the server initializes.

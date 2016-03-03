@@ -116,7 +116,7 @@ end
 
 --This stuff needs to be after plugins but before everything else
 --includecs("sh_events.lua")
---includecs("sh_jobs.lua")
+include("sh_jobs.lua")
 
 -- A table that will hold entities that were there when the map started.
 arista._internaldata.entities = {}

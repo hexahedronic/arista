@@ -24,7 +24,11 @@ end
 
 -- Get a team from a name of index.
 function arista.team.get(name)
-	if not name then return nil end
+	if name == nil then
+		arista.logs.log(arista.logs.E.WARNING, "team.get with nil name?")
+
+		return nil
+	end
 
 	local team
 
@@ -308,8 +312,12 @@ function arista.team.add(name, data)
 
 	if not data.females then data.females = data.males end
 
+	-- Setup data we cant trust idiots with.
 	data.name = name
 	data.isTeam = true
+	data.index = arista.team.index
+
+	data.models = {}
 
 	-- Make the limit maximum players if there is none set.
 	data.limit = data.limit or game.MaxPlayers()
@@ -338,7 +346,7 @@ function arista.team.add(name, data)
 	end
 
 	-- Set the team up (this is called on the server and the client).
-	team.SetUp(arista.team.index, name, color)
+	team.SetUp(arista.team.index, name, data.color)
 
 	-- Tell the group we exist (do this after setting the groups up, to prevent errors)
 	local group = arista.team.getGroup(data.group.group)

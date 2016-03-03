@@ -31,5 +31,7 @@ function arista.timer.violate(name)
 	timer.Destroy(name .. "_tick")
 
 	local t = conditionals[name]
+	if not t or not t.f then return end
+
 	t.f(unpack(t.a))
 end

@@ -153,7 +153,12 @@ function player:takeDoor(door, norefund)
 
 	-- Give the player a refund for the door if we're not forcing it to be taken.
 	if not norefund then
-		--self:giveMoney(GM.Config["Door Cost"] / 2)
+		local cost = arista.config.costs.door or 1
+		local ref = cost / 2
+
+		self:notify("You got $%d for selling your door.", ref)
+
+		self:giveMoney(ref)
 	end
 end
 

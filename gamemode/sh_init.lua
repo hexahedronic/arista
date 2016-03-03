@@ -21,6 +21,14 @@ arista.gamemode = {
 	This gamemode consists mostly of applejack's code (which was built on cider),
 	and we only take credit for the modifications made, not the source material.
 
+	The idea of Arista is to provide an open-source, up-to-date, bugfixed version of applejack.
+
+	With this idea we hope to give smaller servers the ability to run a gamemode other
+	than DarkRP, due to the saturation of DarkRP's servers.
+
+	Note: This is not CityRP, I beleive at some point in the past CityRP was based on
+	either cider/applejack, but this does not MEAN THEY ARE THE SAME THING.
+
 	DO NOT REMOVE KURO OR LEXI FROM THE AUTHOR FIELD.
 	]],
 
@@ -42,19 +50,19 @@ GM.Folder = arista.gamemode.folder
 GM.LuaFolder = arista.gamemode.luaFolder
 GM.GMFolder = arista.gamemode.gmFolder
 
+include("libraries/logs.lua")
+include("libraries/file.lua")
+
 -- This makes more sense tbh
 function gamemode.Call(name, ...)
 	local gm = gmod.GetGamemode() or GM or GAMEMODE or {}
 
 	if not gm[name] then
-		ErrorNoHalt("Hook called '", name, "' called that does not have a GM: function!\n")
+		arista.logs.log(arista.logs.E.WARNING, "Hook called '", name, "' called that does not have a GM: function!\n")
 	end
 
 	return hook.Call(name, gm, ...)
 end
-
-include("libraries/logs.lua")
-include("libraries/file.lua")
 
 --includecs("sh_enumerations.lua")
 include("sh_config.lua")
@@ -80,6 +88,8 @@ function GM:CanPenetrate(trace, force, swep)
 	return force > 7.5
 end
 
+if CLIENT then arista.derma = {} end
+
 arista.file.loadDir("extensions/", "Extension", "Extensions")
 
 arista.file.loadDir("derma/", "Panel", "Panels")
@@ -102,7 +112,7 @@ else
 end
 
 --GM:LoadPlugins()
---GM:LoadItems();
+--GM:LoadItems()
 
 --This stuff needs to be after plugins but before everything else
 --includecs("sh_events.lua")
@@ -212,16 +222,14 @@ function GM:CanTool(ply, trace, tool)
 			return ent:CanTool(ply, trace, tool)
 		end
 
-		--[[if  tool == "remover"
-		and trace.Entity._Removeable
-		and cider.entity.isDoor(trace.Entity)
-		and cider.entity.isOwned(trace.Entity)
-		and type(cider.entity.getOwner(trace.Entity)) == "Player"
-		and not ply:KeyDown(IN_RELOAD) then
-			cider.entity.getOwner(trace.Entity):Notify("You got $"..self.Config["Door Cost"]/2 .." for selling your door.",0)
-			cider.entity.getOwner(trace.Entity):TakeDoor(trace.Entity)
-		end]]
-		-- todo: maybe move to some kind of 'doors' module?
+		do
+			local owner = cider.entity.getOwner(ent)
+
+			if tool == "remover" and ent._removeable and arista.entity.isDoor(ent) and cider.entity.isOwned(ent) and type(owner) == "Player" and not ply:KeyDown(IN_RELOAD) then
+				-- todo: language
+				owner:takeDoor(ent)
+			end
+		end
 
 		--[[if !ply:HasAccess("w") and string.sub(tool, 1, 5) == "wire_" then
 			ply:ConCommand("gmod_toolmode \"\"\n")

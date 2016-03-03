@@ -75,6 +75,11 @@ arista.config.vars = {
 	serverWebsite = "Arista Framework: http://www.hexahedronic.org/",
 }
 
+arista.config.costs = {
+	-- How much doors cost to buy (/2 for refund).
+	door = 100,
+}
+
 function arista.config:getDefault(var)
 	return self.defaults[var]
 end

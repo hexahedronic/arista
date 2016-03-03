@@ -619,7 +619,7 @@ function GM:HUDPaint()
 
 		-- Check if the alpha is 0.
 		if v.alpha <= 0 then
-			arista.client.moneyAlerts[k] = nil
+			table.remove(arista.client.moneyAlerts, k)
 		end
 	end
 

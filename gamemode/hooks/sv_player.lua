@@ -158,8 +158,7 @@ end
 -- @param door The door the player wants to buy
 -- @return true if they can, false if they can't.
 function GM:PlayerCanOwnDoor(ply, door)
-	-- todo: fix
-	return false --door._isDoor and not( door._Sealed or cider.entity.isOwned(door))
+	return door._isDoor and not (door:isSealed() or arista.entity.isOwned(door))
 end
 ---
 -- Called when a player attempts to view an ent's access data.
@@ -167,8 +166,7 @@ end
 -- @param ent The ent the player is trying to view
 -- @return true if they can, false if they can't.
 function GM:PlayerCanViewEnt(ply, ent)
-	-- todo: fix
-	return false --cider.entity.hasAccess(ent, ply);
+	return arista.entity.hasAccess(ent, ply)
 end
 ---
 -- Caled when a player attempts to set the name of an ent
@@ -176,8 +174,7 @@ end
 -- @param ent The entity the player is trying to set on
 -- @return True if they can, false if they can't.
 function GM:PlayerCanSetEntName(ply, ent, name)
-	-- todo: fix
-	return false --ent._isDoor --and name and name ~= "" and not name:find("Sale"));
+	return ent._isDoor and name and name ~= ""
 end
 
 ---
@@ -186,8 +183,8 @@ end
 -- @param door The door in question
 -- @return True if they can, false if they can't.
 function GM:PlayerCanJamDoor(ply, door)
-	-- todo: fix
-	return false --tobool(string.find(door:GetClass(),"func_door"));
+	local class = door:GetClass()
+	return tobool(class:find("func_door", 1, true))
 end
 
 ---

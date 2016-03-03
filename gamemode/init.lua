@@ -479,6 +479,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("knockOutPeriod", 0)
 	ply:networkAristaVar("unarrestTime", 0)
 	ply:networkAristaVar("warrantExpireTime", 0)
+	ply:networkAristaVar("scaleDamage", 0)
 
 	ply:setAristaVar("nextChangeTeam", {})
 	ply:setAristaVar("nextUse", {})
@@ -986,7 +987,7 @@ function GM:EntityTakeDamage(entity, damageinfo)
 			end
 
 			-- Check if the player is supposed to scale damage.
-			if entity:getAristaVar("scaleDamage") then damageinfo:ScaleDamage(entity:getAristaVar("scaleDamage")) end
+			if entity:getAristaVar("scaleDamage") and entity:getAristaVar("scaleDamage") ~= 0 then damageinfo:ScaleDamage(entity:getAristaVar("scaleDamage")) end
 
 			if entity:InVehicle() then
 				entity:SetHealth(entity:Health() - damageinfo:GetDamage()) --Thanks gayry for breaking teh pains in vehicles.
@@ -1088,7 +1089,7 @@ function GM:EntityTakeDamage(entity, damageinfo)
 		end
 
 		-- Check if the player is supposed to scale damage.
-		if ply:getAristaVar("scaleDamage") and not attacker:IsWorld() then damageinfo:ScaleDamage(ply:getAristaVar("scaleDamage")) end
+		if ply:getAristaVar("scaleDamage") and ply:getAristaVar("scaleDamage") ~= 0 and not attacker:IsWorld() then damageinfo:ScaleDamage(ply:getAristaVar("scaleDamage")) end
 
 		-- Take the damage from the player's health.
 		ply:SetHealth(math.max(ply:Health() - damageinfo:GetDamage(), 0))
@@ -1383,7 +1384,7 @@ function GM:KeyPress(ply, key)
 		elseif ply:isUnconscious() and ply:Alive() and (ply:getAristaVar("knockOutPeriod") or 0) <= CurTime() then
 			ply:wakeUp()
 
-			ply:setAristaVar("knockoutPeriod", 0)
+			ply:setAristaVar("knockOutPeriod", 0)
 		end
 	elseif key == IN_USE then
 		-- Grab what's infront of us.

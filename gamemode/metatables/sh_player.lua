@@ -3,8 +3,8 @@ AddCSLuaFile()
 local player = FindMetaTable("Player")
 
 function player:getMoney()
-	if CLIENT then return self:getAristaInt("money") end
-	return self:getAristaVar("money")
+	if CLIENT then return self:getAristaInt("money") or 0 end
+	return self:getAristaVar("money") or 0
 end
 
 ---
@@ -13,6 +13,11 @@ end
 -- @returns True if they have more, false if not.
 function player:canAfford(amount)
 	return self:getMoney() >= amount
+end
+
+function player:getSalary()
+	if CLIENT then return self:getAristaInt("salary") or 0 end
+	return self:getAristaVar("salary") or 0
 end
 
 function player:hasTripped()
@@ -56,18 +61,28 @@ function player:isIncapacitated()
 end
 
 function player:getGender()
-	if CLIENT then return self:getAristaString("gender") end
-	return self:getAristaVar("gender")
+	if CLIENT then return self:getAristaString("gender") or "Male" end
+	return self:getAristaVar("gender") or "Male"
 end
 
 function player:getDetails()
-	if CLIENT then return self:getAristaString("details") end
-	return self:getAristaVar("details")
+	if CLIENT then return self:getAristaString("details") or "" end
+	return self:getAristaVar("details") or ""
+end
+
+function player:getClan()
+	if CLIENT then return self:getAristaString("clan") or "" end
+	return self:getAristaVar("clan") or ""
+end
+
+function player:getJob()
+	if CLIENT then return self:getAristaString("job") or "" end
+	return self:getAristaVar("job") or ""
 end
 
 function player:isWarranted()
-	if CLIENT then return self:getAristaString("warrant") end
-	return self:getAristaVar("warrant")
+	if CLIENT then return self:getAristaString("warrant") or "" end
+	return self:getAristaVar("warrant") or ""
 end
 
 function player:useDisallowed()

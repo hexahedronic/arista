@@ -71,6 +71,8 @@ arista.config.vars = {
 	maxMoney = 10^12,
 	-- Radius you can talk to people in.
 	talkRadius = 300,
+	-- Server's website.
+	serverWebsite = "Arista Framework: http://www.hexahedronic.org/",
 }
 
 function arista.config:getDefault(var)

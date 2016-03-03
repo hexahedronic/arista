@@ -79,7 +79,7 @@ function arista.entity.clearData(entity, saveslaves)
 		master = pm,
 	}
 
-	entity:networkAristaVar("ownerName", entity._owner.name)
+	arista.entity.network(entity)
 end
 
 -- Get every player that has access to this entity
@@ -422,6 +422,14 @@ function arista.entity.takeAccessGang(entity,group,gang)
 	end]]
 end
 
+-- Sends data to client.
+function arista.entity.network(entity)
+	local plyOwner = isentity(entity._owner.owner) and entity._owner.owner ~= NULL
+
+	entity:networkAristaVar("ownerName", entity._owner.name)
+	entity:networkAristaVar("ownedByPlayer", plyOwner)
+end
+
 -- Clear the owner of an entity without resetting access. This should only ever be called if a new owner is about to be set.
 function arista.entity.clearOwner(entity)
 	if not entity or not IsValid(entity) then
@@ -463,7 +471,8 @@ function arista.entity.clearOwner(entity)
 	entity._owner.name = "Nobody"
 	entity._owner.owner = NULL
 
-	entity:setAristaVar("ownerName", entity._owner.name)
+	arista.entity.network(entity)
+
 	arista.entity.updateSlaves(entity)
 end
 
@@ -485,7 +494,7 @@ function arista.entity.setOwnerPlayer(entity, player)
 	arista.entity.clearOwner(entity)
 		entity._owner.name = player:Name()
 		entity._owner.owner = player
-	entity:setAristaVar("ownerName", entity._owner.name)
+	arista.entity.network(entity)
 
 	arista.entity.updateSlaves(entity)
 
@@ -505,7 +514,7 @@ function arista.entity.setOwnerTeam(entity,teamid)
 	arista.entity.clearOwner(entity)
 		entity._owner.name = team.GetName(teamid)
 		entity._owner.owner = teamid
-	entity:setAristaVar("ownerName", entity._owner.name)
+	arista.entity.network(entity)
 
 	arista.entity.updateSlaves(entity)
 
@@ -532,7 +541,7 @@ function arista.entity.setOwnerGang(entity,group,gang)
 	local gangword = group..";"..gang
 	entity._Owner.name = cider.team.gangs[group][gang][1]
 	entity._Owner.owner = gangword
-	entity:SetNWString("cider_ownerName",entity._Owner.name)
+	arista.entity.network(entity)
 		arista.entity.updateSlaves(entity)
 	arista.entity.accessChangedPlayerMulti(entity,cider.team.getGangMembers(group,gang),true)]]
 	-- todo: gangs
@@ -553,7 +562,7 @@ function arista.entity.setName(entity, name, nomaster)
 	if not arista.entity.isOwnable(entity) then return end
 
 	entity._owner.name = name
-	entity:setAristaVar("ownerName", entity._owner.name)
+	arista.entity.network(entity)
 
 	arista.entity.updateSlaves(entity)
 end

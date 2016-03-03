@@ -263,7 +263,7 @@ end
 function player:unWarrant()
 	gamemode.Call("PlayerUnWarranted", self)
 
-	self:setAristaVar("warrant", nil)
+	self:setAristaVar("warrant", "")
 	timer.Destroy("Warrant Expire " .. self:UniqueID())
 end
 

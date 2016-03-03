@@ -17,14 +17,14 @@ arista.config.defaults = {
 	-- Categories in the store that the job can use.
 	jobCategories = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND},
 	-- Playermodels.
-	male = {
+	female = {
 		"models/player/group01/female_01.mdl",
 		"models/player/group01/female_02.mdl",
 		"models/player/group01/female_04.mdl",
 		"models/player/group01/female_05.mdl",
 		"models/player/group01/female_06.mdl",
 	},
-	female = {
+	male = {
 		"models/player/group01/male_01.mdl",
 		"models/player/group01/male_02.mdl",
 		"models/player/group01/male_03.mdl",

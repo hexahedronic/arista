@@ -387,7 +387,9 @@ function GM:DrawInformation(text, font, x, y, color, alpha, left, callback, shad
 
 	-- Get the width and height of the text.
 	local width, height = surface.GetTextSize(text)
+
 	if alpha then color.a = alpha end
+
 	-- Check if we shouldn't left align it, if we have a callback, and if we should draw a shadow.
 	if not left then x = x - (width / 2) end
 	if callback then x, y = callback(x, y, width, height) end
@@ -446,7 +448,8 @@ function GM:DrawPlayerInformation()
 	local y = ScrH() - height - 8
 
 	-- Draw a rounded box to put the information text onto.
-	draw.RoundedBox(2, x, y, width, height, color_black_alpha)
+	surface.SetDrawColor(color_black_alpha)
+	surface.DrawRect(x, y, width, height)
 
 	-- Increase the x and y position by 8.
 	x = x + 8
@@ -566,11 +569,12 @@ function GM:DrawTopText(text)
 		-- Check if the unarrest time is greater than the current time.
 		if unarrestTime > CurTime() then
 			local seconds = math.floor(unarrestTime - CurTime())
+			local mins = math.ceil(seconds / 60)
 
 			-- Check if the amount of seconds is greater than 0.
 			if seconds > 0 then
 				if seconds > 60 then
-					text.y = self:DrawInformation("You will be unarrested in " .. math.ceil(seconds / 60) .. " minute(s).", "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
+					text.y = self:DrawInformation("You will be unarrested in " .. mins .. " minute(s).", "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
 						return x - width - 8, y
 					end)
 				else

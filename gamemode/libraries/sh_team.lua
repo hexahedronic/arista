@@ -380,6 +380,8 @@ if CLIENT then
 	local function teamChanged(team)
 		if not arista._playerInited then
 			timer.Simple(0.5, function() teamChanged(team) end)
+
+			return
 		end
 
 		arista.lp._nextChangeTeam = arista.lp._nextChangeTeam or {}

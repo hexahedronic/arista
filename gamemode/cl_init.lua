@@ -1,5 +1,16 @@
 -- arista: RolePlay FrameWork --
+
+-- Stop showing loadingscreen when we refresh.
+local set
+if arista and arista._playerInited then
+	set = true
+end
+
 include("sh_init.lua")
+
+if set then
+	arista._playerInited = true
+end
 
 arista.client = {}
 
@@ -32,8 +43,6 @@ color_lightblue_alpha =	Color(100, 100, 255, 200)
 color_darkgray_alpha =	Color(025, 025, 025, 150)
 color_black_alpha =		Color(000, 000, 000, 200)
 
-arista._playerInited = true
-
 net.Receive("arista_sendMapEntities", function()
 	local amt = net.ReadUInt(16)
 
@@ -65,17 +74,58 @@ net.Receive("arista_moneyAlert", function()
 		add = 1,
 		alpha = 255,
 	}
-	local amount = net.ReadInt()
 
-	if amount < 0 then
+	local sign = net.ReadBool()
+	local amount = net.ReadUInt(32)
+
+	if not sign then
 		alert.color = color_red
-		alert.text = tostring(amount)
+		alert.text = "-" .. amount
 	else
 		alert.color = color_green
 		alert.text = "+" .. amount
 	end
 
 	table.insert(arista.client.moneyAlerts, alert)
+end)
+
+local startupmenu = CreateClientConVar("arista_startupmenu", "1", true)
+
+local function playerInit(tab)
+	arista.lp = LocalPlayer()
+
+	if IsValid(arista.lp) then
+		arista._playerInited = true
+		arista.client._modelChoices = tab
+
+		if startupmenu:GetBool() then
+			--cider.menu.toggle()
+		end
+	else
+		timer.Simple(0.5, function() playerInit(tab) end)
+	end
+end
+
+-- Hook into when the player has initialized.
+net.Receive("arista_modelChoices", function()
+	local tab = {}
+	local length = net.ReadUInt(8) or 0
+
+	for i = 1, length do
+		local gender = msg:ReadString() or ""
+		tab[gender] = {}
+
+		local leng = net.ReadUInt(8) or 0
+
+		for j = 1, leng do
+			local team = net.ReadUInt(8) or 0
+			local choice = net.ReadUInt(8) or 0
+
+			tab[gender][team] = choice
+		end
+	end
+
+	playerInit(tab)
 end)
 
 function GM:OnAchievementAchieved( ply, achid )
@@ -99,10 +149,6 @@ function GM:InitPostEntity()
 
 	-- Call the base class function.
 	return self.BaseClass:InitPostEntity()
-end
-
--- ????????????
-function GM:ForceDermaSkin()
 end
 
 -- Called when an entity is created.
@@ -573,7 +619,7 @@ function GM:HUDPaint()
 
 		-- Check if the alpha is 0.
 		if v.alpha <= 0 then
-			self.moneyAlerts[k] = nil
+			arista.client.moneyAlerts[k] = nil
 		end
 	end
 
@@ -681,113 +727,29 @@ end
 function GM:PlayerHUDPaint(ply)
 end
 
-/*
--- Called to check if a player can use voice.
-function GM:PlayerCanVoice(player)
-	do return false end
-	if !player:IsValid() or !arista.lp:IsValid() then return false end
-	if ( player:Alive()
-	and player:GetPos():Distance( arista.lp:GetPos() ) <= self.Config["Talk Radius"]
-	and !player:GetNetworkedBool("Arrested")
-	and !player:KnockedOut() ) then
-		return true;
-	else
-		return false;
-	end
-end
-
 -- Stop players bypassing my post proccesses with theirs
-function GM:PostProcessPermitted() return LocalPlayer():IsAdmin() end
-
--- Called every frame.
-function GM:Think()
-	if ( self.Config["Local Voice"] ) then
-		for k, v in pairs( player.GetAll() ) do
-			if ( hook.Call("PlayerCanVoice",GAMEMODE, v) ) then
-				if ( v:IsMuted() ) then v:SetMuted(); end
-			else
-				if ( !v:IsMuted() ) then v:SetMuted(); end
-			end
-		end
-	end
-
-	-- Call the base class function.
-	return self.BaseClass:Think();
+function GM:PostProcessPermitted()
+	return arista.utils.isAdmin(arista.lp)
 end
 
 -- Called when a player begins typing.
-function GM:StartChat(team) return true; end
+function GM:StartChat(team)
+	--return true
+end
 
 -- Called when a player says something or a message is received from the server.
 function GM:ChatText(index, name, text, filter)
-	if ( filter == "none" or filter == "joinleave" or (filter == "chat" and name == "Console") ) then
-		cider.chatBox.chatText(index, name, text, filter);
+	if filter == "none" or filter == "joinleave" or (filter == "chat" and name == "Console") then
+		--cider.chatBox.chatText(index, name, text, filter)
 	end
 
 	-- Return true because we handle this our own way.
-	return true;
+	--return true
 end
-
-local function iHasInitializedyay()
-	if ValidEntity(LocalPlayer()) then
-		GAMEMODE.playerInitialized = true
-		if startupmenu:GetBool() then
-			cider.menu.toggle()
-		end
-	else
-		timer.Simple(0.2,iHasInitializedyay)
-	end
-end
--- Hook into when the player has initialized.
-usermessage.Hook("cider.player.initialized", iHasInitializedyay);
---[[		umsg.Start("cider_ModelChoices")
-		umsg.Short(#player._ModelChoices)
-		for name,gender in pairs(player._ModelChoices) do
-			umsg.String(name)
-			umsg.Short(#gender)
-			for team,choice in ipairs(gender) do
-				umsg.Short(team)
-				umsg.Short(choice)
-			end
-		end
-		umsg.End()]]
-	local errors = 0
-	local maxerrors = GM.Config["Model Choices Timeout"]
-local function CheckForInitalised(tab)
-
-		if errors >= maxerrors then
-			ErrorNoHalt"Something is very wrong - reconnecting!"
-			RunConsoleCommand("retry");
-		elseif errors == maxerrors/2 then
-			ErrorNoHalt("Critical error! You have ".. maxerrors/2 .." seconds before your client reconnects!\n")
-			ErrorNoHalt("LocalPlayer() is not a valid entity after "..errors.." seconds of gameplay!")
-			ErrorNoHalt("LocalPlayer(): "..tostring(LocalPlayer()).."\n")
-			ErrorNoHalt("---------------------------\n")
-		end
-		if !ValidEntity(LocalPlayer()) then
-			errors = errors + 1
-		--	ErrorNoHalt("LocalPlayer is invalid! ("..errors.."/"..maxerrors..")\n")
-			return timer.Simple(1,CheckForInitalised,tab)
-		end
-		--if errors > 0 then ErrorNoHalt"Nevermind it works now...\n" end
-		LocalPlayer()._ModelChoices = tab
-	end
-usermessage.Hook("cider_ModelChoices",function(msg)
-	local tab = {}
-	local length = msg:ReadShort() or 0
-	for i=1, length do
-		local gender = msg:ReadString() or ""
-		tab[gender] = {}
-		local leng = msg:ReadShort()
-		for j = 1, leng do
-			tab[gender][msg:ReadShort() or 0] = msg:ReadShort() or 0
-		end
-	end
-	CheckForInitalised(tab)
-end)
 
 function GM:Initialize()
-	ErrorNoHalt(os.date().." - Finished connecting\n")
+	arista.logs.log(arista.logs.E.LOG, os.date().." - Finished connecting")
+
 	-- Call the base class function.
 	return self.BaseClass:Initialize()
 end
@@ -795,4 +757,3 @@ end
 function GM:ForceDermaSkin()
 	return self.BaseClass:ForceDermaSkin()
 end
-*/

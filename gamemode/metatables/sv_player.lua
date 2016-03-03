@@ -748,11 +748,16 @@ end
 -- Adds an amount of money to the player's money count and triggers an alert on the client.
 -- @param amount How much money to add (can be negative)
 function player:giveMoney(amount)
+	local amount = tonumber(amount)
+
+	if not amount then return end
+
 	local money = self:getMoney()
 	self:setMoney(money + amount)
 
 	net.Start("arista_moneyAlert")
-		net.WriteInt(amount)
+		net.WriteBool(amount >= 0)
+		net.WriteUInt(math.abs(amount), 32) -- Full 32 bit range by sending sign then a uint
 	net.Send(self)
 end
 

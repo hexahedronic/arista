@@ -71,10 +71,26 @@ function GM:InitPostEntity()
 	return self.BaseClass:InitPostEntity()
 end
 
+-- Called to check if a player can use voice.
+local radius = arista.config.vars.talkRadius ^ 2
+
+function GM:PlayerCanHearPlayersVoice(listener, player)
+	if not (player:IsValid() and listener:IsValid()) then return end
+
+	local distToSqr = player:GetPos():DistToSqr(listener:GetPos())
+
+	-- Can hear if alive, close to us, and conscious.
+	if player:Alive() and distToSqr <= radius and not player:isUnconscious() then
+		return true
+	end
+
+	-- Cant hear.
+	return false
+end
+
 -- Called when a player attempts to arrest another player.
 function GM:PlayerCanArrest(ply, target)
 	if target:getAristaVar("warranted") == "arrest" then
-		-- todo: warrant enums? arista.government.E.WARRANT_ARREST ?
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.ARREST, ply, " arrested ", target, ".")
 
 		return true
@@ -418,47 +434,6 @@ end
 
 -- Called when a player's data is loaded.
 function GM:PlayerDataLoaded(ply, success)
-	-- todo: just looking at this code makes me die a little inside.
-	--[[ply._Salary					= 0;
-	ply._JobTimeLimit			= 0;
-	ply._JobTimeExpire			= 0;
-	ply._LockpickChance			= 0;
-	ply._CannotBeWarranted		= 0;
-	ply._ScaleDamage			= 1;
-	ply._Details				= "";
-	ply._NextSpawnGender		= "";
-	ply._NextSpawnGenderWord	= "";
-	ply._Ammo					= {};
-	ply.ragdoll					= {};
-	ply._NextUse				= {};
-	ply._NextChangeTeam			= {};
-	ply._GunCounts				= {};
-	ply._StoredWeapons			= {};
-	ply._FreshWeapons			= {};
-	ply. CSVars					= {}; -- I am aware that this is without a _, but I don't think it looks right with one.
-	ply._Tying					= nil;
-	ply._Initialized			= true;
-	ply._UpdateData				= false;
-	ply._Sleeping				= false;
-	ply._Stunned				= false;
-	ply._Tripped				= false;
-	ply._Warranted				= false;
-	ply._LightSpawn				= false;
-	ply._ChangeTeam				= false;
-	ply._beTied					= false;
-	ply._HideHealthEffects		= false;
-	ply._GenderWord				= "his";
-	ply._Gender					= "Male";
-	ply._NextOOC				= CurTime();
-	ply._NextAdvert				= CurTime();
-	ply._NextDeploy				= CurTime();
-	-- Some player variables based on configuration.
-	ply._SpawnTime				= self.Config["Spawn Time"];
-	ply._ArrestTime				= self.Config["Arrest Time"];
-	ply._Job					= self.Config["Default Job"];
-	ply._KnockOutTime			= self.Config["Knock Out Time"];
-	ply._IdleKick				= CurTime() + self.Config["Autokick time"];]]
-
 	ply:networkAristaVar("job", arista.config:getDefault("job"))
 	ply:networkAristaVar("salary", 0)
 
@@ -472,6 +447,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("stunned", false)
 	ply:networkAristaVar("tripped", false)
 	ply:networkAristaVar("sleeping", false)
+	ply:networkAristaVar("warranted", false)
 
 	ply:networkAristaVar("ragdoll", NULL)
 

@@ -625,8 +625,7 @@ function GM:HUDPaint()
 		end
 	elseif arista.lp:isUnconscious() and arista.lp:Alive() then
 		local knockOutPeriod = arista.lp:getAristaInt("knockOutPeriod") or 0
-
-		local text = "ERROR"
+		local text = ""
 
 		-- Check if the unknock out time is greater than the current time.
 		if knockOutPeriod > CurTime() then
@@ -635,7 +634,7 @@ function GM:HUDPaint()
 			text = "You will be able to get up in " .. seconds .. " second(s)."
 		elseif arista.lp:isSleeping() then
 			text = "Press '" .. jump .. "' to wake up."
-		elseif arista.lp:Alive() then
+		else
 			text = "Press '" .. jump .. "' to get up."
 		end
 

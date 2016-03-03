@@ -467,7 +467,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("arrestTime", arista.config:getDefault("arrestTime"))
 
 	ply:networkAristaVar("tied", false)
-	ply:networkAristaVar("unconcious", false)
+	ply:networkAristaVar("unconscious", false)
 	ply:networkAristaVar("incapacitated", false)
 	ply:networkAristaVar("stunned", false)
 	ply:networkAristaVar("tripped", false)

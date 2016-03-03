@@ -212,10 +212,14 @@ end
 
 -- A function to draw a bar with a maximum and a variable.
 function GM:DrawBar(font, x, y, width, height, color, text, maximum, variable, bar)
-	draw.RoundedBox(2, x, y, width, height, color_black_alpha)
-	draw.RoundedBox(0, x + 2, y + 2, width - 4, height - 4, color_darkgray_alpha)
-	draw.RoundedBox(0, x + 2, y + 2, math.Clamp(((width - 4) / maximum) * variable, 0, width - 4), height - 4, color )
-	-- todo: render this manually, avoid un-needed math
+	surface.SetDrawColor(color_black_alpha)
+	surface.DrawRect(x, y, width, height)
+
+	surface.SetDrawColor(color_darkgray_alpha)
+	surface.DrawRect(x + 2, y + 2, width - 4, height - 4)
+
+	surface.SetDrawColor(color)
+	surface.DrawRect(x + 2, y + 2, math.Clamp(((width - 4) / maximum) * variable, 0, width - 4), height - 4)
 
 	-- Set the font of the text to this one.
 	surface.SetFont(font)
@@ -224,9 +228,17 @@ function GM:DrawBar(font, x, y, width, height, color, text, maximum, variable, b
 	x = math.floor(x + (width / 2))
 	y = math.floor(y + 1)
 
+	local w, h = surface.GetTextSize(text)
+	w = w / 2
+
 	-- Draw text on the bar.
-	draw.DrawText(text, font, x + 1, y + 1, color_black, 1)
-	draw.DrawText(text, font, x, y, color_white, 1)
+	surface.SetTextPos(x - w + 1, y + 1)
+	surface.SetTextColor(color_black)
+	surface.DrawText(text)
+
+	surface.SetTextPos(x - w, y)
+	surface.SetTextColor(color_white)
+	surface.DrawText(text)
 
 	-- Check if a bar table was specified.
 	if bar then bar.y = bar.y - height + 4 end

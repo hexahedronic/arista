@@ -533,17 +533,17 @@ function GM:PlayerInitialSpawn(ply)
 	ply:loadData()
 
 	ply._modelChoices = {}
-	--[[for _,team in pairs(cider.team.stored) do
-		for gender,models in pairs(team.models) do
-			ply._ModelChoices[gender] = ply._ModelChoices[gender] or {}
+	for _, team in pairs(arista.team.stored) do
+		for gender, models in pairs(team.models) do
+			ply._modelChoices[gender] = ply._modelChoices[gender] or {}
+
 			if #models ~= 1 then
-				ply._ModelChoices[gender][team.index]
-					= math.random(1,#models)
+				ply._modelChoices[gender][team.index] = math.random(1, #models)
 			else
-				ply._ModelChoices[gender][team.index] = 1
+				ply._modelChoices[gender][team.index] = 1
 			end
 		end
-	end]]
+	end
 
 	arista.utils.nextFrame(function()
 		if not ply:IsValid() then return end
@@ -648,12 +648,11 @@ do
 			return true
 		end
 
-		local models = false--cider.team.query(ply:Team(), "models")
-		-- todo: getting models
+		local models = arista.team.query(ply:Team(), "models")
 
 		-- Check if the models table exists.
-		if models then
-			local gen = ply:getAristaVar("gender"):lower()
+		if models and ply._modelChoices then
+			local gen = ply:getGender():lower()
 			models = models[gen]
 
 			-- Check if the models table exists for this gender.
@@ -676,14 +675,15 @@ do
 end
 
 function GM:PlayerReSpawn(ply)
-	--[[ply._Ammo = {}
-	ply._Sleeping = false
-	ply._Stunned = false
-	ply._Tripped = false
-	ply._ScaleDamage = 1
-	ply._HideHealthEffects = false
-	ply._CannotBeWarranted = CurTime() + 15
-	ply._Deaded = nil]]
+	--ply._Ammo = {}
+	--ply._HideHealthEffects = false
+
+	ply:setAristaVar("scaleDamage", 1)
+	ply:setAristaVar("sleeping", false)
+	ply:setAristaVar("dead", false)
+	ply:setAristaVar("tripped", false)
+	ply:setAristaVar("stunned", false)
+	ply:setAristaVar("cannotBeWarranted", CurTime() + 15)
 end
 
 -- Called when a player spawns.

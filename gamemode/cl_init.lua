@@ -112,7 +112,7 @@ net.Receive("arista_modelChoices", function()
 	local length = net.ReadUInt(8) or 0
 
 	for i = 1, length do
-		local gender = msg:ReadString() or ""
+		local gender = net.ReadString() or ""
 		tab[gender] = {}
 
 		local leng = net.ReadUInt(8) or 0
@@ -128,7 +128,7 @@ net.Receive("arista_modelChoices", function()
 	playerInit(tab)
 end)
 
-function GM:OnAchievementAchieved( ply, achid )
+function GM:OnAchievementAchieved(ply, achid)
 	--cider.chatBox.chatText(ply:EntIndex(), ply:Name(), achievements.GetName(achid), "achievement")
 end
 

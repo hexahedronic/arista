@@ -32,6 +32,8 @@ color_lightblue_alpha =	Color(100, 100, 255, 200)
 color_darkgray_alpha =	Color(025, 025, 025, 150)
 color_black_alpha =		Color(000, 000, 000, 200)
 
+arista._playerInited = true
+
 net.Receive("arista_sendMapEntities", function()
 	local amt = net.ReadUInt(16)
 
@@ -112,8 +114,6 @@ function GM:OnEntityCreated(entity)
 	-- Call the base class function.
 	return self.BaseClass:OnEntityCreated(entity)
 end
-
-arista._playerInited = true
 
 -- Called when a player presses a bind.
 function GM:PlayerBindPress(player, bind, press)
@@ -551,6 +551,7 @@ end
 function GM:HUDPaint()
 	if not IsValid(arista.lp) then arista.lp = LocalPlayer() return end
 
+	if not arista._playerInited then return end
 	self:HUDPaintESP()
 
 	-- Bypass the camera, show what server this was taken on.

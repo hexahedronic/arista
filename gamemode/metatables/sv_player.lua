@@ -176,51 +176,68 @@ do
 	-- @param tojoin What team to join
 	-- @return success or failure, failure message.
 	function player:joinTeam(tojoin)
-		--[[local oldteam
-		tojoin = cider.team.get(tojoin)
-		if (not tojoin) then
+		local tojoin = arista.team.get(tojoin)
+
+		if not tojoin then
 			return false, "That is not a valid team!"
-		elseif (self:Blacklisted("team",tojoin.index) > 0) then
-			self:BlacklistAlert("team", tojoin.index, tojoin.name)
+			-- todo: language screeeeee
+		elseif self:blacklisted("team", tojoin.index) > 0 then
+			self:blacklistAlert("team", tojoin.index, tojoin.name)
 			return false
 		end
-		timer.Violate(self:UniqueID().." holster")
-		oldteam = self:Team()
-		GM:Log(EVENT_TEAM, "%s changed team from %q to %q.", self:Name(), cider.team.query(oldteam, "name", "Unconnected / Joining"), tojoin.name)
-		self._NextChangeTeam[oldteam] = CurTime() + cider.team.query(oldteam, "waiting", 300) -- Make it so we can't join our old team for x seconds (default 5 mins)
+
+		arista.timer.violate("Holster " .. self:UniqueID())
+
+		local oldteam = self:Team()
+		local oldname = arista.team.query(oldteam, "name", "Unconnected / Joining")
+
+		arista.logs.event(arista.logs.E.LOG, arista.logs.E.JOB, self, "(", self:SteamID(), ") changed job from ", oldname, " to ", tojoin.name)
+
+		self:getAristaVar("nextChangeTeam")[oldteam] = CurTime() + arista.team.query(oldteam, "waiting", 300) -- Make it so we can't join our old team for x seconds (default 5 mins)
+
 		self:SetTeam(tojoin.index)
-		self._Job = tojoin.name
-		self:SetNWString("Job", self._Job)
-		if ((self._JobTimeExpire or 0) > CurTime()) then
-			self._JobTimeExpire = 0
-			self._JobTimeLimit = 0
-			timer.Stop("Job Timelimit: "..self:UniqueID())
-		end if (tojoin.timelimit != 0) then
-			self._JobTimeExpire = tojoin.timelimit + CurTime()
-			self._JobTimeLimit = tojoin.timelimit
-			timer.Create("Job Timelimit: "..self:UniqueID(), tojoin.timelimit, 1, jobtimer, self)
+		self:setAristaVar("job", tojoin.name)
+
+		local expireTime = self:getAristaVar("jobTimeExpire") or 0
+
+		if expireTime > CurTime() then
+			self:setAristaVar("jobTimeExpire", 0)
+			self:setAristaVar("jobTimeLimit", 0)
+
+			timer.Destroy("Job Timelimit " .. self:UniqueID())
 		end
+		if tojoin.timelimit ~= 0 then
+			self:setAristaVar("jobTimeExpire", tojoin.timelimit + CurTime())
+			self:setAristaVar("jobTimeLimit", tojoin.timelimit)
+
+			timer.Create("Job Timelimit " .. self:UniqueID(), tojoin.timelimit, 1, function()
+				jobtimer(self)
+			end)
+		end
+
 		-- Change our salary.
-		self._Salary = tojoin.salary
+		self:setAristaVar("salary", tojoin.salary)
 		gamemode.Call("PlayerAdjustSalary", self)
 
 		-- Tell the client they can't join this team again.
-		umsg.Start("TeamChange", self)
-		umsg.Char(oldteam)
-		umsg.End()
+		net.Start("arista_teamChange")
+			net.WriteUInt(oldteam, 8)
+		net.Send(self)
 
 		-- Some tidying up
 		-- Unwarrant the player.
-		self:UnWarrant()
+		self:unWarrant()
+
 		-- Call the hook to tell various things we've changed team
 		gamemode.Call("PlayerChangedTeams", self, oldteam, tojoin.index)
-		-- Silently kill the player.
-		self._ChangeTeam = oldteam
-		self:KillSilent()
-		-- Return true because it was successful.
-		return true]]
 
-		-- todo: team/job stuff
+		-- Silently kill the player.
+		self._changeTeam = oldteam
+
+		self:KillSilent()
+
+		-- Return true because it was successful.
+		return true
 	end
 end
 
@@ -229,11 +246,11 @@ end
 function player:demote()
 	self:holsterAll()
 
-	--if cider.team.getGroupLevel(self:Team()) == 1 then
+	if arista.team.getGroupLevel(self:Team()) == 1 then
 		self:joinTeam(TEAM_DEFAULT)
-	--else
-	--	self:JoinTeam(cider.team.getGroupBase(cider.team.getGroupByTeam(self:Team())))
-	--end
+	else
+		self:joinTeam(cider.team.getGroupBase(cider.team.getGroupByTeam(self:Team())))
+	end
 end
 
 local function warrantTimer(ply)

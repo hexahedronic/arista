@@ -402,7 +402,7 @@ function GM:PlayerInitialized(ply)
 			if days > 0 then
 				ply:notify("Your Donator status expires in %d day(s).", days)
 			else
-				ply:Notify("Your Donator status expires in %d hour(s) %d minute(s) and %d second(s).", hours, minutes, seconds)
+				ply:notify("Your Donator status expires in %d hour(s) %d minute(s) and %d second(s).", hours, minutes, seconds)
 			end
 			-- todo: language
 
@@ -460,6 +460,8 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("unarrestTime", 0)
 	ply:networkAristaVar("warrantExpireTime", 0)
 	ply:networkAristaVar("scaleDamage", 0)
+	ply:networkAristaVar("jobTimeExpire", 0)
+	ply:networkAristaVar("jobTimeLimit", 0)
 
 	ply:setAristaVar("nextChangeTeam", {})
 	ply:setAristaVar("nextUse", {})

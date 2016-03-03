@@ -12,13 +12,22 @@ arista.config.defaults = {
 	spawnTime = 30,
 	-- Time arrested for.
 	arrestTime = 300,
+	-- Access level.
+	access = "b",
+	-- Categories in the store that the job can use.
+	jobCategories = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND},
+	-- Playermodels.
+	male = {},
+	female = {},
+	-- Wait time to rejoin job.
+	jobWait = 5 * 60
 }
 
 -- Stuff that's saved in the database, if you want to fuck with it, then
 -- fuck with it before your first run (pdata self-corrects, SQL is likely to break).
 arista.config.database = {
 	-- The money that each player starts with.
-	money = 0,
+	money = 2500,
 	-- The clan that each player belongs to by default.
 	clan = "",
 	-- The default inventory size.
@@ -58,7 +67,7 @@ arista.config.vars = {
 	searchWarrantTime = 220,
 	arrestWarrantTime = 360,
 	-- Time taken to perform an action.
-	untyingTime = 50,
+	untyingTime = 15,
 	-- If we should clear decals every 60 seconds.
 	clearDecals = true,
 	-- What logs to print. arista.logs.E.DEBUG, arista.logs.E.LOG, arista.logs.E.WARNING, arista.logs.E.ERROR, arista.logs.E.FATAL

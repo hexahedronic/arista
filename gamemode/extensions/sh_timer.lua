@@ -23,7 +23,7 @@ function arista.timer.conditional(name, time, conditional, success, failure, ...
 			timer.Destroy(name .. "_tick")
 		end
 	end
-	timer.Create(strName .. "_tick", 1, time, tick)
+	timer.Create(name .. "_tick", 1, time, tick)
 end
 
 function arista.timer.violate(name)

@@ -224,14 +224,16 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 		lines:add("Status" .. statuslines, "(Arrested)", color_red, 2 + statuslines)
 		statuslines = statuslines + 1
 	elseif player:isTied() then
-		local useKey = input.LookupBinding("+use")
-		local speedKey = input.LookupBinding("+speed")
+		local useKey = input.LookupBinding("+use"):upper()
+		local speedKey = input.LookupBinding("+speed"):upper()
 
 		lines:add("Status" .. statuslines, "(Tied)", color_lightblue, 2 + statuslines)
 		statuslines = statuslines + 1
 
-		lines:add("Status" .. statuslines, "Press '" .. useKey .. "' + '" .. speedKey .. "' to untie", color_white, 2 + statuslines)
-		statuslines = statuslines + 1
+		if lookingat then
+			lines:add("Status" .. statuslines, "Press '" .. useKey .. "' + '" .. speedKey .. "' to untie", color_white, 2 + statuslines)
+			statuslines = statuslines + 1
+			end
 	end
 
 	local warrant = player:isWarranted()
@@ -247,15 +249,15 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 		statuslines = statuslines + 1
 	end
 
-	local details = player:getDetails()
-
-	-- Check if they have details set
-	if details ~= "" then
-		lines:add("Status" .. statuslines, "Details: " .. details, color_white, 2 + statuslines)
-		statuslines = statuslines + 1
-	end
-
 	if lookingat then
+		local details = player:getDetails()
+
+		-- Check if they have details set
+		if details ~= "" then
+			lines:add("Status" .. statuslines, "Details: " .. details, color_white, 2 + statuslines)
+			statuslines = statuslines + 1
+		end
+
 		-- Check if the player is in a clan.
 		local clan = player:getClan()
 

@@ -232,7 +232,7 @@ function player:demote()
 end
 
 local function warrantTimer(ply)
-	if not IsValid(ply:IsValid()) then return end
+	if not IsValid(ply) then return end
 
 	gamemode.Call("PlayerWarrantExpired", ply, ply:getAristaVar("warrant"))
 	ply:unWarrant()

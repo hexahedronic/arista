@@ -447,7 +447,8 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("stunned", false)
 	ply:networkAristaVar("tripped", false)
 	ply:networkAristaVar("sleeping", false)
-	ply:networkAristaVar("warrant", false)
+
+	ply:networkAristaVar("warrant", "")
 
 	ply:networkAristaVar("ragdoll", NULL)
 

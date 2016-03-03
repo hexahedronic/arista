@@ -46,10 +46,12 @@ function PANEL:Init()
 		end
 
 		if self.textEntry:GetValue():Trim() == "" then
-			RunConsoleCommand("cider", "door", "purchase")
+			--RunConsoleCommand("cider", "door", "purchase")
 		else
-			RunConsoleCommand( "cider", "door", "purchase", self.textEntry:GetValue())
+			--RunConsoleCommand("cider", "door", "purchase", self.textEntry:GetValue())
 		end
+
+		-- todo: maybe arista.runCommand or something? eitherway readd when commands done.
 	end
 
 	-- Create the text entry panel.

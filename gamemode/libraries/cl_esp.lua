@@ -269,7 +269,7 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 		local job = player:getJob()
 
 		-- Draw the player's job.
-		lines:add("Status" .. statuslines, "Job: " .. clan, color_white, 2 + statuslines)
+		lines:add("Status" .. statuslines, "Job: " .. job, color_white, 2 + statuslines)
 		statuslines = statuslines + 1
 	end
 end

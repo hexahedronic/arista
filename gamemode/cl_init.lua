@@ -393,10 +393,17 @@ function GM:DrawInformation(text, font, x, y, color, alpha, left, callback, shad
 	-- Check if we shouldn't left align it, if we have a callback, and if we should draw a shadow.
 	if not left then x = x - (width / 2) end
 	if callback then x, y = callback(x, y, width, height) end
-	if shadow then draw.DrawText(text, font, x + 1, y + 1, Color(0, 0, 0, color.a)) end
+
+	if shadow then
+		surface.SetTextColor(0, 0, 0, color.a)
+		surface.SetTextPos(x + 1, y + 1)
+		surface.DrawText(text)
+	end
 
 	-- Draw the text on the player.
-	draw.DrawText(text, font, x, y, color)
+	surface.SetTextColor(color)
+	surface.SetTextPos(x, y)
+	surface.DrawText(text)
 
 	-- Return the new y position.
 	return y + height + 8

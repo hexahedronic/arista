@@ -27,7 +27,7 @@ function PANEL:Init()
 	self._localPlayerPosition = arista.lp:GetPos()
 
 	-- Create the label panels.
-	self.label = vgui.Create("DLabel", self);
+	self.label = vgui.Create("DLabel", self)
 	self.nameLabel = vgui.Create("DLabel", self)
 		self.nameLabel:SetTextColor(color_white)
 		self.nameLabel:SetText("Name:")

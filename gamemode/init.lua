@@ -365,14 +365,17 @@ end
 function GM:PlayerAuthed(ply, steamid)
 	local name = ply:Name()
 
-	if not name:find("[A-Za-z1-9][A-Za-z1-9][A-Za-z1-9][A-Za-z1-9]") then
+	if name == "^" then
+		ply:Kick("Nice try, but this doesn't use ulx. Change name.")
+	elseif not name:find("[A-Za-z1-9][A-Za-z1-9][A-Za-z1-9][A-Za-z1-9]") then
 		ply:Kick("A minimum of 4 alphanumeric characters is required in your name to play here.")
 	elseif name:find(";") then
 		ply:Kick("Please take the semi-colon out of your name.")
 	elseif name:find('"') then
 		ply:Kick('Please take the " out of your name.')
+	elseif name:StartWith("#") then
+		ply:Kick("Remove the hash infront of your name.")
 	end
-	-- todo: language?? maybe, i mean, it's not like they can choose their kick msg xd
 
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, name, "(", steamid, ") has been authed by steam.")
 end

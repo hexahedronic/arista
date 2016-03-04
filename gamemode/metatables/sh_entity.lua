@@ -39,12 +39,12 @@ end
 
 function entity:physgunForbidden()
 	local class = self:GetClass()
-	return class:find("npc_") or class:find("arista_") or class:find("cider_") or class:find("prop_dynamic") --[[or cider.entity.isDoor(class, true)]]
+	return class:find("npc_") or class:find("arista_") or class:find("cider_") or class:find("prop_dynamic") or arista.entity.isDoor(class, true)
 end
 
 function entity:toolForbidden()
 	local class = self:GetClass()
-	return class:find("camera") or --[[cider.entity.isDoor(class, true) or]] class:find("vehicle")
+	return class:find("camera") or arista.entity.isDoor(class, true) or class:find("vehicle")
 end
 
 if SERVER then

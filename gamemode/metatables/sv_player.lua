@@ -50,27 +50,32 @@ end
 -- Give a player access to a the flag(s) specified
 -- @param flaglist A list of flags with no spaces or delimiters
 function player:giveAccess(flaglist)
-	--[[local flag,access
-	access = self.cider._Access
+	local access = self:getAristaVar("access")
+
 	for i = 1, flaglist:len() do
-		flag = flaglist:sub(i,i)
-		if (not access:find(flag)) then
-			access = access .. flag
+		local flag = flaglist[i]
+
+		if flag ~= " " then
+			if not access:find(flag, 1, true) then
+				access = access .. flag
+			end
 		end
 	end
-	self.cider._Access = access]]
+
+	self:setAristaVar("access", access)
 end
 
 ---
 -- Take away away a player's access to the flag(s) specified
 -- @param flaglist A list of flags with no spaces or delimiters
 function player:takeAccess(flaglist)
-	--[[local access
-	access = self.cider._Access
+	local access = self:getAristaVar("access")
+
 	for i = 1, flaglist:len() do
-		access = access:gsub(flaglist:sub(i,i), "")
+		access = access:gsub(flaglist[i], "")
 	end
-	self.cider._Access = access]]
+
+	self:setAristaVar("access", access)
 end
 
 ---
@@ -81,35 +86,45 @@ end
 -- @param reason Why they have been blacklisted.
 -- @param blacklister Who blacklisted them. Preferably a string (the name), can also take a player.
 function player:blacklist(kind, thing, time, reason, blacklister)
-	--[[local blacklist
-	if (type(blacklister) == "Player") then
+	if type(blacklister) == "Player" then
 		blacklister = blacklister:Name()
 	end
-	blacklist = self.cider._Blacklist[kind]
+
+	local black = self:getAristaVar("blacklist")
+
+	local blacklist = black[kind]
 	blacklist = blacklist or {}
+
 	blacklist[thing] = {
 		time = os.time() + time * 60,
 		reason = reason,
 		admin = blacklister
 	}
-	self.cider._Blacklist[kind] = blacklist]]
+
+	black[kind] = blacklist
+	self:setAristaVar("blacklist", black)
 end
 
 ---
 -- Unblacklist a player from a previously existing blacklist.
 -- @param kind What kind of activity. Can be one of "cat","item","cmd" or "team". In order: Item category, specific item, command or specific team/job.
 -- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
-function player:removeBlacklist(kind, thing)
-	--[[local blacklist
-	blacklist = self.cider._Blacklist[kind]
-	if (blacklist) then
+function player:unBlacklist(kind, thing)
+	local black = self:getAristaVar("blacklist")
+
+	local blacklist = black[kind]
+
+	if blacklist then
 		blacklist[thing] = nil
-		if (table.Count(blacklist) == 0) then
+
+		if table.Count(blacklist) == 0 then
 			blacklist = nil
 		end
-		self.cider._Blacklist[kind] = blacklist
-	end]]
-	-- todo: doors
+
+		black[kind] = blacklist
+
+		self:setAristaVar("blacklist", black)
+	end
 end
 
 ---
@@ -440,14 +455,6 @@ end
 function player:wakeUp(reset)
 	if not self.ragdoll or table.Count(self.ragdoll) == 0 then return end
 
-	-- If the player is on a different team to the one they were on when they were knocked out, respawn them. TODO: Why do this?
-	--[[if (self:Team() ~= self.ragdoll.team) then
-		self.ragdoll.team = self:Team()
-		self:Spawn()
-		return
-	end]]
-	-- todo: ??
-
 	-- Get us out of this spectation
 	self:UnSpectate()
 	self:CrosshairEnable()
@@ -662,22 +669,22 @@ end
 -- @param any Whether to search for any flag on the list (return true at the first flag found), or for every flag on the list. (return false on the first flag not found)
 -- @return true on succes, false on failure.
 function player:hasAccess(flaglist, any)
-	--[[local access, teamaccess, flag
-	access = self.cider._Access
-	teamaccess = cider.team.query(self:Team(),"access","")
+	local access = self:getAristaVar("access")
+	local teamaccess = arista.team.query(self:Team(), "access", "")
+
 	for i = 1, flaglist:len() do
-		flag = flaglist:sub(i,i)
-		if(flag == GM.Config["Default Access"]
-		or GM.FlagFunctions[flag] and GM.FlagFunctions[flag](self)
-		or access:find(flag)
-		or teamaccess:find(flag)) then
-			if (any) then return true end -- If 'any' is selected, then return true whenever we get a match
-		elseif (not any) then -- If 'any' is not selected we don't get a match, return false.
+		local flag = flaglist[1]
+		local flagfunc = arista.flagFunctions[flag] and arista.flagFunctions[flag](self) or false
+
+		if flag == arista.config:getDefault("access") or flagfunc or access:find(flag, 1, true) or teamaccess:find(flag, 1, true) then
+			if any then return true end -- If 'any' is selected, then return true whenever we get a match
+		elseif not any then -- If 'any' is not selected we don't get a match, return false.
 			return false
 		end
 	end
+
 	-- If 'any' is selected and none have matched, return false. If 'any' is not selected and we have matched every flag return true.
-	return not any]]
+	return not any
 end
 
 ---
@@ -687,19 +694,28 @@ end
 -- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
 -- @return 0 if the player is not blacklisted, otherwise the time in seconds, the reason and the name of the blacklister.
 function player:isBlacklisted(kind, thing)
-	--[[local blacklist,time
-	blacklist = self.cider._Blacklist[kind]
-	if (not (blacklist and blacklist[thing])) then
+	local black = self:getAristaVar("blacklist")
+	local blacklist = black[kind]
+
+	if not blacklist then
 		return 0
 	end
-	blacklist = blacklist[thing]
-	time = blacklist.time - os.time()
-	if (time <= 0) then
-		self:UnBlacklist(kind, thing)
+
+	local blackthing = blacklist[thing]
+
+	if not blackthing then
 		return 0
 	end
-	return time / 60, blacklist.reason, blacklist.admin]]
-	return false
+
+	local time = blackthing.time - os.time()
+
+	if time <= 0 then
+		self:unBlacklist(kind, thing)
+
+		return 0
+	end
+
+	return time / 60, blackthing.reason, blackthing.admin
 end
 
 ----------------------------
@@ -714,8 +730,7 @@ end
 -- @param words The words the player should send in the radio message
 function player:sayRadio(words)
 	local team = self:Team()
-	local gang = false--cider.team.getGang(iteam)
-	-- todo: gang
+	local gang = arista.team.getGang(iteam)
 
 	-- If we're in a gang, send the message to them, otherwise just to our teammates.
 	if gang then
@@ -820,13 +835,17 @@ end
 -- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
 -- @param name The name of what it is
 function player:blacklistAlert(kind, thing, name)
-	--[[local time, reason, admin = self:Blacklisted(kind, thing)
-	if (time >= 1440) then
+	local time, reason, admin = self:isBlacklisted(kind, thing)
+
+	if not time or time == 0 then return end
+
+	if time >= 1440 then
 		time = math.ceil(time / 1440) .. " days"
-	elseif (time >= 60) then
+	elseif time >= 60 then
 		time = math.ceil(time / 60) .. " hours"
 	else
 		time = time .. " minutes"
 	end
-	self:Notify("You have been blacklisted from using " .. tostring(name) .. " by " .. admin .. " for " .. time .. " for '" .. reason .. "'!")]]
+
+	self:notify("You have been blacklisted from using %s by %s for %s for '%s'!", tostring(name), admin, time, reason)
 end

@@ -106,14 +106,16 @@ function arista.entity.getAllAccessors(entity, plyindexed)
 				table.Add(ret, team.GetPlayers(v))
 			elseif ty == "string" then
 				--It's a gang
-				--[[local tab = string.Explode(";",v)
-				local group,gang = tonumber(tab[1]),tonumber(tab[2])
-				local members = {}
-				members = cider.team.getGangMembers(group,gang)
-				if members then
-					table.Add(ret,members)
-				end]]
-				-- todo: gangs
+				local tab = v:Split(";")
+				local group, gang = tonumber(tab[1]),tonumber(tab[2])
+
+				if group and gang then
+					local members = arista.team.getGangMembers(group, gang)
+
+					if members then
+						table.Add(ret, members)
+					end
+				end
 			end
 		end
 	end
@@ -146,10 +148,9 @@ function arista.entity.getEntsAccess(player)
 
 	local searchfor, ret = {}, {}
 	local team = player:Team()
-	local gang-- = cider.team.getGang(teamID)
-	--local group = cider.team.getGroupByTeam(teamID)
-	local gid = "0;0"--group.index..";0"
-	-- todo: eek
+	local gang = arista.team.getGang(teamID)
+	local group = arista.team.getGroupByTeam(teamID)
+	local gid = group.index..";0"
 
 	-- table micro optimisations
 	searchfor[1] = gid
@@ -368,58 +369,72 @@ end
 
 -- Give a gang access to an entity
 function arista.entity.giveAccessGang(entity, group, gang)
-	--[[if not ValidEntity(entity) then
-		error("Tried to use a NULL entity!",2)
+	if not entity or not IsValid(entity) then
+		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.giveAccessGang was passed an invalid entity (", tostring(entity), ").")
+
+		return
 	end
+
 	entity = arista.entity.getMaster(entity) or entity
 	if type(group) == "table" then -- We might get passed a group object
 		group = group.index
 	else
 		group = tonumber(group)
 	end
+
 	local gang = tonumber(gang)
-	local gangword = group..";"..gang
+	local gangword = group .. ";" .. gang
+
 	if arista.entity.isOwnable(entity) and not arista.entity.onList(entity,gangword) then
-		table.insert(entity._Owner.access,gangword)
-		arista.entity.accessChangedPlayerMulti(entity,cider.team.getGangMembers(group,gang),true)
+		table.insert(entity._owner.access, gangword)
+		arista.entity.accessChangedPlayerMulti(entity, arista.team.getGangMembers(group, gang), true)
 		arista.entity.updateSlaves(entity)
-	end]]
+	end
 end
 
 --Take a gang's access away
-function arista.entity.takeAccessGang(entity,group,gang)
-	--[[if not ValidEntity(entity) then
-		error("Tried to use a NULL entity!",2)
+function arista.entity.takeAccessGang(entity, group, gang)
+	if not entity or not IsValid(entity) then
+		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.takeAccessGang was passed an invalid entity (", tostring(entity), ").")
+
+		return
 	end
+
 	entity = arista.entity.getMaster(entity) or entity
+
 	if type(group) == "table" then -- We might get passed a group object
 		group = group.index
 	end
+
 	local gang = tonumber(gang)
-	local gangword = group..";"..gang
+	local gangword = group .. ";" .. gang
+
 	if arista.entity.isOwned(entity) then
 		if arista.entity.getOwner(entity) == gangword then
-			arista.entity.clearData(entity,true) -- if you take the owner's access, you lose all accessors
+			arista.entity.clearData(entity, true) -- if you take the owner's access, you lose all accessors
 			arista.entity.updateSlaves(entity)
 		else
-			for key,accessor in ipairs(entity._Owner.access) do
+			for key, accessor in ipairs(entity._owner.access) do
 				if accessor == gangword then
-					table.remove(entity._Owner.access,key)
-					local plyset = cider.team.getGangMembers(group,gang)
+					table.remove(entity._owner.access, key)
+					local plyset = arista.team.getGangMembers(group, gang)
+
 					for key,player in ipairs(plyset) do
-						if arista.entity.hasAccess(entity,player) then
-							table.remove(plyset,key)
+						if arista.entity.hasAccess(entity, player) then
+							table.remove(plyset, key)
 						end
 					end
+
 					if #plyset > 0 then
-						arista.entity.accessChangedPlayerMulti(entity,plyset,false)
+						arista.entity.accessChangedPlayerMulti(entity, plyset, false)
 					end
+
 					arista.entity.updateSlaves(entity)
 					break
 				end
 			end
 		end
-	end]]
+	end
 end
 
 -- Sends data to client.
@@ -456,14 +471,16 @@ function arista.entity.clearOwner(entity)
 		table.Add(ret, team.GetPlayers(owner))
 	elseif Type == "string" then
 		--It's a gang
-		--[[local tab = string.Explode(";",owner)
-		local group,gang = tonumber(tab[1]),tonumber(tab[2])
-		local members = {}
-		members = cider.team.getGangMembers(group,gang)
-		if members then
-			table.Add(ret,members)
-		end]]
-		-- todo: gangs
+		local tab = owner:Split(";")
+		local group, gang = tonumber(tab[1]), tonumber(tab[2])
+
+		if group and gang then
+			local members = arista.team.getGangMembers(group,gang)
+
+			if members then
+				table.Add(ret, members)
+			end
+		end
 	end
 
 	arista.entity.accessChangedPlayerMulti(entity, ret, false)
@@ -502,7 +519,7 @@ function arista.entity.setOwnerPlayer(entity, player)
 end
 
 --Set a team to be the owner of an entity
-function arista.entity.setOwnerTeam(entity,teamid)
+function arista.entity.setOwnerTeam(entity, teamid)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.setOwnerPlayer was passed an invalid entity (", tostring(entity), ").")
 
@@ -522,29 +539,40 @@ function arista.entity.setOwnerTeam(entity,teamid)
 end
 
 -- Set a gang to be the owner of an entity
-function arista.entity.setOwnerGang(entity,group,gang)
-	--[[if not ValidEntity(entity) then
-		error("Tried to use a NULL entity!",2)
+function arista.entity.setOwnerGang(entity, group, gang)
+	if not entity or not IsValid(entity) then
+		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.setOwnerGang was passed an invalid entity (", tostring(entity), ").")
+
+		return
 	end
+
 	entity = arista.entity.getMaster(entity) or entity
 	arista.entity.clearOwner(entity)
+
 	if type(group) == "table" then -- We might get passed a group object
 		group = group.index
 	else
 		group = tonumber(group) or 0
 	end
+
 	local gang = tonumber(gang)
-	if not cider.team.gangs[group] or not cider.team.gangs[group][gang] then
-		error("Invalid group or gang sent. :/",2)
-		return false
+
+	if not arista.team.gangs[group] or not arista.team.gangs[group][gang] then
+		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.setOwnerGang was passed an invalid gang (", group, ", ", tostring(gang), ").")
+
+		return
 	end
-	local gangword = group..";"..gang
-	entity._Owner.name = cider.team.gangs[group][gang][1]
-	entity._Owner.owner = gangword
+
+	local gangword = group .. ";" .. gang
+
+	entity._owner.name = arista.team.gangs[group][gang].name
+	entity._owner.owner = gangword
+
 	arista.entity.network(entity)
-		arista.entity.updateSlaves(entity)
-	arista.entity.accessChangedPlayerMulti(entity,cider.team.getGangMembers(group,gang),true)]]
-	-- todo: gangs
+
+	arista.entity.updateSlaves(entity)
+
+	arista.entity.accessChangedPlayerMulti(entity, arista.team.getGangMembers(group, gang), true)
 end
 
 -- Set the name of an entity
@@ -888,10 +916,11 @@ function arista.entity.getPossessiveName(entity)
 				name = name.."s"
 			end
 		elseif type(owner) == "string" then
-			--[[local aspl = string.Explode(";",owner)
-			local group,gang = tonumber(aspl[1]),tonumber(aspl[2])
-			name = cider.team.gangs[group][gang][1]]
-			-- todo: gangs
+			local aspl = string.Explode(";", owner)
+			local group, gang = tonumber(aspl[1]), tonumber(aspl[2])
+			if group and gang then
+				name = arista.team.gangs[group][gang].name
+			end
 		else
 			arista.logs.logNoPrefix(arista.logs.E.DEBUG, "arista.entity.getPossessiveName found a really fucked up ownership (", tostring(owner), ").")
 			arista.entity.clearData(entity)
@@ -933,15 +962,15 @@ function arista.entity.saveAccess(player)
 	for _, entity in pairs(arista.entity.stored) do
 		entity = arista.entity.getMaster(entity) or entity
 
-		if IsValid(entity) and entity._Owner.owner == player then
+		if IsValid(entity) and entity._owner.owner == player then
 			arista.entity.backup[player:UniqueID()][entity:EntIndex()] = table.Copy(entity._owner)
 
 			arista.entity.accessChangedPlayerMulti(entity,arista.entity.getAllAccessors(entity), false)
 			arista.entity.clearData(entity, true)
 
 			if arista._internaldata.entities[entity] then
-				cider.propprotection.GiveToWorld(entity)
-				cider.propprotection.ClearSpawner(entity)
+				--cider.propprotection.GiveToWorld(entity)
+				--cider.propprotection.ClearSpawner(entity)
 			end
 
 			arista.entity.updateSlaves(entity)

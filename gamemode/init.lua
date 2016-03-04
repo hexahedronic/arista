@@ -36,6 +36,35 @@ do
 	util.AddNetworkString("arista_teamChange")
 end
 
+-- Flags that represent functions.
+arista.flagFunctions = {
+	s = function(ply) return arista.utils.isAdmin(ply, true) end,
+	a = function(ply) return arista.utils.isAdmin(ply, false) end,
+	m = function(ply) return --[[ply:IsModerator()]] arista.utils.isAdmin(ply, false) end,
+}
+-- todo: mod
+
+--[[
+Available access flags:
+s = superAdmin	- Is a SuperAdmin
+a = admin				- Is an admin
+m = moderator		- Is a moderator
+
+e = entity			- Can spawn props, for free
+E = builder			- Can spawn props for a price
+
+w = wire				- Can use wiremod
+p = physics			- Spawns with physicsgun.
+t = tool				- Spawns with toolgun.
+
+b = boss				- Can demote members of the same level. Restricted to a gang if used on a gang member
+d = demote			- Members of lower level. Restricted to a gang if used on a gang member
+g = give				- Can give/take ents to/from gang
+
+D = depose			- Underlings can vote to depose
+M = main				- All group-to-group transitions must go through this
+]]
+
 -- Called when the server initializes.
 function GM:Initialize()
 	ErrorNoHalt("----------------------\n")
@@ -212,14 +241,16 @@ function GM:PlayerSpawnProp(ply, model)
 	-- gc me please.
 	ent = nil
 
-	-- todo: fix this lump of 'hasaccess' and radius stuff
-	--[[if (radius > 100 and !ply:HasAccess("e")) --Only donators go above 100
-	or (radius > 200 and !ply:HasAccess("m")) --Only mods go above 200
-	or (radius > 300) then --Only admins go above 300.
-		ply:Notify("That prop is too big!",1)
+	if (radius > 100 and not ply:HasAccess("e")) --Only donators go above 100
+	or (radius > 200 and not ply:HasAccess("m")) --Only mods go above 200
+	or (radius > 300 and not ply:HasAccess("a")) then --Only admins go above 300.
+		ply:notify("That prop is too big!")
+		-- todo: language
+
 		return false
 	end
 
+	--[[
 	if ply:HasAccess("E") then
 		ply._NextSpawnProp = CurTime() + 15
 		if ( ply:CanAfford(self.Config["Builder Prop Cost"]) ) then
@@ -237,6 +268,7 @@ function GM:PlayerSpawnProp(ply, model)
 			return false
 		end
 	end]]
+	-- todo: fix this
 
 	-- Check if they can spawn this prop yet.
 	local nextSpawn = ply:getAristaVar("nextSpawnProp")
@@ -478,7 +510,7 @@ function GM:PlayerDataLoaded(ply, success)
 			if ply:getAristaVar(k) == nil then
 				arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") had database key '", k, "' initalized as '", v, "' (was missing).")
 
-				ply:networkAristaVar(k, v)
+				if istable(v) then ply:setAristaVar(k, v) else ply:networkAristaVar(k, v) end
 				ply:databaseAristaVar(k)
 
 				changed = true

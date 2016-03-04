@@ -49,7 +49,7 @@ function arista.database.loadPlayer(ply)
 			for k, v in pairs(tbl) do
 				arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") had database key '", k, "' loaded as '", v, "'.")
 
-				ply:networkAristaVar(k, v)
+				if istable(v) then ply:setAristaVar(k, v) else ply:networkAristaVar(k, v) end
 				ply:databaseAristaVar(k)
 			end
 		end

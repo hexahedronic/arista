@@ -13,7 +13,7 @@ arista.config.defaults = {
 	-- Time arrested for.
 	arrestTime = 300,
 	-- Access level.
-	access = "b",
+	access = "",
 	-- Categories in the store that the job can use.
 	jobCategories = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND},
 	-- Playermodels.
@@ -56,6 +56,8 @@ arista.config.database = {
 	donator = 0,
 	-- Gender.
 	gender = "Male",
+	-- Used to block players from certain jobs and whatnot, don't touch it.
+	blacklist = {},
 }
 
 arista.config.vars = {

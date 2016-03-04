@@ -307,8 +307,8 @@ end
 
 function arista.team.add(name, data)
 	-- Check if the male and female models are a table and if not make them one.
-	if data.males and type(males) ~= "table" then males = {males} end
-	if data.females and type(females) ~= "table" then females = {females} end
+	if data.males and type(data.males) ~= "table" then data.males = {data.males} end
+	if data.females and type(data.females) ~= "table" then data.females = {data.females} end
 
 	if not data.females then data.females = data.males end
 

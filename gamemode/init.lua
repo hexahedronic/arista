@@ -650,8 +650,10 @@ do
 
 		local models = arista.team.query(ply:Team(), "models")
 
+		if not ply._modelChoices then return end
+
 		-- Check if the models table exists.
-		if models and ply._modelChoices then
+		if models then
 			local gen = ply:getGender():lower()
 			models = models[gen]
 
@@ -661,6 +663,10 @@ do
 				if not genModels[team] then return end
 
 				local model = models[genModels[team]]
+
+				if not model then
+					return fallback(ply)
+				end
 
 				-- Set the player's model to the we got.
 				ply:SetModel(model)

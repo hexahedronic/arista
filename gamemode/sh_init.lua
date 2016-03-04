@@ -222,7 +222,7 @@ function GM:CanTool(ply, trace, tool)
 			return ent:CanTool(ply, trace, tool)
 		end
 
-		do
+		if SERVER then
 			local owner = arista.entity.getOwner(ent)
 
 			if tool == "remover" and ent._removeable and arista.entity.isDoor(ent) and arista.entity.isOwned(ent) and type(owner) == "Player" and not ply:KeyDown(IN_RELOAD) then
@@ -231,7 +231,7 @@ function GM:CanTool(ply, trace, tool)
 			end
 		end
 
-		if not ply:hasAccess("w") and tool:sub(1, 5) == "wire_" then
+		if SERVER and not ply:hasAccess("w") and tool:sub(1, 5) == "wire_" then
 			ply:ConCommand("gmod_toolmode \"\"\n")
 
 			-- Return false because we cannot use the tool.

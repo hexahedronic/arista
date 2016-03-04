@@ -81,3 +81,94 @@ end
 
 -- Add a new console command.
 concommand.Add("arista", arista.command.consoleCommand)
+
+-- Called when a player says something.
+function GM:PlayerSay(ply, text, public)
+	-- todo: fix
+	--print(ply, text,text:sub(-7), public)
+	-- This is a terrible solution. OH WELL LOL
+	--if (text:sub(-7) == '" "0.00') then
+	--	text = text:sub(1,-8);
+		--print(text)
+	--end
+
+	local prefix = arista.config.vars.commandPrefix or "/"
+
+	-- Fix Valve's errors. DODO: srsly?
+	text = text:gsub(" ' ", "'"):gsub(" : ", ":"):Trim()
+
+	-- The OOC commands have shortcuts.
+	if text:sub(1, 2) == "//" then
+		text = text:sub(3):Trim()
+
+		if text == "" then
+			return ""
+		end
+
+		text = prefix .. "ooc " .. text
+	elseif text:sub(1, 3) == ".//" then
+		text = text:sub(4):Trim()
+
+		if text == "" then
+			return ""
+		end
+
+		text = prefix .. "looc " .. text
+	end
+
+	if text[1] == prefix then
+		--TODO: Rewrite with gmatch chunks
+
+		text = text:sub(2)
+
+		local args = text:Split(" ")
+		local j, tab, quote = 1, {}, false
+
+		for i = 1,#args do
+			local text = args[i]
+
+			if quote then
+				tab[j] = tab[j] .. " "
+			else
+				if text:sub(1,1) == '"' then
+					quote = true
+					text = text:sub(2)
+				end
+
+				tab[j] = ""
+			end
+
+			if text:sub(-1) == '"' then
+				quote = false
+				text = text:sub(1, -2)
+			end
+
+			tab[j] = tab[j] .. text
+
+			if not quote then
+				j = j + 1
+			end
+		end
+
+		arista.command.consoleCommand(ply, _, tab)
+
+		return ""
+	else
+		--[[if ( gamemode.Call("PlayerCanSayIC", ply, text) ) then
+			if (ply:Arrested()) then
+				cider.chatBox.addInRadius(ply, "arrested", text, ply:GetPos(), self.Config["Talk Radius"])
+			elseif ply:Tied() then
+				cider.chatBox.addInRadius(ply, "tied", text, ply:GetPos(), self.Config["Talk Radius"])
+			else
+				cider.chatBox.addInRadius(ply, "ic", text, ply:GetPos(), self.Config["Talk Radius"])
+			end
+			GM:Log(EVENT_TALKING,"%s: %s",ply:Name(),text)
+		end]]
+		-- todo: chat
+	end
+
+	-- Return an empty string so the text doesn't show.
+	--return ""
+	-- todo: chat
+	return text
+end

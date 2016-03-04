@@ -4,10 +4,12 @@ include("sh_init.lua")
 -- Setup downloads.
 arista.content.addFiles()
 
+-- Load admin commands.
+include("sv_commands.lua")
+
 -- Enable realistic fall damage for this gamemode.
 game.ConsoleCommand("mp_falldamage 1\n")
 game.ConsoleCommand("sbox_godmode 0\n")
-
 
 -- Check to see if local voice is enabled.
 if arista.config.vars.localVoice then
@@ -472,6 +474,7 @@ end
 function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("job", arista.config:getDefault("job"))
 	ply:networkAristaVar("salary", 0)
+	ply:networkAristaVar("access", arista.config:getDefault("access"))
 
 	ply:networkAristaVar("knockOutTime", arista.config:getDefault("knockOutTime"))
 	ply:networkAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
@@ -1314,78 +1317,6 @@ function GM:PlayerDisconnected(ply)
 
 	-- Call the base class function.
 	return self.BaseClass:PlayerDisconnected(ply)
-end
-
--- Called when a player says something.
-function GM:PlayerSay(ply, text, public)
-	return text
-	-- todo: fix
-	--[[if string.find(text,"@@@@") then
-		RunConsoleCommand("kickid", ply:UserID(), "Spam")
-	end
-	--print(ply, text,text:sub(-7), public)
-	-- This is a terrible solution. OH WELL LOL
-	if (text:sub(-7) == '" "0.00') then
-		text = text:sub(1,-8);
-		--print(text);
-	end
-	-- Fix Valve's errors. DODO: srsly?
-	text = text:gsub(" ' ", "'"):gsub(" : ", ":");
-
-	-- The OOC commands have shortcuts.
-	if (text:sub(1,2) == "//") then
-		text = text:sub(3):Trim();
-		if (text == "") then
-			return "";
-		end
-		text = self.Config['Command Prefix'] .. "ooc " .. text;
-	elseif (text:sub(1,3) == ".//") then
-		text = text:sub(4):Trim();
-		if (text == "") then
-			return "";
-		end
-		text = self.Config['Command Prefix'] .. "looc " .. text;
-	end
-	if ( string.sub(text, 1, 1) == self.Config["Command Prefix"] ) then
-		--TODO: Rewrite with gmatch chunks
-		text = text:sub(2)
-		local args = string.Explode(" ", text)
-		local j,tab,quote = 1,{},false
-		for i = 1,#args do
-			local text = args[i]
-			if quote then
-				tab[j] = tab[j] .. " "
-			else
-				if text:sub(1,1) == '"' then
-					quote = true
-					text = text:sub(2)
-				end
-				tab[j] = ""
-			end
-			if text:sub(-1) == '"' then
-				quote = false
-				text = text:sub(1,-2)
-			end
-			tab[j] = tab[j] .. text
-			if not quote then
-				j = j + 1
-			end
-		end
-		cider.command.consoleCommand(ply,_,tab)
-	else
-		if ( gamemode.Call("PlayerCanSayIC", ply, text) ) then
-			if (ply:Arrested()) then
-				cider.chatBox.addInRadius(ply, "arrested", text, ply:GetPos(), self.Config["Talk Radius"])
-			elseif ply:Tied() then
-				cider.chatBox.addInRadius(ply, "tied", text, ply:GetPos(), self.Config["Talk Radius"])
-			else
-				cider.chatBox.addInRadius(ply, "ic", text, ply:GetPos(), self.Config["Talk Radius"])
-			end
-			GM:Log(EVENT_TALKING,"%s: %s",ply:Name(),text)
-		end
-	end
-	-- Return an empty string so the text doesn't show.
-	return ""]]
 end
 
 -- Called when a player attempts suicide.

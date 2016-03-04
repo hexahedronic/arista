@@ -55,3 +55,38 @@ do
 		timer.Create("Saving All Player Data", math.ceil(#plys / 5), 0, function() saveallTimer(plys) end)
 	end
 end
+
+---
+-- Gets a player by a part of their name, or their steamID, or their UniqueID, or their UserID.
+-- Will provide the player with the shortest name that matches the key. That way a search for 'lex' will return '||VM|| Lexi' even if 'LeXiCaL1ty{GT}' is available.
+-- @param id An ID to search for the player by.
+-- @return A player if one is found, nil otherwise.
+function arista.player.get(id)
+	local name = id:lower()
+	local num = tonumber(id)
+	local res, len
+
+	for _, ply in ipairs(player.GetAll()) do
+		local pname = ply:Name():lower()
+
+		if (num and ply:UserID() == num or ply:UniqueID() == num) or ply:SteamID() == id or ply:SteamID64() == id then
+			return ply
+		elseif pname == name then
+			return ply
+		elseif pname:find(name) then
+			local lon = pname:len()
+
+			if res then
+				if lon < len then
+					res = ply
+					len = lon
+				end
+			else
+				res = ply
+				len = lon
+			end
+		end
+	end
+
+	return res
+end

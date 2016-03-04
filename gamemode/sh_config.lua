@@ -102,6 +102,8 @@ arista.config.vars = {
 	serverWebsite = "Arista Framework: http://www.hexahedronic.org/",
 	-- Time between 'paydays'.
 	earningInterval = 360,
+	-- Comamnd prefix.
+	commandPrefix = "/",
 }
 
 arista.config.costs = {

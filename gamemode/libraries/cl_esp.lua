@@ -207,6 +207,7 @@ function GM:DrawESPLine(ent, tent, ply)
 end
 
 function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
+	if player == arista.lp then return end
 	-- Draw the player's name.
 	local addon = ""
 

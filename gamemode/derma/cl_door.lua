@@ -5,7 +5,7 @@ local PANEL = {}
 
 -- Called when the panel is initialized.
 function PANEL:Init()
-	self:SetTitle("Door Menu - NYI")
+	self:SetTitle("Door Menu")
 	-- todo: remove when added
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(true)
@@ -46,12 +46,10 @@ function PANEL:Init()
 		end
 
 		if self.textEntry:GetValue():Trim() == "" then
-			--RunConsoleCommand("cider", "door", "purchase")
+			RunConsoleCommand("arista", "door", "purchase")
 		else
-			--RunConsoleCommand("cider", "door", "purchase", self.textEntry:GetValue())
+			RunConsoleCommand("arista", "door", "purchase", self.textEntry:GetValue())
 		end
-
-		-- todo: maybe arista.runCommand or something? eitherway readd when commands done.
 	end
 
 	-- Create the text entry panel.

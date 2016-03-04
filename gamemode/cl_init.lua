@@ -388,7 +388,8 @@ function GM:DrawInformation(text, font, x, y, color, alpha, left, callback, shad
 	-- Get the width and height of the text.
 	local width, height = surface.GetTextSize(text)
 
-	if alpha then color.a = alpha end
+	local color = color
+	if alpha then color = Color(color.r, color.g, color.b, alpha) end
 
 	-- Check if we shouldn't left align it, if we have a callback, and if we should draw a shadow.
 	if not left then x = x - (width / 2) end

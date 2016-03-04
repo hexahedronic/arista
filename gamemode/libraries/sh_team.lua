@@ -300,7 +300,7 @@ function arista.team.addGang(group, name, model, desc)
 
 	local id = #arista.team.gangs[group] + 1
 
-	arista.team.gangs[group][id] = {name = name, model = model, desc = desc}
+	arista.team.gangs[group][id] = {name = name, model = model, desc = desc, index = id}
 
 	return id
 end

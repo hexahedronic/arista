@@ -55,7 +55,7 @@ function arista.command.consoleCommand(player, _, arguments)
 									text = text .. " " .. concat
 								end
 
-								--GM:Log(EVENT_COMMAND,"%s used 'arista %s%s'.",player:Name(),command,text)
+								arista.logs.event(arista.logs.E.LOG, arista.logs.E.COMMAND, player:Name(), "(", player:SteamID(), ") used command ", command, ".")
 							else
 								if msg and msg ~= "" then
 									player:notify(msg)

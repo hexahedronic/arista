@@ -34,6 +34,7 @@ do
 	util.AddNetworkString("arista_menu")
 	util.AddNetworkString("arista_buyDoor")
 	util.AddNetworkString("arista_access")
+	util.AddNetworkString("arista_accessUpdate")
 	util.AddNetworkString("arista_moneyAlert")
 	util.AddNetworkString("arista_teamChange")
 end

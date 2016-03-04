@@ -140,7 +140,7 @@ function player:giveDoor(door, name, unsellable)
 	door._unsellable = unsellable
 
 	arista.entity.setOwnerPlayer(door, self)
-	self:AddCount("doors", door)
+	--self:AddCount("doors", door)
 
 	if name and name ~= "" then
 		arista.entity.setName(door, name)
@@ -164,7 +164,7 @@ function player:takeDoor(door, norefund)
 
 	-- Remove our access to it
 	arista.entity.takeAccessPlayer(door, self)
-	self:TakeCount("doors", door)
+	--self:TakeCount("doors", door)
 
 	-- Give the player a refund for the door if we're not forcing it to be taken.
 	if not norefund then

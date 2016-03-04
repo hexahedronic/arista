@@ -552,20 +552,22 @@ end
 -- @param args A table of all the arguments the player passed
 function GM:PlayerCanUseCommand(ply, cmd, args)
 	-- Stop the player using the command if they're blacklisted from it
-	--[[if (ply:Blacklisted("cmd", command) > 0) then
-		ply:BlacklistAlert("cmd",command,command);
-		return false;
+	if ply:isBlacklisted("cmd", command) > 0 then
+		ply:blacklistAlert("cmd", command, command)
+
+		return false
 	end
+
 	-- Some commands need to be usable when they normally wouldn't be.
-	if (cmd == "sleep" and ply:Alive() and not ply:Arrested() and ply._Sleeping) --So they can wake up
-	or ((cmd == "dropmoney" or cmd == "givemoney") and ply:Alive() and not ply:KnockedOut()) -- So you can bribe your way out of being arrested/tied up
-	or ((cmd == "me" or cmd == "y" or cmd == "w") and ply:Alive() and not (ply:KnockedOut() and not ply._Tripped)) -- So you can emote while arrested/tripped
-	or (cmd == "team" and not (ply:Arrested() or ply:Tied())) -- So you can't change job while arrested or tied, but can while dead or unconsious
-	or table.HasValue(self.Config["Usable Commands"], cmd) then -- Or if it's one of the persistant commands
-		return true;
+	if (cmd == "sleep" and ply:Alive() and not ply:isArrested() and ply:isSleeping()) --So they can wake up
+	or ((cmd == "dropmoney" or cmd == "givemoney") and ply:Alive() and not ply:isUnconscious()) -- So you can bribe your way out of being arrested/tied up
+	or ((cmd == "me" or cmd == "y" or cmd == "w") and ply:Alive() and not (ply:isUnconscious() and not ply:hasTripped())) -- So you can emote while arrested/tripped
+	or (cmd == "team" and not (ply:isArrested() or ply:isTied())) -- So you can't change job while arrested or tied, but can while dead or unconsious
+	or arista.config.vars.persistantCommands[cmd] then -- Or if it's one of the persistant commands
+		return true
 	else --Otherwise, check the defeaults
-		return gamemode.Call("PlayerCanDoSomething", ply);
-	end]]
+		return gamemode.Call("PlayerCanDoSomething", ply)
+	end
 end
 
 ---

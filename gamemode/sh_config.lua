@@ -99,11 +99,17 @@ arista.config.vars = {
 	-- Radius you can talk to people in.
 	talkRadius = 300,
 	-- Server's website.
-	serverWebsite = "Arista Framework: http://www.hexahedronic.org/",
+	serverWebsite = "arista RolePlay: http://www.hexahedronic.org/",
 	-- Time between 'paydays'.
 	earningInterval = 360,
 	-- Comamnd prefix.
 	commandPrefix = "/",
+	-- Commands you can allways use.
+	persistantCommands = {
+		"demote", "blacklist", "unblacklist", "giveaccess", "takeaccess", "giveitem", "save", "pm", "job", "clan", "gender",
+		"laws", "ooc", "looc", "knockout", "knockoutall", "wakeup", "wakeupall", "arrest", "unarrest", "spawn", "awarrant",
+		"tie", "untie",
+	},
 }
 
 arista.config.costs = {

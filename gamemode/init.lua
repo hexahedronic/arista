@@ -430,7 +430,7 @@ function GM:PlayerInitialized(ply)
 	ply._inited = true
 
 	-- Restore access to any entity the player owned that is currently unowned
-	--arista.entity.restoreAccess(ply)
+	arista.entity.restoreAccess(ply)
 	-- todo: restore access for rejoins
 
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") finished connecting.")
@@ -1138,32 +1138,36 @@ function GM:PlayerLoadout(ply)
 	ply:setAristaVar("gunCounts", {})
 
 	if ply:Team() and ply:Team() > 0 then
-		--[[local team = cider.team.get(ply:Team())
+		local team = arista.team.get(ply:Team())
+
 		if team.guns then
 			for _,gun in ipairs(team.guns) do
 				local give = true
-				local item = self.Items[gun]
+				local item = false--self.Items[gun]
+
 				if item then
 					if item.Category then
-						if ply:Blacklisted("cat",item.Category) > 0 then
+						if ply:blacklisted("cat", item.Category) > 0 then
 							give = false
 						end
 					end
+
 					if give then
-						ply._SpawnWeapons[gun] = true
+						ply:getAristaVar("spawnWeapons")[gun] = true
 					end
 				end
+
 				if give then
 					ply:Give(gun)
 				end
 			end
 		end
+
 		if team.ammo then
-			for _,ammo in ipairs(team.ammo) do
-				ply:GiveAmmo(ammo[2],ammo[1])
+			for type, ammo in pairs(team.ammo) do
+				ply:GiveAmmo(ammo, type, true)
 			end
-		end]]
-		-- todo: jobs system
+		end
 	end
 
 	-- Select the hands by default.
@@ -1219,8 +1223,8 @@ function GM:PlayerUse(ply, ent)
 end
 
 function GM:PlayerCanJoinTeam(ply, teamid)
-	local teamdata-- = cider.team.get(teamid);
-	-- todo: cider team here
+	local teamdata = arista.team.get(teamid)
+
 	if not teamdata then
 		return false -- If it's not a valid team (by our standards) then don't join it.
 	end
@@ -1259,8 +1263,7 @@ function GM:PlayerDisconnected(ply)
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ")  has disconnected.")
 
 	-- Access incase of rejoin
-	--arista.entity.saveAccess(ply)
-	-- todo: access
+	arista.entity.saveAccess(ply)
 
 	-- Holseter all weapons.
 	ply:holsterAll()
@@ -1380,10 +1383,10 @@ function GM:KeyPress(ply, key)
 		end
 
 		--~ Open mah doors ~
-		--[[if arista.entity.isDoor(ent) and ent:GetClass() ~= "prop_door_rotating" and gamemode.Call("PlayerCanUseDoor", ply, ent) then
-			arista.entity.openDoor(ent,0);
+		if arista.entity.isDoor(ent) and ent:GetClass() ~= "prop_door_rotating" and gamemode.Call("PlayerCanUseDoor", ply, ent) then
+			arista.entity.openDoor(ent, 0)
 		--~ Crank dem Containers Boi ~
-		elseif cider.container.isContainer(ent) and gamemode.Call("PlayerCanUseContainer", ply, ent) then
+		--[[elseif cider.container.isContainer(ent) and gamemode.Call("PlayerCanUseContainer", ply, ent) then
 			local contents, io, filter = cider.container.getContents(ent, ply, true);
 			local tab = {
 				contents = contents,
@@ -1395,8 +1398,8 @@ function GM:KeyPress(ply, key)
 					name = cider.container.getName(ent) or "Container"
 				}
 			}
-			datastream.StreamToClients( ply, "cider_Container", tab );
-		end]]
+			datastream.StreamToClients( ply, "cider_Container", tab );]]
+		end
 	end
 end
 
@@ -1454,7 +1457,7 @@ function GM:ShowTeam(ply)
 	if door._isDoor then
 		detailstable.owner = detailstable.owner .. " door"
 	else
-		detailstable.owner = detailstable.owner .. " " .. door:GetNWString("cider_Name", "entity")
+		detailstable.owner = detailstable.owner .. " " .. door:getName()
 	end
 
 	net.Start("arista_access")
@@ -1504,7 +1507,6 @@ function GM:PlayerSpawnSENT(ply, class)
 	end
 end
 
-
 -- Create a timer to automatically clean up decals.
 function GM.ClearDecals()
 	if arista.config.vars.clearDecals then
@@ -1514,91 +1516,3 @@ function GM.ClearDecals()
 	end
 end
 timer.Create("Cleanup Decals", 60, 0, GM.ClearDecals)
-
-/*
--- Create a timer to give players money for their contraband.
-timer.Create("Earning", GM.Config["Earning Interval"], 0, function()
-	local contratypes = {}
-	for key in pairs(GM.Config["Contraband"]) do
-		contratypes[key] = true
-	end
-	local cplayers = {}
-	local dplayers = {}
-
-
-	for _, ent in ipairs(ents.GetAll()) do
-		if contratypes[ent:GetClass()] then
-			local ply = ent:GetPlayer();
-			-- Check if the ply is a valid entity,
-			if ( ValidEntity(ply) ) then
-				cplayers[ply] = cplayers[ply] or {refill = 0, money = 0}
-
-				-- Decrease the energy of the contraband.
-				ent.dt.energy = math.Clamp(ent.dt.energy - 1, 0, 5)
-
-				-- Check the energy of the contraband.
-				if (ent.dt.energy == 0) then
-					cplayers[ply].refill = cplayers[ply].refill + 1
-				else
-					cplayers[ply].money = cplayers[ply].money + GM.Config["Contraband"][ ent:GetClass() ].money
-				end
-			end
-		elseif arista.entity.isDoor(ent) and arista.entity.isOwned(ent) then
-			local o = arista.entity.getOwner(ent)
-			if type(o) == "Player" and ValidEntity(o) then
-				dplayers[o] = dplayers[o] or { 0, {} }
-				-- Increase the amount of tax this player must pay.
-				dplayers[o][1] = dplayers[o][1] + GM.Config["Door Tax Amount"]
-				-- Insert the door into the player's door table.
-				table.insert(dplayers[o][2], ent)
-			end
-		end
-	end
-	-- Loop through our players list.
-	for k, v in pairs(cplayers) do
-		if ( IsValid(k) and k:IsPlayer() and hook.Call("PlayerCanEarnContraband",GAMEMODE, k) ) then
-			if (v.refill > 0) then
-				k:Notify(v.refill.." of your contraband need refilling!", 1)
-			end
-			if (v.money > 0) then
-				k:Notify("You earned $"..v.money.." from contraband.", 0)
-
-				-- Give the player their money.
-				k:GiveMoney(v.money)
-			end
-		end
-	end
-	for _,ply in ipairs(player.GetAll()) do
-		if (ply:Alive() and !ply.cider._Arrested) then
-			ply:GiveMoney(ply._Salary)
-
-			-- Print a message to the player letting them know they received their salary.
-			ply:Notify("You received $"..ply._Salary.." salary.", 0)
-		end
-	end
-	if ( GM.Config["Door Tax"] ) then
-		-- Loop through our players list.
-		for k, v in pairs(dplayers) do
-			if ( k:CanAfford(v[1] ) ) then
-				k:Notify("You have been taxed $"..v[1].." for your doors.", 0)
-			else
-				k:Notify("You can't pay your taxes. Your doors were removed.", 1)
-
-				-- Loop through the doors.
-				for k2, v2 in pairs( v[2] ) do
-					if v2._Removeable then
-						v2:Remove()
-					else
-						k:TakeDoor(v2, true)
-					end
-				end
-			end
-
-			-- Take the money from the player.
-			k:GiveMoney(-v[1] )
-		end
-	end
-	player.SaveAll()
-end)
-concommand.Add( "wire_keyboard_press", function(p,c,a) return end )
-*/

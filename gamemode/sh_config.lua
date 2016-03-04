@@ -98,6 +98,8 @@ arista.config.vars = {
 	talkRadius = 300,
 	-- Server's website.
 	serverWebsite = "Arista Framework: http://www.hexahedronic.org/",
+	-- Time between 'paydays'.
+	earningInterval = 360,
 }
 
 arista.config.costs = {

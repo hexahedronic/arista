@@ -501,9 +501,14 @@ end
 
 -- Draw the timer bar.
 function GM:DrawTimerBar(bar)
-	--[[local percento = math.Clamp((tonumber(arista.lp._JobTimeExpire-CurTime())/tonumber(arista.lp._JobTimeLimit))*100, 0, 100);
-	arista.lp._NextEnter = arista.lp._NextEnter or CurTime()
-	self:DrawBar("Default", bar.x, bar.y, bar.width, bar.height, color_orange_alpha, "Time Left: "..string.ToMinutesSeconds(math.floor(tonumber(arista.lp._JobTimeExpire)-CurTime())), 100, percento, bar);]]
+	local jobTimeExpire = arista.lp:getAristaInt("jobTimeExpire") or 0
+	local jobTimeLimit = arista.lp:getAristaInt("jobTimeLimit") or 0
+	local expire = jobTimeExpire - CurTime()
+
+	local percent = math.Clamp((expire / jobTimeLimit) * 100, 0, 100)
+	local time = string.ToMinutesSeconds(math.floor(expire))
+
+	self:DrawBar("Default", bar.x, bar.y, bar.width, bar.height, color_orange_alpha, "Time Left: " .. time, 100, percent, bar)
 end
 
 -- Draw the ammo bar.
@@ -661,10 +666,10 @@ function GM:HUDPaint()
 
 	self:DrawAmmoBar(bar)
 
-	--[[if arista.lp._JobTimeExpire and tonumber(arista.lp._JobTimeExpire) > CurTime() then
+	local jobTimeExpire = arista.lp:getAristaInt("jobTimeExpire") or 0
+	if jobTimeExpire and jobTimeExpire > CurTime() then
 		self:DrawTimerBar(bar)
-	end]]
-	-- todo: job bar
+	end
 
 	-- Call a hook to let plugins know that we're now drawing bars and text.
 	gamemode.Call("DrawBottomBars", bar)

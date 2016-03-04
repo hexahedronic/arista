@@ -110,11 +110,15 @@ arista.config.vars = {
 		"laws", "ooc", "looc", "knockout", "knockoutall", "wakeup", "wakeupall", "arrest", "unarrest", "spawn", "awarrant",
 		"tie", "untie",
 	},
+	-- Prop limit for builders.
+	builderPropLimit = 15,
 }
 
 arista.config.costs = {
 	-- How much doors cost to buy (/2 for refund).
 	door = 100,
+	-- How much do props cost to buy.
+	prop = 100,
 }
 
 function arista.config:getDefault(var)

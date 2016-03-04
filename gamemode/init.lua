@@ -177,8 +177,7 @@ end
 
 -- Called when a player attempts to spawn a prop.
 function GM:PlayerSpawnProp(ply, model)
-	--if ( not ply:HasAccess("eE",true) ) then return false end
-	-- todo: readd hasaccess to this
+	if not ply:hasAccess("meE", true) then return false end
 
 	local res = gamemode.Call("PlayerCanDoSomething", ply, nil, true)
 
@@ -253,28 +252,9 @@ function GM:PlayerSpawnProp(ply, model)
 		return false
 	end
 
-	--[[
-	if ply:HasAccess("E") then
-		ply._NextSpawnProp = CurTime() + 15
-		if ( ply:CanAfford(self.Config["Builder Prop Cost"]) ) then
-			if ply:GetCount("props") <= self.Config["Builder Prop Limit"] then
-				ply:GiveMoney(-self.Config["Builder Prop Cost"])
-			else
-				ply:Notify("You hit the prop limit!",1)
-				return false
-			end
-		else
-			local amount = self.Config["Builder Prop Cost"] - ply.cider._Money
-
-			-- Print a message to the player telling them how much they need.
-			ply:Notify("You need another $"..amount.."!", 1)
-			return false
-		end
-	end]]
-	-- todo: fix this
-
 	-- Check if they can spawn this prop yet.
 	local nextSpawn = ply:getAristaVar("nextSpawnProp")
+	local propCosts = arista.config.costs.prop
 
 	if nextSpawn and nextSpawn > CurTime() then
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a prop (", model, ") (too fast).")
@@ -282,6 +262,27 @@ function GM:PlayerSpawnProp(ply, model)
 
 		-- Return false because we cannot spawn it.
 		return false
+	elseif ply:hasAccess("E") and not ply:hasAccess("e") and propCosts > 0 then
+		if ply:canAfford(propCosts) then
+			if ply:GetCount("props") <= arista.config.vars.builderPropLimit then
+				ply:giveMoney(-propCosts)
+			else
+				ply:LimitHit("props")
+				-- todo: language
+
+				return false
+			end
+		else
+			local amount = arista.config.costs.prop - ply:GetMoney
+
+			-- Print a message to the player telling them how much they need.
+			ply:notify("You need another $" .. amount .. "!")
+			-- todo: language
+
+			return false
+		end
+
+		ply:setAristaVar("nextSpawnProp", CurTime() + 15)
 	else
 		-- todo: adjustable prop spawn delay?
 		ply:setAristaVar("nextSpawnProp", CurTime() + 1)

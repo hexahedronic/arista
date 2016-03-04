@@ -102,7 +102,7 @@ function PANEL:Think()
 				v.name,
 				v.model,
 				v.desc,
-				v.index
+				k
 			}
 			table.insert(categories[id], info)
 		end
@@ -432,7 +432,7 @@ local function updateContainer(decoded)
 		if type(v) == "Player" then
 			paccess[v:EntIndex()] = v
 		elseif type(v) == "number" then
-			taccess[v] = cider.team.get(v)
+			taccess[v] = arista.team.get(v)
 		elseif type(v) == "string" then
 			local a, b = unpack(v:Split(";"))
 			a, b =  tonumber(a), tonumber(b)

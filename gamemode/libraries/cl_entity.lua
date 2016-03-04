@@ -101,53 +101,21 @@ function arista.entity.hasAccess(entity)
 	return arista.entity.stored[entity]
 end
 
-/*
 -- Called when the player's access to an entity is changed
 local function incomingAccess(msg)
-	local ent,access = msg:ReadEntity(),msg:ReadBool() or nil
+	local ent = net.ReadEntity()
+	local access = net.ReadBool()
+
 	arista.entity.stored[ent] = access
-	if GetConVarNumber"developer" > 0 and ValidEntity(ent) then
-		local moneyAlert = {}
-
-		-- Set some information for the money alert.
-		local words = ent:GetNetworkedString("Name","Door")..","..tostring(arista.entity.getOwner(ent))
-		moneyAlert.alpha = 255
-		moneyAlert.add = 1
-
-		-- Check to see if the amount is negative.
-		if access then
-			moneyAlert.color = color_white
-			moneyAlert.text = "+ "..words
-		else
-			moneyAlert.color = color_black
-			moneyAlert.text = "- "..words
-		end
---		debugoverlay.Box(ent:GetPos(),ent:OBBMins(),ent:OBBMaxs(),20,moneyAlert.color,true)
-		debugoverlay.Line(LocalPlayer():EyePos() + LocalPlayer():GetForward(),ent:GetPos(),20,moneyAlert.color,true)
-		print("[DEBUG] Your access for "..tostring(ent).."['"..words.."'] has been set to '"..tostring(access).."'.")
-		-- Insert the money alert into the table.
-		table.insert(GAMEMODE.moneyAlerts, moneyAlert)
-	end
 end
-usermessage.Hook("cider_IncomingAccess",incomingAccess)
+net.Receive("arista_incomingAccess", incomingAccess)
 
 local function wipeAccess(msg)
 	arista.entity.stored = {}
-	if GetConVarNumber"developer" > 0 then
-		local moneyAlert = {};
-
-		-- Set some information for the money alert.
-		moneyAlert.alpha = 255;
-		moneyAlert.add = 1;
-		moneyAlert.color = color_black;
-		moneyAlert.text = "ALL ACCESS WIPED"
-		print"[DEBUG] Your access table has been wiped."
-
-		-- Insert the money alert into the table.
-		table.insert(GAMEMODE.moneyAlerts, moneyAlert);
-	end
 end
-usermessage.Hook("cider_WipeAccess",wipeAccess)
+usermessage.Hook("arista_wipeAccess",wipeAccess)
+
+--[[
 local function massAccessSystem(msg)
 	local len = msg:ReadShort()
 	for i=1,len do
@@ -156,12 +124,13 @@ local function massAccessSystem(msg)
 	end
 end
 usermessage.Hook("cider_massAccessSystem",massAccessSystem)
+]]
 
-timer.Create("keepAccessTableClean",GM.Config["Earning Interval"],0,function()
-	for ent,access in pairs(arista.entity.stored) do
-		if not ValidEntity(ent) or not access then
+function arista.entity.cleanTable()
+	for ent, access in pairs(arista.entity.stored) do
+		if not IsValid(ent) or not access then
 			arista.entity.stored[ent] = nil
 		end
 	end
-end)
-*/
+end
+timer.Create("keepAccessTableClean", arista.config.vars.earningInterval, 0, arista.entity.cleanTable)

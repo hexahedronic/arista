@@ -51,7 +51,7 @@ function GM:PlayerBlacklisted(ply, kind, thing, time, reason, blacklister)
 	if kind == "team" and ply:Team() == thing then
 		ply:demote()
 	elseif kind == "cat" and thing == CATEGORY_WEAPONS then -- If they've been blacklisted from using weapons category, blacklist them from every other one too.
-		ply:HolsterAll();
+		ply:holsterAll()
 		ply:blacklist(kind, CATEGORY_ILLEGAL_WEAPONS, time, reason, blacklister:Name())
 		ply:blacklist(kind, CATEGORY_POLICE_WEAPONS, time, reason, blacklister:Name())
 	end
@@ -313,23 +313,26 @@ end
 -- @param door The door in question
 -- @return True if they can, false if they can't.
 function GM:PlayerCanRamDoor(ply, door)
-	--[[if (door._Jammed or door._Sealed) then
-		ply:Notify("You cannot ram this door!", 1);
-		return false;
-	elseif (cider.entity.isOwned(door)) then
+	if door:isJammed() or door:isSealed() then
+		ply:notify("You cannot ram this door!")
+
+		return false
+	elseif arista.entity.isOwned(door) then
 		for _,pl in pairs(cider.entity.getAllAccessors(door)) do
-			if (pl:Warranted() or pl == ply) then
-				return true;
+			if pl:isWarranted() or pl == ply then
+				return true
 			end
 		end
-		local owner = cider.entity.getOwner(door)
-		if (type(owner) == "Player" and ValidEntity(owner) and owner:Arrested()) then
+
+		local owner = arista.entity.getOwner(door)
+		if type(owner) == "Player" and IsValid(owner) and owner:isArrested() then
 			return true
 		end
-		ply:Notify("You do not have the authority to ram this door.", 1);
-		return false;
-	end]]
-	-- todo: doors
+
+		ply:notify("You do not have the authority to ram this door.")
+
+		return false
+	end
 
 	return true
 end
@@ -409,8 +412,7 @@ end
 -- @param ent The entity in question
 -- @return True if they can, false if they can't.
 function GM:PlayerCanLockpick(ply, ent)
-	-- todo: readd
-	return false--IsValid(ent) and ((cider.entity.isOwnable(ent) and not (ent._Jammed or ent._Sealed)) or (ent:IsPlayer() and ent:Arrested()));
+	return IsValid(ent) and ((arista.entity.isOwnable(ent) and not (ent:isJammed() or ent:isSealed())) or (ent:IsPlayer() and ent:isArrested()))
 end
 
 ---

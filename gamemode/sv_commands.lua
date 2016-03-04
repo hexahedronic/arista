@@ -52,7 +52,7 @@ arista.command.add("door", "", 1, function(ply, arguments)
 
 	-- Check if the player can afford this door.
 	if not ply:canAfford(cost) then
-		local amt = cost - ply:getAristaVar("money")
+		local amt = cost - ply:getMoney()
 
 		return false, "You need another $" .. amt .. " to purchase this door!"
 		-- todo: language (currency)
@@ -129,6 +129,8 @@ do
 		end
 
 		if not (target and name) then
+			PrintTable(arguments)
+			print(kind, id, ply, entity)
 			return false, "Invalid target!"
 		end
 
@@ -185,7 +187,7 @@ do
 			}
 		end
 
-		detailstable.owner = cider.entity.getPossessiveName(entity)
+		detailstable.owner = arista.entity.getPossessiveName(entity)
 
 		if entity._isDoor then
 			detailstable.owner = detailstable.owner .. " door"

@@ -6,7 +6,6 @@ local PANEL = {}
 -- Called when the panel is initialized.
 function PANEL:Init()
 	self:SetTitle("Door Menu")
-	-- todo: remove when added
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(true)
 

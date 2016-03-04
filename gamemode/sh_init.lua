@@ -223,21 +223,20 @@ function GM:CanTool(ply, trace, tool)
 		end
 
 		do
-			local owner = cider.entity.getOwner(ent)
+			local owner = arista.entity.getOwner(ent)
 
-			if tool == "remover" and ent._removeable and arista.entity.isDoor(ent) and cider.entity.isOwned(ent) and type(owner) == "Player" and not ply:KeyDown(IN_RELOAD) then
+			if tool == "remover" and ent._removeable and arista.entity.isDoor(ent) and arista.entity.isOwned(ent) and type(owner) == "Player" and not ply:KeyDown(IN_RELOAD) then
 				-- todo: language
 				owner:takeDoor(ent)
 			end
 		end
 
-		--[[if !ply:HasAccess("w") and string.sub(tool, 1, 5) == "wire_" then
+		if noot ply:hasAccess("w") and tool:sub(1, 5) == "wire_" then
 			ply:ConCommand("gmod_toolmode \"\"\n")
 
 			-- Return false because we cannot use the tool.
 			return false
-		end]]
-		-- todo: hasaccess
+		end
 
 		-- Check if this entity cannot be used by the tool.
 		if arista._internaldata.entities[trace.Entity] then

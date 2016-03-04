@@ -150,7 +150,14 @@ function arista.entity.getEntsAccess(player)
 	local team = player:Team()
 	local gang = arista.team.getGang(teamID)
 	local group = arista.team.getGroupByTeam(teamID)
-	local gid = group.index..";0"
+
+	-- Player still connecting.
+	local index = 0
+	if group then
+		index = group.index
+	end
+
+	local gid = index..";0"
 
 	-- table micro optimisations
 	searchfor[1] = gid
@@ -224,7 +231,7 @@ end
 -- Happens when something happens to a player that requires checking accessability again.
 function arista.entity.updatePlayerAccess(player)
 	if not IsValid(player) or not player:IsPlayer() then
-		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.getEntsAccess was passed an invalid player (", tostring(player), ").")
+		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.updatePlayerAccess was passed an invalid player (", tostring(player), ").")
 
 		return
 	end
@@ -244,12 +251,12 @@ end
 -- Give a player access to an entity
 function arista.entity.giveAccessPlayer(entity, player)
 	if not entity or not IsValid(entity) then
-		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.accessChangedPlayer was passed an invalid entity (", tostring(entity), ").")
+		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.giveAccessPlayer was passed an invalid entity (", tostring(entity), ").")
 
 		return
 	end
 	if not IsValid(player) or not player:IsPlayer() then
-		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.accessChangedPlayer was passed an invalid player (", tostring(player), ").")
+		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.giveAccessPlayer was passed an invalid player (", tostring(player), ").")
 
 		return
 	end

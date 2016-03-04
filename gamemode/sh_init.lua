@@ -231,7 +231,7 @@ function GM:CanTool(ply, trace, tool)
 			end
 		end
 
-		if noot ply:hasAccess("w") and tool:sub(1, 5) == "wire_" then
+		if not ply:hasAccess("w") and tool:sub(1, 5) == "wire_" then
 			ply:ConCommand("gmod_toolmode \"\"\n")
 
 			-- Return false because we cannot use the tool.

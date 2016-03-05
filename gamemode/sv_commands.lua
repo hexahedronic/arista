@@ -119,8 +119,8 @@ do
 		elseif kind == "team" then
 			target = arista.team.get(id)
 			name = target.name
-		elseif kind == "gang" and id:find(";", 1, true) then
-			target = id:Split(";")
+		elseif kind == "gang" and id:find("", 1, true) then
+			target = id:Split("")
 
 			local a, b = unpack(target)
 			a, b =  tonumber(a),tonumber(b)
@@ -195,8 +195,108 @@ do
 			detailstable.owner = detailstable.owner .. " " .. entity:getName()
 		end
 
-		net.Broadcast(ply, "arista_accessUpdate", detailstable)
+		net.Start("arista_accessUpdate")
+			net.WriteTable(detailstable)
+		net.Broadcast()
 
 		return a, b
 	end, "Menu Handlers", "<give|take> <ID> <type> or <name> <mynamehere>", "Perform an action on the entity you're looking at")
 end
+
+-- todo: all the logging here
+
+-- A command to change your job title
+arista.command.add("job", "", 0, function(ply, arguments)
+	local words = table.concat(arguments, " ")
+	words = words:sub(1, 64):Trim()
+
+	if not words or words == "" or words == "none" or words == "default" then
+		words = team.GetName(ply:Team())
+	end
+
+	ply:setAristaVar("job", words)
+
+	--ply:Notify("You have changed your job title to '" .. words .. "'.")
+	--GM:Log(EVENT_EVENT, "%s changed " .. ply._GenderWord .. " job text to %q.", ply:Name(), words)
+end, "Commands", "[text]", "Change your job title or reset it.")
+
+-- A command to change your clan.
+arista.command.add("clan", "", 0, function(ply, arguments)
+	local words = table.concat(arguments, " ")
+	words = words:sub(1, 64):Trim()
+
+	if not words or words == "quit" or words == "none" then
+		words = ""
+	end
+
+	ply:setAristaVar("clan", words)
+
+	--GM:Log(EVENT_EVENT, "%s set their clan to %q.", ply:Name(), words)
+
+	if words == "" then
+		ply:notify("You have left your clan.")
+	else
+		ply:notify("You have set your clan to '%s'.", words)
+	end
+end, "Commands", "[text|quit|none]", "Change your clan or quit your current one.")
+
+-- A command to change your gender.
+arista.command.add("gender", "", 1, function(ply, gender)
+	local gender = gender:lower()
+	local curGen = ply:getGender():lower()
+
+	if gender ~= "male" and gender ~= "female" then
+		return false, "Invalid gender specified."
+	elseif curGen == gender then
+		return false, "You are already " .. gender .. "!"
+	elseif gender == "male" then
+		ply:setAristaVar("gender", "Male")
+	else
+		ply:setAristaVar("gender", "Female")
+	end
+
+	ply:notify("You will be  next time you spawn.", gender)
+
+	--GM:Log(EVENT_EVENT, "%s set " .. ply._NextSpawnGenderWord .. " gender to " .. gender .. ".", ply:Name())
+end, "Menu Handlers", "<male|female>", "Change your gender.")
+
+-- A command to change your clan.
+arista.command.add("details", "", 0, function(ply, arguments)
+	local words = table.concat(arguments, " ")
+	words = words:sub(1, 64):Trim()
+
+	if text == "" or text:lower() == "none" then
+		ply:setAristaVar("details", "")
+
+		-- Print a message to the player.
+		ply:notify("You have removed your details.")
+		--GM:Log(EVENT_EVENT, "%s changed "..ply._GenderWord.." details to %q.",ply:Name(),"nothing")
+	else
+		ply:setAristaVar("text", "")
+
+		-- Print a message to the player.
+		ply:notify("You have changed your details to '%s'.", text)
+		--GM:Log(EVENT_EVENT, "%s changed "..ply._GenderWord.." details to %q.",ply:Name(),text)
+	end
+end, "Commands", "<text|none>", "Change your details or make them blank.")
+
+arista.command.add("team", "", 1, function(ply, identifier)
+	local teamdata = arista.team.get(identifier)
+
+	if not teamdata then
+		return false, "Invalid team!"
+	end
+
+	local teamid = teamdata.index
+	if teamid == ply:Team() then
+		return false, "You are already that team!"
+	elseif team.NumPlayers(teamid) >= teamdata.limit then
+		return false, "That team is full!"
+	elseif gamemode.Call("PlayerCanJoinTeam", ply, teamid) == false then
+		return false
+	end
+
+	ply:holsterAll()
+
+	return ply:joinTeam(teamid)
+end, "Menu Handlers", "<team>", "Change your team.", true)

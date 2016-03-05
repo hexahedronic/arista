@@ -112,6 +112,8 @@ arista.config.vars = {
 	},
 	-- Prop limit for builders.
 	builderPropLimit = 15,
+	-- If we have a team you must pass through to join another group.
+	useMasterGroup = true,
 }
 
 arista.config.costs = {

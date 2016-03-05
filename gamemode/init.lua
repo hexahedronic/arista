@@ -273,7 +273,7 @@ function GM:PlayerSpawnProp(ply, model)
 				return false
 			end
 		else
-			local amount = arista.config.costs.prop - ply:GetMoney
+			local amount = propCosts - ply:GetMoney()
 
 			-- Print a message to the player telling them how much they need.
 			ply:notify("You need another $" .. amount .. "!")
@@ -490,6 +490,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("sleeping", false)
 
 	ply:networkAristaVar("warrant", "")
+	ply:networkAristaVar("nextGender", "")
 
 	ply:networkAristaVar("ragdoll", NULL)
 
@@ -582,7 +583,7 @@ function GM:PlayerInitialSpawn(ply)
 		end
 	end
 
-	arista.utils.nextFrame(function()
+	timer.Simple(2, function()
 		if not ply:IsValid() then return end
 
 		net.Start("arista_modelChoices")
@@ -1278,11 +1279,12 @@ function GM:PlayerCanJoinTeam(ply, teamid)
 
 	-- Run a series of checks
 	if (nextChange[teamid] or 0) > CurTime() then
-		--ply:Notify("You must wait " .. string.ToMinutesSeconds(ply._NextChangeTeam[teamid] - CurTime()) .. " before you can become a " .. teamdata.name .. "!", 1)
+		local time = string.ToMinutesSeconds(nextChange[teamid] - CurTime())
+		ply:notify("You must wait %s before you can become a %s!", time, teamdata.name)
 		-- todo: language
 
 		return false
-	elseif ply:isWarranted() then
+	elseif ply:isWarranted() ~= "" then
 		ply:notify("You cannot change teams while warranted!")
 
 		return false

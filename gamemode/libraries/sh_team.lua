@@ -323,8 +323,8 @@ function arista.team.add(name, data)
 	data.limit = data.limit or game.MaxPlayers()
 	data.access = data.access or arista.config:getDefault("access")
 	data.description = data.description or "N/A."
-	data.models.male = males or arista.config:getDefault("male")
-	data.models.female = females or arista.config:getDefault("female")
+	data.models.male = data.males or arista.config:getDefault("male")
+	data.models.female = data.females or arista.config:getDefault("female")
 	data.canmake = data.canmake or arista.config:getDefault("jobCategories")
 	data.cantuse = data.cantuse or {}
 	data.timelimit = data.timelimit or 0

@@ -1,18 +1,31 @@
 -- arista: RolePlay FrameWork --
 
+surface.CreateFont("arista_hud", {
+	font = "Arial",--"Fira Sans",
+	size = 17
+})
+surface.CreateFont("arista_hudSmall", {
+	font = "Arial",--"Fira Sans",
+	size = 14
+})
+
 -- Stop showing loadingscreen when we refresh.
-local set
+local set, cl
 if arista and arista._playerInited then
 	set = true
+	cl = table.Copy(arista.client)
 end
 
 include("sh_init.lua")
 
+arista.client = {}
+
 if set then
 	arista._playerInited = true
-end
+	arista.client = table.Copy(cl)
 
-arista.client = {}
+	cl = nil
+end
 
 -- Set some information for the gamemode.
 arista.client.topTextGradient = {}
@@ -66,7 +79,10 @@ net.Receive("arista_notify", function()
 
 	local msg = form:format(unpack(args))
 
-	chat.AddText(color_white, msg)
+	notification.AddLegacy(msg, NOTIFY_GENERIC, 2)
+	surface.PlaySound("buttons/button15.wav")
+
+	MsgN(msg)
 end)
 
 net.Receive("arista_moneyAlert", function()
@@ -99,7 +115,7 @@ local function playerInit(tab)
 		arista.client._modelChoices = tab
 
 		if startupmenu:GetBool() then
-			--cider.menu.toggle()
+			arista.derma.menu.toggle()
 		end
 	else
 		timer.Simple(0.5, function() playerInit(tab) end)
@@ -437,9 +453,9 @@ function GM:DrawPlayerInformation()
 
 		if split[2]:Trim() ~= "" then
 			if v[2] then
-				width = self:AdjustMaximumWidth("ChatFont", v[1], width, nil, 24)
+				width = self:AdjustMaximumWidth("arista_hud", v[1], width, nil, 24)
 			else
-				width = self:AdjustMaximumWidth("ChatFont", v[1], width)
+				width = self:AdjustMaximumWidth("arista_hud", v[1], width)
 			end
 
 			-- Insert this text into the information table.
@@ -468,7 +484,7 @@ function GM:DrawPlayerInformation()
 		local ico = v[2] .. ".png"
 
 		if ico then
-			self:DrawInformation(v[1], "ChatFont", x + 24, y, color_white, 255, true)
+			self:DrawInformation(v[1], "arista_hud", x + 24, y, color_white, 255, true)
 
 			if not matCache[ico] then
 				matCache[ico] = Material(ico)
@@ -496,7 +512,7 @@ function GM:DrawHealthBar(bar)
 	local health = math.Clamp(arista.lp:Health(), 0, 100)
 
 	-- Draw the health and ammo bars.
-	self:DrawBar("Default", bar.x, bar.y, bar.width, bar.height, color_red_alpha, "Health: " .. health, 100, health, bar)
+	self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_red_alpha, "Health: " .. health, 100, health, bar)
 end
 
 -- Draw the timer bar.
@@ -508,7 +524,7 @@ function GM:DrawTimerBar(bar)
 	local percent = math.Clamp((expire / jobTimeLimit) * 100, 0, 100)
 	local time = string.ToMinutesSeconds(math.floor(expire))
 
-	self:DrawBar("Default", bar.x, bar.y, bar.width, bar.height, color_orange_alpha, "Time Left: " .. time, 100, percent, bar)
+	self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_orange_alpha, "Time Left: " .. time, 100, percent, bar)
 end
 
 -- Draw the ammo bar.
@@ -535,7 +551,7 @@ function GM:DrawAmmoBar(bar)
 
 	-- Check if the maximum clip if above 0.
 	if clipMaximum > 0 then
-		self:DrawBar("Default", bar.x, bar.y, bar.width, bar.height, color_lightblue_alpha, "Ammo: " .. clipOne .. " [" .. clipAmount .. "]", clipMaximum, clipOne, bar)
+		self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_lightblue_alpha, "Ammo: " .. clipOne .. " [" .. clipAmount .. "]", clipMaximum, clipOne, bar)
 	end
 end
 

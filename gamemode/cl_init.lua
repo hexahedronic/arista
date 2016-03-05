@@ -79,8 +79,8 @@ net.Receive("arista_notify", function()
 
 	local msg = form:format(unpack(args))
 
-	notification.AddLegacy(msg, NOTIFY_GENERIC, 2)
-	surface.PlaySound("buttons/button15.wav")
+	notification.AddLegacy(msg, NOTIFY_GENERIC, 4)
+	surface.PlaySound("ambient/water/drip" .. math.random(1, 4) .. ".wav")
 
 	MsgN(msg)
 end)

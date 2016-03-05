@@ -37,6 +37,7 @@ do
 	util.AddNetworkString("arista_accessUpdate")
 	util.AddNetworkString("arista_moneyAlert")
 	util.AddNetworkString("arista_teamChange")
+	util.AddNetworkString("arista_inventoryItem")
 end
 
 -- Flags that represent functions.
@@ -1183,6 +1184,12 @@ function GM:PlayerLoadout(ply)
 
 	if ply:Team() and ply:Team() > 0 then
 		local team = arista.team.get(ply:Team())
+
+		if not team then
+			arista.logs.log(arista.logs.E.FATAL, "TEAM VALID BUT NOT IN TABLE! PLAYER LOADOUT FAILED! CHECK arista.team.stored!")
+
+			return
+		end
 
 		if team.guns then
 			for _,gun in ipairs(team.guns) do

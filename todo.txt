@@ -1,5 +1,5 @@
 - SV
-[ ] Serverside Items Handling <-
+[X] Serverside Items Handling <-
 [ ] Chat handler (OOC/IC/Ranged) <--
 [ ] Prop-protection
 [ ] Missing commands (a lot of them) <--

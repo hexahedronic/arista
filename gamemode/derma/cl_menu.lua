@@ -1,5 +1,14 @@
+if arista.derma.menu and arista.derma.menu.panel and arista.derma.menu.open then
+	MsgN("  Refreshed, trying to clean up menu...")
+
+	gui.EnableScreenClicker(false)
+
+	arista.derma.menu.panel:Remove()
+	arista.derma.menu.panel = nil
+end
+
 arista.derma.menu = {}
-arista.derma.menu.open = nil
+arista.derma.menu.open = open
 
 local width = 700
 if ScrW() > width then
@@ -18,6 +27,7 @@ function PANEL:Init()
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(false)
 	self:ShowCloseButton(false)
+	self:SetDraggable(false)
 
 	-- Create the close button.
 	self.close = vgui.Create("DButton", self)
@@ -30,8 +40,6 @@ function PANEL:Init()
 	self.tabs = vgui.Create("DPropertySheet", self)
 
 	-- Add the sheets for the other menus to the property sheet.
-	--self.tabs:AddSheet("Sukas", vgui.Create("DPanel", self.tabs), "icon16/user.png")
-	--self.tabs:AddSheet("blyats", vgui.Create("DPanel", self.tabs), "icon16/user.png")
 	self.tabs:AddSheet("Character", vgui.Create("arista_character", self.tabs), "icon16/user.png")
 	--[[self.tabs:AddSheet("Help", vgui.Create("cider_Help", self.tabs), "icon16/page.png")
 	self.tabs:AddSheet("Laws", vgui.Create("cider_Laws",self.tabs),"icon16/world.png")
@@ -51,7 +59,7 @@ function PANEL:PerformLayout()
 	self:SetPos(ScrW() / 2 - self:GetWide() / 2, ScrH() / 2 - self:GetTall() / 2)
 
 	-- Set the size and position of the close button.
-	self.close:SetSize(48, 16)
+	self.close:SetSize(48, 18)
 	self.close:SetPos(self:GetWide() - self.close:GetWide() - 4, 3)
 
 	-- Stretch the tabs to the parent.

@@ -1,11 +1,21 @@
 AddCSLuaFile()
 
+-- Fucking sack of shit lua refresh.
+local derma, internal
+if arista then
+	if CLIENT then derma = table.Copy(arista.derma) end
+	internal = table.Copy(arista._internaldata)
+end
+
 -- arista: RolePlay FrameWork --
 arista = {}
 arista.registry = debug.getregistry()
 
 -- Used to store things that don't have their own home.
-arista._internaldata = {}
+arista._internaldata = internal or {}
+if CLIENT then arista.derma = derma or {} end
+internal = nil
+derma = nil
 
 -- Derive functionality from sandbox
 DeriveGamemode("Sandbox")
@@ -89,8 +99,6 @@ function GM:CanPenetrate(trace, force, swep)
 	return force > 7.5
 end
 
-if CLIENT then arista.derma = {} end
-
 arista.file.loadDir("extensions/", "Extension", "Extensions")
 
 arista.file.loadDir("derma/", "Panel", "Panels")
@@ -103,24 +111,15 @@ arista.file.loadDir("hooks/", "Hook Library", "Hook Libraries")
 -- Libs have been loaded
 gamemode.Call("LibrariesLoaded")
 
--- Check if we're running on the server.
-if SERVER then
-	--include("sv_commands.lua")
-	--include("sv_umsgs.lua")
-	--AddCSLuaFile("cl_content.lua")
-else
-	--include("cl_content.lua")
-end
-
 --GM:LoadPlugins()
---GM:LoadItems()
+GM:LoadItems()
 
 --This stuff needs to be after plugins but before everything else
 --includecs("sh_events.lua")
 include("sh_jobs.lua")
 
 -- A table that will hold entities that were there when the map started.
-arista._internaldata.entities = {}
+if not arista._internaldata.entities then arista._internaldata.entities = {} end
 
 -- Called when a player attempts to punt an entity with the gravity gun.
 function GM:GravGunPunt(ply, entity)

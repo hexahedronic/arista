@@ -630,7 +630,7 @@ function GM:DrawTopText(text)
 	end
 
 	-- Check if the player is wearing kevlar.
-	if arista.lp:getAristaInt("scaleDamage") == 0.5 then
+	if arista.lp:getAristaFloat("scaleDamage") == 0.5 then
 		text.y = self:DrawInformation("You are wearing kevlar which reduces damage by 50%.", "ChatFont", text.x, text.y, color_pink, 255, true, function(x, y, width, height)
 			return x - width - 8, y
 		end)

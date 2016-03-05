@@ -11,7 +11,7 @@ function arista.file.findInLua(path)
 end
 
 function arista.file.valid(name)
-	return name:sub(1, 1) ~= "." and not name:find("~")
+	return name[1] ~= "." and not name:find("~", 1, true)
 end
 
 function arista.file.loadDir(path, name, plural)

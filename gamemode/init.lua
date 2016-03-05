@@ -498,7 +498,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("knockOutPeriod", 0)
 	ply:networkAristaVar("unarrestTime", 0)
 	ply:networkAristaVar("warrantExpireTime", 0)
-	ply:networkAristaVar("scaleDamage", 0)
+	ply:networkAristaVar("scaleDamage", 0, true) -- Floating-point
 	ply:networkAristaVar("jobTimeExpire", 0)
 	ply:networkAristaVar("jobTimeLimit", 0)
 

@@ -65,6 +65,7 @@ function entity:setAristaVar(var, val)
 
 		-- Fuck my life.
 		if ty == "Player" then ty = "Entity" end
+		if ty == "number" and netType == "Float" then ty = "Float" end
 
 		if ty ~= netType and ty ~= valType then
 			arista.logs.event(arista.logs.E.FATAL, arista.logs.E.NETEVENT, "ATTEMPTING TO NETWORK DIFFERING DATATYPE FOR VAR '", var, "' <t=", ty, "><s=", netType, "> ON ", self, ".")
@@ -85,10 +86,13 @@ function entity:getAristaVar(var)
 	return self._aristaVars[var]
 end
 
-function entity:networkAristaVar(var, val)
+function entity:networkAristaVar(var, val, precision)
+
+	local type = arista.utils.typeToNet(val)
+	if type == "Int" and precision then type = "Float" end
 
 	self._varsToNetwork = self._varsToNetwork or {}
-	self._varsToNetwork[var] = arista.utils.typeToNet(val)
+	self._varsToNetwork[var] = type
 
 	self:setAristaVar(var, val)
 end
@@ -107,6 +111,7 @@ createTypeNetworker("Int")
 createTypeNetworker("Entity")
 createTypeNetworker("String")
 createTypeNetworker("Bool")
+createTypeNetworker("Float")
 
 end
 

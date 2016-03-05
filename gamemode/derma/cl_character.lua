@@ -275,10 +275,6 @@ function PANEL:Init()
 	local models = team.models[gender]
 	local modelChoice = arista.client._modelChoices[gender]
 
-	PrintTable(models)
-	PrintTable(modelChoice)
-	print(name)
-
 	local model = models[arista.client._modelChoices[gender][name]]
 
 	-- Set the model of the spawn icon to the one of the team.

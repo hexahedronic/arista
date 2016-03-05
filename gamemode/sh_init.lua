@@ -2,6 +2,7 @@ AddCSLuaFile()
 
 -- arista: RolePlay FrameWork --
 arista = {}
+arista.registry = debug.getregistry()
 
 -- Used to store things that don't have their own home.
 arista._internaldata = {}

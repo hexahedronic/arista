@@ -1,0 +1,23 @@
+- SV
+[ ] Serverside Items Handling <-
+[ ] Chat handler (OOC/IC/Ranged) <--
+[ ] Prop-protection
+[ ] Missing commands (a lot of them) <--
+
+- CL
+[ ] Clientside Inventory GUI <-
+[ ] Clientside Shop GUI <-
+[ ] Missing Main Menu Compontents <-
+[ ] Chatbox <--
+
+- Plugins
+[ ] Plugin mangement/handling <--
+
+[ ] Vehicle handling
+[ ] Officals <--
+[ ] Hunger
+[ ] Flashlight battery
+[ ] Door management (saving) <--
+[ ] Stamina
+[ ] Prison spawnpoints <--
+[ ] Map detailing

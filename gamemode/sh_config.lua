@@ -58,6 +58,8 @@ arista.config.database = {
 	gender = "Male",
 	-- Used to block players from certain jobs and whatnot, don't touch it.
 	blacklist = {},
+	-- Used to store items, don't touch it.
+	inventory = {},
 }
 
 arista.config.vars = {
@@ -119,7 +121,7 @@ arista.config.vars = {
 arista.config.costs = {
 	-- How much doors cost to buy (/2 for refund).
 	door = 100,
-	-- How much do props cost to buy.
+	-- How much do props cost to buy (for builders).
 	prop = 100,
 }
 

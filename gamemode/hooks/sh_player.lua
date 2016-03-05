@@ -83,21 +83,23 @@ end
 -- @param target The intended victim
 -- @return true if they can false if they can't
 function GM:PlayerCanDemote(ply, target)
-	--[[local err = ""
+	local err = ""
 	if target:Team() == TEAM_DEFAULT then
 		if SERVER then
-			ply:Notify("You cannot demote players from the default team!",1)
+			ply:Notify("You cannot demote players from the default team!")
 		end
 		return false
 	elseif (target:Arrested() or target:Tied()) then
 		if SERVER then
-			ply:Notify("You cannot demote "..target:Name().." right now!",1)
+			ply:Notify("You cannot demote %s right now!", target:Name())
 		end
 		return false
-	elseif ply:IsModerator() then
+		-- todo: mod
+	elseif --[[ply:IsModerator()]] arista.utils.isAdmin(ply) then
 		return true
 	end
-	local tteam,mteam = target:Team(),ply:Team()
+
+	local tteam, mteam = target:Team(), ply:Team()
 	local tlevel,mlevel,tgroup,mgroup,tgang,mgang =
 			arista.team.getGroupLevel(tteam),
 			arista.team.getGroupLevel(mteam),
@@ -105,27 +107,30 @@ function GM:PlayerCanDemote(ply, target)
 			arista.team.getGroupByTeam(mteam),
 			arista.team.getGang(tteam),
 			arista.team.getGang(mteam)
+
 	if tgroup ~= mgroup then
 		err = "You cannot demote players in a different group!"
 	elseif tlevel == 1 then
 		err = "You cannot demote a player from the base class!"
 	elseif tlevel > mlevel then
 		err = "You cannot demote a player with a higer level than you!"
-	elseif mlevel == tlevel and !arista.team.hasAccessGroup(mteam,"b") then
+	elseif mlevel == tlevel and not arista.team.hasAccessGroup(mteam, "b") then
 		err = "You do not have access to demote players at the same level as yourself!"
-	elseif !arista.team.hasAccessGroup(mteam,"d") then
+	elseif not arista.team.hasAccessGroup(mteam,"d") then
 		err = "You do not have access to demote this player!"
 	elseif tgang ~= mgang then
 		err = "You cannot demote players in other gangs!"
 	end
+
 	if err == "" then
 		return true
 	else
 		if SERVER then
-			ply:Notify(err,1)
+			ply:notify(err)
 		end
+
 		return false
-	end]]
+	end
 end
 
 -- Called when a player attempts to noclip.

@@ -41,10 +41,10 @@ function PANEL:Init()
 
 	-- Add the sheets for the other menus to the property sheet.
 	self.tabs:AddSheet("Character", vgui.Create("arista_character", self.tabs), "icon16/user.png")
+	self.tabs:AddSheet("Inventory", vgui.Create("arista_inventory", self.tabs), "icon16/application_view_tile.png")
 	--[[self.tabs:AddSheet("Help", vgui.Create("cider_Help", self.tabs), "icon16/page.png")
 	self.tabs:AddSheet("Laws", vgui.Create("cider_Laws",self.tabs),"icon16/world.png")
 	self.tabs:AddSheet("Rules", vgui.Create("cider_Rules", self.tabs), "icon16/exclamation.png")
-	self.tabs:AddSheet("Inventory", vgui.Create("cider_Inventory", self.tabs), "icon16/application_view_tile.png")
 	self.tabs:AddSheet("Store", vgui.Create("cider_Store", self.tabs), "icon16/box.png")
 	self.tabs:AddSheet("Changelog",vgui.Create("cider_Changelog", self.tabs), "icon16/plugin.png")
 	self.tabs:AddSheet("Donate", vgui.Create("cider_Donate", self.tabs), "icon16/heart.png")

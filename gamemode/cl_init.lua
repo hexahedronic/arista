@@ -105,7 +105,7 @@ net.Receive("arista_moneyAlert", function()
 	table.insert(arista.client.moneyAlerts, alert)
 end)
 
-local startupmenu = CreateClientConVar("arista_startupmenu", "1", true)
+local startupmenu = CreateClientConVar("arista_menu_startup", "1", true)
 
 local function playerInit(tab)
 	arista.lp = LocalPlayer()

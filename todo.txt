@@ -5,7 +5,7 @@
 [ ] Missing commands (a lot of them) <--
 
 - CL
-[ ] Clientside Inventory GUI <-
+[X] Clientside Inventory GUI <-
 [ ] Clientside Shop GUI <-
 [ ] Missing Main Menu Compontents <-
 [ ] Chatbox <--

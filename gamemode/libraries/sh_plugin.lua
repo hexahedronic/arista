@@ -46,7 +46,7 @@ function GM:LoadPlugins()
 		hook.Call("LoadData", self)
 	end
 
-	arista.logs.log(arista.logs.E.LOG, "Loaded ", count, " plugins.\n");
+	arista.logs.log(arista.logs.E.LOG, "Loaded ", count, " plugins.")
 end
 
 -- Concommand for debug

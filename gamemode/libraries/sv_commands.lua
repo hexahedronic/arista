@@ -154,17 +154,15 @@ function GM:PlayerSay(ply, text, public)
 
 		return ""
 	else
-		--[[if ( gamemode.Call("PlayerCanSayIC", ply, text) ) then
-			if (ply:Arrested()) then
-				cider.chatBox.addInRadius(ply, "arrested", text, ply:GetPos(), self.Config["Talk Radius"])
+		if gamemode.Call("PlayerCanSayIC", ply, text) then
+			if ply:Arrested() then
+				arista.chatbox.addInRadius(ply, "arrested", text, ply:GetPos())
 			elseif ply:Tied() then
-				cider.chatBox.addInRadius(ply, "tied", text, ply:GetPos(), self.Config["Talk Radius"])
+				arista.chatbox.addInRadius(ply, "tied", text, ply:GetPos())
 			else
-				cider.chatBox.addInRadius(ply, "ic", text, ply:GetPos(), self.Config["Talk Radius"])
+				arista.chatbox.addInRadius(ply, "ic", text, ply:GetPos())
 			end
-			GM:Log(EVENT_TALKING,"%s: %s",ply:Name(),text)
-		end]]
-		-- todo: chat
+		end
 	end
 
 	-- Return an empty string so the text doesn't show.

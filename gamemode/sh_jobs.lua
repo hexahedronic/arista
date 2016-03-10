@@ -4,31 +4,32 @@ AddCSLuaFile()
 Example of how to do a job:
 
 TEAM_POLICEOFFICER = arista.team.add("Police Officer", {
-	color = Color(100, 155, 255, 255),
-	males = "models/player/riot.mdl",
-	description = "Maintains the city and arrests criminals.",
-	salary = 250,
-	limit = 15,
-	access = "",
+	color = Color(100, 155, 255, 255), -- Color of job in scoreboard and chat.
+	males = "models/player/riot.mdl", -- Male models, can be a string, table or nil. If nil uses citizen models.
+	female = nil, -- Female models, can be a string, table or nil. If male is nil uses citizen models, if male exists then uses male models.
+	description = "Maintains the city and arrests criminals.", -- Description of job shown in menu + access.
+	salary = 250, -- Money per 'payday'.
+	limit = 15, -- The limit of players that can be this job.
+	access = nil, -- Any special gamemode access levels they get, listed below.
 	blacklist = nil,
-	group = {
-		gang = GANG_POLICE,
-		access = "",
-		level = 1,--2, -- not base group, but we dont have other jobs so for now
-		group = GROUP_OFFICIALS,
+	group = { -- The jobs group data.
+		gang = GANG_POLICE, -- The gang they belong to.
+		access = "", -- Special group access.
+		level = 2, -- Group access level, 1 is group base, 2 is things like cops, 3 things like police commander.
+		group = GROUP_OFFICIALS, -- Group they belong to, similar to gang but more general.
 	},
-	cantuse = {
+	cantuse = { -- Categories they are banned from using, eg, cops cant use explosives and illegal stuff.
 		CATEGORY_ILLEGAL_GOODS,
 		CATEGORY_ILLEGAL_WEAPONS,
 		CATEGORY_EXPLOSIVES,
 	},
-	canmake = nil,
-	guns = {"cider_baton"},
-	ammo = {
-		{"pistol", 60},
+	canmake = nil, -- Specific categories they CAN produce from the store.
+	guns = {"cider_baton"}, -- Any weapons they spawn with.
+	ammo = { -- Any ammo they spawn with.
+		pistol = 60,
 	},
-	timelimit = nil,
-	waiting = nil,
+	timelimit = nil, -- How long you can be this job at once.
+	waiting = nil, -- How long it takes to rejoin this job.
 })
 ]]
 
@@ -45,6 +46,7 @@ Old format:
 ]]
 
 -- This has to be hear due to the load-order.
+-- Anything in this will be given to groups with default store access.
 arista.config.defaults.jobCategories = {CATEGORY_VEHICLES, CATEGORY_MISC}
 
 GROUP_CIVILIANS	= arista.team.addGroup("Civilians", "Join the ordinary and (generally) law-abiding civilians")
@@ -96,4 +98,5 @@ TEAM_POLICEOFFICER = arista.team.add("Police Officer", {
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
 })
 
+-- Default job.
 TEAM_DEFAULT = TEAM_CITIZEN

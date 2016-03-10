@@ -118,6 +118,8 @@ arista.config.vars = {
 	itemUseDelay = 3,
 	-- How many seconds between uses of a SPECIFIC item.
 	specficItemDelay = 6,
+	-- How many seconds to wait before allowing OOC chat again.
+	oocCoolDown = 2,
 }
 
 arista.config.costs = {

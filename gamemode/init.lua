@@ -38,6 +38,9 @@ do
 	util.AddNetworkString("arista_moneyAlert")
 	util.AddNetworkString("arista_teamChange")
 	util.AddNetworkString("arista_inventoryItem")
+
+	util.AddNetworkString("arista_chatboxMessage")
+	util.AddNetworkString("arista_chatboxPlayerMessage")
 end
 
 -- Flags that represent functions.
@@ -506,6 +509,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:setAristaVar("nextManufactureItem", 0)
 	ply:setAristaVar("nextUseItem", 0)
 	ply:setAristaVar("nextHolsterWeapon", 0)
+	ply:setAristaVar("nextOOC", 0)
 
 	ply:setAristaVar("nextChangeTeam", {})
 	ply:setAristaVar("nextUse", {})

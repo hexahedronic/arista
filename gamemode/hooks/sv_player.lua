@@ -19,6 +19,7 @@ end
 -- @param ply The admin who wants to do the blacklisting
 -- @param victim The player the admin wants to blacklist
 -- @param kind What kind of activity. Can be one of "cat","item","cmd" or "team". In order: Item category, specific item, command or specific team/job.
+-- @param kind What kind of activity. Can be one of "cat","item","cmd" or "team". In order: Item category, specific item, command or specific team/job.
 -- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
 -- @param time How long in seconds admin wants to blacklist them for.
 -- @param reason Why the admin wants to blacklist them
@@ -520,22 +521,27 @@ end
 -- @param ply The player in question
 -- @param text What the player is trying to say
 function GM:PlayerCanSayOOC(ply, text)
-	--[[if (ply:IsModerator()) then -- Mods can always use ooc
-		return true;
-	elseif ((ply._NextOOC or 0) > CurTime()) then -- Prevent OOC spam
-		timeleft = ply._NextOOC - CurTime();
-		if (timeleft > 60) then
-			timeleft = string.ToMinutesSeconds(math.ceil(timeleft)).." minute(s)";
+	local nextOOC = ply:getAristaVar("nextOOC") or 0
+
+	if arista.utils.isAdmin(ply) then -- Admins can always use ooc
+		return true
+	elseif nextOOC > CurTime() then -- Prevent OOC spam
+		local timeleft = nextOOC - CurTime()
+
+		if timeleft > 60 then
+			timeleft = string.ToMinutesSeconds(math.ceil(timeleft)) .. " minute(s)"
 		else
-			timeleft = math.ceil(timeleft).." second(s)";
+			timeleft = math.ceil(timeleft) .. " second(s)"
 		end
-		ply:Notify("You must wait " .. timeleft .. " before using OOC again!", 1);
-		return false;
-	elseif (GetConVarNumber("cider_ooc") == 0) then -- Check if an irate superadmin has turned OOC off
-		ply:Notify("Talking in OOC has been disabled.", 1)
+
+		ply:notify("You must wait %s before using OOC again!", timeleft)
+		-- todo: language
+
 		return false
 	end
-	ply._NextOOC = CurTime() + self.Config["OOC Timeout"]; -- Stop the player talking in OOC again for a while]]
+
+	ply:setAristaVar("nextOOC", CurTime() + arista.config.vars.oocCoolDown) -- Stop the player talking in OOC again for a while
+
 	return true
 end
 

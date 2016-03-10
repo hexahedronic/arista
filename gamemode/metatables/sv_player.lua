@@ -734,7 +734,7 @@ function player:sayRadio(words)
 
 	-- If we're in a gang, send the message to them, otherwise just to our teammates.
 	if gang then
-		recipients = cider.team.getGangMembers(cider.team.getGroupByTeam(iteam), gang)
+		recipients = arista.team.getGangMembers(arista.team.getGroupByTeam(iteam), gang)
 	else
 		recipients = team.GetPlayers(iteam)
 	end
@@ -745,19 +745,14 @@ function player:sayRadio(words)
 	-- Compile a list of those who can't hear the voice
 	local nohear = {}
 
-	-- Loop through every recipient and add the message to their chatbox
-	for _, ply in pairs(recipients) do
-		--cider.chatBox.add(ply, self, "radio", words)
+	for _, ply in ipairs(recipients) do
 		nohear[ply] = true
 	end
 
-	-- Tell everyone nearby that we just said a waydio
-	local pos = self:GetPos()
-	for _, ply in pairs(player.GetAll()) do
-		--if (not nohear[ply] and ply:GetPos():Distance(pos) <= GM.Config["Talk Radius"]) then
-		--	cider.chatBox.add(ply, self, "loudradio", words)
-		--end
-	end
+	arista.chatbox.add(recipients, self, "radio", words)
+
+	-- Tell everyone nearby that we just spoke on a radio.
+	arista.chatbox.addInRadius(self, "loudradio", words, self:GetPos(), nil, nohear)
 end
 
 ---
@@ -775,7 +770,7 @@ function player:emote(words, other)
 		words:gsub("<O>", oPronoun)
 	end
 
-	--cider.chatBox.addInRadius(self, "me", words, self:GetPos(), GM.Config["Talk Radius"])
+	arista.chatbox.addInRadius(self, "me", words, self:GetPos())
 end
 
 function player:setMoney(amount)
@@ -807,19 +802,21 @@ function player:holsterAll()
 		self:ExitVehicle() -- This fixes a suprisingly high number of glitches
 	end
 
-	--[[local class
-	for _, weapon in pairs(self:GetWeapons()) do
-		class = weapon:GetClass()
+	for _, weapon in ipairs(self:GetWeapons()) do
+		local class = weapon:GetClass()
+
 		self:StripWeapon(class)
-		if (GM.Items[class]) then
-			if (gamemode.Call("PlayerCanHolster", self, class, true) and cider.inventory.update(self, class, 1)) then
-				-- ...
-			elseif (gamemode.Call("PlayerCanDrop", self, class, true)) then
-				GM.Items[class]:Make(self:GetPos(), 1)
+
+		if arista.item.items[class] then
+			if gamemode.Call("PlayerCanHolster", self, class, true) and cider.inventory.update(self, class, 1) then
+				-- We put it away normal.
+			elseif gamemode.Call("PlayerCanDrop", self, class, true) then
+				arista.item.items[class]:make(self:GetPos(), 1)
 			end
 		end
 	end
-	self:SelectWeapon("cider_hands")]]
+
+	self:SelectWeapon("hands")
 end
 
 ---

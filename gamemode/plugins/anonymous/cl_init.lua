@@ -1,5 +1,5 @@
 PLUGIN.name = "Anonymous"
-PLUGIN.author - "Lexi"
+PLUGIN.author = "Lexi"
 
 -- Prevent players being told who killed what.
 usermessage.Hook("NPCKilledNPC", function() end)

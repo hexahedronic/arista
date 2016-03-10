@@ -9,9 +9,9 @@ function GM:LoadPlugins()
 	arista.logs.log(arista.logs.E.LOG, "Loading Plugins:")
 
 	local path = "plugins/"
-	local files = arista.file.findInLua(path .. "*")
+	local files, folders = arista.file.findInLua(path .. "*")
 
-	for _, id in ipairs(files) do
+	for _, id in ipairs(folders) do
 		if not id:find(".", 1, true) then
 			PLUGIN = {}
 

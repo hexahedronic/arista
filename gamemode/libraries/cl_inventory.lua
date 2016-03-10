@@ -7,6 +7,8 @@ net.Receive("arista_inventoryItem", function()
 	local item = net.ReadString()
 	local amount = net.ReadUInt(32)
 
+	arista.logs.log(arista.logs.E.DEBUG, "mixtape.fire_", item)
+
 	-- Check to see if the amount is smaller than 1.
 	if amount < 1 then
 		arista.inventory.stored[item] = nil
@@ -27,8 +29,8 @@ function arista.inventory.getMaximumSpace(inv, intial)
 	for k, v in pairs(inv) do
 		local item = arista.item.items[k]
 
-		if item and item.size > 0 then
-			size = size + (item.Size * v)
+		if item and item.size < 0 then
+			size = size + (item.size * -v)
 		end
 	end
 
@@ -46,7 +48,7 @@ function arista.inventory.getSize(inv)
 		local item = arista.item.items[k]
 
 		if item and item.size > 0 then
-			size = size + (item.Size * v)
+			size = size + (item.size * v)
 		end
 	end
 

@@ -4,7 +4,7 @@ arista.item = {}
 arista.item.items = {}
 arista.item.meta = {}
 arista.item.cats = {} -- meow
-arista.item.index = {}
+arista.item.index = 0
 
 -- Set the metatable up
 arista.item.meta.__index = arista.item.meta
@@ -62,21 +62,22 @@ function GM:LoadItems()
 
 			-- Enumerations.
 			local newCat = self:RegisterCategory(CAT)
-			_G['CATEGORY_' .. filename:upper()] = newcat
+			_G['CATEGORY_' .. filename:upper()] = newCat
 
 			files, _ = arista.file.findInLua(path .. filename .. "/*.lua")
 
 			for _, item in ipairs(files) do
 				local filePath = path .. filename .. "/" .. item
 
-				if arista.file.valid(filename) and item ~= "init.lua" then
+				if arista.file.valid(item) and item ~= "init.lua" then
 					ITEM = arista.item.meta()
 
 					if SERVER then AddCSLuaFile(filePath) end
 					include(filePath)
 
-					local uid = filename:sub(1, -5)
+					local uid = item:sub(1, -5)
 					ITEM.uniqueID = uid
+					ITEM.category = newCat
 					ITEM:register()
 
 					ITEM = nil
@@ -100,7 +101,7 @@ end
 
 function GM:RegisterCategory(cat) -- meow
 	cat.index = arista.item.index
-	arista.item.cats[index] = cat
+	arista.item.cats[cat.index] = cat
 
 	arista.item.index = arista.item.index + 1
 

@@ -503,6 +503,10 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("jobTimeExpire", 0)
 	ply:networkAristaVar("jobTimeLimit", 0)
 
+	ply:setAristaVar("nextManufactureItem", 0)
+	ply:setAristaVar("nextUseItem", 0)
+	ply:setAristaVar("nextHolsterWeapon", 0)
+
 	ply:setAristaVar("nextChangeTeam", {})
 	ply:setAristaVar("nextUse", {})
 	ply:setAristaVar("gunCounts", {})

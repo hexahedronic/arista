@@ -7,16 +7,23 @@ function arista.inventory.update(player, id, amount, force)
 		return
 	end
 
+	arista.logs.logNoPrefix(arista.logs.E.DEBUG, "inventory.update called with '", id, "' (", amount, ").")
+
 	local inventory = player:getAristaVar("inventory")
 	inventory[id] = inventory[id] or 0
 
 	local item = arista.item.items[id]
+
+	if not item then
+		arista.logs.log(arista.logs.E.ERROR, "inventory.update was passed an invalid item (", id, ").")
+
+		return false, "That is not a valid item!"
+	end
+
 	local size = item.size * amount
 	local newAmt = inventory[id] + amount
 
-	if not item then
-		return false, "That is not a valid item!"
-	elseif not (amount < 1 or arista.inventory.canFit(player, size) or force) then
+	if not (amount < 1 or arista.inventory.canFit(player, size) or force) then
 		return false, "You do not have enough inventory space!"
 	end
 
@@ -32,7 +39,7 @@ function arista.inventory.update(player, id, amount, force)
 		return false, "You can't carry any more " .. item.plural .. "!"
 	end
 
-	inventory[id] = math.Clamp(newAmt + amount, 0, 2147483647)
+	inventory[id] = math.Clamp(newAmt, 0, 2147483647)
 
 	-- Check to see if we do not have any of this item now.
 	if inventory[id] <= 0 then
@@ -43,14 +50,14 @@ function arista.inventory.update(player, id, amount, force)
 		end
 	end
 
-	ply:setAristaVar("inventory", inventory)
+	player:setAristaVar("inventory", inventory)
 
 	local finAmt = inventory[id]
 
 	-- Send a net message to the player to tell them their items have been updated.
 	net.Start("arista_inventoryItem")
 		net.WriteString(id)
-		net.WriteUInt(finAmt, 32)
+		net.WriteUInt(finAmt or 0, 32)
 	net.Send(player)
 
 	-- Return true because we updated the inventory successfully.
@@ -59,7 +66,7 @@ end
 
 -- Get the maximum amount of space a player has.
 function arista.inventory.getMaximumSpace(player, inventory)
-	local size = ply:getAristaVar("inventorySize")
+	local size = player:getAristaVar("inventorySize")
 	local inv = inventory or player:getAristaVar("inventory")
 
 	-- Loop through the player's inventory.
@@ -67,7 +74,7 @@ function arista.inventory.getMaximumSpace(player, inventory)
 		local item = arista.item.items[k]
 
 		if item and item.size < 0 then
-			size = size + (item.Size * -v)
+			size = size + (item.size * -v)
 		end
 	end
 
@@ -84,8 +91,8 @@ function arista.inventory.getSize(player, inventory)
 	for k, v in pairs(inv) do
 		local item = arista.item.items[k]
 
-		if item and item.size < 0 then
-			size = size + (item.Size * -v)
+		if item and item.size > 0 then
+			size = size + (item.size * v)
 		end
 	end
 
@@ -106,3 +113,13 @@ local function playerInitInventory(player)
 	end
 end
 hook.Add("PlayerInitialized", "Player Init Inventory", playerInitInventory)
+
+timer.Simple(1, function()
+	if #player.GetAll() > 0 then
+		arista.logs.log(arista.logs.E.WARNING, "lua reload detected: resending inventories.")
+
+		for k, v in pairs(player.GetAll()) do
+			if v._inited then playerInitInventory(v) end
+		end
+	end
+end)

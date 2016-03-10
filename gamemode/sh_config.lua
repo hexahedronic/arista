@@ -14,8 +14,6 @@ arista.config.defaults = {
 	arrestTime = 300,
 	-- Access level.
 	access = "",
-	-- Categories in the store that the job can use.
-	jobCategories = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND},
 	-- Playermodels.
 	female = {
 		"models/player/group01/female_01.mdl",
@@ -116,6 +114,10 @@ arista.config.vars = {
 	builderPropLimit = 15,
 	-- If we have a team you must pass through to join another group.
 	useMasterGroup = true,
+	-- How many seconds between item uses.
+	itemUseDelay = 3,
+	-- How many seconds between uses of a SPECIFIC item.
+	specficItemDelay = 6,
 }
 
 arista.config.costs = {

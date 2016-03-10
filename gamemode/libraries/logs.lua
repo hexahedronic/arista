@@ -18,6 +18,7 @@ arista.logs.E = {
 	NETEVENT = "Net Event",
 	JOB = "Job",
 	COMMAND = "Command",
+	ITEM = "Item",
 }
 
 arista.logs.colors = {

@@ -86,6 +86,9 @@ else
 	include("cl_language.lua")
 end
 
+-- A table that will hold entities that were there when the map started.
+if not arista._internaldata.entities then arista._internaldata.entities = {} end
+
 -- This needs to be here, since it may not get defined, but gets called regardless.
 function GM:LibrariesLoaded()
 end
@@ -117,9 +120,6 @@ GM:LoadItems()
 --This stuff needs to be after plugins but before everything else
 --includecs("sh_events.lua")
 include("sh_jobs.lua")
-
--- A table that will hold entities that were there when the map started.
-if not arista._internaldata.entities then arista._internaldata.entities = {} end
 
 -- Called when a player attempts to punt an entity with the gravity gun.
 function GM:GravGunPunt(ply, entity)
@@ -246,20 +246,20 @@ function GM:CanTool(ply, trace, tool)
 		end
 
 		-- Check if we're using the remover tool and we're trying to remove constrained entities.
-		if tool == "remover" and ply:KeyDown(IN_ATTACK2) and not ply:KeyDownLast(IN_ATTACK2) then
+		if SERVER and tool == "remover" and ply:KeyDown(IN_ATTACK2) and not ply:KeyDownLast(IN_ATTACK2) then
 			local entities = constraint.GetAllConstrainedEntities(ent)
 
 			-- Loop through the constained entities.
 			for k, v in pairs(entities) do
 				-- Do not allow touching world entities.
 				if arista._internaldata.entities[v] then
-					if doLog then arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.USE, ply, " tried (and failed) to use tool ", tool, " on ", ent, " (Map Entity Constrained).") end
+					arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.USE, ply, " tried (and failed) to use tool ", tool, " on ", ent, " (Map Entity Constrained).")
 
 					return false
 				end
 				-- Do not allow touching forbidden.
 				if v:toolForbidden() then
-					if doLog then arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.USE, ply, " tried (and failed) to use tool ", tool, " on ", ent, " (Forbidden Constrained).") end
+					arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.USE, ply, " tried (and failed) to use tool ", tool, " on ", ent, " (Forbidden Constrained).")
 
 					return false
 				end

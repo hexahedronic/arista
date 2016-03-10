@@ -49,6 +49,7 @@ end
 
 if SERVER then
 function entity:setAristaVar(var, val)
+	if not (self and IsValid(self)) then return end
 
 	self._aristaVars = self._aristaVars or {}
 	if self:IsPlayer() then self._databaseVars = self._databaseVars or {} end

@@ -44,6 +44,9 @@ Old format:
 (name,color,males,females,group,description,salary,limit,access,blacklist,canmake,cantuse,time,guns,ammo)
 ]]
 
+-- This has to be hear due to the load-order.
+arista.config.defaults.jobCategories = {CATEGORY_VEHICLES, CATEGORY_MISC}
+
 GROUP_CIVILIANS	= arista.team.addGroup("Civilians", "Join the ordinary and (generally) law-abiding civilians")
 GANG_CIVILIANS	= arista.team.addGang(GROUP_CIVILIANS, "The Civilians", "models/player/Group01/male_07.mdl", "Keep me out of this!")
 

@@ -30,6 +30,7 @@ end
 -- Called every frame.
 function PANEL:Think()
 	if arista.inventory.updatePanel then
+		arista.logs.log(arista.logs.E.DEBUG, "Updating clientside inventory panel.")
 		arista.inventory.updatePanel = false
 
 		-- Clear the current list of items.
@@ -43,12 +44,13 @@ function PANEL:Think()
 
 		-- Loop through the items.
 		for k, v in pairs(arista.inventory.stored) do
+			arista.logs.log(arista.logs.E.DEBUG, "Updating for item " , k, ".")
 			local item = arista.item.items[k]
 
 			if item then
-				cat = item.category
+				local cat = item.category
 
-				if cat and GM:GetCategory(cat) then
+				if cat and GAMEMODE:GetCategory(cat) then
 					categories[cat] = categories[cat] or {}
 
 					-- Insert the item into the category table.
@@ -60,19 +62,24 @@ function PANEL:Think()
 		end
 
 		-- Loop through the categories.
-		for k, v in ipairs(categories) do
+		for k, v in pairs(categories) do
+			arista.logs.log(arista.logs.E.DEBUG, "mixtape fire for cat " , k, ".")
+
 			if k == "none" then
 				-- Loop through the items.
 				for k2, v2 in pairs(v) do
 					self.currentItem = v2
+					arista.logs.log(arista.logs.E.DEBUG, "mixtape track for item " , k2, " (none).")
 
 					local item = vgui.Create("arista_inventoryItem", self)
 					self.itemsList:AddItem(item)
 				end
 			else
-				local c = GM:GetCategory(k)
+				local c = GAMEMODE:GetCategory(k)
 
 				if not c.noShow then -- If the category doesn't want to show up (like it's plugin is missing) then don't show it.
+					arista.logs.log(arista.logs.E.DEBUG, "mixtape track for item " , k2, " (", c, ").")
+
 					local header = vgui.Create("DCollapsibleCategory", self)
 						header:SetSize(arista.derma.menu.width, 50) -- Keep the second number at 50
 						header:SetLabel(c.name)
@@ -125,7 +132,7 @@ function PANEL:Init()
 	-- Create a label for the name.
 	self.name = vgui.Create("DLabel", self)
 		local word = (amount > 1) and item.plural or item.name
-		self.name:SetText(amount.." "..word.." (Size: "..item.Size..")")
+		self.name:SetText(amount .. " " .. word .. " (Size: " .. item.size .. ")")
 		self.name:SizeToContents()
 		self.name:SetTextColor(color_black)
 
@@ -137,7 +144,7 @@ function PANEL:Init()
 
 	-- Create the spawn icon.
 	self.spawnIcon = vgui.Create("SpawnIcon", self)
-		self.spawnIcon:SetModel(item.Model, item.Skin)
+		self.spawnIcon:SetModel(item.model, item.skin)
 		self.spawnIcon:SetToolTip()
 		self.spawnIcon.DoClick = function() return end
 		self.spawnIcon.OnMousePressed = function() return end

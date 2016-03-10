@@ -155,9 +155,9 @@ function GM:PlayerSay(ply, text, public)
 		return ""
 	else
 		if gamemode.Call("PlayerCanSayIC", ply, text) then
-			if ply:Arrested() then
+			if ply:isArrested() then
 				arista.chatbox.addInRadius(ply, "arrested", text, ply:GetPos())
-			elseif ply:Tied() then
+			elseif ply:isTied() then
 				arista.chatbox.addInRadius(ply, "tied", text, ply:GetPos())
 			else
 				arista.chatbox.addInRadius(ply, "ic", text, ply:GetPos())

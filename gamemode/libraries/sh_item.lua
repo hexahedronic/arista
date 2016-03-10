@@ -179,7 +179,7 @@ if SERVER then
 
 		gamemode.Call("LoadItems")
 	end)
-elseif GetConVarNumber("developer") > 0 then -- Don't want the peons to get this command.
+elseif GetConVar("developer"):GetInt() > 0 then -- Don't want the peons to get this command.
 	concommand.Add("arista_reload_items_cl", function()
 		gamemode.Call("LoadItems")
 	end)

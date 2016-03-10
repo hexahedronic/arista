@@ -56,9 +56,6 @@ function PANEL:Init()
 					if not canMake then
 						arista.logs.log(arista.logs.E.DEBUG, "ERROR FETCHING JOB CANMAKE!")
 						canMake = {}
-					else
-						PrintTable(canMake)
-						print(k)
 					end
 					self.headers[k]:SetExpanded(table.HasValue(canMake, k)) -- Expanded when popped up
 					self.headers[k]:SetLabel(c.name)

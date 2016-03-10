@@ -10,6 +10,10 @@ function arista.file.findInLua(path)
 	return file.Find(arista.gamemode.gmFolder .. path, "LUA")
 end
 
+function arista.file.exists(path)
+	return file.Exists(arista.gamemode.gmFolder .. path, "LUA")
+end
+
 function arista.file.valid(name)
 	return name[1] ~= "." and not name:find("~", 1, true)
 end

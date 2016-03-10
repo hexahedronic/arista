@@ -129,8 +129,6 @@ do
 		end
 
 		if not (target and name) then
-			PrintTable(arguments)
-			print(kind, id, ply, entity)
 			return false, "Invalid target!"
 		end
 

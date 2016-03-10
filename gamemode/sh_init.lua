@@ -64,6 +64,30 @@ GM.GMFolder = arista.gamemode.gmFolder
 include("libraries/logs.lua")
 include("libraries/file.lua")
 
+if not hook.__oldCall then
+	hook.__oldCall = hook.Call
+end
+
+function hook.Call(name, gm, ...)
+	if arista.plugin and arista.plugin.stored then
+		for _, plugin in pairs(arista.plugin.stored) do
+			local pluginHook = plugin[name]
+
+			if isfunction(pluginHook) then
+				local success, a, b, c, e, f, g, h = pcall(pluginHook, plugin, ...)
+
+				if not success then
+					arista.logs.log(arista.logs.E.ERROR, plugin.name, " Plugin: Hook ", name, " failed: ", a, ".")
+				elseif a ~= nil then
+					return a, b, c, d, e, f, g, h
+				end
+			end
+		end
+	end
+
+	return hook.__oldCall(name, gm, ...)
+end
+
 -- This makes more sense tbh
 function gamemode.Call(name, ...)
 	local gm = gmod.GetGamemode() or GM or GAMEMODE or {}
@@ -75,7 +99,6 @@ function gamemode.Call(name, ...)
 	return hook.Call(name, gm, ...)
 end
 
---includecs("sh_enumerations.lua")
 include("sh_config.lua")
 
 -- Check if we're running on the server.
@@ -91,6 +114,9 @@ if not arista._internaldata.entities then arista._internaldata.entities = {} end
 
 -- This needs to be here, since it may not get defined, but gets called regardless.
 function GM:LibrariesLoaded()
+end
+
+function GM:LoadPlugins()
 end
 
 -- Called when a bullet tries to ricochet
@@ -114,11 +140,10 @@ arista.file.loadDir("hooks/", "Hook Library", "Hook Libraries")
 -- Libs have been loaded
 gamemode.Call("LibrariesLoaded")
 
---GM:LoadPlugins()
+GM:LoadPlugins()
 GM:LoadItems()
 
 --This stuff needs to be after plugins but before everything else
---includecs("sh_events.lua")
 include("sh_jobs.lua")
 
 -- Called when a player attempts to punt an entity with the gravity gun.

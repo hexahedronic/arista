@@ -17,14 +17,14 @@ function arista.chatbox.add(receivers, player, filter, text)
 end
 
 -- Add a new line to players within the radius of a position.
-function arista.chatbox.addInRadius(player, filter, text, position, radius, ignore)
+function arista.chatbox.addInRadius(ply, filter, text, position, radius, ignore)
 	local radius = radius or arista.config.vars.talkRadius
 	local doit, receivers = false, {}
 
 	for k, v in ipairs(player.GetAll()) do
 		if not ignore or not ignore[v] then
 			-- Radius unknown, can't use DistToSqr
-			if v:GetPos():Dist(position) <= radius then
+			if v:GetPos():Distance(position) <= radius then
 				receivers[#receivers+1] = v
 
 				doit = true
@@ -33,6 +33,6 @@ function arista.chatbox.addInRadius(player, filter, text, position, radius, igno
 	end
 
 	if doit then
-		arista.chatbox.add(receivers, player, filter, text)
+		arista.chatbox.add(receivers, ply, filter, text)
 	end
 end

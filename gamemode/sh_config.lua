@@ -120,6 +120,8 @@ arista.config.vars = {
 	specficItemDelay = 6,
 	-- How many seconds to wait before allowing OOC chat again.
 	oocCoolDown = 2,
+	-- How many seconds to wait before allowing an advert again.
+	advertCoolDown = 5,
 }
 
 arista.config.costs = {
@@ -127,6 +129,8 @@ arista.config.costs = {
 	door = 100,
 	-- How much do props cost to buy (for builders).
 	prop = 100,
+	-- How much does an advert cost.
+	advert = 250,
 }
 
 function arista.config:getDefault(var)

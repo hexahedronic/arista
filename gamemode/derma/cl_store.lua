@@ -122,11 +122,10 @@ function PANEL:Init()
 
 	-- Check if it is not a single batch.
 	if item.batch > 1 then
-		self.label:SetText(item.batch .. " " .. item.plural.." ($" .. cost .. ")")
+		self.label:SetText(item.batch .. " " .. item.plural.." (" .. arista.lang.currency .. cost .. ")")
 	else
-		self.label:SetText(item.batch .. " " .. item.name .. " ($" .. cost .. ")")
+		self.label:SetText(item.batch .. " " .. item.name .. " (" .. arista.lang.currency .. cost .. ")")
 	end
-	-- todo: language
 
 	-- The description of the item.
 	self.description = vgui.Create("DLabel", self)
@@ -141,7 +140,7 @@ function PANEL:Init()
 	self.spawnIcon = vgui.Create("SpawnIcon", self)
 
 	-- Set the text of the button.
-	self.button:SetText("Manufacture")
+	self.button:SetText(arista.lang:Get"AL_DERMA_MANUFACTURE")
 	self.button:SetSize(80, 22)
 	self.button.DoClick = function()
 		RunConsoleCommand("arista", "manufacture", self.item)

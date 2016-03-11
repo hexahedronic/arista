@@ -251,7 +251,6 @@ function GM:CanTool(ply, trace, tool)
 			local owner = arista.entity.getOwner(ent)
 
 			if tool == "remover" and ent._removeable and arista.entity.isDoor(ent) and arista.entity.isOwned(ent) and type(owner) == "Player" and not ply:KeyDown(IN_RELOAD) then
-				-- todo: language
 				owner:takeDoor(ent)
 			end
 		end

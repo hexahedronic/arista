@@ -134,8 +134,7 @@ function GM:PlayerCanArrest(ply, target)
 	end
 
 	arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.ARREST, ply, " tried (and failed) to arrest ", target, ".")
-	ply:notify("%s does not have an arrest warrant!", target:Name())
-	-- todo: come back here when language system ready.
+	ply:notify("AL_PLAYER_NO_WARRANT", target:Name())
 	-- Return false because the target does not have a warrant.
 
 	return false
@@ -173,7 +172,7 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 
 	if res then
 		arista.entity.makeOwnable(ent)
-		--arista.entity.setOwnerPlayer(ent,ply)
+		arista.entity.setOwnerPlayer(ent, ply)
 	end
 
 	return self.BaseClass:PlayerSpawnedProp(ply, model, ent)
@@ -205,8 +204,7 @@ function GM:PlayerSpawnProp(ply, model)
 	if false then--for k, v in pairs(self.Config["Banned Props"]) do
 		if v:lower() == model:lower() then
 			arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a (banned) prop (", model, ").")
-			ply:notify("You cannot spawn banned props!")
-			-- todo: more language stuff
+			ply:notify("AL_YOU_PROP_BANNED")
 
 			-- Return false because we cannot spawn it.
 			return false
@@ -216,14 +214,12 @@ function GM:PlayerSpawnProp(ply, model)
 	-- Check if model is some junk that shouldn't spawn.
 	if not arista.utils.validModel(model) then
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a (invalid) prop (", model, ").")
-		ply:notify("That's not a valid model!")
-		-- todo: more language stuff
+		ply:notify("AL_INVALID_MODEL")
 
 		return false
 	elseif false then--ply:GetCount("props") > self.Config["Prop Limit"] then -- getcount likes to die, maybe replace?
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a prop (", model, ") (over limit).")
-		ply:notify("You hit the prop limit!")
-		-- todo: more language stuff
+		ply:notify("AL_YOU_PROP_LIMIT")
 
 		return false
 	end
@@ -235,8 +231,6 @@ function GM:PlayerSpawnProp(ply, model)
 
 	if ent:GetModel() == "models/error.mdl" then
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a prop (", model, ") (error?).")
-		ply:notify("That's an error, god save us all.")
-		-- todo: more language stuff
 
 		return false
 	end
@@ -250,8 +244,7 @@ function GM:PlayerSpawnProp(ply, model)
 	if (radius > 100 and not ply:HasAccess("e")) --Only donators go above 100
 	or (radius > 200 and not ply:HasAccess("m")) --Only mods go above 200
 	or (radius > 300 and not ply:HasAccess("a")) then --Only admins go above 300.
-		ply:notify("That prop is too big!")
-		-- todo: language
+		ply:notify("AL_YOU_PROP_TOOBIG")
 
 		return false
 	end
@@ -262,7 +255,7 @@ function GM:PlayerSpawnProp(ply, model)
 
 	if nextSpawn and nextSpawn > CurTime() then
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a prop (", model, ") (too fast).")
-		ply:notify("You cannot spawn another prop for %d second(s)!", math.ceil(nextSpawn - CurTime()))
+		ply:notify("AL_YOU_PROP_TOOFAST", math.ceil(nextSpawn - CurTime()))
 
 		-- Return false because we cannot spawn it.
 		return false
@@ -272,7 +265,6 @@ function GM:PlayerSpawnProp(ply, model)
 				ply:giveMoney(-propCosts)
 			else
 				ply:LimitHit("props")
-				-- todo: language
 
 				return false
 			end
@@ -280,8 +272,7 @@ function GM:PlayerSpawnProp(ply, model)
 			local amount = propCosts - ply:GetMoney()
 
 			-- Print a message to the player telling them how much they need.
-			ply:notify("You need another $" .. amount .. "!")
-			-- todo: language
+			ply:notify("AL_NEED_ANOTHER_MONEY", amount)
 
 			return false
 		end
@@ -326,8 +317,7 @@ end
 
 function GM:PlayerCanDoSomething(ply, ignorealive, spawning)
 	if not (ply:Alive() or ignorealive) or ply:interactionDisallowed() then
-			ply:notify("You cannot do that in this state!")
-			-- todo: language
+			ply:notify("AL_CANNOT_INVALID")
 
 			-- Return false because we cannot do it
 			return false
@@ -354,14 +344,12 @@ function GM:PlayerSpawnVehicle(ply, model, name, vtable)
 	-- todo: check for vehicles module / store module
 	if not arista.utils.isModelChair(model) then
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a ", name, " (", model, ") (Non-chair).")
-		ply:notify("You must buy your car from the store!")
-		-- todo: language
+		ply:notify("AL_CANNOT_SPAWN_CAR")
 
 		return false
 	end
 
-	-- todo: hasaccess here
-	--if ( !ply:HasAccess("e") ) then return false end
+	if not ply:hasAccess("e") then return false end
 
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned a ", name, "(", model, ").")
 
@@ -436,16 +424,14 @@ function GM:PlayerInitialized(ply)
 			local seconds = string.format("%02.f", math.floor(expire - hours * 3600 - minutes * 60))
 
 			-- Give them their access.
-			--ply:giveAccess("tpew")
-			-- todo: access.
+			ply:giveAccess("tpew")
 
 			-- Check if we still have at least 1 day.
 			if days > 0 then
-				ply:notify("Your Donator status expires in %d day(s).", days)
+				ply:notify("AL_YOU_DONATOR_EXPIRE_DAYS", days)
 			else
-				ply:notify("Your Donator status expires in %d hour(s) %d minute(s) and %d second(s).", hours, minutes, seconds)
+				ply:notify("AL_YOU_DONATOR_EXPIRE_HOURS", hours, minutes, seconds)
 			end
-			-- todo: language
 
 			-- Set some Donator only player variables.
 			ply:setAristaVar("knockOutTime", arista.config:getDefault("knockOutTime") / 2)
@@ -454,12 +440,11 @@ function GM:PlayerInitialized(ply)
 			ply:setAristaVar("donator", 0)
 
 			-- Take away their access and save their data.
-			--ply:takeAccess("tpew")
+			ply:takeAccess("tpew")
 			ply:saveData()
 
 			-- Notify the player about how their Donator status has expired.
-			ply:notify("Your Donator status has expired!")
-			-- todo: language.
+			ply:notify("AL_YOU_DONATOR_REMOVE")
 		end
 	end
 
@@ -471,7 +456,6 @@ function GM:PlayerInitialized(ply)
 
 	-- Restore access to any entity the player owned that is currently unowned
 	arista.entity.restoreAccess(ply)
-	-- todo: restore access for rejoins
 
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") finished connecting.")
 end
@@ -815,11 +799,11 @@ function GM:DoPlayerDeath(ply, attacker, damageInfo)
 		local class = v:GetClass()
 
 		-- Check if this is a valid item.
-		--[[if (self.Items[class]) then
-			if ( hook.Call("PlayerCanDrop",GAMEMODE, ply, class, true, attacker) ) then
-				self.Items[class]:Make(ply:GetPos(), 1);
+		if arista.item.items[class] then
+			if gamemode.Call("PlayerCanDrop", ply, class, true, attacker) ~= false then
+				arista.item.items[class]:make(ply:GetPos(), 1)
 			end
-		end]]
+		end
 	end
 
 	local storedWeapons = ply:getAristaVar("storedWeapons")
@@ -828,11 +812,11 @@ function GM:DoPlayerDeath(ply, attacker, damageInfo)
 			local class = v
 
 			-- Check if this is a valid item.
-			--[[if (self.Items[class]) then
-				if ( hook.Call("PlayerCanDrop",GAMEMODE, ply, class, true, attacker) ) then
-					self.Items[class]:Make(ply:GetPos(), 1);
+			if arista.item.items[class] then
+				if gamemode.Call("PlayerCanDrop", ply, class, true, attacker) ~= false then
+					arista.item.items[class]:make(ply:GetPos(), 1)
 				end
-			end]]
+			end
 		end
 
 		ply:setAristaVar("storedWeapons", {})
@@ -1042,47 +1026,6 @@ function GM:EntityTakeDamage(entity, damageinfo)
 			-- Make the player bleed.
 			entity:bleed(arista.config.vars.bleedTime)
 		end
-	--[[elseif ( entity:IsNPC() ) then
-		if (attacker:IsPlayer() and ValidEntity( attacker:GetActiveWeapon() )
-		and attacker:GetActiveWeapon():GetClass() == "weapon_crowbar") then
-			damageinfo:SetDamage(25)
-		end
-		local smiter = attacker:GetClass()
-		local damage = damageinfo:GetDamage()
-		local smitee = entity:GetClass()
-		local weapon = "."
-		local text = "%s damaged a %s for %G damage%s"
-		if attacker:IsPlayer() then
-			smiter = attacker:GetName()
-			if ValidEntity( attacker:GetActiveWeapon() ) then
-				weapon = " with a "..attacker:GetActiveWeapon():GetClass()
-			end
-		end
-		GM:Log(EVENT_DAMAGE,text,smiter,smitee,damage,weapon)
-	elseif cider.container.isContainer(entity) and entity:Health() > 0 then
-		-- Fookin Boogs.		v
-		damageinfo:SetDamageForce(vector0)
-		local smiter = attacker:GetClass()
-		local damage = damageinfo:GetDamage()
-		local smitee = cider.container.getName(entity)
-		local weapon = "."
-		local text = "%s damaged a %s for %G damage%s"
-		if attacker:IsPlayer() then
-			smiter = attacker:GetName()
-			if ValidEntity( attacker:GetActiveWeapon() ) then
-				weapon = " with a "..attacker:GetActiveWeapon():GetClass()
-			end
-		end
-		print(entity:Health(),damageinfo:GetDamage())
-		entity:SetHealth(entity:Health()-damageinfo:GetDamage())
-		print(entity:Health())
-		if entity:Health() <= 0 then
-			text = "%s destroyed a %s with %G damage%s"
-			entity:SetHealth(0)
-			entity:TakeDamage(1)
-		end
-		GM:Log(EVENT_DAMAGE,text,smiter,smitee,damage,weapon)]]
-		-- todo: readd these damage checks
 
 	-- Check if the entity is a knocked out player.
 	elseif entity:isPlayerRagdoll() and not entity:isCorpse() then
@@ -1094,9 +1037,6 @@ function GM:EntityTakeDamage(entity, damageinfo)
 
 			return false
 		end
-
-		-- Set the damage to the amount we're given.
-		--damageinfo:SetDamage(amount)
 
 		-- Check if the attacker is not a player.
 		if not attacker:IsPlayer() then
@@ -1179,13 +1119,12 @@ end
 
 -- Called when a player's weapons should be given.
 function GM:PlayerLoadout(ply)
-	--[[if ply:hasAccess("t") then]] ply:Give("gmod_tool") --end
-	--[[if ply:hasAccess("p") then]] ply:Give("weapon_physgun") --end
-	-- todo: hasaccess
+	if ply:hasAccess("tm", true) then ply:Give("gmod_tool") end
+	if ply:hasAccess("pm", true) then ply:Give("weapon_physgun") end
 
 	-- Give the player the camera, the hands and the physics cannon.
 	ply:Give("gmod_camera")
-	--ply:Give("cider_hands")
+	ply:Give("hands")
 
 	ply:setAristaVar("spawnWeapons", {})
 	ply:setAristaVar("gunCounts", {})
@@ -1230,8 +1169,7 @@ function GM:PlayerLoadout(ply)
 	end
 
 	-- Select the hands by default.
-	--ply:SelectWeapon("cider_hands")
-	-- todo: hands
+	ply:SelectWeapon("hands")
 end
 
 -- Called when the server shuts down or the map changes.
@@ -1263,8 +1201,7 @@ function GM:PlayerUse(ply, ent)
 		local nextNotify = ply:getAristaVar("nextNotify")
 
 		if not nextNotify or CurTime() > nextNotify then
-			ply:notify("You cannot use that while in this state!")
-			-- todo: language
+			ply:notify("AL_CANNOT_INVALID")
 
 			ply:setAristaVar("nextNotify", CurTime() + 1)
 		end
@@ -1295,20 +1232,19 @@ function GM:PlayerCanJoinTeam(ply, teamid)
 	-- Run a series of checks
 	if (nextChange[teamid] or 0) > CurTime() then
 		local time = string.ToMinutesSeconds(nextChange[teamid] - CurTime())
-		ply:notify("You must wait %s before you can become a %s!", time, teamdata.name)
-		-- todo: language
+		ply:notify("AL_YOU_WAIT_TEAM", time, teamdata.name)
 
 		return false
 	elseif ply:isWarranted() ~= "" then
-		ply:notify("You cannot change teams while warranted!")
+		ply:notify("AL_CANNOT_TEAM_WARRANTED")
 
 		return false
 	elseif ply:isArrested() then
-		ply:notify("You cannot change teams while arrested!")
+		ply:notify("AL_CANNOT_TEAM_ARRESTED")
 
 		return false
 	elseif ply:isTied() then
-		ply:notify("You cannot change teams while tied up!")
+		ply:notify("AL_CANNOT_TEAM_TIED")
 
 		return false
 	elseif gamemode.Call("PlayerCanDoSomething", ply, true) == false then
@@ -1387,6 +1323,7 @@ function GM:KeyPress(ply, key)
 				}
 			}
 			datastream.StreamToClients( ply, "cider_Container", tab );]]
+			-- todo: container
 		end
 	end
 end
@@ -1420,8 +1357,7 @@ function GM:ShowTeam(ply)
 	end
 
 	if not gamemode.Call("PlayerCanViewEnt", ply, door) then
-		ply:notify("You do not have access to that!")
-		-- todo: language
+		ply:notify("AL_CANNOT_NOACCESS")
 
 		return
 	end

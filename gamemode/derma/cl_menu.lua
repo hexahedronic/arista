@@ -23,7 +23,7 @@ local PANEL = {}
 
 -- Called when the panel is initialized.
 function PANEL:Init()
-	self:SetTitle("Main Menu")
+	self:SetTitle(arista.lang:Get"AL_DERMA_MAINMENU")
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(false)
 	self:ShowCloseButton(false)
@@ -31,7 +31,7 @@ function PANEL:Init()
 
 	-- Create the close button.
 	self.close = vgui.Create("DButton", self)
-	self.close:SetText("Close")
+	self.close:SetText(arista.lang:Get"AL_DERMA_CLOSE")
 	self.close.DoClick = function(self)
 		arista.derma.menu.toggle()
 	end
@@ -40,9 +40,9 @@ function PANEL:Init()
 	self.tabs = vgui.Create("DPropertySheet", self)
 
 	-- Add the sheets for the other menus to the property sheet.
-	self.tabs:AddSheet("Character",	vgui.Create("arista_character", self.tabs),	"icon16/user.png")
-	self.tabs:AddSheet("Inventory",	vgui.Create("arista_inventory", self.tabs),	"icon16/application_view_tile.png")
-	self.tabs:AddSheet("Store",			vgui.Create("arista_store", self.tabs),			"icon16/box.png")
+	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_CHARACTER",	vgui.Create("arista_character", self.tabs),	"icon16/user.png")
+	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_INVENTORY",	vgui.Create("arista_inventory", self.tabs),	"icon16/application_view_tile.png")
+	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_STORE",			vgui.Create("arista_store", self.tabs),			"icon16/box.png")
 	--[[self.tabs:AddSheet("Help", vgui.Create("cider_Help", self.tabs), "icon16/page.png")
 	self.tabs:AddSheet("Laws", vgui.Create("cider_Laws",self.tabs),"icon16/world.png")
 	self.tabs:AddSheet("Rules", vgui.Create("cider_Rules", self.tabs), "icon16/exclamation.png")

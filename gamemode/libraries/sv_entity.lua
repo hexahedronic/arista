@@ -918,13 +918,15 @@ function arista.entity.getPossessiveName(entity)
 		if type(owner) == "Player" and IsValid(owner) then
 			name = owner:Name()
 		elseif type(owner) == "number" then
-			name = "The "..team.GetName(owner)
+			name = "The " .. team.GetName(owner)
+
 			if not name:sub(-1,-1) == "r" then
 				name = name.."s"
 			end
 		elseif type(owner) == "string" then
 			local aspl = string.Explode(";", owner)
 			local group, gang = tonumber(aspl[1]), tonumber(aspl[2])
+
 			if group and gang then
 				name = arista.team.gangs[group][gang].name
 			end
@@ -942,7 +944,6 @@ function arista.entity.getPossessiveName(entity)
 
 	return name
 end
--- todo: AAAAAAAAAAAAA
 
 function arista.entity.getDoorName(door)
 	local doorname = door:getAristaVar("name") or ""

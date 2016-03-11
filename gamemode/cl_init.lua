@@ -78,17 +78,15 @@ net.Receive("arista_notify", function()
 
 	local args = {}
 	for i = 1, amt do
-		args[i] = net.ReadString(v)
+		args[i] = arista.lang:Get(net.ReadString(v))
 	end
 
-	form = arista.lang:Get(form)
+	form = arista.lang:Get(form, unpack(args))
 
-	local msg = form:format(unpack(args))
-
-	notification.AddLegacy(msg, NOTIFY_GENERIC, 4)
+	notification.AddLegacy(form, NOTIFY_GENERIC, 4)
 	surface.PlaySound("ambient/water/drip" .. math.random(1, 4) .. ".wav")
 
-	MsgN(msg)
+	MsgN(form)
 end)
 
 net.Receive("arista_moneyAlert", function()
@@ -151,8 +149,11 @@ net.Receive("arista_modelChoices", function()
 end)
 
 function GM:OnAchievementAchieved(ply, achid)
-	--cider.chatBox.chatText(ply:EntIndex(), ply:Name(), achievements.GetName(achid), "achievement")
+	arista.chatBox.chatText(ply:EntIndex(), ply:Name(), achievements.GetName(achid), "achievement")
 end
+
+-- Stop spam related to missing gm hook.
+function GM:ChatboxMessageHandle() end
 
 -- Override the weapon pickup function.
 function GM:HUDWeaponPickedUp(...) end
@@ -397,6 +398,8 @@ function GM:HUDDrawScoreBoard()
 		-- Draw a rounded box for the loading text to go on.
 		draw.RoundedBox(2, (w / 2) - (width / 2) - 8, (h / 2) - 8, width + 16, 30, color_darkgray)
 
+		-- Don't bother localising this, they haven't got to the language menu yet lmao.
+
 		-- Draw the loading text in the middle of the screen.
 		draw.DrawText("Loading!", "ChatFont", w / 2, h / 2, color_white, 1, 1)
 
@@ -447,13 +450,12 @@ function GM:DrawPlayerInformation()
 	local information = {}
 
 	-- Insert the player's information into the text table.
-	text[#text+1] = {"Gender: " .. ply:getGender(), "icon16/user"}
-	text[#text+1] = {"Salary: $"..ply:getSalary(), "icon16/folder_go"}
-	text[#text+1] = {"Money: $"..ply:getMoney(), "icon16/star"}
-	text[#text+1] = {"Details: "..ply:getDetails(), "icon16/status_offline"}
-	text[#text+1] = {"Clan: "..ply:getClan(), "icon16/group"}
-	text[#text+1] = {"Job: "..ply:getJob(), "icon16/wrench"}
-	-- todo: language
+	text[#text+1] = {arista.lang:Get"AL_HUD_GENDER" .. ply:getGender(), "icon16/user"}
+	text[#text+1] = {arista.lang:Get"AL_HUD_SALARY" .. ply:getSalary(), "icon16/folder_go"}
+	text[#text+1] = {arista.lang:Get"AL_HUD_MONEY" .. ply:getMoney(), "icon16/star"}
+	text[#text+1] = {arista.lang:Get"AL_HUD_DETAILS" .. ply:getDetails(), "icon16/status_offline"}
+	text[#text+1] = {arista.lang:Get"AL_HUD_CLAN" .. ply:getClan(), "icon16/group"}
+	text[#text+1] = {arista.lang:Get"AL_HUD_JOB" .. ply:getJob(), "icon16/wrench"}
 
 	-- Loop through each of the text and adjust the width.
 	for k, v in ipairs(text) do
@@ -520,7 +522,7 @@ function GM:DrawHealthBar(bar)
 	local health = math.Clamp(arista.lp:Health(), 0, 100)
 
 	-- Draw the health and ammo bars.
-	self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_red_alpha, "Health: " .. health, 100, health, bar)
+	self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_red_alpha, arista.lang:Get"AL_HUD_HEALTH" .. health, 100, health, bar)
 end
 
 -- Draw the timer bar.
@@ -532,7 +534,7 @@ function GM:DrawTimerBar(bar)
 	local percent = math.Clamp((expire / jobTimeLimit) * 100, 0, 100)
 	local time = string.ToMinutesSeconds(math.floor(expire))
 
-	self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_orange_alpha, "Time Left: " .. time, 100, percent, bar)
+	self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_orange_alpha, arista.lang:Get"AL_HUD_TIMELEFT" .. time, 100, percent, bar)
 end
 
 -- Draw the ammo bar.
@@ -559,7 +561,7 @@ function GM:DrawAmmoBar(bar)
 
 	-- Check if the maximum clip if above 0.
 	if clipMaximum > 0 then
-		self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_lightblue_alpha, "Ammo: " .. clipOne .. " [" .. clipAmount .. "]", clipMaximum, clipOne, bar)
+		self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_lightblue_alpha, arista.lang:Get"AL_HUD_AMMO" .. clipOne .. " [" .. clipAmount .. "]", clipMaximum, clipOne, bar)
 	end
 end
 
@@ -573,29 +575,31 @@ function GM:DrawTopText(text)
 		local warrantExpireTime = arista.lp:getAristaInt("warrantExpireTime") or 0
 
 		-- Text which is extended to the notice.
-		local extension = "."
+		local extension = 0
+		local extensionType
 
 		-- Check if the warrant expire time exists.
 		if warrantExpireTime and warrantExpireTime > 0 then
 			local seconds = math.floor(warrantExpireTime - CurTime())
 
 			if seconds > 60 then
-				extension = " which expires in " .. math.ceil(seconds / 60) .. " minute(s)."
+				extension = math.ceil(seconds / 60)
+				extensionType = arista.lang:Get("AL_MINS")
 			else
-				extension = " which expires in "..seconds.." second(s)."
+				extension = seconds
+				extensionType = arista.lang:Get("AL_SECONDS")
 			end
 		end
 
 		-- Check the class of the warrant.
 		if arista.lp:isWarranted() == "search" then
-			text.y = self:DrawInformation("You have a search warrant" .. extension, "ChatFont", text.x, text.y, color_brightgreen, 255, true, function(x, y, width, height)
+			text.y = self:DrawInformation(arista.lang:Get("AL_YOU_SEARCH_WARRANT", extension, extensionType), "ChatFont", text.x, text.y, color_brightgreen, 255, true, function(x, y, width, height)
 				return x - width - 8, y
 			end)
 		elseif arista.lp:isWarranted() == "arrest" then
-			text.y = self:DrawInformation("You have an arrest warrant" .. extension, "ChatFont", text.x, text.y, color_brightgreen, 255, true, function(x, y, width, height)
+			text.y = self:DrawInformation(arista.lang:Get("AL_YOU_ARREST_WARRANT", extension, extensionType), "ChatFont", text.x, text.y, color_brightgreen, 255, true, function(x, y, width, height)
 				return x - width - 8, y
 			end)
-			-- todo: language
 		end
 	end
 
@@ -611,35 +615,35 @@ function GM:DrawTopText(text)
 			-- Check if the amount of seconds is greater than 0.
 			if seconds > 0 then
 				if seconds > 60 then
-					text.y = self:DrawInformation("You will be unarrested in " .. mins .. " minute(s).", "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
+					text.y = self:DrawInformation(arista.lang:Get("AL_YOU_UNARRESTED_IN", mins, arista.lang:Get("AL_MINS")), "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
 						return x - width - 8, y
 					end)
 				else
-					text.y = self:DrawInformation("You will be unarrested in " .. seconds .. " second(s).", "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
+					text.y = self:DrawInformation(arista.lang:Get("AL_YOU_UNARRESTED_IN", mins, arista.lang:Get("AL_SECONDS")), "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
 						return x - width - 8, y
 					end)
 				end
 			else
-				text.y = self:DrawInformation("You are arrested.", "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
+				text.y = self:DrawInformation(arista.lang:Get("AL_YOU_ARRESTED"), "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
 					return x - width - 8, y
 				end)
 			end
 		else
-			text.y = self:DrawInformation("You are arrested.", "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
+			text.y = self:DrawInformation(arista.lang:Get("AL_YOU_ARRESTED"), "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
 				return x - width - 8, y
 			end)
 		end
 	end
 
 	if arista.lp:isTied() then
-		text.y = self:DrawInformation("You have been tied up!", "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
+		text.y = self:DrawInformation(arista.lang:Get("AL_YOU_TIED"), "ChatFont", text.x, text.y, color_lightblue, 255, true, function(x, y, width, height)
 			return x - width - 8, y
 		end)
 	end
 
 	-- Check if the player is wearing kevlar.
 	if arista.lp:getAristaFloat("scaleDamage") == 0.5 then
-		text.y = self:DrawInformation("You are wearing kevlar which reduces damage by 50%.", "ChatFont", text.x, text.y, color_pink, 255, true, function(x, y, width, height)
+		text.y = self:DrawInformation(arista.lang:Get("AL_YOU_KEVLAR"), "ChatFont", text.x, text.y, color_pink, 255, true, function(x, y, width, height)
 			return x - width - 8, y
 		end)
 	end
@@ -699,15 +703,11 @@ function GM:HUDPaint()
 	gamemode.Call("DrawBottomBars", bar)
 	gamemode.Call("DrawTopText", text)
 
-	-- Set the position of the chat box.
-	--cider.chatBox.position = {x = 8, y = math.min(bar.y + 20, ScrH() - height - 8) - 40};
-	-- todo: chat
-
 	-- Check if the next spawn time is greater than the current time.
 	local x, y = self:GetScreenCenterBounce()
 	y = y + 16
 
-	local jump = input.LookupBinding("+jump")
+	local jump = input.LookupBinding("+jump"):upper()
 
 	-- Get the player's next spawn time.
 	local nextSpawnTime = arista.lp:getAristaInt("nextSpawnTime") or 0
@@ -720,7 +720,7 @@ function GM:HUDPaint()
 
 		-- Check if the amount of seconds is greater than 0.
 		if seconds > 0 then
-			self:DrawInformation("You must wait " .. seconds .. " second(s) to spawn.", "ChatFont", x, y, color_white, 255)
+			self:DrawInformation(arista.lang:Get("AL_YOU_WAIT_SPAWN", seconds), "ChatFont", x, y, color_white, 255)
 		end
 	elseif arista.lp:isUnconscious() and arista.lp:Alive() then
 		local knockOutPeriod = arista.lp:getAristaInt("knockOutPeriod") or 0
@@ -730,11 +730,11 @@ function GM:HUDPaint()
 		if knockOutPeriod > CurTime() then
 			local seconds = math.floor(knockOutPeriod - CurTime())
 
-			text = "You will be able to get up in " .. seconds .. " second(s)."
+			text = arista.lang:Get("AL_YOU_TIME_GETUP", seconds)
 		elseif arista.lp:isSleeping() then
-			text = "Press '" .. jump .. "' to wake up."
+			text = arista.lang:Get("AL_YOU_WAKEUP", jump)
 		else
-			text = "Press '" .. jump .. "' to get up."
+			text = arista.lang:Get("AL_YOU_GETUP", jump)
 		end
 
 		self:DrawInformation(text, "ChatFont", x, y, color_white, 255)
@@ -742,25 +742,16 @@ function GM:HUDPaint()
 		local seconds = math.floor(goToSleepTime - CurTime())
 
 		if seconds > 0 then
-			self:DrawInformation("You will fall asleep in " .. seconds .. " second(s).", "ChatFont", x, y,  color_white, 255)
+			self:DrawInformation(arista.lang:Get("AL_YOU_WAIT_SLEEP", seconds), "ChatFont", x, y,  color_white, 255)
 		end
 	elseif tying > CurTime() then
 		local seconds = math.floor(tying - CurTime())
 
 		if seconds > 0 then
-			self:DrawInformation("You will finish the knots in "..seconds.." second(s).", "ChatFont", x, y,  color_white, 255)
+			self:DrawInformation(arista.lang:Get("AL_YOU_FINISH_KNOTS", seconds), "ChatFont", x, y,  color_white, 255)
 		end
 	elseif beTied then
-		self:DrawInformation("You are being tied up!", "ChatFont", x, y, color_white, 255)
-	end
-
-	-- Get whether the player is stuck in the world.
-	local stuckInWorld --= arista.lp._StuckInWorld;
-	-- todo: stuck
-
-	-- Check whether the player is stuck in the world.
-	if stuckInWorld then
-		self:DrawInformation("You are stuck! Press '" .. jump .. "' to holster your weapons and respawn.", "ChatFont", ScrW() / 2, (ScrH() / 2) - 16, color_red, 255)
+		self:DrawInformation(arista.lang:Get("AL_YOU_FINISH_TIED"), "ChatFont", x, y, color_white, 255)
 	end
 
 	-- Loop through every player.
@@ -793,11 +784,11 @@ end
 -- Called when a player says something or a message is received from the server.
 function GM:ChatText(index, name, text, filter)
 	if filter == "none" or filter == "joinleave" or (filter == "chat" and name == "Console") then
-		--cider.chatBox.chatText(index, name, text, filter)
+		arista.chatbox.chatText(index, name, text, filter)
 	end
 
 	-- Return true because we handle this our own way.
-	--return true
+	return true
 end
 
 function GM:Initialize()

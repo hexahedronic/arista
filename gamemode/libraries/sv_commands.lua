@@ -2,7 +2,10 @@ arista.command = {}
 arista.command.stored = {}
 
 -- Add a new command.
-function arista.command.add(command, access, arguments, callback, category, help, tip, unpack)
+function arista.command.add(command, access, arguments, callback, category, unpack)
+	local help = "AL_COMMAND_" .. command:upper() .. "_HELP"
+	local tip = "AL_COMMAND_" .. command:upper()
+
 	arista.command.stored[command] = {access = access, arguments = arguments, callback = callback, unpack = tobool(unpack)}
 
 	-- Check to see if a category was specified.
@@ -37,12 +40,12 @@ function arista.command.consoleCommand(player, _, arguments)
 				if #arguments >= arista.command.stored[command].arguments then
 					if player:hasAccess(arista.command.stored[command].access) then
 						-- Some callbacks remove arguments from the table, and we don't want to lose them )
-						local success, fail, msg
+						local success, fail, msgFormat, arg1, arg2, arg3, arg4
 
 						if arista.command.stored[command].unpack then
-							success, fail, msg = pcall(arista.command.stored[command].callback, player, unpack(arguments))
+							success, fail, msgFormat, arg1, arg2, arg3, arg4 = pcall(arista.command.stored[command].callback, player, unpack(arguments))
 						else
-							success, fail, msg = pcall(arista.command.stored[command].callback, player, table.Copy(arguments))
+							success, fail, msgFormat, arg1, arg2, arg3, arg4 = pcall(arista.command.stored[command].callback, player, table.Copy(arguments))
 						end
 
 						local concat = table.concat(arguments, " "):Trim()
@@ -57,8 +60,8 @@ function arista.command.consoleCommand(player, _, arguments)
 
 								arista.logs.event(arista.logs.E.LOG, arista.logs.E.COMMAND, player:Name(), "(", player:SteamID(), ") used command ", command, ".")
 							else
-								if msg and msg ~= "" then
-									player:notify(msg)
+								if msgFormat and msgFormat ~= "" then
+									player:notify(msgFormat, arg1, arg2, arg3, arg4)
 								end
 							end
 						else
@@ -84,14 +87,6 @@ concommand.Add("arista", arista.command.consoleCommand)
 
 -- Called when a player says something.
 function GM:PlayerSay(ply, text, public)
-	-- todo: fix
-	--print(ply, text,text:sub(-7), public)
-	-- This is a terrible solution. OH WELL LOL
-	--if (text:sub(-7) == '" "0.00') then
-	--	text = text:sub(1,-8);
-		--print(text)
-	--end
-
 	local prefix = arista.config.vars.commandPrefix or "/"
 
 	-- Fix Valve's errors. DODO: srsly?
@@ -166,7 +161,5 @@ function GM:PlayerSay(ply, text, public)
 	end
 
 	-- Return an empty string so the text doesn't show.
-	--return ""
-	-- todo: chat
-	return text
+	return ""
 end

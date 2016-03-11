@@ -9,7 +9,7 @@
 [X] Clientside Inventory GUI <-
 [X] Clientside Shop GUI <-
 [ ] Missing Main Menu Compontents <-
-[ ] Chatbox <--
+[X] Chatbox <--
 
 - Plugins
 [ ] Plugin mangement/handling <--

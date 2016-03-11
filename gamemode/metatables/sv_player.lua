@@ -21,9 +21,6 @@ function player:saveData(create)
 end
 
 function player:notify(format, ...)
-	-- todo: code here, language system is gonna be
-	-- clientsided, so forward all arguments (tostring'ed) and format
-	-- and let client sort it out.
 	local args = {...}
 
 	net.Start("arista_notify")
@@ -181,8 +178,7 @@ do
 	local function jobTimer(ply)
 		if not IsValid(ply) then return end
 
-		ply:notify("You have reached the timelimit for this job!")
-		-- todo: language
+		ply:notify("AL_YOU_WAIT_TIMELIMIT")
 		ply:demote()
 	end
 
@@ -194,8 +190,7 @@ do
 		local tojoin = arista.team.get(tojoin)
 
 		if not tojoin then
-			return false, "That is not a valid team!"
-			-- todo: language screeeeee
+			return false, "AL_INVALID_TEAM"
 		elseif black and black > 0 then
 			self:blacklistAlert("team", tojoin.index, tojoin.name)
 
@@ -393,7 +388,6 @@ function player:knockOut(time, velocity)
 		if not IsValid(self) then timer.Destroy(tid) return end
 		doforce(ragdoll, (velocity or self:GetVelocity()) * 5)
 	end)
-	-- todo: nasty timer
 
 	-- Make it look even more like us.
 	ragdoll:SetSkin(self:GetSkin())
@@ -552,9 +546,8 @@ function player:returnWeapons()
 		self:SelectWeapon(wep)
 		self:setAristaVar("storedWeapon", nil)
 	else
-		--self:SelectWeapon("cider_hands")
+		self:SelectWeapon("hands")
 	end
-	-- todo: hands
 end
 
 ---
@@ -613,8 +606,7 @@ end
 local function arrestTimer(ply)
 	if not IsValid(ply) then return end
 	ply:unArrest(true)
-	ply:notify("Your arrest time has finished!")
-	-- todo: language
+	ply:notify("AL_YOU_UNARRESTED")
 
 	ply:Spawn()
 end
@@ -673,10 +665,10 @@ function player:hasAccess(flaglist, any)
 	local teamaccess = arista.team.query(self:Team(), "access", "")
 
 	for i = 1, flaglist:len() do
-		local flag = flaglist[1]
+		local flag = flaglist[i]
 		local flagfunc = arista.flagFunctions[flag] and arista.flagFunctions[flag](self) or false
 
-		if flag == arista.config:getDefault("access") or flagfunc or access:find(flag, 1, true) or teamaccess:find(flag, 1, true) then
+		if arista.config:getDefault("access"):find(flag, 1, true) or flagfunc or access:find(flag, 1, true) or teamaccess:find(flag, 1, true) then
 			if any then return true end -- If 'any' is selected, then return true whenever we get a match
 		elseif not any then -- If 'any' is not selected we don't get a match, return false.
 			return false

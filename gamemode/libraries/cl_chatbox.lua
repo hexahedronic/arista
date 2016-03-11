@@ -164,6 +164,9 @@ end
 
 -- Add a new message to the message queue.
 function arista.chatbox.messageAdd(title, name, text, filtered, icon)
+	local res = gamemode.Call("ChatboxMessageHandle", title, name, text, filtered, icon)
+	if res == true then return end
+
 	local tc, tt, nc, nm, xc, tx
 	if title then
 		tc = title[2] or color_white
@@ -182,7 +185,7 @@ function arista.chatbox.messageAdd(title, name, text, filtered, icon)
 
 	if not filtered then
 		local ic = (icon and chathud and "<texture=" .. icon[1] .. ">") or ""
-		chat.AddText(color_white, ic, tc, tt, nc, nm, xc, tx)
+		chat.AddText(tc, tt, color_white, ic, " ", nc, nm, xc, tx)
 	else
 		MsgN("FILTERED - ", icon and icon[2] .. " " or "", tt or "", nm  or "", tx  or "")
 	end

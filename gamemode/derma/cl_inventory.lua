@@ -150,17 +150,16 @@ function PANEL:Init()
 		self.spawnIcon.OnMousePressed = function() return end
 
 	-- Check to see if the item has an on use callback.
-	if item.onUse then table.insert(self.itemFunctions, "Use") end
-	if item.onDrop then table.insert(self.itemFunctions, "Drop") end
-	if item.onSell then table.insert(self.itemFunctions, "Sell") end
-	if item.onPickup then table.insert(self.itemFunctions, "Pick up") end
-	if item.onDestroy then table.insert(self.itemFunctions, "Destroy All") end
+	if item.onUse then table.insert(self.itemFunctions, arista.lang:Get"AL_DERMA_USE") end
+	if item.onDrop then table.insert(self.itemFunctions, arista.lang:Get"AL_DERMA_DROP") end
+	if item.onSell then table.insert(self.itemFunctions, arista.lang:Get"AL_DERMA_SELL") end
+	if item.onPickup then table.insert(self.itemFunctions, arista.lang:Get"AL_DERMA_PICKUP") end
+	if item.onDestroy then table.insert(self.itemFunctions, arista.lang:Get"AL_DERMA_DESTROYALL") end
 
 	-- Create the table to store the item buttons.
 	self.itemButton = {}
 
 	-- Loop through the item functions.
-	-- TODO: Make this not as inefficient
 	for i = 1, #self.itemFunctions do
 		local itemFunc = self.itemFunctions[i]
 
@@ -169,7 +168,7 @@ function PANEL:Init()
 			self.itemButton[i]:SetText(itemFunc)
 
 			-- Check what type of button it is.
-			if itemFunc == "Use" then
+			if itemFunc == arista.lang:Get"AL_DERMA_USE" then
 				self.itemButton[i].DoClick = function()
 					RunConsoleCommand("arista", "inventory", self.item, "use")
 
@@ -177,7 +176,7 @@ function PANEL:Init()
 						arista.derma.menu.toggle()
 					end
 				end
-			elseif itemFunc == "Drop" then
+			elseif itemFunc == arista.lang:Get"AL_DERMA_DROP" then
 				self.itemButton[i].DoClick = function()
 					if arista.inventory.stored[self.item] < 2 then
 						RunConsoleCommand("arista", "inventory", self.item, "drop", 1)
@@ -202,7 +201,7 @@ function PANEL:Init()
 						end
 					end)
 
-					menu:AddOption("All", function()
+					menu:AddOption(arista.lang:Get"AL_DERMA_ALL", function()
 						RunConsoleCommand("arista", "inventory", self.item, "drop", "all")
 
 						if closeOnDrop:GetBool() then
@@ -211,7 +210,7 @@ function PANEL:Init()
 						end
 					end)
 
-					menu:AddOption("Amount", function()
+					menu:AddOption(arista.lang:Get"AL_DERMA_AMOUNT", function()
 						local amt = function(str)
 							local str = tonumber(str)
 							if not str then return end
@@ -233,30 +232,30 @@ function PANEL:Init()
 					-- Open the menu.
 					menu:Open()
 				end
-			elseif itemFunc == "Pick up" then
+			elseif itemFunc == arista.lang:Get"AL_DERMA_PICKUP" then
 				self.itemButton[i].DoClick = function()
 					RunConsoleCommand("arista", "inventory", self.item, "pickup");
 				end
-			elseif itemFunc == "Sell" then
+			elseif itemFunc == arista.lang:Get"AL_DERMA_SELL" then
 				self.itemButton[i].DoClick = function()
 					local menu = DermaMenu()
 
 					-- Add an option for yes and no.
-					menu:AddOption("No", function() end)
-					menu:AddOption("Yes", function()
+					menu:AddOption(arista.lang:Get"AL_NO", function() end)
+					menu:AddOption(arista.lang:Get"AL_YES", function()
 						RunConsoleCommand("arista", "inventory", self.item, "sell")
 					end)
 
 					-- Open the menu.
-					menu:Open() ;
+					menu:Open()
 				end
-			elseif itemFunc == "Destroy All" then
+			elseif itemFunc == arista.lang:Get"AL_DERMA_DESTROYALL" then
 				self.itemButton[i].DoClick = function()
 					local menu = DermaMenu()
 
 					-- Add an option for yes and no.
-					menu:AddOption("No", function() end)
-					menu:AddOption("Yes", function()
+					menu:AddOption(arista.lang:Get"AL_NO", function() end)
+					menu:AddOption(arista.lang:Get"AL_YES", function()
 						RunConsoleCommand("arista", "inventory", self.item, "destroy")
 					end)
 
@@ -305,7 +304,7 @@ function PANEL:Init()
 
 	-- Create the space used label.
 	self.spaceUsed = vgui.Create("DLabel", self)
-		self.spaceUsed:SetText("Space Used: " .. arista.inventory.getSize() .. "/" .. maximumSpace)
+		self.spaceUsed:SetText(arista.lang:Get"AL_HUD_SPACEUSED" .. arista.inventory.getSize() .. "/" .. maximumSpace)
 		self.spaceUsed:SizeToContents()
 		self.spaceUsed:SetTextColor(color_black)
 end
@@ -316,7 +315,7 @@ function PANEL:PerformLayout()
 
 	-- Set the position of the label.
 	self.spaceUsed:SetPos((self:GetWide() / 2) - (self.spaceUsed:GetWide() / 2), 5)
-	self.spaceUsed:SetText("Space Used: " .. arista.inventory.getSize() .. "/" .. maximumSpace)
+	self.spaceUsed:SetText(arista.lang:Get"AL_HUD_SPACEUSED" .. arista.inventory.getSize() .. "/" .. maximumSpace)
 end
 
 -- Register the panel.

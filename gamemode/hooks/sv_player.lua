@@ -56,7 +56,6 @@ function GM:PlayerBlacklisted(ply, kind, thing, time, reason, blacklister)
 		ply:blacklist(kind, CATEGORY_ILLEGAL_WEAPONS, time, reason, blacklister:Name())
 		ply:blacklist(kind, CATEGORY_POLICE_WEAPONS, time, reason, blacklister:Name())
 	end
-	-- todo: categories
 end
 
 ---
@@ -70,7 +69,6 @@ function GM:PlayerUnBlacklisted(ply, kind, thing, unblacklister)
 		ply:unBlacklist(kind, CATEGORY_ILLEGAL_WEAPONS)
 		ply:unBlacklist(kind, CATEGORY_POLICE_WEAPONS)
 	end
-	-- todo: categories
 end
 
 ---
@@ -198,7 +196,7 @@ function GM:PlayerCanHolster(ply, class, silent)
 	local spawnWeapons = ply:getAristaVar("spawnWeapons") or {}
 	if spawnWeapons[class] or ply:getAristaVar("equiping") then
 		if not silent then
-			ply:notify("You cannot holster this weapon!")
+			ply:notify("AL_CANNOT_HOLSTER")
 		end
 
 		return false
@@ -223,23 +221,34 @@ end
 -- @param id The UniqueID of the item
 -- @return True if they can, false if they can't.
 function GM:PlayerCanUseItem(ply, id)
-	--[[item = self.Items[id];
-	if (not item) then return false; end
-	if (item.Category) then
-		local cat = item.Category;
-		if (table.HasValue( cider.team.query( ply:Team(), "cantuse", {}), cat)) then -- Is it set that our team can't use this category? (ie police can't use illegals)
-			ply:Notify(cider.team.query(ply:Team(),"name","Your team's member").."s cannot use "..self:GetCategory(cat).Name.."!", 1);
-			return false;
-		elseif (ply:Blacklisted("cat", cat) > 0) then -- Are we blacklisted from this category?
-			ply:BlacklistAlert("cat",cat,self:GetCategory(cat).Name);
-			return false;
+	local item = arista.item.items[id]
+
+	if not item then return false end
+
+	if item.category then
+		local cat = item.category
+		local cantUse = arista.team.query(ply:Team(), "cantuse", {})
+
+		if table.HasValue(cantUse, cat) then -- Is it set that our team can't use this category? (ie police can't use illegals)
+			local name = arista.team.query(ply:Team(), "name", "AL_YOU_TEAM_NAME")
+			local catName = self:GetCategory(cat).name
+
+			ply:notify("AL_X_CANNOT_USE_X", name, catName)
+
+			return false
+		elseif ply:isBlacklisted("cat", cat) > 0 then -- Are we blacklisted from this category?
+			ply:blacklistAlert("cat", cat, self:GetCategory(cat).name)
+
+			return false
 		end
 	end
-	if (ply:Blacklisted("item", item.UniqueID) > 0) then -- Are we blacklisted from this specific item?
-		ply:BlacklistAlert("item",item.UniqueID,item.Plural);
-		return false;
+
+	if ply:isBlacklisted("item", item.uniqueID) > 0 then -- Are we blacklisted from this specific item?
+		ply:blacklistAlert("item", item.uniqueID, item.plural)
+
+		return false
 	end
-	]]
+
 	return true
 end
 
@@ -306,6 +315,7 @@ function GM:PlayerDestroyedContraband(ply, ent)
 		name = "someone";
 	end
 	GM:Log(EVENT_ADMINEVENT, "%s destroyed %s's %s.", ply:Name(), name, contra.name);]]
+	-- todo: contra
 end
 
 ---
@@ -315,7 +325,7 @@ end
 -- @return True if they can, false if they can't.
 function GM:PlayerCanRamDoor(ply, door)
 	if door:isJammed() or door:isSealed() then
-		ply:notify("You cannot ram this door!")
+		ply:notify("AL_CANNOT_RAM")
 
 		return false
 	elseif arista.entity.isOwned(door) then
@@ -330,7 +340,7 @@ function GM:PlayerCanRamDoor(ply, door)
 			return true
 		end
 
-		ply:notify("You do not have the authority to ram this door.")
+		ply:notify("AL_CANNOT_RAM_NOAUTH")
 
 		return false
 	end
@@ -405,6 +415,7 @@ function GM:PlayerUpdatedContainerContents(ply, ent, itemid, amount, force)
 		ply:Emote("puts " .. iname .. " into the " .. ename .. ".");
 	end
 	GM:Log(EVENT_ENTITY, word, ply:Name(), amount, (amount > 1 and item.Plural or item.Name), oname, ename);]]
+	-- todo: container
 end
 
 ---
@@ -507,8 +518,7 @@ end
 -- @param text What the player is trying to say
 function GM:PlayerCanSayIC(ply, text)
 	if not ply:Alive() or (ply:isUnconscious() and not ply:hasTripped()) then
-		ply:notify("You cannot talk in this state!")
-		-- todo: lang
+		ply:notify("AL_CANNOT_TALK")
 
 		return false
 	end
@@ -527,15 +537,17 @@ function GM:PlayerCanSayOOC(ply, text)
 		return true
 	elseif nextOOC > CurTime() then -- Prevent OOC spam
 		local timeleft = nextOOC - CurTime()
+		local timeType
 
 		if timeleft > 60 then
-			timeleft = string.ToMinutesSeconds(math.ceil(timeleft)) .. " minute(s)"
+			timeleft = string.ToMinutesSeconds(math.ceil(timeleft))
+			timeType = "AL_MINS"
 		else
-			timeleft = math.ceil(timeleft) .. " second(s)"
+			timeleft = math.ceil(timeleft)
+			timeType = "AL_SECONDS"
 		end
 
-		ply:notify("You must wait %s before using OOC again!", timeleft)
-		-- todo: language
+		ply:notify("UL_CANNOT_OOC_COOLDOWN", timeleft, timeType)
 
 		return false
 	end
@@ -583,7 +595,7 @@ end
 -- @param ply The player in question
 -- @return True if they can, false if they can't.
 function GM:PlayerCanBeRecapacitated(ply)
-	return not (ply:isArrested() or ply:isTied() or ply:getAristaVar("HoldingEnt"))
+	return not (ply:isArrested() or ply:isTied() or ply:getAristaVar("holdingEnt"))
 end
 
 ---

@@ -67,7 +67,7 @@ function PANEL:Think()
 			categories[v:Team()] = categories[v:Team()] or {}
 
 			local cln = v:getClan()
-			local nam = "Name: " .. v:Name()
+			local nam = arista.lang:Get"AL_HUD_NAME" .. v:Name()
 			if cln ~= "" then
 				nam = nam .. "  (" .. cln .. ")"
 			end
@@ -77,7 +77,7 @@ function PANEL:Think()
 			local info = {
 				nam,
 				v:GetModel(),
-				det ~= "" and "Details: " .. det or "- No Description -",
+				det ~= "" and arista.lang:Get"AL_HUD_DETAILS" .. det or "- " .. arista.lang:Get"AL_HUD_NODESC" .. " -",
 				v:UserID()
 			}
 			table.insert(categories[v:Team()], info)
@@ -93,7 +93,7 @@ function PANEL:Think()
 			}
 			table.insert(categories[v.group.group], info)
 		else
-			kind, self.type = "Groups","gang"
+			kind, self.type = "Groups", "gang"
 
 			local id = k:Split(";")[1]
 			categories[id] = categories[id] or {}
@@ -230,7 +230,7 @@ function PANEL:PerformLayout()
 
 	self.name:SizeToContents()
 
-	self.description:SetPos(75, 24);
+	self.description:SetPos(75, 24)
 	self.description:SizeToContents()
 
 	-- Define the x position of the item functions.
@@ -280,16 +280,16 @@ end
 vgui.Register("arista_accessInformation", PANEL, "DPanel")
 
 -- Define a new panel.
-PANEL = {};
+PANEL = {}
 
 -- Called when the panel is initialized.
 function PANEL:Init()
 	self.noaccess					= vgui.Create("arista_accessInventory", self)
 	self.access						= vgui.Create("arista_accessInventory", self)
-	self.noaccess.action	= "Give"
-	self.noaccess.name		= "Choices"
-	self.access.action		= "Take"
-	self.access.name			= "Access List"
+	self.noaccess.action	= arista.lang:Get"AL_DERMA_GIVE"
+	self.noaccess.name		= arista.lang:Get"AL_DERMA_CHOICES"
+	self.access.action		= arista.lang:Get"AL_DERMA_TAKE"
+	self.access.name			= arista.lang:Get"AL_DERMA_ACCESSLIST"
 end
 
 -- Called when the layout should be performed.
@@ -316,7 +316,7 @@ function PANEL:Init()
 
 	-- Create the close button.
 	self.close = vgui.Create("DButton", self)
-	self.close:SetText("Close")
+	self.close:SetText(arista.lang:Get"AL_DERMA_CLOSE")
 	self.close.DoClick = function()
 		self:Close()
 		self:Remove()
@@ -330,13 +330,13 @@ function PANEL:Init()
 		self.jobs			= vgui.Create("arista_accessColumns", self.sheets)
 		self.gangs		= vgui.Create("arista_accessColumns", self.sheets)
 
-	self.sheets:AddSheet("Players",	self.players,	nil, nil, true)
-	self.sheets:AddSheet("Jobs",		self.jobs,		nil, nil, true)
-	self.sheets:AddSheet("Gangs",		self.gangs,		nil, nil, true)
+	self.sheets:AddSheet(arista.lang:Get"AL_DERMA_PLAYERS",	self.players,	nil, nil, true)
+	self.sheets:AddSheet(arista.lang:Get"AL_DERMA_JOBS",		self.jobs,		nil, nil, true)
+	self.sheets:AddSheet(arista.lang:Get"AL_DERMA_GANGS",		self.gangs,		nil, nil, true)
 
 	self.texbox	= vgui.Create("DTextEntry",	self)
 	self.setbut = vgui.Create("DButton",	self)
-		self.setbut:SetText("Set Name")
+		self.setbut:SetText(arista.lang:Get"AL_DERMA_SETNAME")
 
 	local function setName()
 		val = self.texbox:GetValue()
@@ -353,13 +353,13 @@ function PANEL:Init()
 	self.setbut.DoClick = setName
 
 	self.selbut = vgui.Create("DButton",	self)
-		self.selbut:SetText("Sell")
+		self.selbut:SetText(arista.lang:Get"AL_DERMA_SELL")
 		self.selbut.DoClick = function()
-			local menu = DermaMenu();
+			local menu = DermaMenu()
 
 			-- Add an option for yes and no.
-			menu:AddOption("No", function() end);
-			menu:AddOption("Yes", function()
+			menu:AddOption(arista.lang:Get"AL_NO", function() end)
+			menu:AddOption(arista.lang:Get"AL_YES", function()
 				RunConsoleCommand("arista", "door", "sell")
 
 				accessmenu:Close()
@@ -398,6 +398,7 @@ function PANEL:PerformLayout()
 			self.texbox:SetVisible(true)
 			self.setbut:SetVisible(true)
 		end
+
 		if accessmenu.sellable then
 			self.selbut:SetVisible(true)
 		end

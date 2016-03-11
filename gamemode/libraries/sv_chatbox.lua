@@ -7,12 +7,12 @@ function arista.chatbox.add(receivers, player, filter, text)
 			net.WriteEntity(player)
 			net.WriteString(filter)
 			net.WriteString(text)
-		net.Send(receivers)
+		if receivers then net.Send(receivers) else net.Broadcast() end
 	else
 		net.Start("arista_chatboxMessage")
 			net.WriteString(filter)
 			net.WriteString(text)
-		net.Send(receivers)
+		if receivers then net.Send(receivers) else net.Broadcast() end
 	end
 end
 

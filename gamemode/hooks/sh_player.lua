@@ -6,7 +6,6 @@ AddCSLuaFile()
 -- @param target The target team's ID
 -- @return True if they can, False if they can't.
 function GM:PlayerCanJoinTeamShared(ply, target)
-	do return true end -- REEEEE
 	local team = arista.team.get(target)
 
 	-- Check if this is a valid team.
@@ -29,8 +28,6 @@ function GM:PlayerCanJoinTeamShared(ply, target)
 	local aimgroup = arista.team.getGroupByTeam(team.index)
 	local mygroup = arista.team.getGroupByTeam(cteam.index)
 
-	-- todo: language stuff below
-
 	if aimlevel == 1 and aimgroup == mygroup then
 		--You can reset yourself to your group's base class
 		return true
@@ -38,7 +35,7 @@ function GM:PlayerCanJoinTeamShared(ply, target)
 		--We wish to swap groups
 		if not aimlevel == 1 and mylevel == 1 then
 			--You can only change groups via level 1
-			if SERVER then ply:notify("You can only change groups via the base classes!") end
+			if SERVER then ply:notify("AL_CANNOT_TEAM_BASE") end
 
 			return false
 		end
@@ -49,7 +46,7 @@ function GM:PlayerCanJoinTeamShared(ply, target)
 				--They are moving to or from the master race
 				return true
 			else
-				if SERVER then ply:notify("You cannot go straight to this group!") end
+				if SERVER then ply:notify("AL_CANNOT_TEAM_GROUP") end
 
 				return false
 			end
@@ -59,7 +56,7 @@ function GM:PlayerCanJoinTeamShared(ply, target)
 		end
 	elseif aimlevel == mylevel + 1 or aimlevel == mylevel - 1 then
 		--All level changes must be in steps of one
-		local cgang, egang = arista.team.getGang(cteam.index),arista.team.getGang(team.index)
+		local cgang, egang = arista.team.getGang(cteam.index), arista.team.getGang(team.index)
 
 		if egang == cgang then
 			--not a problem, we're not moving gang
@@ -68,11 +65,11 @@ function GM:PlayerCanJoinTeamShared(ply, target)
 			--You can only leave/enter a gang via level 1
 			return true
 		else
-			if SERVER then ply:notify("You can only change gangs via the base class!") end
+			if SERVER then ply:notify("AL_CANNOT_TEAM_GANGBASE") end
 
 		end
 	else
-		if SERVER then ply:notify("You cannot join that team!") end
+		if SERVER then ply:notify("AL_CANNOT_TEAM_GENERIC") end
 
 		return false
 	end
@@ -86,13 +83,15 @@ function GM:PlayerCanDemote(ply, target)
 	local err = ""
 	if target:Team() == TEAM_DEFAULT then
 		if SERVER then
-			ply:Notify("You cannot demote players from the default team!")
+			ply:notify("AL_CANNOT_DEMOTE_DEFAULT")
 		end
+
 		return false
 	elseif (target:Arrested() or target:Tied()) then
 		if SERVER then
-			ply:Notify("You cannot demote %s right now!", target:Name())
+			ply:notify("AL_CANNOT_DEMOTE_GENERIC", target:Name())
 		end
+
 		return false
 		-- todo: mod
 	elseif --[[ply:IsModerator()]] arista.utils.isAdmin(ply) then
@@ -100,7 +99,7 @@ function GM:PlayerCanDemote(ply, target)
 	end
 
 	local tteam, mteam = target:Team(), ply:Team()
-	local tlevel,mlevel,tgroup,mgroup,tgang,mgang =
+	local tlevel, mlevel, tgroup, mgroup, tgang, mgang =
 			arista.team.getGroupLevel(tteam),
 			arista.team.getGroupLevel(mteam),
 			arista.team.getGroupByTeam(tteam),
@@ -109,17 +108,17 @@ function GM:PlayerCanDemote(ply, target)
 			arista.team.getGang(mteam)
 
 	if tgroup ~= mgroup then
-		err = "You cannot demote players in a different group!"
+		err = "AL_CANNOT_DEMOTE_GROUP"
 	elseif tlevel == 1 then
-		err = "You cannot demote a player from the base class!"
+		err = "AL_CANNOT_DEMOTE_BASE"
 	elseif tlevel > mlevel then
-		err = "You cannot demote a player with a higer level than you!"
+		err = "AL_CANNOT_DEMOTE_HIGHER"
 	elseif mlevel == tlevel and not arista.team.hasAccessGroup(mteam, "b") then
-		err = "You do not have access to demote players at the same level as yourself!"
-	elseif not arista.team.hasAccessGroup(mteam,"d") then
-		err = "You do not have access to demote this player!"
+		err = "AL_CANNOT_DEMOTE_SAME"
+	elseif not arista.team.hasAccessGroup(mteam, "d") then
+		err = "AL_CANNOT_DEMOTE_NOACCESS"
 	elseif tgang ~= mgang then
-		err = "You cannot demote players in other gangs!"
+		err = "AL_CANNOT_DEMOTE_GANG"
 	end
 
 	if err == "" then

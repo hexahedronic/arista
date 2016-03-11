@@ -29,18 +29,18 @@ function PANEL:Think()
 
 	-- Create the job control.
 	self.job = vgui.Create("arista_characterTextEntry", self)
-		self.job.label:SetText("Job")
+		self.job.label:SetText(arista.lang:Get"AL_DERMA_JOB")
 		self.job.label:SizeToContents()
-		self.job.button:SetText("Change")
+		self.job.button:SetText(arista.lang:Get"AL_DERMA_CHANGE")
 		self.job.button.DoClick = function()
 			RunConsoleCommand("arista", "job", self.job.textEntry:GetValue())
 		end
 
 	-- Create the clan control.
 	self.clan = vgui.Create("arista_characterTextEntry", self)
-		self.clan.label:SetText("Clan")
+		self.clan.label:SetText(arista.lang:Get"AL_DERMA_CLAN")
 		self.clan.label:SizeToContents()
-		self.clan.button:SetText("Change")
+		self.clan.button:SetText(arista.lang:Get"AL_DERMA_CHANGE")
 		self.clan.button.DoClick = function()
 			RunConsoleCommand("arista", "clan", self.clan.textEntry:GetValue())
 		end
@@ -50,9 +50,9 @@ function PANEL:Think()
 
 	-- Create the details control.
 	self.details = vgui.Create("arista_characterTextEntry", self)
-		self.details.label:SetText("Details")
+		self.details.label:SetText(arista.lang:Get"AL_DERMA_DETAILS")
 		self.details.label:SizeToContents()
-		self.details.button:SetText("Change")
+		self.details.button:SetText(arista.lang:Get"AL_DERMA_CHANGE")
 		self.details.button.DoClick = function()
 			RunConsoleCommand("arista", "details", self.details.textEntry:GetValue())
 		end
@@ -62,9 +62,9 @@ function PANEL:Think()
 
 	-- Create the gender control.
 	self.gender = vgui.Create("arista_characterGender", self)
-		self.gender.label:SetText("Gender")
+		self.gender.label:SetText(arista.lang:Get"AL_DERMA_GENDER")
 		self.gender.label:SizeToContents()
-		self.gender.button:SetText("Change")
+		self.gender.button:SetText(arista.lang:Get"AL_DERMA_CHANGE")
 
 	-- Add the controls to the item list.
 	self.itemsList:AddItem(self.job)
@@ -117,25 +117,25 @@ function PANEL:Think()
 				end
 
 				panel.description:SetText(v.description)
-				panel.button:SetText("Become")
+				panel.button:SetText(arista.lang:Get"AL_DERMA_BECOME")
 				panel.button.Think = function()
 					if arista.lp:Team() == v.index then
 						panel.button:SetDisabled(true)
-						panel.button:SetText("Joined")
+						panel.button:SetText(arista.lang:Get"AL_DERMA_JOINED")
 					else
 						local nextChange = arista.lp._nextChangeTeam[v.index]
 
 						if team.NumPlayers(v.index) >= v.limit then
 							panel.button:SetDisabled(true)
-							panel.button:SetText("Full")
+							panel.button:SetText(arista.lang:Get"AL_DERMA_FULL")
 						elseif nextChange and nextChange > CurTime() then
 							local time = string.ToMinutesSeconds(nextChange - CurTime())
 
 							panel.button:SetDisabled(true)
-							panel.button:SetText("Wait ".. time)
+							panel.button:SetText(arista.lang:Get"AL_DERMA_WAIT" .. time)
 						else
 							panel.button:SetDisabled(false)
-							panel.button:SetText("Become")
+							panel.button:SetText(arista.lang:Get"AL_DERMA_BECOME")
 						end
 					end
 				end
@@ -213,8 +213,8 @@ function PANEL:Init()
 		local menu = DermaMenu()
 
 		-- Add male and female options to the menu.
-		menu:AddOption("Male", function() RunConsoleCommand("arista", "gender", "male") end)
-		menu:AddOption("Female", function() RunConsoleCommand("arista", "gender", "female") end)
+		menu:AddOption(arista.lang:Get"AL_MALE", function() RunConsoleCommand("arista", "gender", "male") end)
+		menu:AddOption(arista.lang:Get"AL_FEMALE", function() RunConsoleCommand("arista", "gender", "female") end)
 
 		-- Open the menu and set it's position.
 		menu:Open()
@@ -223,7 +223,7 @@ end
 
 -- Called every frame.
 function PANEL:Think()
-	self.textButton:SetText(arista.lp:getGender() or "Male")
+	self.textButton:SetText(arista.lp:getGender() or arista.lang:Get"AL_MALE")
 	self.textButton:SetContentAlignment(5)
 end
 

@@ -100,8 +100,7 @@ function PANEL:PerformLayout()
 	local cost = arista.config.costs.door or 0
 
 	self.label:SetTextColor(color_green)
-	self.label:SetText("Purchase this door for $" .. cost .. ".")
-	-- todo: language
+	self.label:SetText(arista.lang:Get("AL_YOU_PURCHASE", cost))
 	self.label:SizeToContents()
 
 	-- Set the label and text entry panels to be visible.

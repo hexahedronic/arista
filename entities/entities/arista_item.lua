@@ -33,13 +33,16 @@ if CLIENT then
 
 		if not lookingat then return end
 
+		local use = input.LookupBinding("+use"):upper()
+		local shift = input.LookupBinding("+speed"):upper()
+
 		if item.equippable and arista.lp:KeyDown(IN_SPEED) then
-			lines:add("Instructions", "'Use' + 'Sprint' to " .. item.equipword, color_brightgreen, 2)
+			lines:add("Instructions", arista.lang:Get("AL_X_PLUS_X_TO_X", use, shift, item.equipword), color_brightgreen, 2)
 		else
-			lines:add("Instructions", "'Use' to pick up", color_brightgreen, 2)
+			lines:add("Instructions", arista.lang:Get("AL_X_TO_X", use, arista.lang:Get("AL_PICKUP")), color_brightgreen, 2)
 		end
 
-		lines:add("Size", "Size: " .. tostring(item.size), color_white, 3)
+		lines:add("Size", arista.lang:Get("AL_SIZE_X", item.size), color_white, 3)
 	end
 
 	return
@@ -107,12 +110,11 @@ function ENT:Use(activator, caller)
 
 	if activator:KeyDown(IN_SPEED) and item.equippable then
 		if not arista.utils.isAdmin(ply) and nextUseItem > CurTime() then
-			activator:notify("You cannot use another item for %d second(s)!", nextUseTime - CurTime())
+			activator:notify("AL_CANNOT_USE_ITEM_SPECIFIC", "AL_ITEM", nextUseTime - CurTime())
 
-			-- todo: language
 			return false
 		elseif activator:InVehicle() and item.NoVehicles then
-			activator:notify("You cannot use this item here!")
+			activator:notify("AL_CANNOT_USE_ITEM_VEHICLE")
 
 			return false
 		elseif gamemode.Call("PlayerCanUseItem", activator, item) == false then

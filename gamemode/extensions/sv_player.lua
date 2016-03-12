@@ -3,14 +3,32 @@ arista.player = {}
 ---
 -- Notifies every player on the server that has the specified access.
 -- @param access The access string to search for
--- @param message The message to display
--- @param level The notification level. Nil or unspecified = chat message. 0 = Water drip. 1 = Failure buzzer. 2 = 'Bip' Notification. 3 = 'Tic' Notification. (Used by the cleanup)
+-- @param message The message format to display
 function arista.player.notifyByAccess(access, message, ...)
 	for _, ply in pairs(player.GetAll()) do
 		if ply:hasAccess(access) then
 			ply:notify(message, ...)
 		end
 	end
+end
+
+---
+-- Removes a players donator status.
+-- @param player The player to remove donator from
+function arista.player.expireDonator(ply)
+	ply:setAristaVar("donator", 0)
+
+	-- Take away their access and save their data.
+	ply:takeAccess("tpew")
+	ply:saveData()
+
+	-- Notify the player about how their Donator status has expired.
+	ply:notify("AL_YOU_DONATOR_REMOVE")
+
+	gamemode.Call("PlayerAdjustSalary", ply)
+
+	ply:setAristaVar("knockOutTime", arista.config:getDefault("knockOutTime"))
+	ply:setAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
 end
 
 ---

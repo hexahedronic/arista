@@ -9,6 +9,28 @@ surface.CreateFont("arista_hudSmall", {
 	size = 14
 })
 
+surface.CreateFont("CSKillIcons", {
+	font = "csd",
+	size = 100,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = false,
+	shadow = false,
+	additive = true,
+})
+
+surface.CreateFont("CSSelectIcons", {
+	font = "csd",
+	size = 100,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = false,
+	shadow = false,
+	additive = true,
+})
+
 -- Stop showing loadingscreen when we refresh.
 local set, cl
 if arista and arista._playerInited then
@@ -149,7 +171,7 @@ net.Receive("arista_modelChoices", function()
 end)
 
 function GM:OnAchievementAchieved(ply, achid)
-	arista.chatBox.chatText(ply:EntIndex(), ply:Name(), achievements.GetName(achid), "achievement")
+	arista.chatbox.chatText(ply:EntIndex(), ply:Name(), achievements.GetName(achid), "achievement")
 end
 
 -- Stop spam related to missing gm hook.
@@ -571,7 +593,7 @@ function GM:DrawBottomBars(bar) end
 -- Called when the top text should be drawn.
 function GM:DrawTopText(text)
 	-- Check if the player is warranted.
-	if arista.lp:isWarranted() ~= "" then
+	if arista.lp:hasWarrant() ~= "" then
 		local warrantExpireTime = arista.lp:getAristaInt("warrantExpireTime") or 0
 
 		-- Text which is extended to the notice.
@@ -592,11 +614,11 @@ function GM:DrawTopText(text)
 		end
 
 		-- Check the class of the warrant.
-		if arista.lp:isWarranted() == "search" then
+		if arista.lp:hasWarrant() == "search" then
 			text.y = self:DrawInformation(arista.lang:Get("AL_YOU_SEARCH_WARRANT", extension, extensionType), "ChatFont", text.x, text.y, color_brightgreen, 255, true, function(x, y, width, height)
 				return x - width - 8, y
 			end)
-		elseif arista.lp:isWarranted() == "arrest" then
+		elseif arista.lp:hasWarrant() == "arrest" then
 			text.y = self:DrawInformation(arista.lang:Get("AL_YOU_ARREST_WARRANT", extension, extensionType), "ChatFont", text.x, text.y, color_brightgreen, 255, true, function(x, y, width, height)
 				return x - width - 8, y
 			end)

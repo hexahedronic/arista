@@ -330,7 +330,7 @@ function GM:PlayerCanRamDoor(ply, door)
 		return false
 	elseif arista.entity.isOwned(door) then
 		for _,pl in pairs(cider.entity.getAllAccessors(door)) do
-			if pl:isWarranted() or pl == ply then
+			if pl:hasWarrant() or pl == ply then
 				return true
 			end
 		end

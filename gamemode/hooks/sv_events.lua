@@ -115,6 +115,16 @@ function arista.eventHooks.dataUpdate()
 				ply:setAristaVar("hideHealthEffects", false)
 			end
 
+			local donator = ply:getAristaVar("donator")
+
+			if donator and donator > 0 then
+				local expire = math.max(donator - os.time(), 0)
+
+				if expire <= 0 then
+					arista.player.expireDonator(ply)
+				end
+			end
+
 			-- Give sleeping people a health regen.
 			if ply:isSleeping() and ply:Health() < 100 and ply:Alive() then
 				-- It seems the game doesn't like fractions. Let's make this only happen once every 2 seconds then.

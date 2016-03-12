@@ -2,28 +2,6 @@ AddCSLuaFile()
 
 -- Check if we're running on the client.
 if CLIENT then
-	surface.CreateFont("CSKillIcons", {
-		font = "csd",
-		size = 100,
-		weight = 500,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		shadow = false,
-		additive = true,
-	})
-
-	surface.CreateFont("CSSelectIcons", {
-		font = "csd",
-		size = 100,
-		weight = 500,
-		blursize = 0,
-		scanlines = 0,
-		antialias = false,
-		shadow = false,
-		additive = true,
-	})
-
 	SWEP.PrintName = "Hands"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 1
@@ -32,7 +10,7 @@ if CLIENT then
 	SWEP.DrawCrosshair = false
 
 	function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
-		draw.SimpleText(self.IconLetter, "CSSelectIcons", x + 0.59 * wide, y + tall * 0.2, Color(255, 220, 0, 255), TEXT_ALIGN_CENTER )
+		draw.SimpleText(self.IconLetter, "CSSelectIcons", x + 0.56 * wide, y + tall * 0.27, Color(255, 220, 0, 255), TEXT_ALIGN_CENTER )
 		self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)
 	end
 
@@ -40,16 +18,16 @@ if CLIENT then
 end
 
 -- Define some shared variables.
-SWEP.Author	= "Lexi"
+SWEP.Author	= "Lexi & Q2F2"
 
 -- Bitchin smart lookin instructions o/
 local title_color = "<color=230,230,230,255>"
 local text_color = "<color=150,150,150,255>"
 local end_color = "</color>"
-SWEP.Instructions =	end_color..title_color.."Primary Fire:\t"..						end_color..text_color.." Punch / Throw\n"..
-										end_color..title_color.."Secondary Fire:\t"..					end_color..text_color.." Knock / Pick Up / Drop\n"..
-										end_color..title_color.."Sprint+Primary Fire:"..		end_color..text_color.." Lock\n"..
-										end_color..title_color.."Sprint+Secondary Fire:"..	end_color..text_color.." Unlock"
+SWEP.Instructions =	end_color..title_color.."Primary Fire:\t\t"..						end_color..text_color.." Punch / Throw\n"..
+										end_color..title_color.."Secondary Fire:\t\t"..					end_color..text_color.." Knock / Pick Up / Drop\n"..
+										end_color..title_color.."Sprint+Primary Fire:\t"..		end_color..text_color.." Lock\n"..
+										end_color..title_color.."Sprint+Secondary Fire:\t"..	end_color..text_color.." Unlock"
 SWEP.Purpose = "Picking stuff up, knocking on doors and punching people."
 
 -- Set the view model and the world model to nil.

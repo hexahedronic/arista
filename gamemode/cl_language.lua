@@ -77,7 +77,7 @@ arista.lang.tbl.EN = {
 
 	["AL_CANNOT_SPAWN_CAR"] = "You must buy your car from the store!",
 
-	["AL_CANNOT_OOC_COOLDOWN"] = "You must wait %d%s before using OOC again!",
+	["AL_CANNOT_OOC_COOLDOWN"] = "You must wait %d %s before using OOC again!",
 
 	["AL_CANNOT_TEAM_WARRANTED"] = "You cannot change teams while warranted!",
 	["AL_CANNOT_TEAM_ARRESTED"] = "You cannot change teams while arrested!",
@@ -127,10 +127,10 @@ arista.lang.tbl.EN = {
 	["AL_YOU_REMOVE_DETAILS"] = "You have removed your details.",
 	["AL_YOU_REMOVE_CLAN"] = "You have left your clan.",
 
-	["AL_YOU_SEARCH_WARRANT"] = "You have a search warrant which expires in %d%s.",
-	["AL_YOU_ARREST_WARRANT"] = "You have an arrest warrant which expires in %d%s.",
+	["AL_YOU_SEARCH_WARRANT"] = "You have a search warrant which expires in %d %s.",
+	["AL_YOU_ARREST_WARRANT"] = "You have an arrest warrant which expires in %d %s.",
 
-	["AL_YOU_UNARRESTED_IN"] = "You will be unarrested in %d%s.",
+	["AL_YOU_UNARRESTED_IN"] = "You will be unarrested in %d %s.",
 	["AL_YOU_UNARRESTED"] = "Your arrest time has finished!",
 
 	["AL_YOU_TEAM_NAME"] = "Your team's member",

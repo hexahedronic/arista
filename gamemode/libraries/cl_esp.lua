@@ -223,13 +223,13 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 	local statuslines = 0
 
 	if player:isArrested() then
-		lines:add("Status" .. statuslines, arista.lang:Get"AL_STATUS_ARRESTED", color_red, 2 + statuslines)
+		lines:add("Status" .. statuslines, arista.lang:Get"AL_STATE_ARRESTED", color_red, 2 + statuslines)
 		statuslines = statuslines + 1
 	elseif player:isTied() then
 		local useKey = input.LookupBinding("+use"):upper()
 		local speedKey = input.LookupBinding("+speed"):upper()
 
-		lines:add("Status" .. statuslines, arista.lang:Get"AL_STATUS_RIED", color_lightblue, 2 + statuslines)
+		lines:add("Status" .. statuslines, arista.lang:Get"AL_STATE_TIED", color_lightblue, 2 + statuslines)
 		statuslines = statuslines + 1
 
 		if lookingat then
@@ -239,14 +239,14 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 			end
 	end
 
-	local warrant = player:isWarranted()
+	local warrant = player:hasWarrant()
 
 	if warrant ~= "" then
 		-- Check the class of the warrant.
 		if warrant == "search" then
-			lines:add("Status" .. statuslines, arista.lang:Get"AL_STATUS_SEARCH", color_lightblue, 2 + statuslines)
+			lines:add("Status" .. statuslines, arista.lang:Get"AL_STATE_SEARCH", color_lightblue, 2 + statuslines)
 		elseif warrant == "arrest" then
-			lines:add("Status" .. statuslines, arista.lang:Get"AL_STATUS_ARREST", color_red, 2 + statuslines)
+			lines:add("Status" .. statuslines, arista.lang:Get"AL_STATE_ARREST", color_red, 2 + statuslines)
 		end
 
 		statuslines = statuslines + 1

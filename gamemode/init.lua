@@ -124,7 +124,7 @@ end
 
 -- Called when a player attempts to arrest another player.
 function GM:PlayerCanArrest(ply, target)
-	if target:getAristaVar("warranted") == "arrest" then
+	if target:hasWarrant() == "arrest" then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.ARREST, ply, " arrested ", target, ".")
 
 		return true
@@ -622,6 +622,12 @@ function GM:PlayerAdjustSalary(ply)
 		local current = ply:getAristaVar("salary") or 1
 
 		ply:setAristaVar("salary", current * arista.config.vars.donatorMult)
+		ply._wasDonator = true
+	elseif ply._wasDonator then
+		local current = ply:getAristaVar("salary") or 1
+
+		ply:setAristaVar("salary", current / arista.config.vars.donatorMult)
+		ply._wasDonator = false
 	end
 end
 
@@ -1232,7 +1238,7 @@ function GM:PlayerCanJoinTeam(ply, teamid)
 		ply:notify("AL_YOU_WAIT_TEAM", time, teamdata.name)
 
 		return false
-	elseif ply:isWarranted() ~= "" then
+	elseif ply:hasWarrant() ~= "" then
 		ply:notify("AL_CANNOT_TEAM_WARRANTED")
 
 		return false

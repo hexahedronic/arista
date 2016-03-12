@@ -95,7 +95,7 @@ function player:getJob()
 	return self:getAristaVar("job") or ""
 end
 
-function player:isWarranted()
+function player:hasWarrant()
 	if CLIENT then return self:getAristaString("warrant") or "" end
 	return self:getAristaVar("warrant") or ""
 end

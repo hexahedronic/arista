@@ -84,7 +84,7 @@ TEAM_POLICEOFFICER = arista.team.add("Police Officer", {
 
 	access = "",
 
-	guns = {"cider_baton"},
+	guns = {"arista_baton"},
 	ammo = {
 		pistol = 60,
 	},

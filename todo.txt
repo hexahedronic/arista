@@ -2,7 +2,7 @@
 [X] Serverside Items Handling <-
 [X] Chat handler (OOC/IC/Ranged) <--
 [ ] Prop-protection
-[ ] Missing commands (a lot of them) <--
+[X] Missing commands (a lot of them) <--
 [ ] Containers
 
 - CL
@@ -12,7 +12,7 @@
 [X] Chatbox <--
 
 - Plugins
-[ ] Plugin mangement/handling <--
+[X] Plugin mangement/handling <--
 
 [ ] Vehicle handling
 [ ] Officals <--

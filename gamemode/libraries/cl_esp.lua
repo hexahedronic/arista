@@ -123,7 +123,7 @@ function GM:DrawESPLine(ent, tent, ply)
 		elseif tent.espPaint then
 			tent:espPaint(lines, pos, distance, lookingat)
 		elseif arista.entity.isContainer(tent) and lookingat then
-			lines:add("Name", "A " .. tent:getName(), color_purpleblue, 1)
+			lines:add("Name", arista.lang:Get"AL_A" .. tent:getName(), color_purpleblue, 1)
 
 			local status = arista.entity.getStatus(tent)
 
@@ -143,7 +143,7 @@ function GM:DrawESPLine(ent, tent, ply)
 				if ent:isSealed() then
 					owner = ""
 				elseif not arista.entity.isOwned(tent) then -- Door is for sale
-					owner = "For Sale - Press F2"
+					owner = arista.lang:Get"AL_DOOR_SALE"
 				end
 
 				lines:add("Name", name, color_purpleblue, 1)
@@ -187,11 +187,12 @@ function GM:DrawESPLine(ent, tent, ply)
 					i = i + 1
 				end
 			end]]
+			-- todo: note
 		elseif class == "C_BaseEntity" and lookingat then -- func_buttons show up as C_BaseEntity for some reason.
 			local name = tent:getName()
 
 			if not name or name == "" then
-				name = "A Button"
+				name = arista.lang:Get"AL_A_BUTTON"
 			end
 
 			lines:add("Name", name, color_purpleblue, 1)
@@ -212,9 +213,9 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 	local addon = ""
 
 	if player:getAristaBool("corpse") then
-		addon = "'s corpse"
+		addon = arista.lang:Get"AL_X_CORPSE"
 	elseif not player:Alive() then
-		addon = " (dead)"
+		addon = arista.lang:Get("AL_X_DEAD")
 	end
 
 	lines:add("Name", player:Name() .. addon, team.GetColor(player:Team()), 1)
@@ -222,17 +223,18 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 	local statuslines = 0
 
 	if player:isArrested() then
-		lines:add("Status" .. statuslines, "(Arrested)", color_red, 2 + statuslines)
+		lines:add("Status" .. statuslines, arista.lang:Get"AL_STATUS_ARRESTED", color_red, 2 + statuslines)
 		statuslines = statuslines + 1
 	elseif player:isTied() then
 		local useKey = input.LookupBinding("+use"):upper()
 		local speedKey = input.LookupBinding("+speed"):upper()
 
-		lines:add("Status" .. statuslines, "(Tied)", color_lightblue, 2 + statuslines)
+		lines:add("Status" .. statuslines, arista.lang:Get"AL_STATUS_RIED", color_lightblue, 2 + statuslines)
 		statuslines = statuslines + 1
 
 		if lookingat then
-			lines:add("Status" .. statuslines, "Press '" .. useKey .. "' + '" .. speedKey .. "' to untie", color_white, 2 + statuslines)
+			lines:add("Status" .. statuslines, arista.lang:Get("AL_X_PLUS_X_TO_X", useKey, speedKey, arista.lang:Get"AL_UNTIE"), color_white, 2 + statuslines)
+
 			statuslines = statuslines + 1
 			end
 	end
@@ -242,9 +244,9 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 	if warrant ~= "" then
 		-- Check the class of the warrant.
 		if warrant == "search" then
-			lines:add("Status" .. statuslines, "(Search Warrant)", color_lightblue, 2 + statuslines)
+			lines:add("Status" .. statuslines, arista.lang:Get"AL_STATUS_SEARCH", color_lightblue, 2 + statuslines)
 		elseif warrant == "arrest" then
-			lines:add("Status" .. statuslines, "(Arrest Warrant)", color_red, 2 + statuslines)
+			lines:add("Status" .. statuslines, arista.lang:Get"AL_STATUS_ARREST", color_red, 2 + statuslines)
 		end
 
 		statuslines = statuslines + 1
@@ -255,7 +257,7 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 
 		-- Check if they have details set
 		if details ~= "" then
-			lines:add("Status" .. statuslines, "Details: " .. details, color_white, 2 + statuslines)
+			lines:add("Status" .. statuslines, arista.lang:Get"AL_HUD_DETAILS" .. details, color_white, 2 + statuslines)
 			statuslines = statuslines + 1
 		end
 
@@ -263,14 +265,14 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 		local clan = player:getClan()
 
 		if clan ~= "" then
-			lines:add("Status" .. statuslines, "Clan: " .. clan, color_white, 2 + statuslines)
+			lines:add("Status" .. statuslines, arista.lang:Get"AL_HUD_CLAN" .. clan, color_white, 2 + statuslines)
 			statuslines = statuslines + 1
 		end
 
 		local job = player:getJob()
 
 		-- Draw the player's job.
-		lines:add("Status" .. statuslines, "Job: " .. job, color_white, 2 + statuslines)
+		lines:add("Status" .. statuslines, arista.lang:Get"AL_HUD_JOB" .. job, color_white, 2 + statuslines)
 		statuslines = statuslines + 1
 	end
 end

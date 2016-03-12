@@ -19,9 +19,6 @@ if arista.config.vars.localVoice then
 	game.ConsoleCommand("sv_voicequality 5\n")
 end
 
--- Some useful ConVars that can be changed in game.
---CreateConVar("cider_ooc", 1)
-
 -- Net Messages, seems like a lot since they also replace umsgs (umsg is depreciated)
 do
 	util.AddNetworkString("arista_sendMapEntities")

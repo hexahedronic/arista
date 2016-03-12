@@ -74,14 +74,13 @@ SWEP.Primary.PunchAcceleration = 100
 SWEP.Primary.ThrowAcceleration = 200
 SWEP.Primary.Super = false
 SWEP.Primary.Refire = 1
-SWEP.Primary.Sound = Sound("npc/vort/claw_swing2.wav")
+SWEP.Primary.Sound = Sound("WeaponFrag.Throw")
 
 -- Set the secondary fire settings.
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo	= ""
-SWEP.Secondary.Sound = Sound("npc/vort/claw_swing2.wav")
 
 -- Set the iron sight positions (pointless here).
 SWEP.IronSightPos = Vector(0, 0, 0)

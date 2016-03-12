@@ -664,6 +664,30 @@ function GM:HUDPaint()
 
 	if self:IsUsingCamera() then return end
 
+	local donator = arista.lp:getAristaInt("donator")
+
+	if donator and donator > 0 then
+		local expire = math.max(donator - os.time(), 0)
+
+		if expire > 1 then
+			local days = math.floor(((expire / 60) / 60) / 24)
+
+			if days <= 0 then
+				local hours = math.floor(expire / 3600)
+
+				if hours <= 4 then
+					hours = string.format("%02.f", hours)
+					local minutes = string.format("%02.f", math.floor(expire / 60 - (hours * 60)))
+					local seconds = string.format("%02.f", math.floor(expire - hours * 3600 - minutes * 60))
+
+					self:DrawInformation(arista.lang:Get("AL_YOU_DONATOR_EXPIRE_HOURS", hours, minutes, seconds), "ChatFont", ScrW(), ScrH(), color_highred, 255, true, function(x, y, width, height)
+						return x - width - 8, y - height - 24
+					end)
+				end
+			end
+		end
+	end
+
 	-- Loop through the money alerts.
 	for k, v in ipairs(arista.client.moneyAlerts) do
 		v.alpha = math.Clamp(v.alpha - 1, 0, 255)
@@ -730,7 +754,7 @@ function GM:HUDPaint()
 		if knockOutPeriod > CurTime() then
 			local seconds = math.floor(knockOutPeriod - CurTime())
 
-			text = arista.lang:Get("AL_YOU_TIME_GETUP", seconds)
+			text = arista.lang:Get("AL_YOU_WAIT_GETUP", seconds)
 		elseif arista.lp:isSleeping() then
 			text = arista.lang:Get("AL_YOU_WAKEUP", jump)
 		else

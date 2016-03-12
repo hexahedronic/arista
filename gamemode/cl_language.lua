@@ -18,6 +18,7 @@ arista.lang.tbl.EN = {
 
 	["AL_ITEM"] = "item",
 	["AL_PICKUP"] = "pickup",
+	["AL_UNTIE"] = "untie",
 
 	["AL_TEAMS"] = "Teams",
 	["AL_GROUPS"] = "Groups",
@@ -27,12 +28,25 @@ arista.lang.tbl.EN = {
 	["AL_MALE"] = "Male",
 	["AL_FEMALE"] = "Female",
 
+	["AL_A"] = "A ",
+	["AL_A_BUTTON"] = "A Button",
+
+	["AL_STATE_ARRESTED"] = "(Arrested)",
+	["AL_STATE_TIED"] = "(Tied)",
+	["AL_STATE_SEARCH"] = "(Search Warrant)",
+	["AL_STATE_ARREST"] = "(Arrest Warrant)",
+
+	-- SPECIFIC THINGS
+	["AL_DOOR_SALE"] = "For Sale - Press F2",
+
 	-- GENERAL FORUMLAE
 	["AL_X_PLUS_X_TO_X"] = "'%s' + '%s' to %s.",
 	["AL_X_TO_X"] = "'%s' to %s.",
 	["AL_SIZE_X"] = "Size: %s",
 	["AL_X_SALARY"] = "You received " .. arista.lang.currency .. "%d salary.",
 	["AL_X_CANNOT_USE_X"] = "%ss cannot use %s!",
+	["AL_X_CORPSE"] = "'s corpse",
+	["AL_X_DEAD"] = " (dead)",
 
 	-- PLAYER CANNOT PERFORM ACTION
 	["AL_CANNOT_GENERIC"] = "You cannot do that to this!",

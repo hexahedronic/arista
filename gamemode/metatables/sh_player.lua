@@ -15,6 +15,16 @@ function player:canAfford(amount)
 	return self:getMoney() >= amount
 end
 
+function player:getStamina()
+	if CLIENT then return self:getAristaInt("stamina") or 0 end
+	return self:getAristaVar("stamina") or 0
+end
+
+function player:isExausted()
+	if CLIENT then return self:getAristaBool("exausted") or false end
+	return self:getAristaVar("exausted") or false
+end
+
 function player:getSalary()
 	if CLIENT then return self:getAristaInt("salary") or 0 end
 	return self:getAristaVar("salary") or 0
@@ -53,6 +63,11 @@ end
 function player:isTied()
 	if CLIENT then return self:getAristaBool("tied") end
 	return self:getAristaVar("tied")
+end
+
+function player:getAccess()
+	if CLIENT then return self:getAristaString("access") or "" end
+	return self:getAristaVar("access") or ""
 end
 
 function player:isIncapacitated()

@@ -39,7 +39,7 @@ end
 
 function entity:physgunForbidden()
 	local class = self:GetClass()
-	return class:find("npc_") or class:find("arista_") or class:find("cider_") or class:find("prop_dynamic") or arista.entity.isDoor(class, true)
+	return class:find("npc_") or class:find("arista_") or class:find("cider_") or class:find("prop_dynamic") or arista.entity.isDoor(self, true)
 end
 
 function entity:toolForbidden()

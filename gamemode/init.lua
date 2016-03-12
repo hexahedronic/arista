@@ -549,7 +549,7 @@ function GM:PlayerAddedToDatabase(ply)
 	for k, v in pairs(arista.config.database) do
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") had database key '", k, "' initalized as '", v, "'.")
 
-		ply:networkAristaVar(k, v)
+		if istable(v) then ply:setAristaVar(k, v) else ply:networkAristaVar(k, v) end
 		ply:databaseAristaVar(k)
 	end
 

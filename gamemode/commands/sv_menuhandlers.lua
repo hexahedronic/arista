@@ -181,7 +181,7 @@ arista.command.add("gender", "", 1, function(ply, gender)
 	ply:notify("AL_YOU_CHANGE_GENDER", gender)
 
 	--GM:Log(EVENT_EVENT, "%s set " .. ply._NextSpawnGenderWord .. " gender to " .. gender .. ".", ply:Name())
-end, "AL_COMMAND_CAT_MENU")
+end, "AL_COMMAND_CAT_MENU", true)
 
 -- A command to perform an action on a door.
 arista.command.add("door", "", 1, function(ply, arguments)

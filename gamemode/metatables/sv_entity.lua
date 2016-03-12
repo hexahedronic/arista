@@ -18,7 +18,7 @@ function entity:lock(delay, override)
 		self:Fire("lock")
 	end
 
-	self:setAristaVar("locked", true)
+	self:networkAristaVar("locked", true)
 end
 
 function entity:unLock(delay, override)
@@ -39,5 +39,5 @@ function entity:unLock(delay, override)
 		self:Fire("unlock")
 	end
 
-	self:setAristaVar("locked", false)
+	self:networkAristaVar("locked", false)
 end

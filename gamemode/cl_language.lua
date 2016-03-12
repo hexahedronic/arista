@@ -1,7 +1,14 @@
 arista.lang = {}
-arista.lang.currency = "£"
 
-arista.lang.EN = {
+arista.lang.currency = "£"
+arista.lang.selected = "EN"
+
+-- Don't edit EN or I will rip your throat out. If you want to
+-- translate it MAKE A NEW TABLE FOR IT AND SET THE DEFAULT TO IT.
+
+arista.lang.tbl = {}
+
+arista.lang.tbl.EN = {
 	-- MISC
 	["AL_FUCK"] = "FUCK!",
 	["AL_WAT"] = "wat",
@@ -272,11 +279,46 @@ arista.lang.EN = {
 	["AL_METHOD_UNSUPORTED"] = "This method is no longer supported.",
 }
 
--- todo: go find all the 'todo: language' shit and replace here.
-function arista.lang:Get(str, ...)
-	--do if str:StartWith("AL_HUD") then return "cyka: " else return "cyka" end end
-	local form = arista.lang.EN[str] or str or ""
+local missing = {}
+function arista.lang.findMissingLocalization()
+	arista.logs.log(arista.logs.E.LOG, "Now printing detected missing localization strings:")
+	arista.logs.logNoPrefix(arista.logs.E.LOG, "Missing from other langs:")
+	for l, s in pairs(arista.lang.tbl.EN) do
+		for k, v in pairs(arista.lang.tbl) do
+			if not v[l] then
+				print(k .. " = ", l)
+			end
+		end
+	end
 
-	return string.format(form, ...)
-	-- todo: language selection
+	arista.logs.logNoPrefix(arista.logs.E.LOG, "Missing calls:")
+	for i, v in ipairs(missing) do
+		print("-", v.s)
+		print(v.t)
+	end
+end
+
+function arista.lang:Get(str, ...)
+	local str = str or ""
+
+	--do if str:StartWith("AL_HUD") then return "cyka: " else return "cyka" end end
+	local lang = arista.lang.selected or "EN"
+
+	lang = arista.lang.tbl[lang]
+	local form = lang[str]
+
+	if not form then
+		form = str
+		missing[#missing+1] = {s = form, t = debug.traceback()}
+	end
+
+	form = form:format(...)
+
+	return form or ""
+end
+
+if GetConVar("developer"):GetInt() > 0 then
+	concommand.Add("arista_lang_find_missing", function()
+		arista.lang.findMissingLocalization()
+	end)
 end

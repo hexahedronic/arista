@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 -- Check if we're running on the client.
 if CLIENT then
 	SWEP.PrintName = "Electrical Baton"

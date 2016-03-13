@@ -1202,7 +1202,7 @@ function GM:PlayerUse(ply, ent)
 	if ply:isUnconscious() then
 		-- If you're unconsious, you can't use things.
 		return false
-	elseif ply:useDisallowed() then
+	elseif ply:useDisallowed() and not (ent:IsVehicle() and arista.config.vars.allowArrestedCars) then
 		-- Prevent spam
 		local nextNotify = ply:getAristaVar("nextNotify")
 

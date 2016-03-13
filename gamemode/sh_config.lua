@@ -125,7 +125,9 @@ arista.config.vars = {
 	-- What models are automatically containers. [model] = {size, name}
 	containerModels = {
 		["models/props_c17/furnituredresser001a.mdl"] = {20, "Wardrobe"},
-	}
+	},
+	-- If arrested people can get into cars (eg for being driven to jail).
+	allowArrestedCars = true,
 }
 
 arista.config.costs = {

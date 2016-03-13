@@ -27,7 +27,7 @@
 	[ ] Laws
 	[ ] Rules
 	[ ] Command help
-	[ ] Credits
+	[X] Credits
 	[-] Changelog
 [X] Chatbox
 

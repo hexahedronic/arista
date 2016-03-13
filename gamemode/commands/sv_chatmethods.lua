@@ -36,7 +36,8 @@ arista.command.add("me", "", 1, function(ply, arguments)
 	if not words or words == "" then
 		return false, "AL_INVALID_MESSAGE"
 	end
-	ply:Emote(words)
+
+	ply:emote(words)
 end, "AL_COMMAND_CAT_MENU")
 
 -- A command to whisper in character.

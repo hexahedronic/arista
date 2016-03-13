@@ -19,22 +19,34 @@ if arista.config.vars.localVoice then
 	game.ConsoleCommand("sv_voicequality 5\n")
 end
 
--- Net Messages, seems like a lot since they also replace umsgs (umsg is depreciated)
+-- Net Messages, seems like a lot since they also replace umsgs (umsg is deprecated)
 do
 	util.AddNetworkString("arista_sendMapEntities")
+
 	util.AddNetworkString("arista_playerInitialized")
+
 	util.AddNetworkString("arista_modelChoices")
+
 	util.AddNetworkString("arista_laws")
+	util.AddNetworkString("arista_lawsUpdate")
+
 	util.AddNetworkString("arista_notify")
+
 	util.AddNetworkString("arista_wipeAccess")
 	util.AddNetworkString("arista_incomingAccess")
-	util.AddNetworkString("arista_menu")
-	util.AddNetworkString("arista_buyDoor")
 	util.AddNetworkString("arista_access")
 	util.AddNetworkString("arista_accessUpdate")
+
+	util.AddNetworkString("arista_menu")
+
+	util.AddNetworkString("arista_buyDoor")
+
 	util.AddNetworkString("arista_moneyAlert")
+
 	util.AddNetworkString("arista_teamChange")
+
 	util.AddNetworkString("arista_inventoryItem")
+
 	util.AddNetworkString("arista_container")
 	util.AddNetworkString("arista_containerUpdate")
 	util.AddNetworkString("arista_closeContainerMenu")
@@ -607,7 +619,7 @@ function GM:PlayerInitialSpawn(ply)
 		net.Send(ply)
 
 		net.Start("arista_laws")
-			net.WriteString("the laws") -- todo: laws go here
+			net.WriteTable(arista.laws.stored)
 		net.Send(ply)
 	end)
 

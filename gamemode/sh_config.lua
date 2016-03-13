@@ -34,7 +34,20 @@ arista.config.defaults = {
 		"models/player/group01/male_09.mdl",
 	},
 	-- Wait time to rejoin job.
-	jobWait = 5 * 60
+	jobWait = 5 * 60,
+	-- Default laws.
+	laws = [[
+[Permanent Laws0]
+Contraband is illegal. Anyone found with it will be arrested. Any police found with it will be demoted on the spot.
+Murder is illegal.
+Assault is illegal.
+Discrimination is illegal.
+Breaking into other people's property is illegal.
+Stealing cars is illegal.
+Explosives are illegal.
+Tying people up without their explicit consent is illegal.
+[Temporary Laws1]
+]],
 }
 
 -- Stuff that's saved in the database, if you want to fuck with it, then

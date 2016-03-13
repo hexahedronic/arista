@@ -18,6 +18,7 @@
 [ ] SQL
 
 [ ] Find issue with job string
+[ ] Double disconnect message
 
 - CL
 [X] Clientside Inventory GUI

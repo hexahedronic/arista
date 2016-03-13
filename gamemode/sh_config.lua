@@ -122,6 +122,10 @@ arista.config.vars = {
 	oocCoolDown = 2,
 	-- How many seconds to wait before allowing an advert again.
 	advertCoolDown = 5,
+	-- What models are automatically containers. [model] = {size, name}
+	containerModels = {
+		["models/props_c17/furnituredresser001a.mdl"] = {20, "Wardrobe"},
+	}
 }
 
 arista.config.costs = {

@@ -35,6 +35,9 @@ do
 	util.AddNetworkString("arista_moneyAlert")
 	util.AddNetworkString("arista_teamChange")
 	util.AddNetworkString("arista_inventoryItem")
+	util.AddNetworkString("arista_container")
+	util.AddNetworkString("arista_containerUpdate")
+	util.AddNetworkString("arista_closeContainerMenu")
 
 	util.AddNetworkString("arista_chatboxMessage")
 	util.AddNetworkString("arista_chatboxPlayerMessage")
@@ -158,10 +161,10 @@ function GM:PlayerSpawnNPC(ply, model)
 end
 
 function GM:PropSpawned(model, ent)
-	--local data = self.Config["Spawnable Containers"][model:lower()]
-	--if not data then return false end
-	--cider.container.make(ent,data[1],data[2])
-	-- todo: Readd automatic containers
+	local data = arista.config.vars.containerModels[model:lower()]
+	if not data then return false end
+
+	arista.container.make(ent, data[1], data[2])
 end
 
 function GM:PlayerSpawnedProp(ply, model, ent)
@@ -1313,26 +1316,29 @@ function GM:KeyPress(ply, key)
 		if arista.entity.isDoor(ent) and ent:GetClass() ~= "prop_door_rotating" and gamemode.Call("PlayerCanUseDoor", ply, ent) then
 			arista.entity.openDoor(ent, 0)
 		--~ Crank dem Containers Boi ~
-		--[[elseif cider.container.isContainer(ent) and gamemode.Call("PlayerCanUseContainer", ply, ent) then
-			local contents, io, filter = cider.container.getContents(ent, ply, true);
+		elseif arista.container.isContainer(ent) and gamemode.Call("PlayerCanUseContainer", ply, ent) ~= false then
+			local contents, io, filter = arista.container.getContents(ent, ply, true)
+
 			local tab = {
 				contents = contents,
 				meta = {
 					io = io,
 					filter = filter, -- Only these can be put in here, if nil then ignore, but empty means nothing.
-					size = cider.container.getLimit(ent), -- Max space for the container
+					size = arista.container.getLimit(ent), -- Max space for the container
 					entindex = ent:EntIndex(), -- You'll probably want it for something
-					name = cider.container.getName(ent) or "Container"
+					name = arista.container.getName(ent) or "Container"
 				}
 			}
-			datastream.StreamToClients( ply, "cider_Container", tab );]]
-			-- todo: container
+
+			net.Start("arista_container")
+				net.WriteTable(tab)
+			net.Send(ply)
 		end
 	end
 end
 
 function GM:SetPlayerSpeed(ply)
-	if ply:isIncapacitate() or not ply:recapacitate() then
+	if ply:isIncapacitated() or not ply:recapacitate() then
 		ply:incapacitate()
 	end
 end

@@ -96,6 +96,8 @@ arista.lang.tbl.EN = {
 	["AL_CANNOT_DEMOTE_NOACCESS"] = "You do not have access to demote this player!",
 	["AL_CANNOT_DEMOTE_GANG"] = "You cannot demote players in other gangs!",
 
+	["AL_CANNOT_CONTAINER_FIT"] = "Cannot fit that item in!",
+
 	-- INVALID OBJECT
 	["AL_INVALID_ACTION"] = "Invalid action specified!",
 	["AL_INVALID_ITEM"] = "This is not a valid item!",
@@ -108,6 +110,7 @@ arista.lang.tbl.EN = {
 	["AL_INVALID_TARGET"] = "Invalid target!",
 	["AL_INVALID_MESSAGE"] = "You must specify a message!",
 	["AL_INVALID_MODEL"] = "That's not a valid model!",
+	["AL_INVALID_CONTAINER"] = "That's not a valid container!",
 
 	-- PLAYER PERFORMED ACTION
 	["AL_YOU_MANUFACTURED"] = "You manufactured %s.",
@@ -184,6 +187,12 @@ arista.lang.tbl.EN = {
 	["AL_DERMA_DROP"] = "Drop",
 	["AL_DERMA_PICKUP"] = "Pickup",
 	["AL_DERMA_DESTROYALL"] = "Destroy All",
+	["AL_DERMA_PUT"] = "Put",
+	["AL_DERMA_TAKE"] = "Take",
+	["AL_DERMA_CONTAINER"] = "Container",
+	["AL_DERMA_YOUR_INVENTORY"] = "Your Inventory",
+	["AL_DERMA_CONT_INVENTORY"] = "Container Inventory",
+	["AL_DERMA_CREDITS"] = "Credits",
 
 	-- HUD ELEMENTS
 	["AL_HUD_JOB"] = "Job: ",
@@ -231,6 +240,9 @@ arista.lang.tbl.EN = {
 
 	["AL_COMMAND_ENTITY"] = "Perform an action on the entity you're looking at.",
 	["AL_COMMAND_ENTITY_HELP"] = "<give|take> <ID> <type> or <name> <mynamehere>",
+
+	["AL_COMMAND_CONTAINER"] = "Put or take an item into/from a container.",
+	["AL_COMMAND_CONTAINER_HELP"] = "<item> <put|take> <amount>",
 
 
 	["AL_COMMAND_CAT_COMMANDS"] = "Commands",

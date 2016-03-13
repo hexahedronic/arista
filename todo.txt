@@ -1,24 +1,55 @@
+[X] = Complete.
+[#] = Partialy complete.
+[-] = Unconfirmed.
+[ ] = Confirmed but uncomplete.
+
 - SV
-[X] Serverside Items Handling <-
-[X] Chat handler (OOC/IC/Ranged) <--
+[X] Serverside Items Handling
+[X] Chat handler (OOC/IC/Ranged)
 [ ] Prop-protection
-[X] Missing commands (a lot of them) <--
-[ ] Containers
+[#] Missing commands (a lot of them)
+	[#] Administration
+	[X] Menu Handling
+	[X] Chat Handling
+	[#] General RP Commands
+[X] Containers
+[ ] Contraband
+[ ] Old Items
+[ ] SQL
+
+[ ] Find issue with job string
 
 - CL
-[X] Clientside Inventory GUI <-
-[X] Clientside Shop GUI <-
-[ ] Missing Main Menu Compontents <-
-[X] Chatbox <--
+[X] Clientside Inventory GUI
+[X] Clientside Shop GUI
+[X] Clientside Container GUI
+[ ] Missing Main Menu Compontent
+	[ ] Laws
+	[ ] Rules
+	[ ] Command help
+	[ ] Credits
+	[-] Changelog
+[X] Chatbox
 
 - Plugins
-[X] Plugin mangement/handling <--
+[X] Plugin mangement/handling
 
 [ ] Vehicle handling
-[ ] Officals <--
+[ ] Officals
 [ ] Hunger
 [ ] Flashlight battery
-[ ] Door management (saving) <--
+[ ] Door management (saving)
 [ ] Stamina
-[ ] Prison spawnpoints <--
-[ ] Map detailing
+[ ] Prison spawnpoints
+[-] Map detailing
+
+- Potential Plguins / Additions
+[-] Wandering NPCs
+[-] Guesture menu (hands up, ect)
+[-] Realistic text signs (with actual models)
+[-] Area display (intergrated)
+
+- Finalising
+[ ] CLOSED-ALPHA (1 day closed testing for immediate, easily spottable errors) (8 Slots)
+[ ] ALPHA (2 days open testing for not so easily spottable errors) (16 Slots)
+[ ] BETA (7 days open testing for underlying issues, small bugs, improvements ect) (24 Slots)

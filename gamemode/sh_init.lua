@@ -61,6 +61,10 @@ GM.Folder = arista.gamemode.folder
 GM.LuaFolder = arista.gamemode.luaFolder
 GM.GMFolder = arista.gamemode.gmFolder
 
+-- Some enums that need to be shared and global.
+CONTAINER_CAN_PUT = 1
+CONTAINER_CAN_TAKE = 2
+
 include("libraries/logs.lua")
 include("libraries/file.lua")
 

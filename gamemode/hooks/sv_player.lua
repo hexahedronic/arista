@@ -329,7 +329,7 @@ function GM:PlayerCanRamDoor(ply, door)
 
 		return false
 	elseif arista.entity.isOwned(door) then
-		for _,pl in pairs(cider.entity.getAllAccessors(door)) do
+		for _,pl in pairs(arista.entity.getAllAccessors(door)) do
 			if pl:hasWarrant() or pl == ply then
 				return true
 			end
@@ -394,28 +394,33 @@ end
 -- @param amount How much of the item the player wants to do. (Negative values indicate removing from the container)
 -- @param force If the update was forced.
 function GM:PlayerUpdatedContainerContents(ply, ent, itemid, amount, force)
-	--[[if (amount == 0) then
-		return;
+	if (amount == 0) then
+		return
 	end
-	local item = self.Items[itemid];
-	local iname, ename, oname, word;
-	if (math.abs(amount) > 1) then
-		iname = "some " .. item.Plural;
+
+	local item = arista.item.items[itemid]
+	local iname, ename, oname, word
+
+	if math.abs(amount) > 1 then
+		iname = "some " .. item.plural
 	else
-		iname = (item.Name:sub(1,1):lower():find"[aeio]" and "an " or "a ") .. item.Name;
+		iname = (item.name[1]:lower():find"[aeio]" and "an " or "a ") .. item.name
 	end
-	ename = ent:GetNWString("Name","container")
-	oname = cider.entity.isOwned(ent) and cider.entity.getPossessiveName(ent) or ename:sub(1,1):find"[aeiou]" and "an" or "a"
-	if (amount < 0) then
-		amount = -amount;
-		word = "%s took %i %s from %s %s";
-		ply:Emote("takes " .. iname .. " from the " .. ename .. ".");
+
+	ename = arista.container.getName(ent)
+	oname = arista.entity.isOwned(ent) and arista.entity.getPossessiveName(ent) or ename:sub(1,1):find"[aeiou]" and "an" or "a"
+
+	if amount < 0 then
+		amount = -amount
+		word = "%s took %i %s from %s %s"
+		ply:emote("takes " .. iname .. " from the " .. ename .. ".")
 	else
-		word = "%s put %i %s into %s %s";
-		ply:Emote("puts " .. iname .. " into the " .. ename .. ".");
+		word = "%s put %i %s into %s %s"
+		ply:emote("puts " .. iname .. " into the " .. ename .. ".")
 	end
-	GM:Log(EVENT_ENTITY, word, ply:Name(), amount, (amount > 1 and item.Plural or item.Name), oname, ename);]]
-	-- todo: container
+
+	--GM:Log(EVENT_ENTITY, word, ply:Name(), amount, (amount > 1 and item.Plural or item.Name), oname, ename)
+	-- todo: log
 end
 
 ---
@@ -583,7 +588,7 @@ function GM:PlayerCanUseCommand(ply, cmd, args)
 	or ((cmd == "dropmoney" or cmd == "givemoney") and ply:Alive() and not ply:isUnconscious()) -- So you can bribe your way out of being arrested/tied up
 	or ((cmd == "me" or cmd == "y" or cmd == "w") and ply:Alive() and not (ply:isUnconscious() and not ply:hasTripped())) -- So you can emote while arrested/tripped
 	or (cmd == "team" and not (ply:isArrested() or ply:isTied())) -- So you can't change job while arrested or tied, but can while dead or unconsious
-	or arista.config.vars.persistantCommands[cmd] then -- Or if it's one of the persistant commands
+	or table.HasValue(arista.config.vars.persistantCommands, cmd) then -- Or if it's one of the persistant commands
 		return true
 	else --Otherwise, check the defeaults
 		return gamemode.Call("PlayerCanDoSomething", ply)

@@ -26,6 +26,60 @@ net.Receive("arista_chatboxMessage", function()
 	arista.chatbox.chatText(nil, nil, text, filter)
 end)
 
+-- Return a table of wrapped text (thanks to SamuraiMushroom for this function).
+function arista.chatbox.wrapText(text, font, width, overhead, base)
+	surface.SetFont(font)
+
+	-- Save the original width for the next line and take the overhead from the width.
+	local original = width
+	width = width - (overhead or 0)
+
+	-- Check to see if the width of the text is greater than the width we specified.
+	if surface.GetTextSize(string.gsub(text, "&", "U")) > width then
+		local length = 0
+		local exploded = {}
+		local seperator = ""
+
+		-- Check if the text has any spaces in it.
+		if string.find(text, " ") then
+			exploded = string.Explode(" ", text)
+			seperator = " "
+		else
+			exploded = string.ToTable(text)
+			seperator = ""
+		end
+
+		-- Create a variable to store the current position of the text.
+		local i = 1
+
+		-- Keep looping while the length of the text is smaller than our specified width.
+		while length < width do
+			local block = table.concat(exploded, seperator, 1, i)
+
+			-- Set the length to be the length of this block of text.
+			length = surface.GetTextSize(string.gsub(block, "&", "U"))
+
+			-- Increase the iterator so that we can move on to the next block of text.
+			i = i + 1
+		end
+
+		-- Insert the first line into our out table.
+		table.insert(base, table.concat(exploded, seperator, 1, i - 2))
+
+		-- Get the second line of the text which we may need to wrap again.
+		text = table.concat(exploded, seperator, i - 1)
+
+		-- Check to see if the size of the second line is greater than our specified width.
+		if surface.GetTextSize(string.gsub(text, "&", "U")) > original then
+			arista.chatbox.wrapText(text, font, original, nil, base)
+		else
+			table.insert(base, text)
+		end
+	else
+		table.insert(base, text)
+	end
+end
+
 -- Explode a string by tags.
 function arista.chatbox.explodeByTags(variable, seperator, open, close)
 	local results = {}

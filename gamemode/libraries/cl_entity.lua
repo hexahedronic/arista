@@ -23,7 +23,7 @@ function arista.entity.isDoor(entity)
 end
 
 function arista.entity.isContainer(entity)
-	return false
+	return entity:getAristaBool("container")
 end
 
 -- Check to see if an entity is owned

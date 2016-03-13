@@ -377,3 +377,107 @@ do
 		return a, b
 	end, "AL_COMMAND_CAT_MENU")
 end
+
+do
+	local function containerHandler(ply, item, action, number)
+		local container = ply:GetEyeTraceNoCursor().Entity
+		if not (IsValid(container) and arista.container.isContainer(container) and ply:GetPos():DistToSqr(ply:GetEyeTraceNoCursor().HitPos) <= range) then
+			return false, "That is not a valid container!"
+		elseif gamemode.Call("PlayerCanUseContainer", ply, container) == false then
+			return false, "You cannot use that container!"
+		end
+
+		local item = item:lower()
+		local action = action:lower()
+
+		if action ~= "put" and action ~= "take" then
+			return false, "Invalid option: "..action.."!"
+		end
+
+		local pInventory = ply:getAristaVar("inventory")
+		local cInventory, io, filter = arista.container.getContents(container, ply, true)
+
+		local pAmount = pInventory[item]
+		local cAmount = cInventory[item]
+
+		local number = number or 1
+		if number == "all" then
+			number = action == "put" and pAmount or cAmount
+		end
+
+		number = math.floor(tonumber(number) or 1)
+
+		if number < 1 then
+			return false, "Invalid amount!"
+		elseif not arista.item.items[item]  then
+			return false, "Invalid item!"
+		end
+
+		if action == "put" then
+			local amount = item == "money" and ply:getMoney() or pAmount
+
+			number = math.abs(tonumber(number) or amount or 0)
+
+			if not (amount and amount > 0 and amount >= number) then
+				return false, "You do not have enough items!"
+			end
+		else
+			local amount = cInventory[item]
+
+			number = math.abs(tonumber(number) or amount or 0)
+
+			if not (amount and math.abs(amount) > 0 and math.abs(amount) >= number) then
+				return false, "There aren't enough items in the container!"
+			elseif amount < 0 then
+				return false, "You cannot take that item out!"
+			end
+		end
+
+		if filter and action == "put" and not filter[item] then
+			return false, "You cannot put that item in!"
+		end
+
+		do
+			local action = action == "put" and CONTAINER_CAN_PUT or CONTAINER_CAN_TAKE
+
+			if bit.band(action, io) ~= action then
+				return false, "You cannot do that!"
+			end
+		end
+
+		if number == 0 then return false, "Invalid amount!" end
+		if action == "take" then number = -number end
+
+		return arista.container.update(container, item, number, nil, ply)
+	end
+
+	arista.command.add("container", "", 2, function(ply, ...)
+		-- I use a handler because returning a value is so much neater than a pyramid of ifs.
+		local res, msg = containerHandler(ply, ...)
+
+		if res then
+			local entity = ply:GetEyeTraceNoCursor().Entity
+			local contents, io, filter = arista.container.getContents(entity, ply, true)
+
+			local tab = {
+				contents = contents,
+				meta = {
+					io = io,
+					filter = filter, -- Only these can be put in here, if nil then ignore, but empty means nothing.
+					size = arista.container.getLimit(entity), -- Max space for the container
+					entindex = entity:EntIndex(), -- You'll probably want it for something
+					name = arista.container.getName(entity) or "Container"
+				}
+			}
+
+			net.Start("arista_containerUpdate")
+				net.WriteTable(tab)
+			net.Send(ply)
+		else
+			net.Start("arista_closeContainerMenu")
+			net.Send(ply)
+		end
+
+		return res, msg
+	end, "AL_COMMAND_CAT_MENU", true)
+end

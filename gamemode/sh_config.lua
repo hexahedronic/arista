@@ -126,6 +126,10 @@ arista.config.vars = {
 	containerModels = {
 		["models/props_c17/furnituredresser001a.mdl"] = {20, "Wardrobe"},
 	},
+	-- Models that are blocked (if no prop protection addon is suplied).
+	blockedModels = {
+		"models/cranes/crane_frame.mdl",
+	},
 	-- If arrested people can get into cars (eg for being driven to jail).
 	allowArrestedCars = true,
 }

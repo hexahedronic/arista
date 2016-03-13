@@ -260,7 +260,7 @@ function player:demote()
 	if arista.team.getGroupLevel(self:Team()) == 1 then
 		self:joinTeam(TEAM_DEFAULT)
 	else
-		self:joinTeam(cider.team.getGroupBase(cider.team.getGroupByTeam(self:Team())))
+		self:joinTeam(arista.team.getGroupBase(arista.team.getGroupByTeam(self:Team())))
 	end
 end
 
@@ -374,7 +374,7 @@ function player:knockOut(time, velocity)
 	ragdoll:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
 	-- Gief to world to prevent people picking it up and waving it about
-	--cider.propprotection.GiveToWorld(ragdoll)
+	ragdoll:CPPISetOwner(game.GetWorld())
 
 	-- Pose the ragdoll in the same shape as us
 	for i, matrix in ipairs(bones) do
@@ -800,7 +800,7 @@ function player:holsterAll()
 		self:StripWeapon(class)
 
 		if arista.item.items[class] then
-			if gamemode.Call("PlayerCanHolster", self, class, true) and cider.inventory.update(self, class, 1) then
+			if gamemode.Call("PlayerCanHolster", self, class, true) and arista.inventory.update(self, class, 1) then
 				-- We put it away normal.
 			elseif gamemode.Call("PlayerCanDrop", self, class, true) then
 				arista.item.items[class]:make(self:GetPos(), 1)

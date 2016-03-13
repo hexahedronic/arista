@@ -977,8 +977,7 @@ function arista.entity.saveAccess(player)
 			arista.entity.clearData(entity, true)
 
 			if arista._internaldata.entities[entity] then
-				--cider.propprotection.GiveToWorld(entity)
-				--cider.propprotection.ClearSpawner(entity)
+				entity:CPPISetOwner(game.GetWorld())
 			end
 
 			arista.entity.updateSlaves(entity)

@@ -51,13 +51,13 @@ end
 
 -- Concommand for debug
 if SERVER then
-	concommand.Add("cider_reload_plugins", function(ply)
+	concommand.Add("arista_reload_plugins", function(ply)
 		if IsValid(ply) and not ply:IsSuperAdmin() then return end
 
 		gamemode.Call("LoadPlugins")
 	end)
 elseif GetConVar("developer"):GetInt() > 0 then -- Don't want the peons to get this command.
-	concommand.Add("cider_reload_plugins_cl", function()
+	concommand.Add("arista_reload_plugins_cl", function()
 		gamemode.Call("LoadPlugins")
 	end)
 end

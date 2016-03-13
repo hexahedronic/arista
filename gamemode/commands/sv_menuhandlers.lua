@@ -137,8 +137,7 @@ arista.command.add("manufacture", "", 1, function(ply, item)
 			local entity = item:make(trace.HitPos + Vector(0,0,16), item.batch)
 
 			if item.onManufacture then item:onManufacture(ply, entity, amount) end
-			--cider.propprotection.PlayerMakePropOwner(entity,ply,true);
-			-- todo: pp
+			entity:CPPISetOwner(ply)
 
 			local text = ""
 
@@ -249,6 +248,7 @@ arista.command.add("door", "", 1, function(ply, arguments)
 
 	--cider.propprotection.ClearSpawner(door)
 	-- todo: pp
+	door:CPPISetOwner(nil)
 
 	local name = arista.entity.getDoorName(door)
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.COMMAND, ply:Name(), "(", ply:SteamID(), ") bought a door (named '", name, "').")

@@ -203,7 +203,7 @@ function GM:PlayerSpawnProp(ply, model)
 	model = model:gsub("//",  "/")
 
 	-- Loop through our banned props to see if this one is banned.
-	if CPPI:GetName() == "arista CPPI Fallback" then
+	if CPPI:GetName() == "arista CPPI Fallback" or arista.config.vars.forceBlockedModels then
 		for k, v in ipairs(arista.config.vars.blockedModels) do
 			if v:lower() == model:lower() then
 				arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a (banned) prop (", model, ").")

@@ -130,6 +130,8 @@ arista.config.vars = {
 	blockedModels = {
 		"models/cranes/crane_frame.mdl",
 	},
+	-- Force blocked models even if prop protection handles it.
+	forceBlockedModels = true,
 	-- If arrested people can get into cars (eg for being driven to jail).
 	allowArrestedCars = true,
 }

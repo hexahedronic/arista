@@ -721,7 +721,7 @@ end
 -- TODO: Remove this and set up a frequency based thingy.
 -- @param words The words the player should send in the radio message
 function player:sayRadio(words)
-	local team = self:Team()
+	local iteam = self:Team()
 	local gang = arista.team.getGang(iteam)
 
 	-- If we're in a gang, send the message to them, otherwise just to our teammates.

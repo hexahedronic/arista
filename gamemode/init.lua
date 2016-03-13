@@ -112,6 +112,8 @@ end
 local radius = arista.config.vars.talkRadius ^ 2
 
 function GM:PlayerCanHearPlayersVoice(listener, player)
+	if not arista.config.vars.localVoice then return true end
+
 	if not (player:IsValid() and listener:IsValid()) then return end
 
 	local distToSqr = player:GetPos():DistToSqr(listener:GetPos())

@@ -15,13 +15,17 @@
 	[X] Chat Handling
 	[#] General RP Commands
 [X] Containers
-[ ] Contraband
-[ ] Old Items
+[-] Contraband
+[#] Old Items
 [ ] SQL
 
 - Fix
 [ ] Find issue with job string
 [ ] Double disconnect message
+
+- Update / Improve
+[ ] Remake HUD Design
+[ ] Remake Derma Design
 
 - CL
 [X] Clientside Inventory GUI

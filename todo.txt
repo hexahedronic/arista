@@ -45,10 +45,10 @@
 [ ] Vehicle handling
 [ ] Officals
 [ ] Hunger
-[ ] Flashlight battery
+[X] Flashlight battery
 [ ] Door management (saving)
 [ ] Stamina
-[ ] Prison spawnpoints
+[#] Prison spawnpoints
 [-] Map detailing
 
 - Potential Plguins / Additions

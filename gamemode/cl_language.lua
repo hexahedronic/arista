@@ -342,9 +342,9 @@ function arista.lang:Get(str, ...)
 	local str = str or ""
 
 	--do if str:StartWith("AL_HUD") then return "cyka: " else return "cyka" end end
-	local lang = arista.lang.selected or "EN"
+	local lang = self.selected or "EN"
 
-	lang = arista.lang.tbl[lang]
+	lang = self.tbl[lang]
 	local form = lang[str]
 
 	if not form then
@@ -355,6 +355,15 @@ function arista.lang:Get(str, ...)
 	form = form:format(...)
 
 	return form or ""
+end
+
+-- For plugins to add their own translations
+function arista.lang:Add(str, tbl)
+	for lang, trans in pairs(tbl) do
+		if self.tbl[lang] then
+			if not self.tbl[lang][str] then self.tbl[lang][str] = trans end
+		end
+	end
 end
 
 if GetConVar("developer"):GetInt() > 0 then

@@ -1,5 +1,5 @@
 ITEM.name					= "Note"
-ITEM.plural				= "Notes"
+ITEM.plural				= "Cash"
 ITEM.size					= 0
 ITEM.cost					= 1
 ITEM.model				= "models/props/cs_assault/money.mdl"

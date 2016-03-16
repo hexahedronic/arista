@@ -98,6 +98,8 @@ arista.lang.tbl.EN = {
 
 	["AL_CANNOT_CONTAINER_FIT"] = "Cannot fit that item in!",
 
+	["AL_CANNOT_LAWS_CHANGE"] = "You may not change the laws.",
+
 	-- INVALID OBJECT
 	["AL_INVALID_ACTION"] = "Invalid action specified!",
 	["AL_INVALID_ITEM"] = "This is not a valid item!",
@@ -146,6 +148,7 @@ arista.lang.tbl.EN = {
 	["AL_YOU_WAIT_SLEEP"] = "You will fall asleep in %s second(s).",
 	["AL_YOU_WAIT_TEAM"] = "You must wait %s before you can become a %s!",
 	["AL_YOU_WAIT_TIMELIMIT"] = "You have reached the timelimit for this job!",
+	["AL_YOU_WAIT_LAWS"] = "You must wait another %d minute(s) to update the laws!",
 
 	["AL_YOU_PROP_LIMIT"] = "You have hit the prop limit!",
 	["AL_YOU_PROP_BANNED"] = "You cannot spawn banned props!",
@@ -193,6 +196,10 @@ arista.lang.tbl.EN = {
 	["AL_DERMA_YOUR_INVENTORY"] = "Your Inventory",
 	["AL_DERMA_CONT_INVENTORY"] = "Container Inventory",
 	["AL_DERMA_CREDITS"] = "Credits",
+	["AL_DERMA_EDIT"] = "Edit",
+	["AL_DERMA_EDITLAWS"] = "Edit the City Laws",
+	["AL_DERMA_SAVE"] = "Save",
+	["AL_DERMA_LAWS"] = "Laws",
 
 	-- HUD ELEMENTS
 	["AL_HUD_JOB"] = "Job: ",
@@ -213,6 +220,7 @@ arista.lang.tbl.EN = {
 	["AL_PLAYER_NO_WARRANT"] = "%s does not have an arrest warrant!",
 	["AL_PLAYER_GIVEACCESS"] = "%s gave %s access to the %q flag%s",
 	["AL_PLAYER_TAKEACCESS"] = "%s took %s's access to the %q flag%s",
+	["AL_PLAYER_UPDATELAWS"] = "%s just updated the city laws.",
 
 	-- DONT HAVE ENOUGH / NEED MORE
 	["AL_NEED_ANOTHER_MONEY"] = "You need another " .. arista.lang.currency .. "%d!",

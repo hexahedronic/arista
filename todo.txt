@@ -28,7 +28,7 @@
 [X] Clientside Shop GUI
 [X] Clientside Container GUI
 [#] Missing Main Menu Compontent
-	[ ] Laws
+	[X] Laws
 	[ ] Rules
 	[ ] Command help
 	[X] Credits

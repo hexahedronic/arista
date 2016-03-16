@@ -103,6 +103,7 @@ net.Receive("arista_notify", function()
 		args[i] = arista.lang:Get(net.ReadString(v))
 	end
 
+	arista.logs.logNoPrefix(arista.logs.E.DEBUG, "Notification string:", form)
 	form = arista.lang:Get(form, unpack(args))
 
 	notification.AddLegacy(form, NOTIFY_GENERIC, 4)

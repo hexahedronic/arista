@@ -599,7 +599,7 @@ end
 -- @param ply The player in question
 -- @return True if they can, false if they can't.
 function GM:PlayerCanBeRecapacitated(ply)
-	return not (ply:isArrested() or ply:isTied() or ply:getAristaVar("holdingEnt"))
+	return not (ply:isArrested() or ply:isTied() or ply._holdingEnt)
 end
 
 ---

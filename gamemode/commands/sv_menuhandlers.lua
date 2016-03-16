@@ -246,8 +246,6 @@ arista.command.add("door", "", 1, function(ply, arguments)
 
 	ply:giveDoor(door, name)
 
-	--cider.propprotection.ClearSpawner(door)
-	-- todo: pp
 	door:CPPISetOwner(nil)
 
 	local name = arista.entity.getDoorName(door)

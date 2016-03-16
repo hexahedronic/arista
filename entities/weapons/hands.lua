@@ -65,7 +65,7 @@ SWEP.IronSightPos = Vector(0, 0, 0)
 SWEP.IronSightAng = Vector(0, 0, 0)
 SWEP.NoIronSightFovChange = true
 SWEP.NoIronSightAttack = true
-SWEP.HeldEnt = NULL
+SWEP.heldEnt = NULL
 
 -- Called when the SWEP is initialized.
 function SWEP:Initialize()
@@ -100,7 +100,7 @@ function SWEP:PrimaryAttack()
 
 	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Refire)
 
-	if IsValid(self.HeldEnt)then
+	if IsValid(self.heldEnt)then
 		self:dropObject(self.Primary.ThrowAcceleration)
 
 		return
@@ -212,7 +212,7 @@ end
 function SWEP:SecondaryAttack()
 	self.Weapon:SetNextSecondaryFire(CurTime() + 0.25)
 
-	if IsValid(self.HeldEnt)then
+	if IsValid(self.heldEnt)then
 		self:dropObject()
 
 		return
@@ -267,8 +267,8 @@ function SWEP:Reload()
 	if arista.utils.isAdmin(self.Owner) and self.Owner:KeyDown(IN_SPEED) then
 
 		if self.Primary.Super then
-			self.Primary.PunchAcceleration = 100
-			self.Primary.ThrowAcceleration = 200
+			self.Primary.PunchAcceleration = 150
+			self.Primary.ThrowAcceleration = 250
 			self.Primary.Damage = 1.5
 			self.Primary.Super = false
 			self.Primary.Refire = 1
@@ -297,39 +297,44 @@ function SWEP:Think()
 		self:UpdateNextIdle()
 	end
 
-	/*if !self.HeldEnt or CLIENT then return end
-	if !IsValid(self.HeldEnt) then
-		if IsValid(self.EntWeld) then self.EntWeld:Remove() end
-		self.Owner._HoldingEnt, self.HeldEnt.held, self.HeldEnt, self.EntWeld, self.EntAngles, self.OwnerAngles = nil
-		self:Speed()
+	if not self.heldEnt or CLIENT then return end
+
+	if not IsValid(self.heldEnt) then
+		if IsValid(self.entWeld) then self.entWeld:Remove() end
+
+		self.Owner._holdingEnt, self.heldEnt.held, self.heldEnt, self.entWeld, self.entAngles, self.ownerAngles = nil
+		self:speed()
+
 		return
-	elseif !IsValid(self.EntWeld) then
-		self.Owner._HoldingEnt, self.HeldEnt.held, self.HeldEnt, self.EntWeld, self.EntAngles, self.OwnerAngles = nil
-		self:Speed()
+	elseif not IsValid(self.entWeld) then
+		self.Owner._holdingEnt, self.heldEnt.held, self.heldEnt, self.entWeld, self.entAngles, self.ownerAngles = nil
+		self:speed()
+
 		return
 	end
-	if !self.HeldEnt:IsInWorld() then
-		self.HeldEnt:SetPos(self.Owner:GetShootPos())
-		self:DropObject()
+
+	if not self.heldEnt:IsInWorld() then
+		self.heldEnt:SetPos(self.Owner:GetShootPos())
+		self:dropObject()
+
 		return
 	end
+
 	if self.NoPos then return end
+
 	local pos = self.Owner:GetShootPos()
 	local ang = self.Owner:GetAimVector()
-	self.HeldEnt:SetPos(pos+(ang*60))
-	self.HeldEnt:SetAngles(Angle(self.EntAngles.p,(self.Owner:GetAngles().y-self.OwnerAngles.y)+self.EntAngles.y,self.EntAngles.r))*/
+
+	self.heldEnt:SetPos(pos + (ang * 60))
+	self.heldEnt:SetAngles(Angle(self.entAngles.p, (self.Owner:GetAngles().y - self.ownerAngles.y) + self.entAngles.y, self.entAngles.r))
 end
 
 function SWEP:speed(down)
-	/*if down then
-		self.Owner:SetRunSpeed( GM.Config["Incapacitated Speed"]);
-		self.Owner:SetWalkSpeed(GM.Config["Incapacitated Speed"]);
-		self.Owner:SetJumpPower( 0 )
+	if down then
+		self.Owner:incapacitate()
 	else
-		self.Owner:SetRunSpeed( GM.Config["Run Speed"] );
-		self.Owner:SetWalkSpeed(GM.Config["Walk Speed"]);
-		self.Owner:SetJumpPower( GM.Config["Jump Power"] )
-	end*/
+		self.Owner:recapacitate()
+	end
 end
 
 function SWEP:Holster()
@@ -341,66 +346,72 @@ function SWEP:Holster()
 	return true
 end
 
-function SWEP:pickUp(ent,trace)
-	/*if CLIENT or ent.held then return end
-	if (constraint.HasConstraints(ent) or ent:IsVehicle()) then
+function SWEP:pickUp(ent, trace)
+	if CLIENT or ent.held then return end
+	if constraint.HasConstraints(ent) or ent:IsVehicle() then
 		return false
 	end
-	local pent = ent:GetPhysicsObject( )
-	if !IsValid(pent) then return end
-	if pent:GetMass() > 60 or not pent:IsMoveable() then
+
+	local pent = ent:GetPhysicsObject()
+	if not IsValid(pent) then return end
+
+	if pent:GetMass() > (self.Primary.Super and 150 or 60) or not pent:IsMoveable() then
 		return
 	end
+
 	if ent:GetClass() == "prop_ragdoll" then
---[[				cider.player.notify(self.Owner,"Temporarily disabled due to bugs. ):",1)
-		self.EntWeld = constraint.Weld(ent,self.Owner,trace.PhysicsBone,0,0,1)
-		if not IsValid(self.EntWeld) then
-			return false
-		end
-		ent:DeleteOnRemove(self.EntWeld)
-		self.NoPos = true
-	--	print(self.EntWeld)
-	--]]	return false
+		return false
 	else
-		ent:SetCollisionGroup( COLLISION_GROUP_WORLD )
-		local EntWeld = {}
-		EntWeld.ent = ent
-		function EntWeld:IsValid() return IsValid(self.ent) end
-		function EntWeld:Remove()
-			if IsValid(self.ent) then self.ent:SetCollisionGroup( COLLISION_GROUP_NONE ) end
+		ent:SetCollisionGroup(COLLISION_GROUP_WORLD)
+
+		local entWeld = {}
+		entWeld.ent = ent
+
+		function entWeld:IsValid()
+			return IsValid(self.ent)
 		end
+
+		function entWeld:Remove()
+			if IsValid(self.ent) then
+				self.ent:SetCollisionGroup(COLLISION_GROUP_NONE)
+			end
+		end
+
 		self.NoPos = false
-		self.EntWeld = EntWeld
+		self.entWeld = entWeld
 	end
-	--print(self.EntWeld)
---	print("k, pickin up")
-	self.Owner._HoldingEnt = true
-	self.HeldEnt = ent
-	self.HeldEnt = ent
-	self.HeldEnt.held = true
-	self.EntAngles = ent:GetAngles()
-	self.OwnerAngles = self.Owner:GetAngles()
-	self:Speed(true)*/
+
+	self.Owner._holdingEnt = true
+	self.heldEnt = ent
+	self.heldEnt = ent
+	self.heldEnt.held = true
+
+	self.entAngles = ent:GetAngles()
+	self.ownerAngles = self.Owner:GetAngles()
+
+	self:speed(true)
 end
 
 function SWEP:dropObject(acceleration)
-	/*if CLIENT then return true end
-	--[[if not acceleration then
-		print("D:")
-	end]]
-	acceleration = acceleration or 0.1
-	if !IsValid(self.HeldEnt) then return true end
-	if IsValid(self.EntWeld) then self.EntWeld:Remove() end
-	local pent = self.HeldEnt:GetPhysicsObject( )
+	if CLIENT then return true end
+
+	acceleration = acceleration or 0.01
+
+	if not IsValid(self.heldEnt) then return true end
+	if IsValid(self.entWeld) then self.entWeld:Remove() end
+
+	local pent = self.heldEnt:GetPhysicsObject()
+
 	if pent:IsValid() then
 		pent:ApplyForceCenter(self.Owner:GetAimVector() * pent:GetMass() * acceleration)
-		--print(pent:GetMass() , acceleration,pent:GetMass() * acceleration)
 	end
-	self.Owner._HoldingEnt, self.HeldEnt.held, self.HeldEnt, self.EntWeld, self.EntAngles, self.OwnerAngles = nil
-	self:Speed()*/
+
+	self.Owner._holdingEnt, self.heldEnt.held, self.heldEnt, self.entWeld, self.entAngles, self.ownerAngles = nil
+
+	self:speed()
 end
 
-function SWEP:OnRemove( )
+function SWEP:OnRemove()
 	if CLIENT then return true end
 
 	self:dropObject()

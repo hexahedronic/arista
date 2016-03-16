@@ -56,8 +56,7 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
 	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
-	--cider.propprotection.GiveToWorld(self)
-	-- todo: pp
+	self:CPPISetOwner(game.GetWorld())
 
 	-- Get the physics object of the entity.
 	local physicsObject = self:GetPhysicsObject()

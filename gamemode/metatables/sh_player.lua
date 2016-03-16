@@ -106,7 +106,7 @@ function player:useDisallowed()
 		else return self:getAristaVar(var) end
 	end
 
-	return get("holdingEnt")
+	return (SERVER and self._holdingEnt)
 		or get("equiping")
 		or self:isStunned()
 		or self:isUnconscious()

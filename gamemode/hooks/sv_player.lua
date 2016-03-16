@@ -394,7 +394,7 @@ end
 -- @param amount How much of the item the player wants to do. (Negative values indicate removing from the container)
 -- @param force If the update was forced.
 function GM:PlayerUpdatedContainerContents(ply, ent, itemid, amount, force)
-	if (amount == 0) then
+	if amount == 0 then
 		return
 	end
 
@@ -412,15 +412,14 @@ function GM:PlayerUpdatedContainerContents(ply, ent, itemid, amount, force)
 
 	if amount < 0 then
 		amount = -amount
-		word = "%s took %i %s from %s %s"
+		word = "took %i %s from %s %s"
 		ply:emote("takes " .. iname .. " from the " .. ename .. ".")
 	else
-		word = "%s put %i %s into %s %s"
+		word = "put %i %s into %s %s"
 		ply:emote("puts " .. iname .. " into the " .. ename .. ".")
 	end
 
-	--GM:Log(EVENT_ENTITY, word, ply:Name(), amount, (amount > 1 and item.Plural or item.Name), oname, ename)
-	-- todo: log
+	arista.logs.event(arista.logs.E.LOG, arista.logs.E.COMMAND, ply:Name(), "(", ply:SteamID(), ") ", string.format(word, amount, (amount > 1 and item.plural or item.name), oname, ename))
 end
 
 ---

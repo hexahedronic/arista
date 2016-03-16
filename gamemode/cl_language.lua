@@ -71,6 +71,11 @@ arista.lang.tbl.EN = {
 	["AL_CANNOT_DOOR_OWNED"] = "This door is already owned!",
 	["AL_CANNOT_DOOR_UNSELLABLE"] = "You cannot sell this door.",
 
+	["AL_CANNOT_CONTAINER_NOITEMS"] = "There aren't enough items in the container!",
+	["AL_CANNOT_CONTAINER_TAKE"] = "You cannot take that item out!",
+	["AL_CANNOT_CONTAINER_PUT"] = "You cannot put that item in!",
+	["AL_CANNOT_CONTAINER_USE"] = "You cannot use that container!",
+
 	["AL_CANNOT_PM_SELF"] = "You can't PM yourself.",
 
 	["AL_CANNOT_ADVERT"] = "You must wait %d %s before using advert again!",
@@ -226,6 +231,7 @@ arista.lang.tbl.EN = {
 	["AL_NEED_ANOTHER_MONEY"] = "You need another " .. arista.lang.currency .. "%d!",
 
 	["AL_DONT_HAVE_AMOUNT"] = "You don't have that many %s!",
+	["AL_DONT_HAVE_ITEMS"] = "You do not have enough items!",
 	["AL_DONT_OWN_ITEM"] = "You do not own any %s!",
 
 	-- COMMANDS

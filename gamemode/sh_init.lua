@@ -97,7 +97,7 @@ function gamemode.Call(name, ...)
 	local gm = gmod.GetGamemode() or GM or GAMEMODE or {}
 
 	if not gm[name] then
-		arista.logs.log(arista.logs.E.WARNING, "Hook called '", name, "' called that does not have a GM: function!\n")
+		arista.logs.log(arista.logs.E.WARNING, "Hook called '", name, "' called that does not have a GM: function!")
 	end
 
 	return hook.Call(name, gm, ...)

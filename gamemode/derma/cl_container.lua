@@ -236,7 +236,7 @@ function PANEL:Init()
 					end
 					box.OnEnter = func
 
-				button = vgui.Create("DButton", editPanel)
+				local button = vgui.Create("DButton", editPanel)
 					button:SetText(self:GetValue())
 					button.DoClick = func
 					button:SetPos(editPanel:GetWide() - button:GetWide() - 10, 46)

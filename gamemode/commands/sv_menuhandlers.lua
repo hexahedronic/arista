@@ -382,22 +382,22 @@ do
 	local function containerHandler(ply, item, action, number)
 		local container = ply:GetEyeTraceNoCursor().Entity
 		if not (IsValid(container) and arista.container.isContainer(container) and ply:GetPos():DistToSqr(ply:GetEyeTraceNoCursor().HitPos) <= range) then
-			return false, "That is not a valid container!"
+			return false, "AL_INVALID_CONTAINER"
 		elseif gamemode.Call("PlayerCanUseContainer", ply, container) == false then
-			return false, "You cannot use that container!"
+			return false, "AL_CANNOT_CONTAINER_USE"
 		end
 
 		local item = item:lower()
 		local action = action:lower()
 
 		if action ~= "put" and action ~= "take" then
-			return false, "Invalid option: "..action.."!"
+			return false, "AL_CANNOT_GENERIC"
 		end
 
 		local pInventory = ply:getAristaVar("inventory")
 		local cInventory, io, filter = arista.container.getContents(container, ply, true)
 
-		local pAmount = pInventory[item]
+		local pAmount = item == "money" and ply:getMoney() or pInventory[item]
 		local cAmount = cInventory[item]
 
 		local number = number or 1
@@ -408,9 +408,9 @@ do
 		number = math.floor(tonumber(number) or 1)
 
 		if number < 1 then
-			return false, "Invalid amount!"
+			return false, "AL_INVALID_AMOUNT"
 		elseif not arista.item.items[item]  then
-			return false, "Invalid item!"
+			return false, "AL_INVALID_ITEM"
 		end
 
 		if action == "put" then
@@ -419,7 +419,7 @@ do
 			number = math.abs(tonumber(number) or amount or 0)
 
 			if not (amount and amount > 0 and amount >= number) then
-				return false, "You do not have enough items!"
+				return false, "AL_DONT_HAVE_ITEMS"
 			end
 		else
 			local amount = cInventory[item]
@@ -427,25 +427,25 @@ do
 			number = math.abs(tonumber(number) or amount or 0)
 
 			if not (amount and math.abs(amount) > 0 and math.abs(amount) >= number) then
-				return false, "There aren't enough items in the container!"
+				return false, "AL_CANNOT_CONTAINER_NOITEMS"
 			elseif amount < 0 then
-				return false, "You cannot take that item out!"
+				return false, "AL_CANNOT_CONTAINER_TAKE"
 			end
 		end
 
 		if filter and action == "put" and not filter[item] then
-			return false, "You cannot put that item in!"
+			return false, "AL_CANNOT_CONTAINER_PUT"
 		end
 
 		do
 			local action = action == "put" and CONTAINER_CAN_PUT or CONTAINER_CAN_TAKE
 
 			if bit.band(action, io) ~= action then
-				return false, "You cannot do that!"
+				return false, "AL_CANNOT_GENERIC"
 			end
 		end
 
-		if number == 0 then return false, "Invalid amount!" end
+		if number == 0 then return false, "AL_INVALID_AMOUNT" end
 		if action == "take" then number = -number end
 
 		return arista.container.update(container, item, number, nil, ply)

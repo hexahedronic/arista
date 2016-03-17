@@ -154,6 +154,10 @@ arista.config.plugins = {
 	staminaRestore = 0.3,
 	-- STAMINA: How much stamina to drain per interval.
 	staminaDrain = 0.6,
+	-- STAMINA: How much stamina to drain for a punch.
+	staminaPunch = 15,
+	-- STAMINA: How much stamina to drain for a jump.
+	staminaJump = 10,
 }
 
 arista.config.costs = {

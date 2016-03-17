@@ -204,7 +204,10 @@ function SWEP:PrimaryAttack()
 	end
 
 	if SERVER and self.stamina and not self.Primary.Super then
-		self.Owner:setAristaVar("stamina", math.Clamp(self.Owner:getStamina() - 20, 0, 100))
+		local drain = arista.config.plugins.staminaPunch
+		hook.Run("StaminaAdjustDrain", self.Owner, drain)
+
+		self.Owner:setAristaVar("stamina", math.Clamp(self.Owner:getStamina() - drain, 0, 100))
 	end
 end
 

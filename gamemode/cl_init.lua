@@ -287,7 +287,7 @@ function GM:DrawBar(font, x, y, width, height, color, text, maximum, variable, b
 	surface.DrawText(text)
 
 	-- Check if a bar table was specified.
-	if bar then bar.y = bar.y - height + 4 end
+	if bar then bar.y = bar.y - height + 1 end
 end
 
 -- Get the bouncing position of the screen's center.

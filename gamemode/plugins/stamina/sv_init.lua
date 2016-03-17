@@ -12,7 +12,7 @@ function PLUGIN:KeyPress(player, key)
 			if player:IsOnGround() and key == IN_JUMP then
 				local stamina = player:getAristaVar("stamina")
 
-				local drain = 5
+				local drain = 10
 				hook.Run("StaminaAdjustDrain", player, drain)
 
 				stamina = math.Clamp(stamina - drain, 0, 100)

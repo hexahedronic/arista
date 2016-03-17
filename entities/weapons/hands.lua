@@ -106,7 +106,7 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if not self.Owner:KeyDown(IN_SPEED) and self.Owner:isExausted() then
+	if not self.Owner:KeyDown(IN_SPEED) and self.Owner:isExhausted() then
 		return
 	end
 

@@ -20,9 +20,9 @@ function player:getStamina()
 	return self:getAristaVar("stamina") or 0
 end
 
-function player:isExausted()
-	if CLIENT then return self:getAristaBool("exausted") or false end
-	return self:getAristaVar("exausted") or false
+function player:isExhausted()
+	if CLIENT then return self:getAristaBool("exhausted") or false end
+	return self:getAristaVar("exhausted") or false
 end
 
 function player:getSalary()

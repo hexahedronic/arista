@@ -149,6 +149,13 @@ arista.config.vars = {
 	allowArrestedCars = true,
 }
 
+arista.config.plugins = {
+	-- STAMINA: How much stamina to restore per interval.
+	staminaRestore = 0.3,
+	-- STAMINA: How much stamina to drain per interval.
+	staminaDrain = 0.6,
+}
+
 arista.config.costs = {
 	-- How much doors cost to buy (/2 for refund).
 	door = 100,

@@ -492,6 +492,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("stunned", false)
 	ply:networkAristaVar("tripped", false)
 	ply:networkAristaVar("sleeping", false)
+	ply:networkAristaVar("exhausted", false)
 
 	ply:networkAristaVar("warrant", "")
 	ply:networkAristaVar("nextGender", "")
@@ -737,6 +738,8 @@ function GM:PlayerReSpawn(ply)
 	--ply._Ammo = {}
 	--ply._HideHealthEffects = false
 
+	ply:setAristaVar("exhausted", false)
+	ply:setAristaVar("exhaustedCooldown", false)
 	ply:setAristaVar("scaleDamage", 1)
 	ply:setAristaVar("sleeping", false)
 	ply:setAristaVar("dead", false)
@@ -760,10 +763,11 @@ function GM:PlayerSpawn(ply)
 
 		-- Check if we're not doing a light spawn.
 		if not ply:getAristaVar("lightSpawn") then
-			ply:recapacitate()
-
 			-- Set some of the ply's variables.
 			gamemode.Call("PlayerReSpawn", ply)
+
+			-- Reset player's speeds.
+			ply:recapacitate()
 
 			-- Make the ply become conscious again.
 			ply:wakeUp(true)

@@ -47,8 +47,9 @@
 [ ] Hunger
 [X] Flashlight battery
 [ ] Door management (saving)
-[ ] Stamina
-[#] Prison spawnpoints
+[X] Stamina
+[X] Prison spawnpoints
+[X] Oxygen
 [-] Map detailing
 
 - Potential Plguins / Additions

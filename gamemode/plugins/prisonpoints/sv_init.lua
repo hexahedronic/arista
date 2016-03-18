@@ -1,56 +1,53 @@
 PLUGIN.prisonpoints = {}
 
 function PLUGIN:LoadData()
-	--[[local path, data, status, results;
+	local path = "prisonpoints/" .. game.GetMap() .. ".txt"
 
-	path = GM.LuaFolder.."/prisonpoints/"..game.GetMap()..".txt";
-	if (not file.Exists(path)) then
+	if not arista.file.existsData(path) then
 		return
 	end
-	data = file.Read(path);
-	status, results = pcall(glon.decode,data);
-	if (status == false) then
-		error("Error GLON decoding '"..path.."': "..results);
-	elseif (not results) then
+
+	local data = arista.file.readData(path)
+	local status, results = pcall(arista.utils.deSerialize, data)
+
+	if status == false then
+		error("["..os.date().."] prisonpoints Plugin: Error decoding '" .. path .. "': " .. results)
+	elseif not results then
 		return
 	end
-	self.Prisonpoints = results;]]
+
+	self.prisonpoints = results
 end
 
 function PLUGIN:SaveData()
---[[	print("savedata!");
-	local data,status,result,path;
---	PrintTable(self.Prisonpoints);
-	status, result = pcall(glon.encode,self.Prisonpoints);
---	print("status",status,"result",result);
-	if (status == false) then
-		error("["..os.date().."] Prisonpoints Plugin: Error GLON encoding prisonpoints : "..results);
+	local status, result = pcall(arista.utils.serialize, self.prisonpoints)
+
+	if status == false then
+		error("["..os.date().."] prisonpoints Plugin: Error encoding prisonpoints : " .. results)
 	end
-	path = GM.LuaFolder.."/prisonpoints/"..game.GetMap()..".txt";
---	print("path",path);
-	if (not result or result == "") then
---		print("no result");
-		if (file.Exists(path)) then
---			print("file exists");
-			file.Delete(path);
+
+	local path = "prisonpoints/" .. game.GetMap() .. ".txt"
+
+	if not result or result == "" then
+		if arista.file.existsData(path) then
+			arista.file.deleteData(path)
 		end
-		return;
+
+		return
 	end
---	print("result, writing.");
-	file.Write(path,result);]]
+
+	arista.file.writeData(path, result)
 end
 
 function PLUGIN:PlayerArrested(ply)
---[[	MsgAll("Plugin called PlayerArrested");
-	if (table.Count(self.Prisonpoints) < 1) then
-		player.NotifyAll("The Prisonpoints plugin is active but has no prison points set!");
-		return;
+	if table.Count(self.prisonpoints) < 1 then
+		arista.player.notifyAll("AL_PRISONPOINTS_NOSET")
+		return
 	end
---	MsgAll("Gots Points");
-	local data = table.Random(self.Prisonpoints);
---	MsgAll("Data: "..tostring(data)..", pos: "..data.pos..", ang: "..data.ang);
-	ply:SetPos(data.pos);
-	ply:SetAngles(data.ang);]]
+
+	local data = table.Random(self.prisonpoints)
+	ply:SetPos(data.pos)
+	ply:SetAngles(data.ang)
 end
 
 -- A command to add a player prison point.
@@ -60,32 +57,35 @@ arista.command.add("prisonpoint", "a", 1, function(ply, action)
 
 	local points = plugin.prisonpoints
 
-	--[[local pos,count;
-	action = action:lower();
-	if (action == "add") then
-		local pos = ply:GetPos();
-		table.insert(points,{pos = pos, ang = ply:GetAngles()});
-		ply:Notify("You have added a prisonpoint where you are standing.");
-		--ply:ConCommand("drawcross "..pos.x.." "..pos.y.." "..pos.z)
-	elseif (action == "remove") then
-		if (not table.Count(points)) then
-			return false, "there are no prisonpoints!";
+	local action = action:lower()
+	if action == "add" then
+		local pos = ply:GetPos()
+		table.insert(points, {pos = pos, ang = ply:GetAngles()})
+
+		ply:notify("AL_PRISONPOINTS_ADD")
+	elseif action == "remove" then
+		if not table.Count(points) then
+			return false, "AL_PRISONPOINTS_NONE"
 		end
-		pos = ply:GetEyeTraceNoCursor().HitPos;
-		count = 0;
-		for k,data in pairs(points) do
-			if ((pos - data.pos):LengthSqr() <= 65536) then
-				points[k] = nil;
-				count = count + 1;
+
+		local pos = ply:GetEyeTraceNoCursor().HitPos
+		local count = 0
+
+		for k, data in ipairs(points) do
+			if (pos - data.pos):LengthSqr() <= 65536 then
+				points[k] = nil
+				count = count + 1
 			end
 		end
-		if (count > 0) then
-			ply:Notify("You removed "..count.." prisonpoints from where you were looking, leaving "..table.Count(points).." left.");
+
+		if count > 0 then
+			ply:notify("AL_PRISONPOINTS_REMOVE", count, table.Count(points))
 		else
-			ply:Notify("There are no prisonpoints where you are looking!");
+			return false, "AL_PRISONPOINTS_NONELOOK"
 		end
 	else
-		return false,"Invalid action specified!";
+		return false, "AL_INVALID_ACTION"
 	end
-	plugin:SaveData();]]
+
+	plugin:SaveData()
 end, "AL_COMMAND_CAT_ADMIN", true)

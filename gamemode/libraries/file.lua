@@ -2,6 +2,27 @@ AddCSLuaFile()
 
 arista.file = {}
 
+function arista.file.findData(path)
+	if not file.Exists("data/" .. arista.gamemode.luaFolder, "GAME") then file.CreateDir(arista.gamemode.luaFolder) end
+	return file.Find("data/" .. arista.gamemode.luaFolder .. path, "GAME")
+end
+
+function arista.file.readData(path)
+	return file.Read("data/" .. arista.gamemode.luaFolder .. path, "GAME")
+end
+
+function arista.file.writeData(path)
+	return file.Write(arista.gamemode.luaFolder .. path)
+end
+
+function arista.file.deleteData(path)
+	return file.Delete(arista.gamemode.luaFolder .. path)
+end
+
+function arista.file.existsData(path)
+	return file.Exists("data/" .. arista.gamemode.luaFolder .. path, "GAME")
+end
+
 function arista.file.find(path)
 	return file.Find(arista.gamemode.folder .. path, "GAME")
 end

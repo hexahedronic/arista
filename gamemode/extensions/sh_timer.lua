@@ -16,7 +16,7 @@ function arista.timer.conditional(name, time, conditional, success, failure, ...
 	timer.Create(name, time + 1, 1, suc)
 
 	local tick = function()
-		if conditional(unpack(args)) then
+		if conditional(unpack(args)) == false then
 			failure(unpack(args))
 
 			timer.Destroy(name)

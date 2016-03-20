@@ -97,7 +97,9 @@ arista.config.vars = {
 	-- Warrant expire times.
 	searchWarrantTime = 220,
 	arrestWarrantTime = 360,
-	-- Time taken to perform an action.
+	-- Time taken to tie up a player.
+	tyingTime = 8,
+	-- Time taken to untie a player.
 	untyingTime = 15,
 	-- If we should clear decals every 60 seconds.
 	clearDecals = true,

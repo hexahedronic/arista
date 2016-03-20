@@ -753,13 +753,13 @@ end
 -- @param other Other person involved, if there is one
 function player:emote(words, other)
 	local pronoun = self:getPronouns()
-	words:gsub("<P>", pronoun)
+	words = words:gsub("<P>", pronoun)
 
 	if other and IsValid(other) then
-		words:gsub("<N>", other:Name())
+		words = words:gsub("<N>", other:Name())
 
 		local oPronoun = other:getPronouns()
-		words:gsub("<O>", oPronoun)
+		words = words:gsub("<O>", oPronoun)
 	end
 
 	arista.chatbox.addInRadius(self, "me", words, self:GetPos())

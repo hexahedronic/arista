@@ -66,6 +66,8 @@ arista.lang.tbl.EN = {
 
 	["AL_CANNOT_GENDER_SAME"] = "You are already %s!",
 
+	["AL_CANNOT_TIE"] = "You must look at a player to tie them up!",
+
 	["AL_CANNOT_MANUFACTURE"] = "You cannot manufacture another item for %s seconds(s)!",
 
 	["AL_CANNOT_DOOR_OWNED"] = "This door is already owned!",

@@ -362,7 +362,7 @@ function SWEP:pickUp(ent, trace)
 		return
 	end
 
-	if ent:GetClass() == "prop_ragdoll" then
+	if ent:GetClass() == "prop_ragdoll" or ent:IsPlayer() or ent:IsWorld() then
 		return false
 	else
 		ent:SetCollisionGroup(COLLISION_GROUP_WORLD)

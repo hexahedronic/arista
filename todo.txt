@@ -22,6 +22,7 @@
 - Fix
 [ ] Find issue with job string
 [ ] Double disconnect message
+[ ] E + Shift doesnt work on deployed items
 
 - Update / Improve
 [ ] Remake HUD Design

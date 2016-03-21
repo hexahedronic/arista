@@ -31,6 +31,9 @@ arista.lang.tbl.EN = {
 	["AL_A"] = "A ",
 	["AL_A_BUTTON"] = "A Button",
 
+	["AL_DROP_THAT"] = "drop that",
+	["AL_DESTROY_THAT"] = "destroy that",
+
 	["AL_STATE_ARRESTED"] = "(Arrested)",
 	["AL_STATE_TIED"] = "(Tied)",
 	["AL_STATE_SEARCH"] = "(Search Warrant)",
@@ -47,6 +50,8 @@ arista.lang.tbl.EN = {
 	["AL_X_CANNOT_USE_X"] = "%ss cannot use %s!",
 	["AL_X_CORPSE"] = "'s corpse",
 	["AL_X_DEAD"] = " (dead)",
+	["AL_CANNOT_X_MAX"] = "You've hit the %s limit!",
+	["AL_CANNOT_X_ENCUMBERED"] = "You cannot %s, you will be over encumbered!",
 
 	-- PLAYER CANNOT PERFORM ACTION
 	["AL_CANNOT_GENERIC"] = "You cannot do that to this!",

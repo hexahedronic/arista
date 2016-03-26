@@ -1,0 +1,135 @@
+-- Documentation for developers, hooks and meta-functions.
+
+---
+-- Convienence function: Checks if a player has more (or equal) money than the amount specified.
+-- @param amount The amount of money to compare the player's against
+-- @returns True if they have more, false if not.
+function player:canAfford(amount)
+end
+
+---
+-- Convienence function: Returns a players money.
+-- @returns Integer
+function player:getMoney()
+end
+
+---
+-- Convienence function: Returns a players salary.
+-- @returns Integer
+function player:getSalary()
+end
+
+---
+-- Convienence function: Returns a players stamina.
+-- @returns Integer
+function player:getStamina()
+end
+
+---
+-- Convienence function: Returns if a player is exhausted.
+-- @returns Boolean
+function player:isExhausted()
+end
+
+---
+-- Convienence function: Returns if a player has tripped.
+-- @returns Boolean
+function player:hasTripped()
+end
+
+---
+-- Convienence function: Returns if a player is sleeping.
+-- @returns Boolean
+function player:isSleeping()
+end
+
+---
+-- Convienence function: Returns if a player is stunned.
+-- @returns Boolean
+function player:isStunned()
+end
+
+---
+-- Convienence function: Returns if a player is stuck in something. (NYI?)
+-- @returns Boolean
+function player:isStuck()
+end
+
+---
+-- Convienence function: Returns if a player is under arrest.
+-- @returns Boolean
+function player:isArrested()
+end
+
+---
+-- Convienence function: Returns if a player has been knocked out / is sleeping.
+-- @returns Boolean
+function player:isUnconscious()
+end
+
+---
+-- Convienence function: Returns if a player is tied up with rope.
+-- @returns Boolean
+function player:isTied()
+end
+
+---
+-- Convienence function: Returns if a player is incapacitated (slow speed, no jumping).
+-- @returns Boolean
+function player:isIncapacitated()
+end
+
+---
+-- Convienence function: Returns if a player cannot USE [E] items.
+-- @returns Boolean
+function player:useDisallowed()
+end
+
+---
+-- Convienence function: Returns if a player cannot interact at all.
+-- @returns Boolean
+function player:interactionDisallowed()
+end
+
+---
+-- Convienence function: Returns a player's gender.
+-- @returns String
+function player:getGender()
+end
+
+---
+-- Convienence function: Returns a player's details (tall, blonde, ect).
+-- @returns String
+function player:getDetails()
+end
+
+---
+-- Convienence function: Returns a player's clan.
+-- @returns String
+function player:getClan()
+end
+
+---
+-- Convienence function: Returns a player's job (customizable, it's the string not the TEAM).
+-- @returns String
+function player:getJob()
+end
+
+---
+-- Convienence function: Returns a player's warrant (either arrest search or "").
+-- @returns String
+function player:hasWarrant()
+end
+
+---
+-- Convienence function: Returns a player's access string (see init/sh_jobs for more info on this).
+-- @returns String
+function player:getAccess()
+end
+
+---
+-- Convienence function: Returns a player's pronouns (his/him ect).
+-- @returns String possessive
+-- @returns String self (I am not good with grammar, what is this called?)
+function player:getPronouns()
+end

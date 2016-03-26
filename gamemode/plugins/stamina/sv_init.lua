@@ -13,7 +13,7 @@ function PLUGIN:KeyPress(player, key)
 				local stamina = player:getAristaVar("stamina")
 
 				local drain = arista.config.plugins.staminaJump
-				hook.Run("StaminaAdjustDrain", player, drain)
+				drain = hook.Run("StaminaAdjustDrain", player, drain) or drain
 
 				stamina = math.Clamp(stamina - drain, 0, 100)
 
@@ -30,7 +30,7 @@ function PLUGIN:PlayerTenthSecond(player)
 	if not (player:isArrested() or player:isTied() or player._holdingEnt or player:GetMoveType() == MOVETYPE_NOCLIP) then
 		if player:KeyDown(IN_SPEED) and player:Alive() and not player:isUnconscious() and not player:getAristaVar("exhaustedCooldown") and not player:isExhausted() and player:GetVelocity():Length() > 1 and player:IsOnGround() then
 			local drain = arista.config.plugins.staminaDrain
-			hook.Run("StaminaAdjustDrain", player, drain)
+			drain = hook.Run("StaminaAdjustDrain", player, drain) or drain
 
 			if player:Health() < 50 then
 				stamina = math.Clamp(stamina - (drain + ((50 - player:Health()) * 0.05)), 0, 100)

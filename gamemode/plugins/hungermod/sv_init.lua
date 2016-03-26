@@ -16,7 +16,7 @@ function PLUGIN:PlayerTenthSecond(ply)
 	if LastDelay > CurTime() then return end
 	LastDelay = CurTime() + arista.config.plugins.hungerInterval
 
-	local hunger = ply:getAristaVar("hunger")
+	local hunger = ply:getAristaVar("hunger") or 100
 	hunger = math.Clamp(hunger - arista.config.plugins.hungerDrain, 0, 100)
 	ply:setAristaVar("hunger", hunger)
 	
@@ -24,7 +24,7 @@ end
 
 function PLUGIN:StaminaAdjustPlayerSpeed(ply, run, walk)
 
-	local hunger = ply:getAristaVar("hunger")
+	local hunger = ply:getAristaVar("hunger") or 100
 	
 	if hunger <= 10 then
 	
@@ -37,7 +37,7 @@ end
 
 function PLUGIN:StaminaAdjustDrain(ply, amt)
 
-	local hungry = ply:getAristaVar("hunger") <= 10
+	local hungry = (ply:getAristaVar("hunger") or 100) <= 10
 	
 	if hungry then 
 	

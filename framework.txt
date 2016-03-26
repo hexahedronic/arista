@@ -1,135 +1,561 @@
 -- Documentation for developers, hooks and meta-functions.
 
+-- META
+
 ---
 -- Convienence function: Checks if a player has more (or equal) money than the amount specified.
 -- @param amount The amount of money to compare the player's against
 -- @returns True if they have more, false if not.
-function player:canAfford(amount)
+SHARED function player:canAfford(amount)
 end
 
 ---
 -- Convienence function: Returns a players money.
 -- @returns Integer
-function player:getMoney()
+SHARED function player:getMoney()
 end
 
 ---
 -- Convienence function: Returns a players salary.
 -- @returns Integer
-function player:getSalary()
+SHARED function player:getSalary()
 end
 
 ---
 -- Convienence function: Returns a players stamina.
 -- @returns Integer
-function player:getStamina()
+SHARED function player:getStamina()
 end
 
 ---
 -- Convienence function: Returns if a player is exhausted.
 -- @returns Boolean
-function player:isExhausted()
+SHARED function player:isExhausted()
 end
 
 ---
 -- Convienence function: Returns if a player has tripped.
 -- @returns Boolean
-function player:hasTripped()
+SHARED function player:hasTripped()
 end
 
 ---
 -- Convienence function: Returns if a player is sleeping.
 -- @returns Boolean
-function player:isSleeping()
+SHARED function player:isSleeping()
 end
 
 ---
 -- Convienence function: Returns if a player is stunned.
 -- @returns Boolean
-function player:isStunned()
+SHARED function player:isStunned()
 end
 
 ---
 -- Convienence function: Returns if a player is stuck in something. (NYI?)
 -- @returns Boolean
-function player:isStuck()
+SHARED function player:isStuck()
 end
 
 ---
 -- Convienence function: Returns if a player is under arrest.
 -- @returns Boolean
-function player:isArrested()
+SHARED function player:isArrested()
 end
 
 ---
 -- Convienence function: Returns if a player has been knocked out / is sleeping.
 -- @returns Boolean
-function player:isUnconscious()
+SHARED function player:isUnconscious()
 end
 
 ---
 -- Convienence function: Returns if a player is tied up with rope.
 -- @returns Boolean
-function player:isTied()
+SHARED function player:isTied()
 end
 
 ---
 -- Convienence function: Returns if a player is incapacitated (slow speed, no jumping).
 -- @returns Boolean
-function player:isIncapacitated()
+SHARED function player:isIncapacitated()
 end
 
 ---
 -- Convienence function: Returns if a player cannot USE [E] items.
 -- @returns Boolean
-function player:useDisallowed()
+SHARED function player:useDisallowed()
 end
 
 ---
 -- Convienence function: Returns if a player cannot interact at all.
 -- @returns Boolean
-function player:interactionDisallowed()
+SHARED function player:interactionDisallowed()
 end
 
 ---
 -- Convienence function: Returns a player's gender.
 -- @returns String
-function player:getGender()
+SHARED function player:getGender()
 end
 
 ---
 -- Convienence function: Returns a player's details (tall, blonde, ect).
 -- @returns String
-function player:getDetails()
+SHARED function player:getDetails()
 end
 
 ---
 -- Convienence function: Returns a player's clan.
 -- @returns String
-function player:getClan()
+SHARED function player:getClan()
 end
 
 ---
 -- Convienence function: Returns a player's job (customizable, it's the string not the TEAM).
 -- @returns String
-function player:getJob()
+SHARED function player:getJob()
 end
 
 ---
 -- Convienence function: Returns a player's warrant (either arrest search or "").
 -- @returns String
-function player:hasWarrant()
+SHARED function player:hasWarrant()
 end
 
 ---
 -- Convienence function: Returns a player's access string (see init/sh_jobs for more info on this).
 -- @returns String
-function player:getAccess()
+SHARED function player:getAccess()
 end
 
 ---
 -- Convienence function: Returns a player's pronouns (his/him ect).
 -- @returns String possessive
 -- @returns String self (I am not good with grammar, what is this called?)
-function player:getPronouns()
+SHARED function player:getPronouns()
+end
+
+-- HOOKS
+
+---
+-- Called when a player's warrant timer ends.
+-- @param ply The player whose warrant just expired
+-- @param class The class of warrant. 'arrest' or 'search'.
+SERVER function GM:PlayerWarrantExpired(player, class)
+end
+
+---
+-- Called when a player demotes another player from a team.
+-- @param ply The player that did the demoting
+-- @param victim The player that got demoted
+-- @param teamID The ID of the team the victim got demoted from
+-- @param reason The reason the player demoted the victim.
+SERVER function GM:PlayerDemote(ply, victim, teamID, reason)
+end
+
+---
+-- Called to check if a player can blacklist another player from something
+-- @param ply The admin who wants to do the blacklisting
+-- @param victim The player the admin wants to blacklist
+-- @param kind What kind of activity. Can be one of "cat","item","cmd" or "team". In order: Item category, specific item, command or specific team/job.
+-- @param kind What kind of activity. Can be one of "cat","item","cmd" or "team". In order: Item category, specific item, command or specific team/job.
+-- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
+-- @param time How long in seconds admin wants to blacklist them for.
+-- @param reason Why the admin wants to blacklist them
+-- @return true if they can, false if they can't.
+SERVER function GM:PlayerCanBlacklist(ply, victim, kind, thing, time, reason)
+end
+
+---
+-- Called to check if a player can removing an existing blacklist before the timer expires.
+-- @param ply The admin who wants to do the unblacklisting
+-- @param target The player the admin wants to unblacklist
+-- @param kind What kind of activity. Can be one of "cat","item","cmd" or "team". In order: Item category, specific item, command or specific team/job.
+-- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
+-- @return true if they can, false if they can't.
+SERVER function GM:PlayerCanUnBlacklist(ply, target, kind, thing)
+end
+
+---
+-- Called when a player has been blacklisted from something
+-- @param ply The player that has been blacklisted
+-- @param kind What kind of activity. Can be one of "cat","item","cmd" or "team". In order: Item category, specific item, command or specific team/job.
+-- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
+-- @param time How long in seconds they have been blacklisted for
+-- @param reason Why they have been blacklisted.
+-- @param blacklister The admin who blacklisted them.
+SERVER function GM:PlayerBlacklisted(ply, kind, thing, time, reason, blacklister)
+end
+
+---
+-- Called when a player has been unblacklisted from something
+-- @param ply The player that has been unblacklisted
+-- @param kind What kind of activity. Can be one of "cat","item","cmd" or "team". In order: Item category, specific item, command or specific team/job.
+-- @param thing What specific activity. For instance if the kind was 'cmd', the thing could be 'unblacklist'.
+-- @param unblacklister The admin who unblacklisted them.
+SERVER function GM:PlayerUnBlacklisted(ply, kind, thing, unblacklister)
+end
+
+---
+-- Called when a player knocks out another player (tranq/baton/chloroform etc)
+-- @param ply The player that did the knocking
+-- @param victim The player that got knocked.
+SERVER function GM:PlayerKnockOut(ply, victim)
+end
+
+---
+-- Called when a player wakes up another player (stims/baton etc)
+-- @param ply The player that did the waking up
+-- @param victim The player that got woke up
+SERVER function GM:PlayerWakeUp(ply, victim)
+end
+
+---
+-- Called when a player arrests another player.
+-- @param ply The player that did it
+-- @param victim The player that it was done to
+SERVER function GM:PlayerArrest(ply, victim)
+end
+
+---
+-- Called when a player unarrests another player.
+-- @param ply The player that did it
+-- @param victim The player that it was done to
+SERVER function GM:PlayerUnarrest(ply, victim)
+end
+
+---
+-- Called when a player warrants another player.
+-- @param ply The player that did it
+-- @param victim The player that it was done to
+SERVER function GM:PlayerWarrant(ply, victim, class)
+end
+
+---
+-- Called when a player unwarrants another player.
+-- @param ply The player that did it
+-- @param victim The player that it was done to
+SERVER function GM:PlayerUnwarrant(ply, victim)
+end
+
+---
+-- Called when a player ties up another player.
+-- @param ply The player that did it
+-- @param victim The player that it was done to
+SERVER function GM:PlayerTied(ply, victim)
+end
+
+---
+-- Called when a player unties another player.
+-- @param ply The player that did it
+-- @param victim The player that it was done to
+SERVER function GM:PlayerUnTied(ply, victim)
+end
+
+---
+-- Called when a player tries to tie another player up
+-- @param ply The player trying to do the tying
+-- @param target The player the attempted tie is apon
+-- @return true if they can, false if they can't.
+SERVER function GM:PlayerCanTie(ply, target)
+end
+
+---
+-- Called when a player tries to untie another player
+-- @param ply The player trying to do the untying
+-- @param target The player the attempted untie is apon
+-- @return true if they can, false if they can't.
+SERVER function GM:PlayerCanUntie(ply, target)
+end
+
+---
+-- Called when a player attempts to own a door.
+-- @param ply The player trying to do the buying
+-- @param door The door the player wants to buy
+-- @return true if they can, false if they can't.
+SERVER function GM:PlayerCanOwnDoor(ply, door)
+end
+---
+-- Called when a player attempts to view an ent's access data.
+-- @param ply The player trying to do the viewing
+-- @param ent The ent the player is trying to view
+-- @return true if they can, false if they can't.
+SERVER function GM:PlayerCanViewEnt(ply, ent)
+end
+---
+-- Caled when a player attempts to set the name of an ent
+-- @param ply The player trying to do the setting
+-- @param ent The entity the player is trying to set on
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanSetEntName(ply, ent, name)
+end
+
+---
+-- Called when a player tries to jam a door
+-- @param ply The player in question
+-- @param door The door in question
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanJamDoor(ply, door)
+end
+
+---
+-- Called when a player attempts to holster a weapon.
+-- @param ply The player in question
+-- @param class The weapon class
+-- @param silent Wether to be quiet about it or not
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanHolster(ply, class, silent)
+end
+
+---
+-- Called when a player attempts to drop a weapon.
+-- @param ply The player in question
+-- @param class The weapon class
+-- @param silent Wether to be quiet about it or not
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanDrop(ply, class, silent)
+end
+
+---
+-- Called when a player attempts to use an item.
+-- @param ply The player in question
+-- @param id The UniqueID of the item
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanUseItem(ply, id)
+end
+
+---
+-- Called when a plyer attempts to stun another player
+-- @param ply The player in question
+-- @param target The player's intended victim
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanStun(ply, target)
+end
+
+---
+-- Called when a player attempts to knock out a player.
+-- @param ply The player in question
+-- @param target The player's intended victim
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanKnockOut(ply, target)
+end
+
+---
+-- Called when a player attempts to warrant a player.
+-- @param ply The player in question
+-- @param target The player's intended victim
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanWarrant(ply, target)
+end
+
+---
+-- Called when a player attempts to wake up another player.
+-- @param target The player's intended victim
+-- @param ply The player in question
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanWakeUp(ply, target)
+end
+
+---
+-- Called when a player attempts to destroy contraband.
+-- @param ply The player in question
+-- @param ent The contraband the player wants to destroy
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanDestroyContraband(ply, ent)
+end
+
+---
+-- Called when a player destroys contraband.
+-- @param ply The player in question
+-- @param ent The contraband the player just destroyed
+SERVER function GM:PlayerDestroyedContraband(ply, ent)
+end
+
+---
+-- Called when a player attempts to ram a door.
+-- @param ply The player in question
+-- @param door The door in question
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanRamDoor(ply, door)
+end
+
+---
+-- Called when a player attempts to open a container
+-- @param ply The player in question
+-- @param ent The container in question
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanUseContainer(ply, ent)
+end
+
+---
+-- Called when a player starts to put/take an item into/from a container (Allows the overriding of the insertion proccess, or denying insertion, for banks or whatever)
+-- @param ply The player in question
+-- @param ent The container in question
+-- @param itemid The ID of the item in question
+-- @param amount How much of the item the player wants to do. (Negative values indicate removing from the container)
+-- @param force Whether or not to ignore normal restraints such as size limits. If the gamemode sends a force request, it's not expecting it to fail nor is it going to handle any output you return.
+-- @return nil to update as normal, true to indicate that you have updated the container and all is fine or false (and an optional message) to indicate failure and that the container window should be closed.
+SERVER function GM:PlayerUpdateContainerContents(ply, ent, itemid, amount, force)
+end
+
+---
+-- Called when a player has put/taken an item into/from a container (For notifications etc)
+-- @param ply The player in question
+-- @param ent The container in question
+-- @param itemid The ID of the item in question
+-- @param amount How much of the item the player wants to do. (Negative values indicate removing from the container)
+-- @param force If the update was forced.
+SERVER function GM:PlayerUpdatedContainerContents(ply, ent, itemid, amount, force)
+end
+
+---
+-- Called when a player attempts to lockpick an entity
+-- @param ply The player in question
+-- @param ent The entity in question
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanLockpick(ply, ent)
+end
+
+---
+-- Called when a player attempts to earn contraband money.
+-- @param ply The player in question
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanEarnContraband(ply)
+end
+
+---
+-- Called when a player attempts to change the city laws
+-- @param ply The player in question
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanChangeLaws(ply)
+end
+
+---
+-- Called when a player attempts to unwarrant a player.
+-- @param ply The player in question
+-- @param target The player's intended victim
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanUnwarrant(ply, target)
+end
+
+---
+-- Called when a player has been warranted
+-- @param ply The player in question
+-- @param class The class of warrant
+SERVER function GM:PlayerWarranted(ply, class)
+end
+
+---
+-- Called when a player has been unwarranted either due to direct action or the time expiring
+-- @param ply The player in question
+SERVER function GM:PlayerUnWarranted(ply)
+end
+
+---
+-- Called when a player switches teams
+-- @param ply The player in question
+-- @param oldteam The id of the old team
+-- @param newteam The id of the new team
+SERVER function GM:PlayerChangedTeams(ply, oldteam, newteam)
+end
+
+---
+-- Called when a player is arrested
+-- @param ply The player in question
+SERVER function GM:PlayerArrested(ply)
+end
+
+---
+-- Called when a player is unarrested
+-- @param ply The player in question
+SERVER function GM:PlayerUnArrested(ply)
+end
+
+---
+-- Called when a player is knocked out, possibly by enemy action
+-- @param ply The player in question
+-- @param attacker (optional) The person who knocked them out
+SERVER function GM:PlayerKnockedOut(ply, attacker)
+end
+
+---
+-- Called when a player is woken up, possibly by enemy action
+-- @param ply The player in question
+-- @param attacker (optional) The person who woke them up
+SERVER function GM:PlayerWokenUp(ply, attacker)
+end
+
+---
+-- Called every 10th second a player is on the server
+-- @param ply The player in question
+SERVER function GM:PlayerTenthSecond(ply)
+end
+
+---
+-- Called every second a player is on the server
+-- @param ply The player in question
+SERVER function GM:PlayerSecond(ply)
+end
+
+---
+-- Called when a player attempts to say something in-character.
+-- @param ply The player in question
+-- @param text What the player is trying to say
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanSayIC(ply, text)
+end
+
+---
+-- Called when a player attempts to say something in OOC.
+-- @param ply The player in question
+-- @param text What the player is trying to say
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanSayOOC(ply, text)
+end
+
+---
+-- Called when a player attempts to say something in local OOC.
+-- @param ply The player in question
+-- @param text What the player is trying to say
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanSayLOOC(ply, text)
+end
+
+---
+-- Called when attempts to use a command.
+-- @param ply The player in question
+-- @param cmd What command the player just tried to use
+-- @param args A table of all the arguments the player passed
+SERVER function GM:PlayerCanUseCommand(ply, cmd, args)
+end
+
+---
+-- Called when a player is about to be recapacitated
+-- @param ply The player in question
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanBeRecapacitated(ply)
+end
+
+---
+-- Called when a player is about to recieve their weapons
+-- @param ply The player in question
+-- @return True if they can, false if they can't.
+SERVER function GM:PlayerCanRecieveWeapons(ply)
+end
+
+---
+-- Called when a player attempts to join a team (server) or the job list is updated (client)
+-- @param ply The player in question
+-- @param target The target team's ID
+-- @return True if they can, False if they can't.
+SHARED function GM:PlayerCanJoinTeamShared(ply, target)
+end
+
+---
+-- Called when a player attempts to demote another player.
+-- @param ply The player attempting
+-- @param target The intended victim
+-- @return true if they can false if they can't
+SHARED function GM:PlayerCanDemote(ply, target)
 end

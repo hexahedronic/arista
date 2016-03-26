@@ -76,6 +76,7 @@ color_darkgray =		Color(025, 025, 025, 255)
 color_lightgray =		Color(150, 150, 150, 255)
 color_yellow =			Color(250, 230, 070, 255)
 color_cream =			Color(255, 255, 150, 255)
+color_darkgreen =       Color(030, 120, 045, 255)
 
 --Alpha'd
 color_red_alpha =		Color(255, 050, 050, 200)

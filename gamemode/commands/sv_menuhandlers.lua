@@ -258,7 +258,7 @@ do
 		local ent = entity._isDoor and "door" or entity:getName()
 
 		if action == "name" then
-			if not gamemode.Call("PlayerCanSetEntName", ply, entity) then
+			if gamemode.Call("PlayerCanSetEntName", ply, entity) == false then
 				return false, "AL_CANNOT_GENERIC"
 			end
 
@@ -356,7 +356,7 @@ do
 
 			detailstable.owned = {
 				sellable = tobool(entity._isDoor and not entity._unsellable) or nil,
-				name = gamemode.Call("PlayerCanSetEntName", ply, entity) and arista.entity.getName(entity) or nil,
+				name = gamemode.Call("PlayerCanSetEntName", ply, entity) ~= false and arista.entity.getName(entity) or nil,
 			}
 		end
 
@@ -370,7 +370,7 @@ do
 
 		net.Start("arista_accessUpdate")
 			net.WriteTable(detailstable)
-		net.Broadcast()
+		net.Send(ply)
 
 		return a, b
 	end, "AL_COMMAND_CAT_MENU")

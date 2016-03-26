@@ -1,17 +1,19 @@
 -- todo: this looks like 90% inventory code,
 -- possibly split it this into arista_invBase or something and rebuild inventory onto it?
 
+arista.derma.access = {}
+arista.derma.access.accessmenu =  nil
+
 local PANEL = {}
 
 local width, height = ScrW() * 0.75,ScrH() * 0.75
-local accessmenu
 local localPlayerPosition
 local CurTab
 
 local function checkPos()
 	if localPlayerPosition ~= LocalPlayer():GetPos() then
-		accessmenu:Close()
-		accessmenu:Remove()
+		arista.derma.access.accessmenu:Close()
+		arista.derma.access.accessmenu:Remove()
 
 		-- Disable the screen clicker.
 		gui.EnableScreenClicker(false)
@@ -125,7 +127,7 @@ function PANEL:Think()
 				c = arista.team.getGroup(k)
 			end
 
-			local header = vgui.Create("DCollapsibleCategory", self)
+			local header = vgui.Create("QCollapsibleCategory", self)
 				header:SetSize(width / 2, 50) -- Keep the second number at 50
 				header:SetLabel(c.name)
 				header:SetToolTip(c.description)
@@ -142,7 +144,7 @@ function PANEL:Think()
 				self.currentItem = v2
 				self.nobut = false
 
-				if v2[4] == arista.lp:UserID() and self.type == "player" or not accessmenu.owned then
+				if v2[4] == arista.lp:UserID() and self.type == "player" or not arista.derma.access.accessmenu.owned then
 					self.nobut = true
 				end
 
@@ -158,7 +160,7 @@ function PANEL:Think()
 end
 
 -- Register the panel.
-vgui.Register("arista_accessInventory", PANEL, "Panel")
+vgui.Register("arista_accessInventory", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -179,13 +181,13 @@ function PANEL:Init()
 	self.name = vgui.Create("DLabel", self)
 		self.name:SetText(name or "ERROR")
 		self.name:SizeToContents()
-		self.name:SetTextColor(color_black)
+		self.name:SetTextColor(color_white)
 
 	-- Create a label for the description.
 	self.description = vgui.Create("DLabel", self)
 		self.description:SetText(description or "ERROR")
 		self.description:SizeToContents()
-		self.description:SetTextColor(color_black)
+		self.description:SetTextColor(color_white)
 
 	-- Create the spawn icon.
 	self.spawnIcon = vgui.Create("SpawnIcon", self)
@@ -209,16 +211,16 @@ function PANEL:Init()
 	-- Loop through the item functions.
 	for i = 1, #self.itemFunctions do
 		if self.itemFunctions[i] then
-			self.itemButton[i] = vgui.Create("DButton", self)
+			self.itemButton[i] = vgui.Create("QButton", self)
 				self.itemButton[i]:SetText(self.itemFunctions[i])
 				self.itemButton[i].DoClick = function()
 					if not checkPos() then return end
-					if accessmenu.buttoned then return end -- If a button has been pressed, we can't do anything until sent an update.
+					if arista.derma.access.accessmenu.buttoned then return end -- If a button has been pressed, we can't do anything until sent an update.
 
 					RunConsoleCommand("arista", "entity", self.itemFunctions[i]:lower(), typ, uniqueID or "ERROR")
 
-					CurTab = accessmenu.sheets:GetActiveTab()
-					accessmenu.buttoned = true
+					CurTab = arista.derma.access.accessmenu.sheets:GetActiveTab()
+					arista.derma.access.accessmenu.buttoned = true
 				end
 		end
 	end
@@ -252,7 +254,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_accessItem", PANEL, "DPanel")
+vgui.Register("arista_accessItem", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -265,7 +267,7 @@ function PANEL:Init()
 	self.spaceUsed = vgui.Create("DLabel", self)
 		self.spaceUsed:SetText(self.word)
 		self.spaceUsed:SizeToContents()
-		self.spaceUsed:SetTextColor(color_black)
+		self.spaceUsed:SetTextColor(color_white)
 end
 
 -- Called when the layout should be performed.
@@ -277,7 +279,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_accessInformation", PANEL, "DPanel")
+vgui.Register("arista_accessInformation", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -302,22 +304,19 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_accessColumns", PANEL, "Panel")
+vgui.Register("arista_accessColumns", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
 
 -- Called when the panel is initialized.
-function PANEL:Init()
+function PANEL:ExtraInit()
 	self:SetTitle("Container")
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(true)
-	self:ShowCloseButton(false)
 
 	-- Create the close button.
-	self.close = vgui.Create("DButton", self)
-	self.close:SetText(arista.lang:Get"AL_DERMA_CLOSE")
-	self.close.DoClick = function()
+	self.btnClose.DoClick = function()
 		self:Close()
 		self:Remove()
 
@@ -325,7 +324,7 @@ function PANEL:Init()
 		gui.EnableScreenClicker(false)
 	end
 
-	self.sheets		= vgui.Create("DPropertySheet", self)
+	self.sheets		= vgui.Create("QPropertySheet", self)
 		self.players	= vgui.Create("arista_accessColumns", self.sheets)
 		self.jobs			= vgui.Create("arista_accessColumns", self.sheets)
 		self.gangs		= vgui.Create("arista_accessColumns", self.sheets)
@@ -334,8 +333,8 @@ function PANEL:Init()
 	self.sheets:AddSheet(arista.lang:Get"AL_DERMA_JOBS",		self.jobs,		nil, nil, true)
 	self.sheets:AddSheet(arista.lang:Get"AL_DERMA_GANGS",		self.gangs,		nil, nil, true)
 
-	self.texbox	= vgui.Create("DTextEntry",	self)
-	self.setbut = vgui.Create("DButton",	self)
+	self.texbox	= vgui.Create("QTextEntry",	self.sheets)
+	self.setbut = vgui.Create("QButton",	self.sheets)
 		self.setbut:SetText(arista.lang:Get"AL_DERMA_SETNAME")
 
 	local function setName()
@@ -352,7 +351,7 @@ function PANEL:Init()
 	self.texbox.OnEnter = setName
 	self.setbut.DoClick = setName
 
-	self.selbut = vgui.Create("DButton",	self)
+	self.selbut = vgui.Create("QButton", self.sheets)
 		self.selbut:SetText(arista.lang:Get"AL_DERMA_SELL")
 		self.selbut.DoClick = function()
 			local menu = DermaMenu()
@@ -362,8 +361,8 @@ function PANEL:Init()
 			menu:AddOption(arista.lang:Get"AL_YES", function()
 				RunConsoleCommand("arista", "door", "sell")
 
-				accessmenu:Close()
-				accessmenu:Remove()
+				arista.derma.access.accessmenu:Close()
+				arista.derma.access.accessmenu:Remove()
 
 				gui.EnableScreenClicker(false)
 			end)
@@ -377,53 +376,54 @@ function PANEL:Init()
 end
 
 -- Called when the layout should be performed.
-function PANEL:PerformLayout()
+function PANEL:ExtraPerformLayout()
 	self:SetSize(width, height)
 	self:SetPos((ScrW() - width) / 2, (ScrH() - height) / 2)
-	self.close:SetSize(48, 16)
+
 	self.selbut:SetSize(48, 16)
 	self.setbut:SetSize(60, 16)
+
 	self.texbox:SetSize(self:GetWide()/ 4, 16)
-	self.texbox:SetPos(self:GetWide()/ 2 + 2, 27)
-	self.setbut:SetPos(self:GetWide()/ 2 + 2 + self.texbox:GetWide() + 5, 27)
-	self.selbut:SetPos(self:GetWide() - self.selbut:GetWide() - 10,	27)
-	self.close:SetPos(self:GetWide() - self.close:GetWide() - 10, 3)
+	self.texbox:SetPos(self.sheets:GetWide() - self.texbox:GetWide() - 60 - 48 - 9, 3)
+
+	self.selbut:SetPos(self.sheets:GetWide() - 48 - 3,	3)
+	self.setbut:SetPos(self.sheets:GetWide() - 60 - 48 - 6, 3)
+
 	self.texbox:SetVisible(false)
 	self.setbut:SetVisible(false)
 	self.selbut:SetVisible(false)
 
-	if accessmenu.owned then
-		if accessmenu.name then
+	if arista.derma.access.accessmenu.owned then
+		if arista.derma.access.accessmenu.name then
 			self.texbox:RequestFocus()
 			self.texbox:SetVisible(true)
 			self.setbut:SetVisible(true)
 		end
 
-		if accessmenu.sellable then
+		if arista.derma.access.accessmenu.sellable then
 			self.selbut:SetVisible(true)
 		end
 	else
 	end
 
-	self.sheets:SetPos(8, 25)
-	self.sheets:StretchToParent(8,25,8,8)
+	self.sheets:Dock(FILL)
+	self.sheets:DockMargin(5, 10, 5, 5)
 	self.sheets:InvalidateLayout()
 
 	-- Check if the local player's position is different from our captured one.
 	checkPos()
-
-	-- Perform the layout of the main frame.
-	DFrame.PerformLayout(self)
 end
 
 -- Register the panel.
-vgui.Register("arista_access", PANEL, "DFrame")
+vgui.Register("arista_access", PANEL, "QFrame")
 
 local function updateContainer(decoded)
-	if not (accessmenu and ValidPanel(accessmenu)) then return end
+	if not (arista.derma.access.accessmenu and ValidPanel(arista.derma.access.accessmenu)) then return end
 	width, height = ScrW() * 0.75, ScrH() * 0.75
 
-	accessmenu:SetTitle(decoded.owner)
+	if not arista.derma.access.accessmenu.players then timer.Simple(0, function() updateContainer(decoded) end) return end
+
+	arista.derma.access.accessmenu:SetTitle(decoded.owner)
 
 	local paccess = {}
 	local taccess = {}
@@ -466,39 +466,41 @@ local function updateContainer(decoded)
 		end
 	end
 
-	accessmenu.players.noaccess.inventory		= pnoaccess
-	accessmenu.players.access.inventory			= paccess
-	accessmenu.jobs.noaccess.inventory			= tnoaccess
-	accessmenu.jobs.access.inventory				= taccess
-	accessmenu.gangs.noaccess.inventory			= gnoaccess
-	accessmenu.gangs.access.inventory				= gaccess
-	accessmenu.players.noaccess.updatePanel	= true
-	accessmenu.players.access.updatePanel		= true
-	accessmenu.jobs.noaccess.updatePanel		= true
-	accessmenu.jobs.access.updatePanel			= true
-	accessmenu.gangs.noaccess.updatePanel		= true
-	accessmenu.gangs.access.updatePanel			= true
+	arista.derma.access.accessmenu.players.noaccess.inventory		= pnoaccess
+	arista.derma.access.accessmenu.players.access.inventory			= paccess
+	arista.derma.access.accessmenu.jobs.noaccess.inventory			= tnoaccess
+	arista.derma.access.accessmenu.jobs.access.inventory				= taccess
+	arista.derma.access.accessmenu.gangs.noaccess.inventory			= gnoaccess
+	arista.derma.access.accessmenu.gangs.access.inventory				= gaccess
+	arista.derma.access.accessmenu.players.noaccess.updatePanel	= true
+	arista.derma.access.accessmenu.players.access.updatePanel		= true
+	arista.derma.access.accessmenu.jobs.noaccess.updatePanel		= true
+	arista.derma.access.accessmenu.jobs.access.updatePanel			= true
+	arista.derma.access.accessmenu.gangs.noaccess.updatePanel		= true
+	arista.derma.access.accessmenu.gangs.access.updatePanel			= true
 
-	accessmenu.owned = tobool(decoded.owned)
+	arista.derma.access.accessmenu.owned = tobool(decoded.owned)
 
-	if accessmenu.owned then
-		accessmenu.sellable = decoded.owned.sellable
-		accessmenu.name = decoded.owned.name
+	if arista.derma.access.accessmenu.owned then
+		arista.derma.access.accessmenu.sellable = decoded.owned.sellable
+		arista.derma.access.accessmenu.name = decoded.owned.name
 	end
 
-	accessmenu:InvalidateLayout()
-	accessmenu.buttoned = false
+	arista.derma.access.accessmenu:InvalidateLayout(true)
+	timer.Simple(0.01, function() arista.derma.access.accessmenu:InvalidateLayout() end)
+
+	arista.derma.access.accessmenu.buttoned = false
 end
 
 function newContainer()
 	local decoded = net.ReadTable()
 
-	if accessmenu then accessmenu:Remove() end
-	accessmenu = vgui.Create("arista_access")
+	if arista.derma.access.accessmenu then arista.derma.access.accessmenu:Remove() end
+	arista.derma.access.accessmenu = vgui.Create("arista_access")
 
 	gui.EnableScreenClicker(true)
 
-	accessmenu:MakePopup()
+	arista.derma.access.accessmenu:MakePopup()
 	updateContainer(decoded)
 end
 

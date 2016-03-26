@@ -1403,7 +1403,7 @@ function GM:ShowTeam(ply)
 	if owner == ply then
 		detailstable.owned = {
 			sellable = tobool(door._isDoor and not door._unsellable) or nil,
-			name = gamemode.Call("PlayerCanSetEntName", ply, door) and arista.entity.getName(door) or nil,
+			name = gamemode.Call("PlayerCanSetEntName", ply, door) ~= false and arista.entity.getName(door) or nil,
 		}
 	end
 

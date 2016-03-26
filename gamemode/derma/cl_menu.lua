@@ -51,7 +51,10 @@ function PANEL:ExtraPerformLayout()
 	self:SetPos(ScrW() / 2 - self:GetWide() / 2, ScrH() / 2 - self:GetTall() / 2)
 
 	-- Stretch the tabs to the parent.
-	if self.tabs then self.tabs:StretchToParent(4, 28, 4, 4) end
+	if self.tabs then
+		self.tabs:Dock(FILL)
+		self.tabs:DockMargin(5, 10, 5, 5)
+	end
 
 	-- Size To Contents.
 	self:SizeToContents()
@@ -71,6 +74,7 @@ function arista.derma.menu.toggle()
 		-- Check if the main menu exists.
 		if arista.derma.menu.panel and arista.derma.menu.panel:IsValid() then
 			arista.derma.menu.panel:SetVisible(arista.derma.menu.open)
+			arista.derma.menu.panel:InvalidateLayout(true)
 		else
 			arista.derma.menu.panel = vgui.Create("arista_menu")
 			arista.derma.menu.panel:MakePopup()

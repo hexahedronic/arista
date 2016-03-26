@@ -4,17 +4,13 @@ arista.derma.door = {}
 local PANEL = {}
 
 -- Called when the panel is initialized.
-function PANEL:Init()
+function PANEL:ExtraInit()
 	self:SetTitle("Door Menu")
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(true)
 
-	self:ShowCloseButton(false)
-
 	-- Create the close button.
-	self.close = vgui.Create("DButton", self)
-	self.close:SetText("Close")
-	self.close.DoClick = function()
+	self.btnClose.DoClick = function()
 		self:Close()
 		self:Remove()
 
@@ -52,12 +48,12 @@ function PANEL:Init()
 	end
 
 	-- Create the text entry panel.
-	self.textEntry = vgui.Create("DTextEntry", self)
+	self.textEntry = vgui.Create("QTextEntry", self)
 	self.textEntry.OnEnter = purchase
 	self.textEntry:RequestFocus()
 
 	-- Create the purchase button.
-	self.purchase = vgui.Create("DButton", self)
+	self.purchase = vgui.Create("QButton", self)
 	self.purchase:SetText("Purchase")
 	self.purchase.DoClick = purchase
 
@@ -66,7 +62,7 @@ function PANEL:Init()
 end
 
 -- Called when the layout should be performed.
-function PANEL:PerformLayout()
+function PANEL:ExtraPerformLayout()
 	local width = math.max(180, self.label:GetWide())
 	self:SetSize(8 + width + 8, 28 + self.label:GetTall() + 8 + self.textEntry:GetTall() + 8 + self.purchase:GetTall() + 8)
 
@@ -75,10 +71,6 @@ function PANEL:PerformLayout()
 
 	-- Set the position of the menu.
 	self:SetPos(ScrW() / 2 - self:GetWide() / 2, ScrH() / 2 - self:GetTall() / 2)
-
-	-- Set the size and position of the close button.
-	self.close:SetSize(48, 18)
-	self.close:SetPos(self:GetWide() - self.close:GetWide() - 4, 3)
 
 	-- Set the position of the label and the purchase button.
 	self.label:SetPos(8, 28)
@@ -118,13 +110,10 @@ function PANEL:PerformLayout()
 		-- Disable the screen clicker.
 		gui.EnableScreenClicker(false)
 	end
-
-	-- Perform the layout of the main frame.
-	DFrame.PerformLayout(self)
 end
 
 -- Register the panel.
-vgui.Register("arista_door", PANEL, "DFrame")
+vgui.Register("arista_door", PANEL, "QFrame")
 
 
 net.Receive("arista_buyDoor", function()

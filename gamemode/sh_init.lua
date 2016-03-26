@@ -108,9 +108,12 @@ include("sh_config.lua")
 -- Check if we're running on the server.
 if SERVER then
 	include("sv_config.lua")
+
 	AddCSLuaFile("cl_language.lua")
+	AddCSLuaFile("derma/qderma/qderma.lua") -- submodule from trixter
 else
 	include("cl_language.lua")
+	include("derma/qderma/qderma.lua")
 end
 
 -- A table that will hold entities that were there when the map started.

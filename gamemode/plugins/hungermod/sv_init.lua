@@ -17,12 +17,16 @@ function PLUGIN:PlayerTenthSecond(ply)
 	hunger = math.Clamp(hunger - arista.config.plugins.hungerDrain, 0, 100)
 
 	ply:setAristaVar("hunger", hunger)
+
+	if hunger <= arista.config.plugins.hungerStarve then
+		ply:TakeDamage(5, ply, game.GetWorld())
+	end
 end
 
 function PLUGIN:StaminaAdjustPlayerSpeed(ply, run, walk)
-	local hungry = (ply:getAristaVar("hunger") or 100) <= 10
+	local hungry = (ply:getAristaVar("hunger") or 100) <= arista.config.plugins.hungerHungry
 
-	if hunger <= 10 then
+	if hungry then
 		run = walk
 
 		return run, walk
@@ -30,7 +34,7 @@ function PLUGIN:StaminaAdjustPlayerSpeed(ply, run, walk)
 end
 
 function PLUGIN:StaminaAdjustDrain(ply, amt)
-	local hungry = (ply:getAristaVar("hunger") or 100) <= 10
+	local hungry = (ply:getAristaVar("hunger") or 100) <= arista.config.plugins.hungerHungry
 
 	if hungry then
 		amt = amt * 1.5

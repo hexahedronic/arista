@@ -106,7 +106,7 @@ arista.command.add("manufacture", "", 1, function(ply, item)
 	if item then
 		if item.category then
 			if not table.HasValue(arista.team.query(ply:Team(), "canmake", {}), item.category) then
-				return false, arista.team.query(ply:Team(), "name", "Your team's member") .. "s cannot manufacture " .. GAMEMODE:GetCategory(item.Category).name .. "!"
+				return false, "AL_X_CANNOT_MANUFACTURE_X", arista.team.query(ply:Team(), "name", "Your team's member"), GAMEMODE:GetCategory(item.category).name .. "!"
 			end
 		end
 

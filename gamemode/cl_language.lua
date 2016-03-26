@@ -52,6 +52,7 @@ arista.lang.tbl.EN = {
 	["AL_X_DEAD"] = " (dead)",
 	["AL_CANNOT_X_MAX"] = "You've hit the %s limit!",
 	["AL_CANNOT_X_ENCUMBERED"] = "You cannot %s, you will be over encumbered!",
+	["AL_X_CANNOT_MANUFACTURE_X"] = "%ss cannot manufacture %s",
 
 	-- PLAYER CANNOT PERFORM ACTION
 	["AL_CANNOT_GENERIC"] = "You cannot do that to this!",

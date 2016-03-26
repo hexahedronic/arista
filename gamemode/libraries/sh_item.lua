@@ -109,6 +109,10 @@ function GM:RegisterCategory(cat) -- meow
 end
 
 function GM:GetCategory(id)
+	if not id then
+		arista.logs.log(arista.logs.E.ERROR, "GetCategory passed nil??")
+	return end
+
 	-- If we're passed a valid UniqueID, then return the item
 	if arista.item.cats[id] then
 		return arista.item.cats[id]

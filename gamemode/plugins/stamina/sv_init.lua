@@ -68,8 +68,13 @@ function PLUGIN:PlayerTenthSecond(player)
 			player:setAristaVar("exhausted", false)
 			player:recapacitate()
 
-			player:SetRunSpeed((arista.config.vars.runSpeed - arista.config.vars.walkSpeed) * r + arista.config.vars.walkSpeed)
-			player:SetWalkSpeed((arista.config.vars.walkSpeed - arista.config.vars.incapacitatedWalkSpeed) * r + arista.config.vars.incapacitatedWalkSpeed)
+			local run = (arista.config.vars.runSpeed - arista.config.vars.walkSpeed) * r + arista.config.vars.walkSpeed
+			local walk = (arista.config.vars.walkSpeed - arista.config.vars.incapacitatedWalkSpeed) * r + arista.config.vars.incapacitatedWalkSpeed
+
+			local retRun, retWalk = hook.Run("StaminaAdjustPlayerSpeed", player, run, walk)
+
+			player:SetRunSpeed(retRun or run)
+			player:SetWalkSpeed(retWalk or walk)
 		end
 	end
 end

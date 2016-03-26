@@ -17,7 +17,7 @@ end
 
 function player:getStamina()
 	if CLIENT then return self:getAristaInt("stamina") or 0 end
-	return self:getAristaVar("stamina") or 0
+	return math.floor(self:getAristaVar("stamina") or 0)
 end
 
 function player:isExhausted()
@@ -128,6 +128,7 @@ function player:getPronouns()
 	elseif gender == "Female" then
 		return "her", "her"
 	else
+		-- not used unless code fucks up bigtime
 		return "their", "them"
 	end
 end

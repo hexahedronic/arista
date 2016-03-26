@@ -1,0 +1,3 @@
+[submodule "gamemode/derma/qderma"]
+	path = gamemode/derma/qderma
+	url = https://github.com/SteppuFIN/QDerma.git

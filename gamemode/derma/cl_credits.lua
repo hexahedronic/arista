@@ -114,7 +114,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_credits", PANEL, "Panel")
+vgui.Register("arista_credits", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -139,7 +139,7 @@ function PANEL:SetText(text)
 
 		-- Set the text of the label.
 		label:SetText(v)
-		label:SetTextColor(color_black)
+		label:SetTextColor(color_white)
 		label:SizeToContents()
 
 		-- Insert the label into our labels table.
@@ -167,7 +167,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_creditsText", PANEL, "DPanel")
+vgui.Register("arista_creditsText", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -177,7 +177,7 @@ function PANEL:Init()
 	self.label = vgui.Create("DLabel", self)
 		self.label:SetText("N/A")
 		self.label:SetFont("ChatFont")
-		self.label:SetTextColor(color_black)
+		self.label:SetTextColor(color_white)
 		self.label:SizeToContents()
 end
 
@@ -188,4 +188,4 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_creditsHeader", PANEL, "DPanel")
+vgui.Register("arista_creditsHeader", PANEL, "QPanel")

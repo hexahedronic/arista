@@ -48,7 +48,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_help", PANEL, "Panel")
+vgui.Register("arista_help", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -99,7 +99,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_helpText", PANEL, "DPanel")
+vgui.Register("arista_helpText", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -108,7 +108,7 @@ PANEL = {}
 function PANEL:Init()
 	self.label = vgui.Create("DLabel", self)
 		self.label:SetText("N/A")
-		self.label:SetTextColor(color_black)
+		self.label:SetTextColor(color_white)
 		self.label:SizeToContents()
 end
 
@@ -119,7 +119,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_helpHeader", PANEL, "DPanel")
+vgui.Register("arista_helpHeader", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -129,7 +129,7 @@ function PANEL:Init()
 	self.label = vgui.Create("DLabel", self)
 
 	-- Set the text color of the label.
-	self.label:SetTextColor(color_black)
+	self.label:SetTextColor(color_white)
 end
 
 -- Called when the panel should be painted.
@@ -142,4 +142,4 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_helpLabel", PANEL, "DPanel")
+vgui.Register("arista_helpLabel", PANEL, "QPanel")

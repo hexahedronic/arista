@@ -92,7 +92,7 @@ function PANEL:Think()
 				local c = GAMEMODE:GetCategory(k)
 
 				if not c.noShow then -- If the category doesn't want to show up (like it's plugin is missing) then don't show it.
-					local header = vgui.Create("DCollapsibleCategory", self)
+					local header = vgui.Create("QCollapsibleCategory", self)
 						header:SetSize(arista.derma.menu.width, 50) -- Keep the second number at 50
 						header:SetLabel(c.name)
 						header:SetToolTip(c.description)
@@ -121,13 +121,14 @@ function PANEL:Think()
 end
 
 -- Register the panel.
-vgui.Register("arista_containerInventory", PANEL, "Panel")
+vgui.Register("arista_containerInventory", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
 
 -- Called when the panel is initialized.
 function PANEL:Init()
+
 	-- Set the size and position of the panel.
 	self:SetSize(width / 2, 75)
 	self:SetPos(1, 5)
@@ -150,13 +151,13 @@ function PANEL:Init()
 		local word = (amount > 1) and item.plural or item.name
 		self.name:SetText(amount .. " " .. word .. " (" .. arista.lang:Get("AL_SIZE_X", item.size) .. ")")
 		self.name:SizeToContents()
-		self.name:SetTextColor(color_black)
+		self.name:SetTextColor(color_white)
 
 	-- Create a label for the description.
 	self.description = vgui.Create("DLabel", self)
 		self.description:SetText(item.description or "")
 		self.description:SizeToContents()
-		self.description:SetTextColor(color_black)
+		self.description:SetTextColor(color_white)
 
 	-- Create the spawn icon.
 	self.spawnIcon = vgui.Create("SpawnIcon", self)
@@ -211,7 +212,7 @@ function PANEL:Init()
 		end)
 
 		menu:AddOption(arista.lang:Get"AL_DERMA_AMOUNT", function()
-				local editPanel = vgui.Create("DFrame")
+				local editPanel = vgui.Create("QFrame")
 					editPanel:SetPos((ScrW() - 50) / 2, (ScrH() - 38) / 2)
 					editPanel:SetSize(100 ,76)
 					editPanel:SetTitle(arista.lang:Get"AL_DERMA_AMOUNT")
@@ -220,7 +221,7 @@ function PANEL:Init()
 					editPanel:ShowCloseButton(true)
 					editPanel:MakePopup()
 
-				local box = vgui.Create("DTextEntry", editPanel)
+				local box = vgui.Create("QTextEntry", editPanel)
 					box:SetPos(10, 28)
 					box:SetSize(editPanel:GetWide() - 20, 16)
 					box:RequestFocus()
@@ -236,7 +237,7 @@ function PANEL:Init()
 					end
 					box.OnEnter = func
 
-				local button = vgui.Create("DButton", editPanel)
+				local button = vgui.Create("QButton", editPanel)
 					button:SetText(self:GetValue())
 					button.DoClick = func
 					button:SetPos(editPanel:GetWide() - button:GetWide() - 10, 46)
@@ -249,15 +250,19 @@ function PANEL:Init()
 	-- Loop through the item functions.
 	for i = 1, #self.itemFunctions do
 		if self.itemFunctions[i] then
-			self.itemButton[i] = vgui.Create("DButton", self)
+			self.itemButton[i] = vgui.Create("QButton", self)
 				self.itemButton[i]:SetText(self.itemFunctions[i])
 				self.itemButton[i].DoClick = menus
 		end
 	end
+
+	self:InvalidateLayout()
 end
 
 -- Called when the layout should be performed.
 function PANEL:PerformLayout()
+	if not self.spawnIcon then return end
+
 	self.spawnIcon:SetPos(4, 5)
 	self.name:SizeToContents()
 	self.description:SetPos(75, 24)
@@ -282,7 +287,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_containerItem", PANEL, "DPanel")
+vgui.Register("arista_containerItem", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -295,7 +300,7 @@ function PANEL:Init()
 	self.spaceUsed = vgui.Create("DLabel", self)
 	self.spaceUsed:SetText(self.word .. " " .. arista.lang:Get"AL_HUD_SPACEUSED" .. "MMMMM/MMMMM")
 	self.spaceUsed:SizeToContents()
-	self.spaceUsed:SetTextColor(color_black)
+	self.spaceUsed:SetTextColor(color_white)
 end
 
 -- Called when the layout should be performed.
@@ -307,22 +312,19 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_containerInformation", PANEL, "DPanel")
+vgui.Register("arista_containerInformation", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
 
 -- Called when the panel is initialized.
-function PANEL:Init()
+function PANEL:ExtraInit()
 	self:SetTitle(arista.lang:Get"AL_DERMA_CONTAINER")
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(true)
-	self:ShowCloseButton(false)
 
 	-- Create the close button.
-	self.close = vgui.Create("DButton", self)
-		self.close:SetText(arista.lang:Get"AL_DERMA_CLOSE")
-		self.close.DoClick = closeMenu
+	self.btnClose.DoClick = closeMenu
 
 	-- Capture the position of the local player.
 	self.localPlayerPosition = arista.lp:GetPos()
@@ -338,22 +340,21 @@ function PANEL:Init()
 end
 
 -- Called when the layout should be performed.
-function PANEL:PerformLayout()
+function PANEL:ExtraPerformLayout()
 	self:SetSize(width, height)
 	self:SetPos((ScrW() - width) / 2, (ScrH() - height) / 2)
 
-	self.close:SetSize(48, 16)
-	self.close:SetPos(self:GetWide() - self.close:GetWide() - 4, 3)
+	if not self.pInventory then return end
 
 	-- Set the position of both lists
-	self.pInventory:SetPos(8, 25)
-	self.cInventory:SetPos(8 + self.cInventory:GetWide() + 8, 25)
-
-	-- Perform the layout of the main frame.
-	DFrame.PerformLayout(self)
+	self.pInventory:Dock(LEFT)
+	self.pInventory:DockMargin(5, 10, 0, 5)
+	self.cInventory:Dock(RIGHT)
+	self.cInventory:DockMargin(0, 10, 5, 5)
 end
 
 function PANEL:Think()
+	if not self.pInventory then return end
 	checkPos()
 
 	local m = arista.lp:getMoney()
@@ -366,10 +367,11 @@ function PANEL:Think()
 end
 
 -- Register the panel.
-vgui.Register("arista_container", PANEL, "DFrame")
+vgui.Register("arista_container", PANEL, "QFrame")
 
 local function updateContainer(decoded)
-	if not containermenu then return end
+	if not (containermenu and IsValid(containermenu)) then return end
+	if not containermenu.pInventory then timer.Simple(0, function() updateContainer(decoded) end) return end
 
 	containermenu.meta = decoded.meta
 	targetEntity = Entity(decoded.meta.entindex)
@@ -410,7 +412,7 @@ local function newContainer()
 	gui.EnableScreenClicker(true)
 
 	containermenu:MakePopup()
-	updateContainer(decoded)
+	timer.Simple(0, function() updateContainer(decoded) end)
 end
 
 net.Receive("arista_container", newContainer)

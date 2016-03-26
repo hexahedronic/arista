@@ -68,12 +68,12 @@ function PANEL:Think()
 	end
 
 	if arista.utils.isAdmin(arista.lp) or arista.team.query(arista.lp:Team(), "mayor", false) then
-		local button = vgui.Create("DButton", self)
+		local button = vgui.Create("QButton", self)
 			button:SetText(arista.lang:Get"AL_DERMA_EDIT")
 
 			button.DoClick = function()
 
-				local editPanel = vgui.Create("DFrame")
+				local editPanel = vgui.Create("QFrame")
 					editPanel:SetPos((ScrW() - 400) / 2, (ScrH() - 500) / 2)
 					editPanel:SetSize(400, 265)
 					editPanel:SetTitle(arista.lang:Get"AL_DERMA_EDITLAWS")
@@ -86,7 +86,7 @@ function PANEL:Think()
 				y = 28
 
 				for i = 1, 10 do
-					boxes[i] = vgui.Create("DTextEntry", editPanel)
+					boxes[i] = vgui.Create("QTextEntry", editPanel)
 						boxes[i]:SetPos(10, y)
 						boxes[i]:SetValue(arista.laws.stored[i])
 						boxes[i]:SetSize(editPanel:GetWide() - 20, 16)
@@ -94,7 +94,7 @@ function PANEL:Think()
 					y = y + boxes[i]:GetTall() + 5
 				end
 
-				local savebutton = vgui.Create("DButton", editPanel)
+				local savebutton = vgui.Create("QButton", editPanel)
 					savebutton:SetText(arista.lang:Get"AL_DERMA_SAVE")
 					savebutton.DoClick = function()
 						local tab = {}
@@ -129,7 +129,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_laws", PANEL, "Panel")
+vgui.Register("arista_laws", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -155,7 +155,7 @@ function PANEL:SetText(text)
 
 		-- Set the text of the label.
 		label:SetText(v)
-		label:SetTextColor(color_black)
+		label:SetTextColor(color_white)
 		label:SizeToContents()
 
 		-- Insert the label into our labels table.
@@ -183,7 +183,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_lawsText", PANEL, "DPanel")
+vgui.Register("arista_lawsText", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -193,7 +193,7 @@ function PANEL:Init()
 	self.label = vgui.Create("DLabel", self)
 		self.label:SetText("N/A")
 		self.label:SetFont("ChatFont")
-		self.label:SetTextColor(color_black)
+		self.label:SetTextColor(color_white)
 		self.label:SizeToContents()
 end
 -- Called when the layout should be performed.
@@ -203,4 +203,4 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_lawsHeader", PANEL, "DPanel")
+vgui.Register("arista_lawsHeader", PANEL, "QPanel")

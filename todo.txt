@@ -24,6 +24,7 @@
 [ ] Double disconnect message
 [ ] E + Shift doesnt work on deployed items
 [ ] Stamina exhausted might not be networked properly? potential clientside jump prohibiter broken
+[ ] Access is not returned to rejoining players correctly
 
 - Update / Improve
 [ ] Remake HUD Design

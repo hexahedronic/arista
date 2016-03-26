@@ -50,7 +50,7 @@ function PANEL:Init()
 			local c = GAMEMODE:GetCategory(k)
 
 			if not c.noShow then -- If the category doesn't want to show up (like it's plugin is missing) then don't show it.
-				self.headers[k] = vgui.Create("DCollapsibleCategory", self)
+				self.headers[k] = vgui.Create("QCollapsibleCategory", self)
 					self.headers[k]:SetSize(arista.derma.menu.width, 50) -- Keep the second number at 50
 					local canMake = arista.team.query(self.team, "canmake")
 					if not canMake then
@@ -103,7 +103,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_store", PANEL, "Panel")
+vgui.Register("arista_store", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -118,7 +118,7 @@ function PANEL:Init()
 
 	-- The name of the item.
 	self.label = vgui.Create("DLabel", self)
-		self.label:SetTextColor(color_black)
+		self.label:SetTextColor(color_white)
 
 	-- Check if it is not a single batch.
 	if item.batch > 1 then
@@ -129,14 +129,14 @@ function PANEL:Init()
 
 	-- The description of the item.
 	self.description = vgui.Create("DLabel", self)
-		self.description:SetTextColor(color_black)
+		self.description:SetTextColor(color_white)
 		self.description:SetText(item.description)
 
 	-- Set the size of the panel.
 	self:SetSize(arista.derma.menu.width, 75)
 
 	-- Create the button and the spawn icon.
-	self.button = vgui.Create("DButton", self)
+	self.button = vgui.Create("QButton", self)
 	self.spawnIcon = vgui.Create("SpawnIcon", self)
 
 	-- Set the text of the button.
@@ -164,7 +164,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_storeItem", PANEL, "DPanel")
+vgui.Register("arista_storeItem", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -174,7 +174,7 @@ function PANEL:Init()
 	self.label = vgui.Create("DLabel", self)
 		self.label:SetText("N/A")
 		self.label:SizeToContents()
-		self.label:SetTextColor(color_black)
+		self.label:SetTextColor(color_white)
 end
 
 -- Called when the layout should be performed.
@@ -184,4 +184,4 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_storeHeader", PANEL, "DPanel")
+vgui.Register("arista_storeHeader", PANEL, "QPanel")

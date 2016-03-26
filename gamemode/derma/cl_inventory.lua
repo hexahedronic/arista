@@ -80,7 +80,7 @@ function PANEL:Think()
 				if not c.noShow then -- If the category doesn't want to show up (like it's plugin is missing) then don't show it.
 					arista.logs.log(arista.logs.E.DEBUG, "mixtape track for item " , k2, " (", c, ").")
 
-					local header = vgui.Create("DCollapsibleCategory", self)
+					local header = vgui.Create("QCollapsibleCategory", self)
 						header:SetSize(arista.derma.menu.width, 50) -- Keep the second number at 50
 						header:SetLabel(c.name)
 						header:SetToolTip(c.description)
@@ -110,7 +110,7 @@ function PANEL:Think()
 end
 
 -- Register the panel.
-vgui.Register("arista_inventory", PANEL, "Panel")
+vgui.Register("arista_inventory", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -134,13 +134,13 @@ function PANEL:Init()
 		local word = (amount > 1) and item.plural or item.name
 		self.name:SetText(amount .. " " .. word .. " (Size: " .. item.size .. ")")
 		self.name:SizeToContents()
-		self.name:SetTextColor(color_black)
+		self.name:SetTextColor(color_white)
 
 	-- Create a label for the description.
-	self.description = vgui.Create("DLabel", self);
+	self.description = vgui.Create("DLabel", self)
 		self.description:SetText(item.description)
 		self.description:SizeToContents()
-		self.description:SetTextColor(color_black)
+		self.description:SetTextColor(color_white)
 
 	-- Create the spawn icon.
 	self.spawnIcon = vgui.Create("SpawnIcon", self)
@@ -164,7 +164,7 @@ function PANEL:Init()
 		local itemFunc = self.itemFunctions[i]
 
 		if itemFunc then
-			self.itemButton[i] = vgui.Create("DButton", self)
+			self.itemButton[i] = vgui.Create("QButton", self)
 			self.itemButton[i]:SetText(itemFunc)
 
 			-- Check what type of button it is.
@@ -234,7 +234,7 @@ function PANEL:Init()
 				end
 			elseif itemFunc == arista.lang:Get"AL_DERMA_PICKUP" then
 				self.itemButton[i].DoClick = function()
-					RunConsoleCommand("arista", "inventory", self.item, "pickup");
+					RunConsoleCommand("arista", "inventory", self.item, "pickup")
 				end
 			elseif itemFunc == arista.lang:Get"AL_DERMA_SELL" then
 				self.itemButton[i].DoClick = function()
@@ -293,7 +293,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_inventoryItem", PANEL, "DPanel")
+vgui.Register("arista_inventoryItem", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -306,7 +306,7 @@ function PANEL:Init()
 	self.spaceUsed = vgui.Create("DLabel", self)
 		self.spaceUsed:SetText(arista.lang:Get"AL_HUD_SPACEUSED" .. arista.inventory.getSize() .. "/" .. maximumSpace)
 		self.spaceUsed:SizeToContents()
-		self.spaceUsed:SetTextColor(color_black)
+		self.spaceUsed:SetTextColor(color_white)
 end
 
 -- Called when the layout should be performed.
@@ -319,4 +319,4 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_inventoryInformation", PANEL, "DPanel")
+vgui.Register("arista_inventoryInformation", PANEL, "QPanel")

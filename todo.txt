@@ -23,10 +23,12 @@
 [ ] Find issue with job string
 [ ] Double disconnect message
 [ ] E + Shift doesnt work on deployed items
+[ ] Stamina exhausted might not be networked properly? potential clientside jump prohibiter broken
 
 - Update / Improve
 [ ] Remake HUD Design
 [ ] Remake Derma Design
+[ ] Chatbox (possibly bug ghosty to finish CBox)
 
 - CL
 [X] Clientside Inventory GUI

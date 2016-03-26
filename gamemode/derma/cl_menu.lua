@@ -45,7 +45,8 @@ function PANEL:Init()
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_STORE",			vgui.Create("arista_store", self.tabs),			"icon16/box.png")
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_CREDITS",		vgui.Create("arista_credits", self.tabs),		"icon16/group.png")
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_LAWS",			vgui.Create("arista_laws", self.tabs),			"icon16/world.png")
-	--[[self.tabs:AddSheet("Help", vgui.Create("cider_Help", self.tabs), "icon16/page.png")
+	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_HELP",			vgui.Create("arista_help", self.tabs),			"icon16/page.png")
+	--[[
 	self.tabs:AddSheet("Rules", vgui.Create("cider_Rules", self.tabs), "icon16/exclamation.png")
 	self.tabs:AddSheet("Changelog",vgui.Create("cider_Changelog", self.tabs), "icon16/plugin.png")
 	self.tabs:AddSheet("Donate", vgui.Create("cider_Donate", self.tabs), "icon16/heart.png")]]

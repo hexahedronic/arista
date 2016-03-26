@@ -212,6 +212,7 @@ arista.lang.tbl.EN = {
 	["AL_DERMA_EDITLAWS"] = "Edit the City Laws",
 	["AL_DERMA_SAVE"] = "Save",
 	["AL_DERMA_LAWS"] = "Laws",
+	["AL_DERMA_HELP"] = "Help",
 
 	-- HUD ELEMENTS
 	["AL_HUD_JOB"] = "Job: ",

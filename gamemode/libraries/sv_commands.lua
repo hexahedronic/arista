@@ -6,16 +6,13 @@ function arista.command.add(command, access, arguments, callback, category, unpa
 	local help = "AL_COMMAND_" .. command:upper() .. "_HELP"
 	local tip = "AL_COMMAND_" .. command:upper()
 
+	local prefix = arista.config.vars.commandPrefix or "/"
+
 	arista.command.stored[command] = {access = access, arguments = arguments, callback = callback, unpack = tobool(unpack)}
 
 	-- Check to see if a category was specified.
 	if category then
-		if not help or help == "" then
-			--arista.help.add(category, GM.Config["Command Prefix"]..command.." <none>.", tip)
-		else
-			--arista.help.add(category, GM.Config["Command Prefix"]..command.." "..help..".", tip)
-			-- todo: help menu
-		end
+		arista.help.add(category, help, tip, prefix .. command)
 	end
 end
 
@@ -68,6 +65,7 @@ function arista.command.consoleCommand(player, _, arguments)
 							ErrorNoHalt(os.date() .. " callback for 'arista " .. command .. " " .. concat .. "' failed: " .. fail .. "\n")
 						end
 					else
+						-- todo: lang
 						player:notify("You do not have access to this command, %s.", player:Name())
 					end
 				else

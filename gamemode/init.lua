@@ -53,6 +53,8 @@ do
 
 	util.AddNetworkString("arista_chatboxMessage")
 	util.AddNetworkString("arista_chatboxPlayerMessage")
+
+	util.AddNetworkString("arista_helpReplace")
 end
 
 -- Flags that represent functions.

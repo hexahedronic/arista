@@ -37,7 +37,7 @@
 [#] Missing Main Menu Compontent
 	[X] Laws
 	[ ] Rules
-	[ ] Command help
+	[X] Command help
 	[X] Credits
 	[-] Changelog
 [X] Chatbox

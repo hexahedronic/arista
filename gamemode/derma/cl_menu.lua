@@ -33,7 +33,7 @@ function PANEL:ExtraInit()
 	end
 
 	-- Create the tabs property sheet.
-	self.tabs = vgui.Create("DPropertySheet", self)
+	self.tabs = vgui.Create("QPropertySheet", self)
 
 	-- Add the sheets for the other menus to the property sheet.
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_CHARACTER",	vgui.Create("arista_character", self.tabs),	"icon16/user.png")
@@ -42,8 +42,6 @@ function PANEL:ExtraInit()
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_CREDITS",		vgui.Create("arista_credits", self.tabs),		"icon16/group.png")
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_LAWS",			vgui.Create("arista_laws", self.tabs),			"icon16/world.png")
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_HELP",			vgui.Create("arista_help", self.tabs),			"icon16/page.png")
-
-	print("extra init")
 end
 
 -- Called when the layout should be performed.
@@ -51,8 +49,6 @@ function PANEL:ExtraPerformLayout()
 	self:SetVisible(arista.derma.menu.open)
 	self:SetSize(arista.derma.menu.width, arista.derma.menu.height)
 	self:SetPos(ScrW() / 2 - self:GetWide() / 2, ScrH() / 2 - self:GetTall() / 2)
-
-	print("extralayout", self.tabs)
 
 	-- Stretch the tabs to the parent.
 	if self.tabs then self.tabs:StretchToParent(4, 28, 4, 4) end

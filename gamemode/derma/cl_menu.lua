@@ -22,17 +22,13 @@ arista.derma.menu.height = ScrH() - 40
 local PANEL = {}
 
 -- Called when the panel is initialized.
-function PANEL:Init()
+function PANEL:ExtraInit()
 	self:SetTitle(arista.lang:Get"AL_DERMA_MAINMENU")
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(false)
-	self:ShowCloseButton(false)
 	self:SetDraggable(false)
 
-	-- Create the close button.
-	self.close = vgui.Create("DButton", self)
-	self.close:SetText(arista.lang:Get"AL_DERMA_CLOSE")
-	self.close.DoClick = function(self)
+	self.btnClose.DoClick = function(self)
 		arista.derma.menu.toggle()
 	end
 
@@ -46,35 +42,27 @@ function PANEL:Init()
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_CREDITS",		vgui.Create("arista_credits", self.tabs),		"icon16/group.png")
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_LAWS",			vgui.Create("arista_laws", self.tabs),			"icon16/world.png")
 	self.tabs:AddSheet(arista.lang:Get"AL_DERMA_HELP",			vgui.Create("arista_help", self.tabs),			"icon16/page.png")
-	--[[
-	self.tabs:AddSheet("Rules", vgui.Create("cider_Rules", self.tabs), "icon16/exclamation.png")
-	self.tabs:AddSheet("Changelog",vgui.Create("cider_Changelog", self.tabs), "icon16/plugin.png")
-	self.tabs:AddSheet("Donate", vgui.Create("cider_Donate", self.tabs), "icon16/heart.png")]]
-	--self.tabs:AddSheet("Log",vgui.Create("cider_Log",self.tabs), "icon16/page_white_magnify.png")
+
+	print("extra init")
 end
 
 -- Called when the layout should be performed.
-function PANEL:PerformLayout()
+function PANEL:ExtraPerformLayout()
 	self:SetVisible(arista.derma.menu.open)
 	self:SetSize(arista.derma.menu.width, arista.derma.menu.height)
 	self:SetPos(ScrW() / 2 - self:GetWide() / 2, ScrH() / 2 - self:GetTall() / 2)
 
-	-- Set the size and position of the close button.
-	self.close:SetSize(48, 18)
-	self.close:SetPos(self:GetWide() - self.close:GetWide() - 4, 3)
+	print("extralayout", self.tabs)
 
 	-- Stretch the tabs to the parent.
-	self.tabs:StretchToParent(4, 28, 4, 4)
+	if self.tabs then self.tabs:StretchToParent(4, 28, 4, 4) end
 
 	-- Size To Contents.
 	self:SizeToContents()
-
-	-- Perform the layout of the main frame.
-	DFrame.PerformLayout(self)
 end
 
 -- Register the panel.
-vgui.Register("arista_menu", PANEL, "DFrame")
+vgui.Register("arista_menu", PANEL, "QFrame")
 
 -- A function to toggle the menu.
 function arista.derma.menu.toggle()
@@ -85,7 +73,7 @@ function arista.derma.menu.toggle()
 		gui.EnableScreenClicker(arista.derma.menu.open)
 
 		-- Check if the main menu exists.
-		if arista.derma.menu.panel then
+		if arista.derma.menu.panel and arista.derma.menu.panel:IsValid() then
 			arista.derma.menu.panel:SetVisible(arista.derma.menu.open)
 		else
 			arista.derma.menu.panel = vgui.Create("arista_menu")

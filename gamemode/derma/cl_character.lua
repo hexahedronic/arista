@@ -1,4 +1,5 @@
 local PANEL = {}
+
 -- Called when the panel is initialized.
 function PANEL:Init()
 	self:SetSize(arista.derma.menu.width, arista.derma.menu.height - 8)
@@ -78,7 +79,7 @@ function PANEL:Think()
 
 	-- Loop through each of our groups
 	for index, group in ipairs(groups) do
-		local header = vgui.Create("DCollapsibleCategory", self)
+		local header = vgui.Create("QCollapsibleCategory", self)
 			header:SetSize(arista.derma.menu.width, 50) -- Keep the second number at 50
 			header:SetLabel(group.name)
 			header:SetExpanded(lgroup == group)
@@ -160,7 +161,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_character", PANEL, "Panel")
+vgui.Register("arista_character", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -169,12 +170,12 @@ PANEL = {}
 function PANEL:Init()
 	self.label = vgui.Create("DLabel", self)
 		self.label:SizeToContents()
-		self.label:SetTextColor(color_black)
+		self.label:SetTextColor(color_white)
 
-	self.textEntry = vgui.Create("DTextEntry", self)
+	self.textEntry = vgui.Create("QTextEntry", self)
 
 	-- Create the button.
-	self.button = vgui.Create("DButton", self)
+	self.button = vgui.Create("QButton", self)
 end
 
 -- Called when the layout should be performed.
@@ -193,7 +194,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_characterTextEntry", PANEL, "DPanel")
+vgui.Register("arista_characterTextEntry", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -202,13 +203,13 @@ PANEL = {}
 function PANEL:Init()
 	self.label = vgui.Create("DLabel", self)
 		self.label:SizeToContents()
-		self.label:SetTextColor(color_black)
+		self.label:SetTextColor(color_white)
 
-	self.textButton = vgui.Create("DButton", self)
+	self.textButton = vgui.Create("QButton", self)
 		self.textButton:SetDisabled(true)
 
 	-- Create the button.
-	self.button = vgui.Create("DButton", self)
+	self.button = vgui.Create("QButton", self)
 	self.button.DoClick = function()
 		local menu = DermaMenu()
 
@@ -243,7 +244,7 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_characterGender", PANEL, "DPanel")
+vgui.Register("arista_characterGender", PANEL, "QPanel")
 
 -- Define a new panel.
 PANEL = {}
@@ -251,17 +252,17 @@ PANEL = {}
 -- Called when the panel is initialized.
 function PANEL:Init()
 	self.label = vgui.Create("DLabel", self)
-	self.label:SetTextColor(color_black)
+	self.label:SetTextColor(color_white)
 
 	-- The description of the team.
 	self.description = vgui.Create("DLabel", self)
-	self.description:SetTextColor(color_black)
+	self.description:SetTextColor(color_white)
 
 	-- Set the size of the panel.
 	self:SetSize(arista.derma.menu.width, 75)
 
 	-- Create the button and the spawn icon.
-	self.button = vgui.Create("DButton", self)
+	self.button = vgui.Create("QButton", self)
 	self.spawnIcon = vgui.Create("SpawnIcon", self)
 
 	-- Get the team from the parent and set the gender of the spawn icon.
@@ -321,4 +322,4 @@ function PANEL:PerformLayout()
 end
 
 -- Register the panel.
-vgui.Register("arista_characterTeam", PANEL, "DPanel")
+vgui.Register("arista_characterTeam", PANEL, "QPanel")

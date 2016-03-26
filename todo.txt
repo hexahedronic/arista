@@ -27,7 +27,7 @@
 
 - Update / Improve
 [ ] Remake HUD Design
-[ ] Remake Derma Design
+[#] Remake Derma Design
 [ ] Chatbox (possibly bug ghosty to finish CBox)
 
 - CL
@@ -47,7 +47,7 @@
 
 [ ] Vehicle handling
 [ ] Officals
-[ ] Hunger
+[X] Hunger
 [X] Flashlight battery
 [ ] Door management (saving)
 [X] Stamina
@@ -64,4 +64,4 @@
 - Finalising
 [ ] CLOSED-ALPHA (1 day closed testing for immediate, easily spottable errors) (8 Slots)
 [ ] ALPHA (2 days open testing for not so easily spottable errors) (16 Slots)
-[ ] BETA (7 days open testing for underlying issues, small bugs, improvements ect) (24 Slots)
+[ ] BETA (5 days open testing for underlying issues, small bugs, improvements ect) (24 Slots)

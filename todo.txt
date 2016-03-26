@@ -25,6 +25,8 @@
 [ ] E + Shift doesnt work on deployed items
 [ ] Stamina exhausted might not be networked properly? potential clientside jump prohibiter broken
 [ ] Access is not returned to rejoining players correctly
+[ ] Readd sound to QButtons in derma implementation
+[ ] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
 
 - Update / Improve
 [ ] Remake HUD Design

@@ -92,7 +92,7 @@ function arista.derma.menu.toggle()
 			arista.derma.menu.panel:SetVisible(arista.derma.menu.open)
 
 			arista.derma.menu.panel:Reload()
-			timer.Simple(0.01, function() arista.derma.menu.panel:Reload() end)
+			timer.Simple(0.1, function() arista.derma.menu.panel:Reload() end)
 		else
 			arista.derma.menu.panel = vgui.Create("arista_menu")
 			arista.derma.menu.panel:MakePopup()

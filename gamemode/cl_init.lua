@@ -831,7 +831,7 @@ end
 
 -- Called when a player says something or a message is received from the server.
 function GM:ChatText(index, name, text, filter)
-	if filter == "none" or filter == "joinleave" or (filter == "chat" and name == "Console") then
+	if filter == "none" or (filter == "chat" and name == "Console") then
 		arista.chatbox.chatText(index, name, text, filter)
 	end
 

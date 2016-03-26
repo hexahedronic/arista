@@ -28,16 +28,16 @@
 
 - Update / Improve
 [ ] Remake HUD Design
-[#] Remake Derma Design
+[X] Remake Derma Design
 [ ] Chatbox (possibly bug ghosty to finish CBox)
 
 - CL
 [X] Clientside Inventory GUI
 [X] Clientside Shop GUI
 [X] Clientside Container GUI
-[#] Missing Main Menu Compontent
+[X] Missing Main Menu Compontent
 	[X] Laws
-	[ ] Rules
+	[-] Rules
 	[X] Command help
 	[X] Credits
 	[-] Changelog

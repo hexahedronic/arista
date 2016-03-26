@@ -18,6 +18,7 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
+	if self:GetWide() < 32 then self:InvalidateLayout(true) return end
 	if not arista.team.changed then return end
 	if not arista.client._modelChoices then return end
 

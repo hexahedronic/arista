@@ -49,26 +49,6 @@ Old format:
 -- Anything in this will be given to groups with default store access.
 arista.config.defaults.jobCategories = {CATEGORY_VEHICLES, CATEGORY_MISC}
 
-GROUP_CIVILIANS	= arista.team.addGroup("Civilians", "Join the ordinary and (generally) law-abiding civilians")
-GANG_CIVILIANS	= arista.team.addGang(GROUP_CIVILIANS, "The Civilians", "models/player/Group01/male_07.mdl", "Keep me out of this!")
-
-TEAM_CITIZEN = arista.team.add("Citizen", {
-	color = Color(25, 150, 25, 255),
-	description = "A regular Citizen living in the city.",
-
-	salary = 200,
-
-	access = "",
-
-	group = {
-		gang = GANG_CIVILIANS,
-		access = "M",
-		level = 1,
-		group = GROUP_CIVILIANS,
-	},
-	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
-})
-
 GROUP_OFFICIALS	= arista.team.addGroup("Officials", "Join the force for 'Public Good', maintaining law and order.", "P")
 
 GANG_OFFICIALS	= arista.team.addGang(GROUP_OFFICIALS, "The Officials", "models/player/breen.mdl", "Enough red tape to drown a continent")
@@ -97,6 +77,48 @@ TEAM_POLICEOFFICER = arista.team.add("Police Officer", {
 	},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
 })
+
+
+GROUP_CIVILIANS	= arista.team.addGroup("Civilians", "Join the ordinary and (generally) law-abiding civilians")
+GANG_CIVILIANS	= arista.team.addGang(GROUP_CIVILIANS, "The Civilians", "models/player/Group01/male_07.mdl", "Keep me out of this!")
+
+TEAM_CITIZEN = arista.team.add("Citizen", {
+	color = Color(25, 150, 25, 255),
+	description = "A regular Citizen living in the city.",
+
+	salary = 200,
+
+	access = "",
+
+	group = {
+		gang = GANG_CIVILIANS,
+		access = "M",
+		level = 1,
+		group = GROUP_CIVILIANS,
+	},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
+})
+
+if (GM or GAMEMODE):GetPlugin("hungermod") then
+TEAM_CHEF = arista.team.add("Chef", {
+	color = Color(255, 125, 200, 255),
+	description = "Sells food to the city's inhabitants.",
+
+	salary = 220,
+	limit = 5,
+
+	access = "",
+
+	group = {
+		gang = GANG_CIVILIANS,
+		access = "",
+		level = 2,
+		group = GROUP_CIVILIANS,
+	},
+	canmake = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND, CATEGORY_FOOD, CATEGORY_ALCOHOL, CATEGORY_DRINKS},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
+})
+end
 
 -- Default job.
 TEAM_DEFAULT = TEAM_CITIZEN

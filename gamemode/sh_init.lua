@@ -110,10 +110,10 @@ if SERVER then
 	include("sv_config.lua")
 
 	AddCSLuaFile("cl_language.lua")
-	AddCSLuaFile("derma/qderma/qderma.lua") -- submodule from trixter
+	AddCSLuaFile("derma/qderma.lua") -- submodule from trixter
 else
 	include("cl_language.lua")
-	include("derma/qderma/qderma.lua")
+	include("derma/qderma.lua")
 end
 
 -- A table that will hold entities that were there when the map started.

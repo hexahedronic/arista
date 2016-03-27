@@ -6,11 +6,11 @@ qderma = {}
 qderma.colors = {
 	titleBg = Color(49, 27, 146, 120),
 
-	panelBg = Color(69, 39, 160, 100),
+	panelBg = Color(69, 39, 160, 40),
 	btnClr = Color(220, 220, 220, 255),
 	btnBg = Color(81, 45, 168, 140),
-	btnDisabled = Color(0, 0, 0, 40),
-	btnHovered = Color(255, 255, 255, 4),
+	btnDisabled = Color(0, 0, 0, 100),
+	btnHovered = Color(255, 255, 255, 40),
 
 	btnClose = Color(180, 100, 100, 80),
 	btnCloseHovered = Color(210, 100, 100, 100),
@@ -18,12 +18,12 @@ qderma.colors = {
 	collapClr = Color(81, 45, 168, 255),
 	collapBg = Color(103, 58, 183, 70),
 
-	entryClr = Color(220, 220, 220, 100),
+	entryClr = Color(225, 225, 225, 200),
 	entryTextClr = Color(81, 45, 168),
 	entrySelectionClr = Color(126, 87, 194, 70),
-	entryCursorClr = Color(255, 255, 255),
+	entryCursorClr = Color(81, 45, 168),
 
-	sheetClr = Color(81, 45, 168, 100),
+	sheetClr = Color(81, 45, 168, 200),
 }
 
 local QFrame = {}
@@ -46,11 +46,12 @@ function QFrame:Init()
 	self.btnClose.Paint = function(panel, w, h)
 		panel.lerp = Lerp(FrameTime() * 10, panel.lerp, panel.Hovered and 21 or 4)
 		surface.SetDrawColor(panel.Hovered and qderma.colors.btnCloseHovered or qderma.colors.btnClose)
-		surface.DrawRect(1, 0, w-1, panel.lerp)
+		surface.DrawRect(1, 0, w - 1, panel.lerp)
 
 		local posx, posy = self.btnClose:LocalToScreen(0, 0)
+
 		render.SetScissorRect(posx, posy, posx + w, posy + panel.lerp, true)
-			draw.SimpleText("r", "Marlett", w / 2, 10, panel.Hovered and color_white or color_gray, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText("r", "Marlett", w / 2, 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		render.SetScissorRect(0, 0, 0, 0, false)
 	end
 
@@ -69,6 +70,7 @@ function QFrame:Init()
 	end)
 end
 
+local shade = Color(0, 0, 0, 240)
 function QFrame:Paint(w, h)
 	if self.m_bBackgroundBlur then
 		Derma_DrawBackgroundBlur(self, self.m_fCreateTime)
@@ -79,7 +81,7 @@ function QFrame:Paint(w, h)
 	surface.SetMaterial(matBlurScreen)
 	surface.SetDrawColor(255, 255, 255, 255)
 
-	for i = 1, 3 do
+	for i = 1, 2 do
 		matBlurScreen:SetFloat("$blur", i)
 		matBlurScreen:Recompute()
 
@@ -88,7 +90,7 @@ function QFrame:Paint(w, h)
 		surface.DrawTexturedRect(-x, -y, ScrW(), ScrH())
 	end
 
-	surface.SetDrawColor(Color(0, 0, 0, 240))
+	surface.SetDrawColor(shade)
 	surface.DrawRect(0, 0, w, h)
 
 	surface.SetDrawColor(qderma.colors.titleBg)

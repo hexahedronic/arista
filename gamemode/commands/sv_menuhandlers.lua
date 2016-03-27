@@ -295,7 +295,7 @@ do
 			target = arista.team.get(id)
 			name = target.name
 		elseif kind == "gang" and id:find("", 1, true) then
-			target = id:Split("")
+			target = id:Split(";")
 
 			local a, b = unpack(target)
 			a, b =  tonumber(a),tonumber(b)

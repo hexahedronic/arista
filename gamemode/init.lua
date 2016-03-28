@@ -559,6 +559,8 @@ function GM:PlayerDataLoaded(ply, success)
 		-- Send a net message to remove the loading screen.
 		net.Start("arista_playerInitialized")
 		net.Send(ply)
+
+		ply:forceNetworkUpdate()
 	end)
 end
 

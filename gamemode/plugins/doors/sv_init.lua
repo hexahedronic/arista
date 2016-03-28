@@ -274,7 +274,7 @@ arista.command.add("unownable", "s", 0, function(ply, action, ...)
 			end
 		end
 
-		arista.entity.setName(door,name)
+		arista.entity.setName(door, name)
 
 		name = arista.entity.getDoorName(door)
 		ply:notify("AL_X_NOW_UNOWNABLE", name)

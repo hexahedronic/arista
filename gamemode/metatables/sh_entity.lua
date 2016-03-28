@@ -96,9 +96,18 @@ function entity:networkAristaVar(var, val, precision)
 	self:setAristaVar(var, val)
 end
 
+local defaults = {String = "RELOAD", Int = 0, Float = 0, Bool = false, Entity = game.GetWorld()}
 function entity:forceNetworkUpdate()
 	for k, v in pairs(self._varsToNetwork) do
-		self:setAristaVar(k, self:getAristaVar(k))
+		local val = self:getAristaVar(k)
+		local def = defaults[v]
+
+		self:setAristaVar(k, def)
+
+		timer.Simple(0.1, function()
+			if not (self and self:IsValid()) then return end
+			self:setAristaVar(k, val)
+		end)
 	end
 end
 

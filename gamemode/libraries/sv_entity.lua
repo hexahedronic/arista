@@ -25,15 +25,11 @@ end
 function arista.entity.makeOwnable(entity, unmake)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.makeOwnable was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	if arista.entity.isOwnable(entity) or entity:IsPlayer() and not unmake then
 		arista.logs.logNoPrefix(arista.logs.E.DEBUG, "arista.entity.makeOwnable was passed an already ownable entity.")
-
-		return
-	end
+	return end
 
 	arista.entity.clearData(entity)
 
@@ -62,9 +58,7 @@ end
 function arista.entity.clearData(entity, saveslaves)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.clearData was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	arista.entity.accessChangedPlayerMulti(entity, arista.entity.getAllAccessors(entity), false)
 
@@ -95,9 +89,7 @@ end
 function arista.entity.getAllAccessors(entity, plyindexed)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.clearData was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	local ret = {}
 
@@ -151,9 +143,7 @@ end
 function arista.entity.getEntsAccess(player)
 	if not IsValid(player) or not player:IsPlayer() then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.getEntsAccess was passed an invalid player (", tostring(player), ").")
-
-		return
-	end
+	return end
 
 	local searchfor, ret = {}, {}
 	local team = player:Team()
@@ -216,14 +206,11 @@ end
 function arista.entity.accessChangedPlayer(entity, player, bool)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.accessChangedPlayer was passed an invalid entity (", tostring(entity), ").")
+	return end
 
-		return
-	end
 	if not IsValid(player) or not player:IsPlayer() then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.accessChangedPlayer was passed an invalid player (", tostring(player), ").")
-
-		return
-	end
+	return end
 
 	if arista.entity.hasSlaves(entity) then
 		for _, slave in ipairs(arista.entity.getSlaves(entity)) do
@@ -243,9 +230,7 @@ end
 function arista.entity.updatePlayerAccess(player)
 	if not IsValid(player) or not player:IsPlayer() then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.updatePlayerAccess was passed an invalid player (", tostring(player), ").")
-
-		return
-	end
+	return end
 
 	for _, entity in ipairs(arista.entity.getEntsAccess(player)) do
 		arista.entity.accessChangedPlayer(entity, player, true)
@@ -263,14 +248,11 @@ end
 function arista.entity.giveAccessPlayer(entity, player)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.giveAccessPlayer was passed an invalid entity (", tostring(entity), ").")
+	return end
 
-		return
-	end
 	if not IsValid(player) or not player:IsPlayer() then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.giveAccessPlayer was passed an invalid player (", tostring(player), ").")
-
-		return
-	end
+	return end
 
 	entity = arista.entity.getMaster(entity) or entity
 
@@ -286,14 +268,11 @@ end
 function arista.entity.takeAccessPlayer(entity, player)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.takeAccessPlayer was passed an invalid entity (", tostring(entity), ").")
+	return end
 
-		return
-	end
 	if not IsValid(player) or not player:IsPlayer() then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.takeAccessPlayer was passed an invalid player (", tostring(player), ").")
-
-		return
-	end
+	return end
 
 	entity = arista.entity.getMaster(entity) or entity
 
@@ -323,9 +302,7 @@ end
 function arista.entity.giveAccessTeam(entity, teamid)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.giveAccessTeam was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	entity = arista.entity.getMaster(entity) or entity
 
@@ -345,9 +322,7 @@ end
 function arista.entity.takeAccessTeam(entity, teamid)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.takeAccessTeam was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	entity = arista.entity.getMaster(entity) or entity
 
@@ -389,9 +364,7 @@ end
 function arista.entity.giveAccessGang(entity, group, gang)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.giveAccessGang was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	entity = arista.entity.getMaster(entity) or entity
 	if type(group) == "table" then -- We might get passed a group object
@@ -414,9 +387,7 @@ end
 function arista.entity.takeAccessGang(entity, group, gang)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.takeAccessGang was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	entity = arista.entity.getMaster(entity) or entity
 
@@ -467,9 +438,7 @@ end
 function arista.entity.clearOwner(entity)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.clearOwner was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	if not arista.entity.isOwnable(entity) then
 		 arista.entity.makeOwnable(entity)
@@ -510,21 +479,18 @@ function arista.entity.clearOwner(entity)
 
 	arista.entity.updateSlaves(entity)
 
-	gamemode.Call("EntityOwnerCleared", entity)
+	gamemode.Call("EntityOwnerSet", entity, "remove")
 end
 
 -- Set a player to be the owner of an entity
 function arista.entity.setOwnerPlayer(entity, player)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.setOwnerPlayer was passed an invalid entity (", tostring(entity), ").")
+	return end
 
-		return
-	end
 	if not IsValid(player) or not player:IsPlayer() then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.setOwnerPlayer was passed an invalid player (", tostring(player), ").")
-
-		return
-	end
+	return end
 
 	entity = arista.entity.getMaster(entity) or entity
 
@@ -544,9 +510,7 @@ end
 function arista.entity.setOwnerTeam(entity, teamid)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.setOwnerPlayer was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	entity = arista.entity.getMaster(entity) or entity
 
@@ -566,9 +530,7 @@ end
 function arista.entity.setOwnerGang(entity, group, gang)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.setOwnerGang was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	entity = arista.entity.getMaster(entity) or entity
 	arista.entity.clearOwner(entity)
@@ -605,9 +567,7 @@ end
 function arista.entity.setName(entity, name, nomaster)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.setName was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	if not nomaster then
 		entity = arista.entity.getMaster(entity) or entity
@@ -627,9 +587,7 @@ end
 function arista.entity.getName(entity)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.getName was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	if not arista.entity.isOwnable(entity) then return end
 
@@ -640,9 +598,7 @@ end
 function arista.entity.isOwnable(entity)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.isOwnable was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	return tobool(entity._owner)
 end
@@ -651,9 +607,7 @@ end
 function arista.entity.isOwned(entity)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.isOwned was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	return entity._owner and entity._owner.owner and entity._owner.owner ~= NULL
 end
@@ -662,9 +616,7 @@ end
 function arista.entity.getOwner(entity)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.getOwner was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	if arista.entity.isOwned(entity) then
 		return entity._owner.owner
@@ -677,9 +629,7 @@ end
 function arista.entity.onList(entity, entry, noown)
 	if not entity or not IsValid(entity) then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.onList was passed an invalid entity (", tostring(entity), ").")
-
-		return
-	end
+	return end
 
 	if not arista.entity.isOwned(entity) then
 		return false

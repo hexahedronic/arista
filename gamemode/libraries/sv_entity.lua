@@ -537,8 +537,7 @@ function arista.entity.setOwnerPlayer(entity, player)
 
 	arista.entity.accessChangedPlayer(entity, player, true)
 
-	gamemode.Call("EntityOwnerSet", entity, player)
-	gamemode.Call("EntityOwnerSetPlayer", entity, player)
+	gamemode.Call("EntityOwnerSet", entity, "player", player)
 end
 
 --Set a team to be the owner of an entity
@@ -560,8 +559,7 @@ function arista.entity.setOwnerTeam(entity, teamid)
 
 	arista.entity.accessChangedPlayerMulti(entity, team.GetPlayers(teamid), true)
 
-	gamemode.Call("EntityOwnerSet", entity, team)
-	gamemode.Call("EntityOwnerSetTeam", entity, team)
+	gamemode.Call("EntityOwnerSet", entity, "team", team)
 end
 
 -- Set a gang to be the owner of an entity
@@ -591,17 +589,16 @@ function arista.entity.setOwnerGang(entity, group, gang)
 
 	local gangword = group .. ";" .. gang
 
-	entity._owner.name = arista.team.gangs[group][gang].name
-	entity._owner.owner = gangword
-
+	arista.entity.clearOwner(entity)
+		entity._owner.name = arista.team.gangs[group][gang].name
+		entity._owner.owner = gangword
 	arista.entity.network(entity)
 
 	arista.entity.updateSlaves(entity)
 
 	arista.entity.accessChangedPlayerMulti(entity, arista.team.getGangMembers(group, gang), true)
 
-	gamemode.Call("EntityOwnerSet", entity, group, gang)
-	gamemode.Call("EntityOwnerSetGang", entity, group, gang)
+	gamemode.Call("EntityOwnerSet", entity, "gang", {group, gang})
 end
 
 -- Set the name of an entity

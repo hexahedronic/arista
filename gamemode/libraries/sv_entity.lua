@@ -29,13 +29,20 @@ function arista.entity.makeOwnable(entity, unmake)
 		return
 	end
 
-	if arista.entity.isOwnable(entity) or entity:IsPlayer() then
+	if arista.entity.isOwnable(entity) or entity:IsPlayer() and not unmake then
 		arista.logs.logNoPrefix(arista.logs.E.DEBUG, "arista.entity.makeOwnable was passed an already ownable entity.")
 
 		return
 	end
 
 	arista.entity.clearData(entity)
+
+	if unmake then
+		gamemode.Call("EntityUnMadeOwnable", entity)
+
+		entity:unLock()
+		arista.entity.stored[entity:EntIndex()] = nil
+	return end
 
 	if arista.entity.isDoor(entity, true) then
 		entity._isDoor = true
@@ -47,6 +54,8 @@ function arista.entity.makeOwnable(entity, unmake)
 
 	entity:unLock()
 	arista.entity.stored[entity:EntIndex()] = entity
+
+	gamemode.Call("EntityMadeOwnable", entity)
 end
 
 -- Clear the ownership data of an entity
@@ -221,6 +230,8 @@ function arista.entity.accessChangedPlayer(entity, player, bool)
 			arista.entity.accessChangedPlayer(slave, player, bool)
 		end
 	end
+
+	gamemode.Call("EntityAccessChangedPlayer", entity, player, bool)
 
 	net.Start("arista_incomingAccess")
 		net.WriteEntity(entity)
@@ -498,6 +509,8 @@ function arista.entity.clearOwner(entity)
 	arista.entity.network(entity)
 
 	arista.entity.updateSlaves(entity)
+
+	gamemode.Call("EntityOwnerCleared", entity)
 end
 
 -- Set a player to be the owner of an entity
@@ -523,6 +536,9 @@ function arista.entity.setOwnerPlayer(entity, player)
 	arista.entity.updateSlaves(entity)
 
 	arista.entity.accessChangedPlayer(entity, player, true)
+
+	gamemode.Call("EntityOwnerSet", entity, player)
+	gamemode.Call("EntityOwnerSetPlayer", entity, player)
 end
 
 --Set a team to be the owner of an entity
@@ -543,6 +559,9 @@ function arista.entity.setOwnerTeam(entity, teamid)
 	arista.entity.updateSlaves(entity)
 
 	arista.entity.accessChangedPlayerMulti(entity, team.GetPlayers(teamid), true)
+
+	gamemode.Call("EntityOwnerSet", entity, team)
+	gamemode.Call("EntityOwnerSetTeam", entity, team)
 end
 
 -- Set a gang to be the owner of an entity
@@ -580,6 +599,9 @@ function arista.entity.setOwnerGang(entity, group, gang)
 	arista.entity.updateSlaves(entity)
 
 	arista.entity.accessChangedPlayerMulti(entity, arista.team.getGangMembers(group, gang), true)
+
+	gamemode.Call("EntityOwnerSet", entity, group, gang)
+	gamemode.Call("EntityOwnerSetGang", entity, group, gang)
 end
 
 -- Set the name of an entity
@@ -600,6 +622,8 @@ function arista.entity.setName(entity, name, nomaster)
 	arista.entity.network(entity)
 
 	arista.entity.updateSlaves(entity)
+
+	gamemode.Call("EntityNameSet", entity, name)
 end
 
 -- Get the name of an entity
@@ -682,6 +706,8 @@ function arista.entity.setMaster(entity, master, noupdate)
 	if not (IsValid(entity) and arista.entity.isOwnable(entity)) then return end
 
 	if not arista.entity.isOwnable(entity) then return nil end
+
+	gamemode.Call("EntityMasterSet", entity, master)
 
 	if not master or master == NULL then -- I have been set loose. whoo-hoo.
 		arista.entity.takeSlave(arista.entity.getMaster(entity), entity)
@@ -768,6 +794,8 @@ function arista.entity.giveSlave(entity, slave)
 		end
 	end
 
+	gamemode.Call("EntityGiveSlave", entity, slave)
+
 	table.insert(entity._owner.slaves, slave)
 end
 
@@ -781,6 +809,8 @@ function arista.entity.takeSlave(entity, slave)
 			table.remove(slaves, key)
 		end
 	end
+
+	gamemode.Call("EntityTakeSlave", entity, slave)
 end
 
 -- Does the player have access to the entity?
@@ -921,10 +951,10 @@ function arista.entity.getPossessiveName(entity)
 			name = "The " .. team.GetName(owner)
 
 			if not name:sub(-1,-1) == "r" then
-				name = name.."s"
+				name = name .. "s"
 			end
 		elseif type(owner) == "string" then
-			local aspl = string.Explode(";", owner)
+			local aspl = owner:Split(";")
 			local group, gang = tonumber(aspl[1]), tonumber(aspl[2])
 
 			if group and gang then
@@ -932,6 +962,7 @@ function arista.entity.getPossessiveName(entity)
 			end
 		else
 			arista.logs.logNoPrefix(arista.logs.E.DEBUG, "arista.entity.getPossessiveName found a really fucked up ownership (", tostring(owner), ").")
+
 			arista.entity.clearData(entity)
 		end
 	end

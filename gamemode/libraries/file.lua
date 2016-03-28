@@ -17,8 +17,8 @@ function arista.file.readData(path)
 	return file.Read("data/" .. arista.gamemode.luaFolder .. path, "GAME")
 end
 
-function arista.file.writeData(path)
-	return file.Write(arista.gamemode.luaFolder .. path)
+function arista.file.writeData(path, data)
+	return file.Write(arista.gamemode.luaFolder .. path, data)
 end
 
 function arista.file.deleteData(path)

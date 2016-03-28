@@ -44,17 +44,19 @@ function PANEL:ExtraInit()
 	end
 
 	-- Add the sheets for the other menus to the property sheet.
-	self.tabs:addSheet(arista.lang:Get"AL_DERMA_CHARACTER",	vgui.Create("arista_character", self.tabs),	"icon16/user.png")
-	self.tabs:addSheet(arista.lang:Get"AL_DERMA_INVENTORY",	vgui.Create("arista_inventory", self.tabs),	"icon16/application_view_tile.png")
-	self.tabs:addSheet(arista.lang:Get"AL_DERMA_STORE",			vgui.Create("arista_store", self.tabs),			"icon16/box.png")
-	self.tabs:addSheet(arista.lang:Get"AL_DERMA_CREDITS",		vgui.Create("arista_credits", self.tabs),		"icon16/group.png")
-	self.tabs:addSheet(arista.lang:Get"AL_DERMA_LAWS",			vgui.Create("arista_laws", self.tabs),			"icon16/world.png")
-	self.tabs:addSheet(arista.lang:Get"AL_DERMA_HELP",			vgui.Create("arista_help", self.tabs),			"icon16/page.png")
+	self.tabs:addSheet(arista.lang:Get"AL_DERMA_CHARACTER",		vgui.Create("arista_character", self.tabs),		"icon16/user.png")
+	self.tabs:addSheet(arista.lang:Get"AL_DERMA_INVENTORY",		vgui.Create("arista_inventory", self.tabs),		"icon16/application_view_tile.png")
+	self.tabs:addSheet(arista.lang:Get"AL_DERMA_STORE",			vgui.Create("arista_store", 	self.tabs),		"icon16/box.png")
+	self.tabs:addSheet(arista.lang:Get"AL_DERMA_CREDITS",		vgui.Create("arista_credits", 	self.tabs),		"icon16/group.png")
+	self.tabs:addSheet(arista.lang:Get"AL_DERMA_LAWS",			vgui.Create("arista_laws", 		self.tabs),		"icon16/world.png")
+	self.tabs:addSheet(arista.lang:Get"AL_DERMA_HELP",			vgui.Create("arista_help", 		self.tabs),		"icon16/page.png")
 end
 
 function PANEL:Reload()
-	for k, v in ipairs(self.panels) do
-		v:InvalidateLayout()
+	if (self.panels) then
+		for k, v in ipairs(self.panels) do
+			v:InvalidateLayout()
+		end
 	end
 
 	self:InvalidateLayout()

@@ -20,7 +20,7 @@
 [ ] SQL
 
 - Fix
-[ ] Find issue with job string
+[X] Find issue with job string
 [ ] Double disconnect message
 [ ] E + Shift doesnt work on deployed items
 [ ] Stamina exhausted might not be networked properly? potential clientside jump prohibiter broken

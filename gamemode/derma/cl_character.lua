@@ -131,7 +131,7 @@ function PANEL:Think()
 							panel.button:SetDisabled(true)
 							panel.button:SetText(arista.lang:Get"AL_DERMA_FULL")
 						elseif nextChange and nextChange > CurTime() then
-							local time = string.ToMinutesSeconds(nextChange - CurTime())
+							local time = " " .. string.ToMinutesSeconds(nextChange - CurTime())
 
 							panel.button:SetDisabled(true)
 							panel.button:SetText(arista.lang:Get"AL_DERMA_WAIT" .. time)

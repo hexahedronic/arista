@@ -1,3 +1,5 @@
+arista.file.makeDir("prisonpoints")
+
 PLUGIN.prisonpoints = {}
 
 function PLUGIN:LoadData()

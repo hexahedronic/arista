@@ -524,7 +524,7 @@ function arista.entity.setOwnerTeam(entity, teamid)
 
 	arista.entity.accessChangedPlayerMulti(entity, team.GetPlayers(teamid), true)
 
-	gamemode.Call("EntityOwnerSet", entity, "team", team)
+	gamemode.Call("EntityOwnerSet", entity, "team", teamid)
 end
 
 -- Set a gang to be the owner of an entity

@@ -6,6 +6,7 @@ PANEL.credits = [[
 [Arista Credits;color_highpink]
 Q2F2 - Rewriting almost the entirety of Applejack, fixing it for Gmod13, replacing deprecated functions ect.
 Ghosty - Good friend, being a drama causing retard, helping with ideas, various code.
+Liquid - Good friend, finding bugs, various code.
 Trixter - Good friend, various code.
 [Applejack Credits;color_lightblue]
 kuromeku - kuromeku@gmail.com - http://conna.org - Made the core systems of Cider, populated it with items and released it.

@@ -14,7 +14,7 @@ function PLUGIN:PlayerSecond(ply)
 
 	ply:setAristaVar("hunger", hunger)
 
-	if hunger <= arista.config.plugins.hungerStarve then
+	if hunger <= arista.config.plugins.hungerStarve and ply:Alive() then
 		ply:TakeDamage(5, ply, game.GetWorld())
 	end
 end

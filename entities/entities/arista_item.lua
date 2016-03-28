@@ -108,7 +108,7 @@ function ENT:Use(activator, caller)
 	local nextUseItem = activator:getAristaVar("nextUseItem") or 0
 
 	if activator:KeyDown(IN_SPEED) and item.equippable then
-		if not arista.utils.isAdmin(ply) and nextUseItem > CurTime() then
+		if not arista.utils.isAdmin(activator) and nextUseItem > CurTime() then
 			activator:notify("AL_CANNOT_USE_ITEM_SPECIFIC", "AL_ITEM", nextUseTime - CurTime())
 
 			return false
@@ -116,7 +116,7 @@ function ENT:Use(activator, caller)
 			activator:notify("AL_CANNOT_USE_ITEM_VEHICLE")
 
 			return false
-		elseif gamemode.Call("PlayerCanUseItem", activator, item) == false then
+		elseif gamemode.Call("PlayerCanUseItem", activator, item.uniqueID) == false then
 			return false
 		end
 
@@ -131,7 +131,7 @@ function ENT:Use(activator, caller)
 
 			self:updateAmount(-1)
 
-			arista.logs.event(arista.logs.E.LOG, arista.logs.E.ITEM, ply:Name(), "(", ply:SteamID(), ") equiped a dropped ", item.name, ".")
+			arista.logs.event(arista.logs.E.LOG, arista.logs.E.ITEM, activator:Name(), "(", activator:SteamID(), ") equiped a dropped ", item.name, ".")
 		end
 
 		return

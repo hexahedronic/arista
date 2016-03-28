@@ -7,7 +7,7 @@ end
 
 -- Called when a player presses a key.
 function PLUGIN:KeyPress(player, key)
-	if not (player:isArrested() or player:isTied() or player._holdingEnt or player:getAristaVar("exhausted")) then
+	if not (player:isArrested() or player:isTied() or player._holdingEnt or player:isExhausted() or player:InVehicle()) then
 		if player:Alive() and not player:isUnconscious() then
 			if player:IsOnGround() and key == IN_JUMP then
 				local stamina = player:getAristaVar("stamina")

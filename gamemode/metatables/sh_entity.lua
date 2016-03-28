@@ -81,14 +81,12 @@ function entity:setAristaVar(var, val)
 end
 
 function entity:getAristaVar(var)
-
 	self._aristaVars = self._aristaVars or {}
 
 	return self._aristaVars[var]
 end
 
 function entity:networkAristaVar(var, val, precision)
-
 	local type = arista.utils.typeToNet(val)
 	if type == "Int" and precision then type = "Float" end
 

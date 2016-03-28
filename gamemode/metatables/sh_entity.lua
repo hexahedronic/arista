@@ -98,6 +98,12 @@ function entity:networkAristaVar(var, val, precision)
 	self:setAristaVar(var, val)
 end
 
+function entity:forceNetworkUpdate()
+	for k, v in pairs(self._varsToNetwork) do
+		self:setAristaVar(k, self:getAristaVar(k))
+	end
+end
+
 else
 
 local function createTypeNetworker(class)

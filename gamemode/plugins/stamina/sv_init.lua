@@ -39,7 +39,7 @@ function PLUGIN:PlayerTenthSecond(player)
 			end
 		elseif not player:getAristaVar("exhaustedCooldown") then
 			local restore = arista.config.plugins.staminaRestore
-			hook.Run("StaminaAdjustRestore", player, restore)
+			restore = hook.Run("StaminaAdjustRestore", player, restore) or restore
 
 			if player:Health() < 50 then
 				stamina = math.Clamp(stamina + (restore - ((50 - player:Health()) * 0.0025)), 0, 100)

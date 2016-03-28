@@ -5,11 +5,7 @@ function PLUGIN:PostPlayerSpawn(ply, lightSpawn, changeTeam)
 	end
 end
 
-local LastDelay = CurTime()
-function PLUGIN:PlayerTenthSecond(ply)
-	if LastDelay > CurTime() then return end
-	LastDelay = CurTime() + arista.config.plugins.hungerInterval
-
+function PLUGIN:PlayerSecond(ply)
 	local drain = arista.config.plugins.hungerDrain
 	drain = hook.Run("HungerAdjustDrain") or drain
 

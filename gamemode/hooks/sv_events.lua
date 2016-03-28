@@ -107,7 +107,7 @@ function arista.eventHooks.dataUpdate()
 		if ply._inited and ply._updateData then
 			gamemode.Call("PlayerTenthSecond", ply)
 
-			if not second then return end
+			if not second then continue end
 			gamemode.Call("PlayerSecond", ply)
 
 			-- Disable paracetamol if yer over 50HP

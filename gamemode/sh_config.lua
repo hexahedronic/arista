@@ -196,10 +196,8 @@ arista.config.plugins = {
 	-- STAMINA: How much stamina to drain for a jump.
 	staminaJump = 10,
 
-	-- HUNGERMOD: How much hunger to drain per interval.
-	hungerDrain = 1,
-	-- HUNGERMOD: How long is one interval (in seconds)
-	hungerInterval = 20, -- 18 * 100 / 60 = 30 minutes
+	-- HUNGERMOD: How much hunger to drain per second.
+	hungerDrain = 0.05,
 	-- HUNGERMOD: How low must the hunger be before the player starves.
 	hungerStarve = 5,
 	-- HUNGERMOD: How low must the hunger be before the 'hungry' debuff.

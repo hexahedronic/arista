@@ -147,8 +147,8 @@ function arista.entity.getEntsAccess(player)
 
 	local searchfor, ret = {}, {}
 	local team = player:Team()
-	local gang = arista.team.getGang(teamID)
-	local group = arista.team.getGroupByTeam(teamID)
+	local gang = arista.team.getGang(team)
+	local group = arista.team.getGroupByTeam(team)
 
 	-- Player still connecting.
 	local index = 0

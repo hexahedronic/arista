@@ -324,6 +324,9 @@ arista.lang.tbl.EN = {
 	["AL_COMMAND_RESTARTMAP"] = "Restart the map immediately.",
 	["AL_COMMAND_RESTARTMAP_HELP"] = "",
 
+
+	["AL_COMMAND_CAT_SADMIN"] = "Super Admin Commands",
+
 	-- BACKWARDS COMPAT
 	["AL_METHOD_UNSUPORTED"] = "This method is no longer supported.",
 }

@@ -419,6 +419,7 @@ function arista.entity.takeAccessGang(entity, group, gang)
 					end
 
 					arista.entity.updateSlaves(entity)
+
 					break
 				end
 			end

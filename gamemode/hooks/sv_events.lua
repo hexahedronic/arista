@@ -72,9 +72,9 @@ end
 hook.Add("PlayerChangedTeams", "arista.eventHooks.playerChangedTeams", arista.eventHooks.playerChangedTeams)
 
 function arista.eventHooks.clearTables()
-	for index, ent in pairs(arista.entity.stored) do
+	for index, ent in pairs(arista._internaldata.entity_stored) do
 		if not IsValid(ent) then
-			arista.entity.stored[index] = nil
+			arista._internaldata.entity_stored[index] = nil
 		end
 	end
 end

@@ -37,7 +37,7 @@ arista.gamemode = {
 	With this idea we hope to give smaller servers the ability to run a gamemode other
 	than DarkRP, due to the saturation of DarkRP's servers.
 
-	Note: This is not CityRP, I beleive at some point in the past CityRP was based on
+	Note: This is not CityRP, I believe at some point in the past CityRP was based on
 	either cider/applejack, but this does not MEAN THEY ARE THE SAME THING.
 
 	DO NOT REMOVE KURO OR LEXI FROM THE AUTHOR FIELD.

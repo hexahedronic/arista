@@ -52,7 +52,7 @@
 [ ] Officals
 [X] Hunger
 [X] Flashlight battery
-[ ] Door management (saving)
+[#] Door management (saving)
 [X] Stamina
 [X] Prison spawnpoints
 [X] Oxygen

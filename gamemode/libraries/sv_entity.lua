@@ -1,6 +1,6 @@
 arista.entity = {}
-arista.entity.stored = {}
-arista.entity.backup = {}
+arista._internaldata.entity_stored = arista._internaldata.entity_stored or {}
+arista._internaldata.entity_backup = arista._internaldata.entity_backup or {}
 
 -- Check if an entity is a door.
 function arista.entity.isDoor(entity)
@@ -37,7 +37,7 @@ function arista.entity.makeOwnable(entity, unmake)
 		gamemode.Call("EntityUnMadeOwnable", entity)
 
 		entity:unLock()
-		arista.entity.stored[entity:EntIndex()] = nil
+		arista._internaldata.entity_stored[entity:EntIndex()] = nil
 	return end
 
 	if arista.entity.isDoor(entity, true) then
@@ -49,7 +49,7 @@ function arista.entity.makeOwnable(entity, unmake)
 	end
 
 	entity:unLock()
-	arista.entity.stored[entity:EntIndex()] = entity
+	arista._internaldata.entity_stored[entity:EntIndex()] = entity
 
 	gamemode.Call("EntityMadeOwnable", entity)
 end
@@ -169,7 +169,7 @@ function arista.entity.getEntsAccess(player)
 	searchfor[#searchfor+1] = team
 	searchfor[#searchfor+1] = player
 
-	for index, ent in pairs(arista.entity.stored) do
+	for index, ent in pairs(arista._internaldata.entity_stored) do
 		if IsValid(ent) then
 			local found = false
 
@@ -195,7 +195,7 @@ function arista.entity.getEntsAccess(player)
 				end
 			end
 		else
-			arista.entity.stored[index] = nil
+			arista._internaldata.entity_stored[index] = nil
 		end
 	end
 
@@ -944,13 +944,13 @@ function arista.entity.getDoorName(door)
 end
 
 function arista.entity.saveAccess(player)
-	arista.entity.backup[player:UniqueID()] = {}
+	arista._internaldata.entity_backup[player:UniqueID()] = {}
 
-	for _, entity in pairs(arista.entity.stored) do
+	for _, entity in pairs(arista._internaldata.entity_stored) do
 		entity = arista.entity.getMaster(entity) or entity
 
 		if IsValid(entity) and entity._owner.owner == player then
-			arista.entity.backup[player:UniqueID()][entity:EntIndex()] = table.Copy(entity._owner)
+			arista._internaldata.entity_backup[player:UniqueID()][entity:EntIndex()] = table.Copy(entity._owner)
 
 			arista.entity.accessChangedPlayerMulti(entity,arista.entity.getAllAccessors(entity), false)
 			arista.entity.clearData(entity, true)
@@ -965,9 +965,9 @@ function arista.entity.saveAccess(player)
 end
 
 function arista.entity.restoreAccess(player)
-	if not arista.entity.backup[player:UniqueID()] then return end
+	if not arista._internaldata.entity_backup[player:UniqueID()] then return end
 
-	for index, data in pairs(arista.entity.backup[player:UniqueID()]) do
+	for index, data in pairs(arista._internaldata.entity_backup[player:UniqueID()]) do
 		entity = Entity(index)
 		entity = arista.entity.getMaster(entity) or entity
 
@@ -983,5 +983,5 @@ function arista.entity.restoreAccess(player)
 		end
 	end
 
-	arista.entity.backup[player:UniqueID()] = nil
+	arista._internaldata.entity_backup[player:UniqueID()] = nil
 end

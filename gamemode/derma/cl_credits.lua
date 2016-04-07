@@ -8,6 +8,8 @@ Q2F2 - Rewriting almost the entirety of Applejack, fixing it for Gmod13, replaci
 Ghosty - Good friend, being a drama causing retard, helping with ideas, various code.
 Liquid - Good friend, finding bugs, various code.
 Trixter - Good friend, various code.
+[Arista Testers;color_highpink]
+Frumorn - 'That one gay retard'
 [Applejack Credits;color_lightblue]
 kuromeku - kuromeku@gmail.com - http://conna.org - Made the core systems of Cider, populated it with items and released it.
 Lexi - mwaness@gmail.com - http://www.ventmob.com/ - Vast swathes of improvements to the script, going with the philosophy that "Light RP doesn't have to be shit."

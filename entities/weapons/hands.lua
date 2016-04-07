@@ -96,9 +96,10 @@ end
 local range = 128 ^ 2
 
 -- Called when the player attempts to primary fire.
-function SWEP:PrimaryAttack()
+function SWEP:PrimaryAttack(right)
 
-	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Refire)
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Refire)
+	self:SetNextSecondaryFire(CurTime() + self.Primary.Refire)
 
 	if IsValid(self.heldEnt)then
 		self:dropObject(self.Primary.ThrowAcceleration)
@@ -111,10 +112,10 @@ function SWEP:PrimaryAttack()
 	end
 
 	-- Set the animation of the weapon and play the sound.
-	self.Weapon:EmitSound(self.Primary.Sound)
+	self:EmitSound(self.Primary.Sound)
 
 	local vm = self.Owner:GetViewModel()
-	vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_left"))
+	vm:SendViewModelMatchingSequence(right and vm:LookupSequence("fists_right") or vm:LookupSequence("fists_left"))
 
 	self:UpdateNextIdle()
 
@@ -170,8 +171,8 @@ function SWEP:PrimaryAttack()
 			end
 		else
 			if self.Owner:KeyDown(IN_SPEED) then
-				self.Weapon:SetNextPrimaryFire(CurTime() + 0.75)
-				self.Weapon:SetNextSecondaryFire(CurTime() + 0.75)
+				self:SetNextPrimaryFire(CurTime() + 0.75)
+				self:SetNextSecondaryFire(CurTime() + 0.75)
 
 				-- Keys!
 				if CLIENT then return end
@@ -200,7 +201,7 @@ function SWEP:PrimaryAttack()
 		end
 
 		-- Check if the trace hit an entity or the world.
-		if (trace.Hit or trace.HitWorld) then self.Weapon:EmitSound("weapons/crossbow/hitbod2.wav") end
+		if (trace.Hit or trace.HitWorld) then self:EmitSound("weapons/crossbow/hitbod2.wav") end
 	end
 
 	if SERVER and self.stamina and not self.Primary.Super then
@@ -213,7 +214,7 @@ end
 
 -- Called when the player attempts to secondary fire.
 function SWEP:SecondaryAttack()
-	self.Weapon:SetNextSecondaryFire(CurTime() + 0.25)
+	self:SetNextSecondaryFire(CurTime() + 0.25)
 
 	if IsValid(self.heldEnt)then
 		self:dropObject()
@@ -227,7 +228,6 @@ function SWEP:SecondaryAttack()
 
 	-- Check the hit position of the trace to see if it's close to us.
 	if IsValid(ent) and self.Owner:GetPos():DistToSqr(trace.HitPos) <= range then
-
 		if arista.entity.isOwnable(ent) then
 			local vm = self.Owner:GetViewModel()
 			vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_right"))
@@ -235,8 +235,8 @@ function SWEP:SecondaryAttack()
 			self:UpdateNextIdle()
 
 			if self.Owner:KeyDown(IN_SPEED) then
-				self.Weapon:SetNextPrimaryFire(CurTime() + 0.75)
-				self.Weapon:SetNextSecondaryFire(CurTime() + 0.75)
+				self:SetNextPrimaryFire(CurTime() + 0.75)
+				self:SetNextSecondaryFire(CurTime() + 0.75)
 
 				-- Keys!
 				if CLIENT then return end
@@ -252,13 +252,20 @@ function SWEP:SecondaryAttack()
 
 				return
 			elseif arista.entity.isDoor(ent) then
-				self.Weapon:EmitSound("physics/wood/wood_crate_impact_hard2.wav")
+				self:EmitSound("physics/wood/wood_crate_impact_hard2.wav")
 				if self.Primary.Super and SERVER and arista.utils.isAdmin(self.Owner, true) then
 					arista.entity.openDoor(ent, 0, true, true)
 				end
 
 				return
 			end
+		elseif ent:IsPlayer() or ent:IsNPC() or ent:GetClass() == "prop_ragdoll" and not self.Owner:KeyDown(IN_SPEED) then
+			self:PrimaryAttack(true)
+
+			self:SetNextPrimaryFire(CurTime() + self.Primary.Refire)
+			self:SetNextSecondaryFire(CurTime() + self.Primary.Refire)
+
+			return
 		end
 
 		self:pickUp(ent, trace)
@@ -351,7 +358,7 @@ end
 
 function SWEP:pickUp(ent, trace)
 	if CLIENT or ent.held then return end
-	if constraint.HasConstraints(ent) or ent:IsVehicle() then
+	if constraint.HasConstraints(ent) or ent:IsVehicle() or ent:IsNPC() or ent:GetClass():lower():find("npc_", 1, true) then
 		return false
 	end
 

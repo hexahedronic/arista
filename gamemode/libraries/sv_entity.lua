@@ -546,9 +546,7 @@ function arista.entity.setOwnerGang(entity, group, gang)
 
 	if not arista.team.gangs[group] or not arista.team.gangs[group][gang] then
 		arista.logs.logNoPrefix(arista.logs.E.ERROR, "arista.entity.setOwnerGang was passed an invalid gang (", group, ", ", tostring(gang), ").")
-
-		return
-	end
+	return end
 
 	local gangword = group .. ";" .. gang
 
@@ -663,9 +661,7 @@ function arista.entity.setMaster(entity, master, noupdate)
 		entity._owner.master = master
 
 		arista.entity.clearData(entity)
-
-		return true
-	end
+	return true end
 
 	-- Return if master not valid and ownable.
 	if not (IsValid(master) and arista.entity.isOwnable(master)) then return nil end
@@ -680,9 +676,7 @@ function arista.entity.setMaster(entity, master, noupdate)
 	end
 
 	arista.entity.clearData(entity)
-
-	entity._owner.master = master
-
+		entity._owner.master = master
 	arista.entity.giveSlave(master,entity)
 
 	if not noupdate then -- Only need to do this once
@@ -925,22 +919,13 @@ function arista.entity.getPossessiveName(entity)
 end
 
 function arista.entity.getDoorName(door)
-	local doorname = door:getAristaVar("name") or ""
 	local addon = ""
 
 	if arista.entity.isOwned(door) then
 		addon = arista.entity.getName(door)
 	end
 
-	if doorname and doorname ~= "" then
-		if addon ~= "" then
-			addon = doorname .. " - " .. addon
-		else
-			addon = doorname
-		end
-	end
-
-	return addon
+	return addon:Trim() ~= "" and addon or "Door"
 end
 
 function arista.entity.saveAccess(player)

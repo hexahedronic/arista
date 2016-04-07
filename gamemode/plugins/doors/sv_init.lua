@@ -66,10 +66,6 @@ function PLUGIN:LoadDoors()
 					end
 				end
 
-				if data.name then -- Does this door have a custom name?
-					entity:networkAristaVar("name", data.name)
-				end
-
 				if data.unownable then -- Is this door unownable?
 					if not data.preOwned then -- If the door doesn't already have an owner
 						arista.entity.setOwnerTeam(entity, TEAM_NONE) -- Give it to the dummy team we set up earlier, so no one else can have it.
@@ -122,13 +118,12 @@ function PLUGIN:GetDoorData(door, create)
 	return ret
 end
 
-
-function PLUGIN:SaveData()
+function PLUGIN:SaveData(force_update)
 	local tocode = {}
 	local count = 0
 
 	for ent, data in pairs(self.Doors) do -- Loop through our stored door data
-		if IsValid(ent) and table.Count(data) > 0 then -- Make sure this door exists and has data
+		if IsValid(ent) and table.Count(data) > 0 and ent._unownable then -- Make sure this door exists and has data
 			count = count + 1
 
 			tocode[count] = data
@@ -137,7 +132,13 @@ function PLUGIN:SaveData()
 		end
 	end
 
+	local path = "doors/" .. game.GetMap() .. ".txt"
+
 	if count < 1 then
+		if arista.file.existsData(path) then
+			arista.file.deleteData(path)
+		end
+
 		return
 	end
 
@@ -147,10 +148,8 @@ function PLUGIN:SaveData()
 		error("["..os.date().."] Doors Plugin: Error encoding doors : " .. tostring(results))
 	end
 
-	local path = "doors/" .. game.GetMap() .. ".txt"
-
 	if not result or result == "" then
-		if arista.file.existsData(path) then
+		if force_update and arista.file.existsData(path) then
 			arista.file.deleteData(path)
 		end
 
@@ -243,13 +242,14 @@ arista.command.add("unownable", "s", 0, function(ply, action, ...)
 		arista.entity.clearData(door, true)
 
 		local data = plugin:GetDoorData(door)
-		if data.preOwned then
+		if data.preOwned and not (data.preOwned == "team" and data.owner == TEAM_NONE) then
 			if data.preOwned == "team" then
 				arista.entity.setOwnerTeam(door, data.owner)
 			else
 				arista.entity.setOwnerGang(door, data.owner[1], data.owner[2])
 			end
 		else
+			arista.entity.clearOwner(door)
 			arista.entity.updateSlaves(door)
 		end
 
@@ -280,5 +280,5 @@ arista.command.add("unownable", "s", 0, function(ply, action, ...)
 		ply:notify("AL_X_NOW_UNOWNABLE", name)
 	end
 
-	plugin:SaveData()
+	plugin:SaveData(force_update)
 end, "AL_COMMAND_CAT_SADMIN", true)

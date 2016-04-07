@@ -87,13 +87,8 @@ end
 
 -- Get the owner's name of an entity
 function arista.entity.getOwner(entity)
-	local name = entity:getAristaString("ownerName")
-
-	if name and name ~= "" then
-		return name
-	end
-
-	return nil
+	--local name = entity:getAristaString("ownerName")
+	return entity:getAristaString("ownerName")
 end
 
 -- Does the local player have access to the entity?

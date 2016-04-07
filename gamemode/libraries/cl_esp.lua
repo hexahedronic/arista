@@ -123,7 +123,7 @@ function GM:DrawESPLine(ent, tent, ply)
 		elseif tent.espPaint then
 			tent:espPaint(lines, pos, distance, lookingat)
 		elseif arista.entity.isContainer(tent) and lookingat then
-			lines:add("Name", arista.lang:Get"AL_A" .. tent:getName(), color_purpleblue, 1)
+			lines:add("Name", arista.lang:Get"AL_A" .. tent:getTitle(), color_purpleblue, 1)
 
 			local status = arista.entity.getStatus(tent)
 
@@ -134,15 +134,13 @@ function GM:DrawESPLine(ent, tent, ply)
 			local owner = arista.entity.getOwner(tent)
 
 			if owner then
-				local name = tent:getName()
+				local name = tent:getTitle()
 
 				if not name or name == "" then
 					name = "Door"
 				end
 
-				if ent:isSealed() then
-					owner = ""
-				elseif not arista.entity.isOwned(tent) then -- Door is for sale
+				if not arista.entity.isOwned(tent) then -- Door is for sale
 					owner = arista.lang:Get"AL_DOOR_SALE"
 				end
 
@@ -189,7 +187,7 @@ function GM:DrawESPLine(ent, tent, ply)
 			end]]
 			-- todo: note
 		elseif class == "C_BaseEntity" and lookingat then -- func_buttons show up as C_BaseEntity for some reason.
-			local name = tent:getName()
+			local name = tent:getTitle()
 
 			if not name or name == "" then
 				name = arista.lang:Get"AL_A_BUTTON"

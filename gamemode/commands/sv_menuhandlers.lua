@@ -255,7 +255,7 @@ end, "AL_COMMAND_CAT_MENU")
 do
 	local function entHandler(ply, arguments, entity)
 		local action = table.remove(arguments, 1)
-		local ent = entity._isDoor and "door" or entity:getName()
+		local ent = entity._isDoor and "door" or entity:getTitle()
 
 		if action == "name" then
 			if gamemode.Call("PlayerCanSetEntName", ply, entity) == false then
@@ -365,7 +365,7 @@ do
 		if entity._isDoor then
 			detailstable.owner = detailstable.owner .. " door"
 		else
-			detailstable.owner = detailstable.owner .. " " .. entity:getName()
+			detailstable.owner = detailstable.owner .. " " .. entity:getTitle()
 		end
 
 		net.Start("arista_accessUpdate")

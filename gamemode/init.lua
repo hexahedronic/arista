@@ -1414,7 +1414,7 @@ function GM:ShowTeam(ply)
 	if door._isDoor then
 		detailstable.owner = detailstable.owner .. " door"
 	else
-		detailstable.owner = detailstable.owner .. " " .. door:getName()
+		detailstable.owner = detailstable.owner .. " " .. door:getTitle()
 	end
 
 	net.Start("arista_access")

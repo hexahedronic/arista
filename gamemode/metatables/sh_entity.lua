@@ -2,9 +2,9 @@ AddCSLuaFile()
 
 local entity = FindMetaTable("Entity")
 
-function entity:getName()
-	if CLIENT then return self:getAristaString("name") end
-	return self:getAristaVar("name") or ""
+function entity:getTitle()
+	if CLIENT then return self:getAristaString("title") end
+	return self:getAristaVar("title") or ""
 end
 
 function entity:isSealed()

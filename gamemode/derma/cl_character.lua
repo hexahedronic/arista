@@ -38,6 +38,9 @@ function PANEL:Think()
 			RunConsoleCommand("arista", "name", self.rpname.textEntry:GetValue())
 		end
 
+		local name = arista.lp:rpName() or ""
+		self.rpname.textEntry:SetValue(name)
+
 	-- Create the job control.
 	self.job = vgui.Create("arista_characterTextEntry", self)
 		self.job.label:SetText(arista.lang:Get"AL_DERMA_JOB")
@@ -46,6 +49,9 @@ function PANEL:Think()
 		self.job.button.DoClick = function()
 			RunConsoleCommand("arista", "job", self.job.textEntry:GetValue())
 		end
+
+		local job = arista.lp:getJob() or ""
+		self.job.textEntry:SetValue(job)
 
 	-- Create the clan control.
 	self.clan = vgui.Create("arista_characterTextEntry", self)

@@ -13,7 +13,7 @@ function arista.container.make(entity, size, name, initialContents)
 	}
 
 	entity:networkAristaVar("container", true)
-	entity:networkAristaVar("name", entity._inventory.name)
+	entity:networkAristaVar("title", entity._inventory.name)
 
 	entity:SetUseType(SIMPLE_USE)
 

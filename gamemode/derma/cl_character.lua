@@ -30,6 +30,15 @@ function PANEL:Think()
 	self.itemsList:Clear()
 
 	-- Create the job control.
+	self.rpname = vgui.Create("arista_characterTextEntry", self)
+		self.rpname.label:SetText(arista.lang:Get"AL_DERMA_NAME")
+		self.rpname.label:SizeToContents()
+		self.rpname.button:SetText(arista.lang:Get"AL_DERMA_CHANGE")
+		self.rpname.button.DoClick = function()
+			RunConsoleCommand("arista", "name", self.rpname.textEntry:GetValue())
+		end
+
+	-- Create the job control.
 	self.job = vgui.Create("arista_characterTextEntry", self)
 		self.job.label:SetText(arista.lang:Get"AL_DERMA_JOB")
 		self.job.label:SizeToContents()
@@ -69,6 +78,7 @@ function PANEL:Think()
 		self.gender.button:SetText(arista.lang:Get"AL_DERMA_CHANGE")
 
 	-- Add the controls to the item list.
+	self.itemsList:AddItem(self.rpname)
 	self.itemsList:AddItem(self.job)
 	self.itemsList:AddItem(self.clan)
 	self.itemsList:AddItem(self.details)

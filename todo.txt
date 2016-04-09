@@ -24,7 +24,7 @@
 [X] Double disconnect message
 [X] E + Shift doesnt work on deployed items
 [X] Stamina exhausted might not be networked properly? potential clientside jump prohibiter broken
-[ ] Access is not returned to rejoining players correctly
+[X] Access is not returned to rejoining players correctly
 [-] Readd sound to QButtons in derma implementation
 [-] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
 
@@ -52,7 +52,7 @@
 [ ] Officals
 [X] Hunger
 [X] Flashlight battery
-[#] Door management (saving)
+[X] Door management (saving)
 [X] Stamina
 [X] Prison spawnpoints
 [X] Oxygen

@@ -560,6 +560,11 @@ function GM:PlayerDataLoaded(ply, success)
 		net.Start("arista_playerInitialized")
 		net.Send(ply)
 
+		if ply:rpName() == "" then
+			ply:generateDefaultRpName()
+			arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") was missing their RP Name, giving them a new one.")
+		end
+
 		ply:forceNetworkUpdate()
 	end)
 end

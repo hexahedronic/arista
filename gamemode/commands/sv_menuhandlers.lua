@@ -177,6 +177,8 @@ arista.command.add("gender", "", 1, function(ply, gender)
 		ply:setAristaVar("gender", "Female")
 	end
 
+	ply:generateDefaultRpName()
+
 	ply:notify("AL_YOU_CHANGE_GENDER", gender)
 
 	--GM:Log(EVENT_EVENT, "%s set " .. ply._NextSpawnGenderWord .. " gender to " .. gender .. ".", ply:Name())

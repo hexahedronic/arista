@@ -214,13 +214,15 @@ arista.lang.tbl.EN = {
 	["AL_DERMA_SAVE"] = "Save",
 	["AL_DERMA_LAWS"] = "Laws",
 	["AL_DERMA_HELP"] = "Help",
+	["AL_DERMA_NAME"] = "Name",
 
 	-- HUD ELEMENTS
+	["AL_HUD_RPNAME"] = "Name: ",
 	["AL_HUD_JOB"] = "Job: ",
 	["AL_HUD_GENDER"] = "Gender: ",
 	["AL_HUD_DETAILS"] = "Details: ",
 	["AL_HUD_CLAN"] = "Clan: ",
-	["AL_HUD_MONEY"] = "Money: " .. arista.lang.currency,
+	["AL_HUD_MONEY"] = "Balance: " .. arista.lang.currency,
 	["AL_HUD_SALARY"] = "Salary: " .. arista.lang.currency,
 	["AL_HUD_NAME"] = "Name: ",
 	["AL_HUD_NODESC"] = "No Description",
@@ -278,6 +280,9 @@ arista.lang.tbl.EN = {
 
 	["AL_COMMAND_CLAN"] = "Change your clan or quit your current one.",
 	["AL_COMMAND_CLAN_HELP"] = "[text|quit|none]",
+
+	["AL_COMMAND_NAME"] = "Change your rp-name.",
+	["AL_COMMAND_NAME_HELP"] = "[text|random|default]",
 
 	["AL_COMMAND_DETAILS"] = "Change your details or make them blank.",
 	["AL_COMMAND_DETAILS_HELP"] = "[text|none]",

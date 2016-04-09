@@ -2,6 +2,11 @@ AddCSLuaFile()
 
 local player = FindMetaTable("Player")
 
+function player:rpName()
+	if CLIENT then return self:getAristaString("rpname") or "" end
+	return self:getAristaVar("rpname") or ""
+end
+
 function player:getMoney()
 	if CLIENT then return self:getAristaInt("money") or 0 end
 	return self:getAristaVar("money") or 0

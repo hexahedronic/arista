@@ -6,6 +6,16 @@ function player:databaseAristaVar(var)
 	self._databaseVars[var] = self:getAristaVar(var)
 end
 
+
+function player:generateDefaultRpName()
+	local names = arista.config:getDefault("rpnames")
+
+	local first = names.first[self:getGender():lower()] or names.first["male"]
+	local sur = names.surnames
+
+	self:setAristaVar("rpname", table.Random(first) .. " " .. table.Random(sur))
+end
+
 ---
 -- Load a player's data from the SQL database, overwriting any data already loaded on the player. Performs it's actions in a threaded query.
 -- If the player's data has not been loaded after 30 seconds, it will call itself again

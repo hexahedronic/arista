@@ -7,9 +7,9 @@ arista.config.defaults = {
 	-- The job that each player starts with.
 	job = "Citizen",
 	-- Time knocked out for.
-	knockOutTime = 60,
+	knockOutTime = 30,
 	-- Time until respawn.
-	spawnTime = 30,
+	spawnTime = 20,
 	-- Time arrested for.
 	arrestTime = 300,
 	-- Access level.
@@ -48,6 +48,37 @@ Explosives are illegal.
 Tying people up without their explicit consent is illegal.
 [Temporary Laws1]
 ]],
+	-- Default rpnames.
+	rpnames = {
+		first = {
+			male = {
+				"John",
+				"Henry",
+				"Michael",
+				"Paul",
+				"Andrew",
+				"Dean",
+			},
+			female = {
+				"Ann",
+				"Stacey",
+				"Sue",
+				"Ava",
+				"Wendy",
+				"Mary",
+				"Sarah",
+				"Felicity",
+			},
+		},
+		surnames = {
+			"Smith",
+			"Doe",
+			"Cors",
+			"Clark",
+			"Johnson",
+			"Goodeve",
+		},
+	}
 }
 
 -- Stuff that's saved in the database, if you want to fuck with it, then
@@ -71,6 +102,8 @@ arista.config.database = {
 	blacklist = {},
 	-- Used to store items, don't touch it.
 	inventory = {},
+	-- Used for IC chat and stuff.
+	rpname = "",
 }
 
 arista.config.vars = {

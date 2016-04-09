@@ -41,6 +41,20 @@ arista.command.add("clan", "", 0, function(ply, arguments)
 end, "AL_COMMAND_CAT_COMMANDS")
 
 -- A command to change your clan.
+arista.command.add("name", "", 0, function(ply, arguments)
+	local words = table.concat(arguments, " ")
+	words = words:sub(1, 64):Trim()
+
+	if not words or words == "random" or words == "default" then
+		ply:generateDefaultRpName()
+	return end
+
+	ply:setAristaVar("rpname", words)
+
+	arista.logs.event(arista.logs.E.LOG, arista.logs.E.COMMAND, ply:Name(), "(", ply:SteamID(), ") changed their name to '", words, "'.")
+end, "AL_COMMAND_CAT_COMMANDS")
+
+-- A command to change your clan.
 arista.command.add("details", "", 0, function(ply, arguments)
 	local words = table.concat(arguments, " ")
 	words = words:sub(1, 64):Trim()

@@ -234,9 +234,11 @@ arista.config.plugins = {
 	-- HUNGERMOD: How much hunger to drain per second.
 	hungerDrain = 0.05,
 	-- HUNGERMOD: How low must the hunger be before the player starves.
-	hungerStarve = 5,
+	hungerStarve = 1,
 	-- HUNGERMOD: How low must the hunger be before the 'hungry' debuff.
-	hungerHungry = 10,
+	hungerHungry = 5,
+	-- HUNGERMODE: How much damage to take per interval when starving.
+	hungerDamage = 2,
 }
 
 arista.config.costs = {

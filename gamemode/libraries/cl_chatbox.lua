@@ -13,7 +13,7 @@ net.Receive("arista_chatboxPlayerMessage", function()
 
 	-- Check to see if the player is a player.
 	if player:IsPlayer() then
-		arista.chatbox.chatText(player:EntIndex(), player:Name(), text, filter)
+		arista.chatbox.chatText(player:EntIndex(), player:rpName(), text, filter)
 	end
 end)
 
@@ -126,7 +126,8 @@ function arista.chatbox.chatText(index, name, text, filter)
 	 or filter == "whisper" or filter == "me"
 	 or filter == "advert" or filter == "request"
 	 or filter == "radio" or filter == "loudradio"
-	 or filter == "tied" or filter == "action" then
+	 or filter == "tied" or filter == "action"
+	 or filter == "gaction" then
 		filter = "ic"
 	elseif filter == "ooc" or filter == "looc" or filter == "pm" or filter == "notify" then
 		filter = "ooc"
@@ -151,6 +152,8 @@ function arista.chatbox.chatText(index, name, text, filter)
 		local teamColor = team.GetColor(teamIndex)
 		local icon = nil
 
+		if filter == "ooc" then name = player:Name() end
+
 		-- Check if the player is a super admin.
 		if arista.utils.isAdmin(player, true) then
 			icon = {"icon16/shield.png", "^"}
@@ -174,6 +177,8 @@ function arista.chatbox.chatText(index, name, text, filter)
 			arista.chatbox.messageAdd(nil, nil, {"*** " .. text, color_cream}, filtered)
 		elseif class == "action" then
 			arista.chatbox.messageAdd({"(Action: " .. name .. ")", color_highred}, nil, {"*** " .. text, color_cream}, filtered)
+		elseif class == "gaction" then
+			arista.chatbox.messageAdd({"(Global)", color_highred}, nil, {"*** " .. text, color_cream}, filtered)
 		elseif class == "advert" then
 			arista.chatbox.messageAdd({"(Advert)"}, nil, {text, color_highpink}, filtered)
 		elseif class == "yell" then
@@ -195,11 +200,11 @@ function arista.chatbox.chatText(index, name, text, filter)
 		elseif class == "loudradio" then
 			arista.chatbox.messageAdd({"(Radio)"}, nil, {name .. ": " .. text, color_cream}, filtered)
 		elseif class == "pm" then
-			arista.chatbox.messageAdd({"(OOC)", color_highred}, {"(PM)"}, {name .. ": " .. text, color_redorange}, filtered)
+			arista.chatbox.messageAdd({"(PM)", color_highred}, {name, color_cream}, {text, color_white}, filtered)
 		elseif class == "achievement" then
 			arista.chatbox.messageAdd({"(Achievement)", color_highred}, {name, teamColor}, {"just earned the achievement '" .. text .. "'!", color_redorange}, filtered)
 		elseif class == "ooc" then
-			arista.chatbox.messageAdd({"(OOC)", color_highred}, {name, teamColor}, {text}, filtered, icon)
+			arista.chatbox.messageAdd({"(OOC)", color_highred}, {name, teamColor}, {text, color_white}, filtered, icon)
 		elseif class == "achat" then
 			arista.chatbox.messageAdd({"(@Admins)", color_highred}, {name, teamColor}, {text}, filtered, icon)
 		elseif class == "mchat" then
@@ -239,7 +244,7 @@ function arista.chatbox.messageAdd(title, name, text, filtered, icon)
 
 	if not filtered then
 		local ic = (icon and chathud and "<texture=" .. icon[1] .. ">") or ""
-		chat.AddText(tc, tt, color_white, ic, " ", nc, nm, xc, tx)
+		chat.AddText(tc, tt, color_white, ic, nc, nm, xc, tx)
 	else
 		MsgN("FILTERED - ", icon and icon[2] .. " " or "", tt or "", nm  or "", tx  or "")
 	end

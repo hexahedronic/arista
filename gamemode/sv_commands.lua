@@ -75,27 +75,29 @@ arista.command.add("details", "", 0, function(ply, arguments)
 end, "AL_COMMAND_CAT_COMMANDS")
 
 -- A command to give a player some money.
-arista.command.add("givemoney", "z", 1, function(ply, amt)
-	local victim = ply:GetEyeTraceNoCursor().Entity;
-	if (not (IsValid(victim) and victim:IsPlayer())) then
-		return false, "You must look at a player to give them money!";
+arista.command.add("givemoney", "", 1, function(ply, amt)
+	local victim = ply:GetEyeTraceNoCursor().Entity
+	if not (IsValid(victim) and victim:IsPlayer()) then
+		return false, "AL_INVALID_TARGET"
 	end
-	amt = tonumber(amt);
-	if (not amt or amt < 1) then
-		return false, "You must specify a valid amount of money!";
-	end
-	amt = math.floor(amt);
-	if (not ply:CanAfford(amt)) then
-		return false, "You do not have enough money!";
-	end
-	ply:GiveMoney(-amt);
-	victim:GiveMoney(amt);
 
-	ply:Emote("hands " .. victim:Name() .. " a wad of money.");
+	amt = tonumber(amt)
+	if not amt or amt < 1 then
+		return false, "AL_INVALID_AMOUNT"
+	end
 
-	ply:Notify("You gave " .. victim:Name() .. " $" .. amt .. ".", 0);
-	victim:Notify(ply:Name() .. " gave you $" .. amt .. ".", 0);
-	GM:Log(EVENT_EVENT, "%s gave %s $%i.", ply:Name(), victim:Name(), amt);
+	amt = math.floor(amt)
+	if not ply:canAfford(amt) then
+		return false, "AL_YOU_NOT_ENOUGHMONEY"
+	end
+
+	ply:giveMoney(-amt)
+	victim:giveMoney(amt)
+
+	ply:emote("hands <N> a wad of money.", victim)
+
+	ply:notify("AL_PLAYER_YOU_GAVE", victim:Name(), amt)
+	victim:notify("AL_PLAYER_GAVE_YOU", ply:Name(), amt)
 end, "Commands", "<amount>", "Give some money to the player you're looking at.", true);
 
 -- A command to drop money.
@@ -115,15 +117,15 @@ arista.command.add("dropmoney", "", 1, function(ply, amt)
 
 	amt = tonumber(amt)
 	if not amt or amt < 1 then
-		return false, "You must specify a valid amount of money!";
+		return false, "AL_INVALID_AMOUNT"
 	end
 
 	amt = math.floor(amt)
 
 	if not ply:canAfford(amt) then
 		return false, "AL_YOU_NOT_ENOUGHMONEY"
-	elseif amt < 100 then -- Fucking spammers again.
-		return false, "AL_YOU_NOT_DROPENOUGH", 100
+	elseif amt < 50 then -- Fucking spammers again.
+		return false, "AL_YOU_NOT_DROPENOUGH", 50
 	end
 
 	ply._nextMoneyDrop = CurTime() + 10

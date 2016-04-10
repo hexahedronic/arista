@@ -46,7 +46,7 @@ function PLUGIN:LoadDoors()
 					for i = 1, numents do -- Loop through our suitable ents (again!)
 						local master = validents[i]
 
-						if (data.Master - entity:GetPos()):LengthSqr() <= radiusSquared then -- Check if the current ent is within a unit of our target
+						if (data.master - entity:GetPos()):LengthSqr() <= radiusSquared then -- Check if the current ent is within a unit of our target
 							arista.entity.setMaster(entity, master) -- If it is, set it as the entity's master.
 
 							break -- We can either have the last appropriate entity as the master, or the first. Let's choose the first for speed.

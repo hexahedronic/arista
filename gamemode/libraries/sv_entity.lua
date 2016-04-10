@@ -697,7 +697,7 @@ function arista.entity.getSlaves(entity)
 
 	local ret = {}
 	for key, slave in ipairs(entity._owner.slaves) do
-		if ValidEntity(slave) and arista.entity.isOwnable(slave) then
+		if IsValid(slave) and arista.entity.isOwnable(slave) then
 			ret[#ret+1] = slave
 		else
 			table.remove(entity._owner.slaves, key)

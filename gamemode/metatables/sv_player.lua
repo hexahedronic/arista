@@ -799,7 +799,7 @@ function player:emote(words, other)
 	words = words:gsub("<P>", pronoun)
 
 	if other and IsValid(other) then
-		words = words:gsub("<N>", other:Name())
+		words = words:gsub("<N>", other:rpName())
 
 		local oPronoun = other:getPronouns()
 		words = words:gsub("<O>", oPronoun)

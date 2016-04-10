@@ -10,7 +10,7 @@
 	[X] CPPI rather than intergrated
 	[-] Make CPPI fallback work decently without external
 [#] Missing commands (a lot of them)
-	[#] Administration
+	[X] Administration
 	[X] Menu Handling
 	[X] Chat Handling
 	[#] General RP Commands
@@ -29,9 +29,9 @@
 [-] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
 
 - Update / Improve
-[ ] Remake HUD Design
+[-] Remake HUD Design
 [X] Remake Derma Design
-[ ] Chatbox (possibly bug ghosty to finish CBox)
+[-] Chatbox (possibly bug ghosty to finish CBox)
 
 - CL
 [X] Clientside Inventory GUI

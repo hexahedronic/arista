@@ -264,7 +264,7 @@ arista.command.add("globalaction", "m", 1, function(ply,arguments)
 		return false, "AL_CANNOT_NOTENOUGHTEXT"
 	end
 
-	arista.chatbox.add(nil, ply, "action", text)
+	arista.chatbox.add(nil, ply, "gaction", text)
 end, "AL_COMMAND_CAT_MOD")
 
 -- Set an ent's master
@@ -297,7 +297,7 @@ end, "AL_COMMAND_CAT_SADMIN", true)
 
 arista.command.add("setname", "s", 1, function(ply, arguments)
 	local entity = ply:GetEyeTraceNoCursor().Entity
-	if not (ValidEntity(entity) and arista.entity.isOwnable(entity) and entity._isDoor) then
+	if not (IsValid(entity) and arista.entity.isOwnable(entity) and entity._isDoor) then
 		return false, "AL_INVALID_DOOR"
 	end
 

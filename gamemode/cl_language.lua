@@ -262,6 +262,8 @@ arista.lang.tbl.EN = {
 	["AL_PLAYER_TAKEACCESS"] = "%s took %s's access to the %q flag%s",
 	["AL_PLAYER_UPDATELAWS"] = "%s just updated the city laws.",
 	["AL_PLAYER_NOTBLACKLISTED"] = "%s is not blacklisted from that!",
+	["AL_PLAYER_YOU_GAVE"] = "You gave %s " .. arista.lang.currency .. "%s.",
+	["AL_PLAYER_GAVE_YOU"] = "%s gave you " .. arista.lang.currency .. "%s.",
 
 	-- DONT HAVE ENOUGH / NEED MORE
 	["AL_NEED_ANOTHER_MONEY"] = "You need another " .. arista.lang.currency .. "%d!",

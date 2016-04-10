@@ -484,6 +484,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("tripped", false)
 	ply:networkAristaVar("sleeping", false)
 	ply:networkAristaVar("exhausted", false)
+	ply:networkAristaVar("hideHealthEffects", false)
 
 	ply:networkAristaVar("warrant", "")
 	ply:networkAristaVar("nextGender", "")
@@ -734,9 +735,7 @@ do
 end
 
 function GM:PlayerReSpawn(ply)
-	--ply._Ammo = {}
-	--ply._HideHealthEffects = false
-
+	ply:setAristaVar("hideHealthEffects", false)
 	ply:setAristaVar("exhausted", false)
 	ply:setAristaVar("exhaustedCooldown", false)
 	ply:setAristaVar("scaleDamage", 1)

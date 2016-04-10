@@ -165,7 +165,7 @@ arista.config.vars = {
 	-- Amount of time (by default) people should bleed for.
 	bleedTime = 3,
 	-- Respective hitgroup region damage multipliers.
-	headDmgScale = 3,
+	headDmgScale = 2.5,
 	stomachDmgScale = 1.25,
 	normalDmgScale = 1,
 	legDmgScale = 0.75,
@@ -180,9 +180,9 @@ arista.config.vars = {
 	searchWarrantTime = 220,
 	arrestWarrantTime = 360,
 	-- Time taken to tie up a player.
-	tyingTime = 8,
+	tyingTime = 5,
 	-- Time taken to untie a player.
-	untyingTime = 15,
+	untyingTime = 8,
 	-- If we should clear decals every 60 seconds.
 	clearDecals = true,
 	-- What logs to print. arista.logs.E.DEBUG, arista.logs.E.LOG, arista.logs.E.WARNING, arista.logs.E.ERROR, arista.logs.E.FATAL
@@ -210,7 +210,7 @@ arista.config.vars = {
 	-- Prop limit for builders.
 	builderPropLimit = 15,
 	-- If we have a team you must pass through to join another group.
-	useMasterGroup = true,
+	useMasterGroup = false,
 	-- How many seconds between item uses.
 	itemUseDelay = 3,
 	-- How many seconds between uses of a SPECIFIC item.
@@ -286,6 +286,9 @@ arista.config.plugins = {
 	hungerHungry = 5,
 	-- HUNGERMODE: How much damage to take per interval when starving.
 	hungerDamage = 2,
+
+	-- OFFICALS: How long should the mayor/president have god mode for?
+	officalsMayorGod = 60,
 }
 
 arista.config.costs = {

@@ -49,20 +49,69 @@ Old format:
 -- Anything in this will be given to groups with default store access.
 arista.config.defaults.jobCategories = {CATEGORY_VEHICLES, CATEGORY_MISC}
 
+if (GM or GAMEMODE):GetPlugin("officals") then
 GROUP_OFFICIALS	= arista.team.addGroup("Officials", "Join the force for 'Public Good', maintaining law and order.", "P")
 
 GANG_OFFICIALS	= arista.team.addGang(GROUP_OFFICIALS, "The Officials", "models/player/breen.mdl", "Enough red tape to drown a continent")
 GANG_POLICE			= arista.team.addGang(GROUP_OFFICIALS, "The Police", "models/player/riot.mdl", "Less talk, more action!")
 
+TEAM_MAYOR = arista.team.add("Mayor", {
+	color = Color(0, 0, 255, 255),
+	males = "models/player/breen.mdl",
+	females = "models/player/mossman.mdl",
+
+	description = "Runs the city and keeps it in shape.",
+
+	mayor = true,
+
+	salary = 500,
+	limit = 1,
+
+	access = "bdgeD",
+
+	group = {
+		gang = GANG_OFFICIALS,
+		access = "",
+		level = 1,
+		group = GROUP_OFFICIALS,
+	},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
+})
+
+TEAM_VICEMAYOR = arista.team.add("Vice-Mayor", {
+	color = Color(0, 0, 255, 255),
+	males = "models/player/breen.mdl",
+	females = "models/player/mossman.mdl",
+
+	description = "Runs the city and keeps it in shape.",
+
+	vicemayor = true,
+
+	salary = 500,
+	limit = 1,
+
+	access = "dgeD",
+
+	group = {
+		gang = GANG_OFFICIALS,
+		access = "",
+		level = 1,
+		group = GROUP_OFFICIALS,
+	},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
+})
+
 TEAM_POLICEOFFICER = arista.team.add("Police Officer", {
 	color = Color(100, 155, 255, 255),
 	males = "models/player/riot.mdl",
-	description = "Maintains the city and arrests criminals.",
+	description = "Controls the police and criminal justice.",
+
+	officer = true,
 
 	salary = 250,
 	limit = 15,
 
-	access = "",
+	access = "deD",
 
 	guns = {"arista_baton"},
 	ammo = {
@@ -77,6 +126,55 @@ TEAM_POLICEOFFICER = arista.team.add("Police Officer", {
 	},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
 })
+
+TEAM_POLICECOMMANDER = arista.team.add("Police Commander", {
+	color = Color(100, 155, 255, 255),
+	males = "models/player/urban.mdl",
+	description = "Maintains the city and arrests criminals.",
+
+	commander = true,
+
+	salary = 350,
+	limit = 1,
+
+	access = "",
+
+	guns = {"arista_baton"},
+	ammo = {
+		pistol = 60,
+	},
+
+	group = {
+		gang = GANG_POLICE,
+		access = "",
+		level = 1,
+		group = GROUP_OFFICIALS,
+	},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
+})
+
+TEAM_SECRETARY = arista.team.add("Secretary", {
+	color = Color(50, 200, 200, 255),
+	males = {
+		"models/player/Hostage/Hostage_01.mdl",
+		"models/player/Hostage/Hostage_04.mdl"
+	},
+	description = "Maintains public relations and does misc jobs.",
+
+	salary = 350,
+	limit = 4,
+
+	access = "",
+
+	group = {
+		gang = GANG_OFFICIALS,
+		access = "",
+		level = 1,
+		group = GROUP_OFFICIALS,
+	},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
+})
+end
 
 
 GROUP_CIVILIANS	= arista.team.addGroup("Civilians", "Join the ordinary and (generally) law-abiding civilians")
@@ -110,7 +208,7 @@ TEAM_GUNDEAL = arista.team.add("Gun Dealer", {
 	group = {
 		gang = GANG_CIVILIANS,
 		access = "",
-		level = 2,
+		level = 1,
 		group = GROUP_CIVILIANS,
 	},
 	canmake = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND, CATEGORY_POLICE_WEAPONS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_AMMO},
@@ -130,7 +228,7 @@ TEAM_CHEF = arista.team.add("Chef", {
 	group = {
 		gang = GANG_CIVILIANS,
 		access = "",
-		level = 2,
+		level = 1,
 		group = GROUP_CIVILIANS,
 	},
 	canmake = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND, CATEGORY_FOOD, CATEGORY_ALCOHOL, CATEGORY_DRINKS},

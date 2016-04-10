@@ -284,8 +284,7 @@ do
 		gamemode.Call("PlayerChangedTeams", self, oldteam, tojoin.index)
 
 		-- Silently kill the player.
-		self._changeTeam = oldteam
-
+		self:setAristaVar("changeTeam", oldteam)
 		self:KillSilent()
 
 		-- Return true because it was successful.

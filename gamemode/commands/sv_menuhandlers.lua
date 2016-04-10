@@ -116,7 +116,7 @@ arista.command.add("manufacture", "", 1, function(ply, item)
 		if not ply:IsAdmin() and nextManufacture and nextManufacture > CurTime() then
 			return false, "AL_CANNOT_MANUFACTURE", math.ceil(nextManufacture - CurTime())
 		else
-			ply:setAristaVar("nextManufactureItem", CurTime() + (5 * item.batch))
+			ply:setAristaVar("nextManufactureItem", CurTime() + 3)
 		end
 
 		local cost = item.cost * item.batch

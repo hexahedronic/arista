@@ -115,7 +115,7 @@ function item:sell(ply)
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.ITEM, ply:Name(), "(", ply:SteamID(), ") sold a ", self.name, ".")
 
 	local refund = self.refund or self.cost / 2
-	ply:notify("You got $%d for selling your %s secondhand", refund)
+	ply:notify("AL_GOT_SECONDHAND", refund)
 	ply:giveMoney(refund)
 
 	return true

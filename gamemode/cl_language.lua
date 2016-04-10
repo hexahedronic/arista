@@ -31,6 +31,7 @@ arista.lang.tbl.EN = {
 	["AL_FEMALE"] = "Female",
 
 	["AL_BLACKLISTDETAILS"] = "Blacklist details have been printed to your console.",
+	["AL_GOT_SECONDHAND"] = "You got " .. arista.lang.currency .. "%d for selling your %s secondhand.",
 
 	["AL_A"] = "A ",
 	["AL_A_BUTTON"] = "A Button",
@@ -158,7 +159,7 @@ arista.lang.tbl.EN = {
 
 	["AL_YOU_ARRESTED"] = "You are arrested.",
 	["AL_YOU_TIED"] = "You have been tied up!",
-	["AL_YOU_KEVLAR"] = "You are wearing kevlar which reduces damage by 50%.",
+	["AL_YOU_KEVLAR"] = "You are wearing kevlar which reduces damage by 50%%.",
 	["AL_YOU_WAKEUP"] = "Press '%s' to wake up!",
 	["AL_YOU_GETUP"] = "Press '%s' to get up!",
 
@@ -360,6 +361,15 @@ arista.lang.tbl.EN = {
 
 	["AL_COMMAND_HOLSTER"] = "Holster your current weapon.",
 	["AL_COMMAND_HOLSTER_HELP"] = "",
+
+	["AL_COMMAND_REQUEST"] = "Request assistance from the government.",
+	["AL_COMMAND_REQUEST_HELP"] = "<text>",
+
+	["AL_COMMAND_LOCKDOWN"] = "Request or initiate a lockdown.",
+	["AL_COMMAND_LOCKDOWN_HELP"] = "",
+
+	["AL_COMMAND_UNLOCKDOWN"] = "Request the end of or end the current lockdown.",
+	["AL_COMMAND_UNLOCKDOWN_HELP"] = "",
 
 
 	["AL_COMMAND_CAT_ADMIN"] = "Admin Commands",

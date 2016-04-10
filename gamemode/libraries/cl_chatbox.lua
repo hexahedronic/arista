@@ -129,7 +129,7 @@ function arista.chatbox.chatText(index, name, text, filter)
 	 or filter == "tied" or filter == "action"
 	 or filter == "gaction" then
 		filter = "ic"
-	elseif filter == "ooc" or filter == "looc" or filter == "pm" or filter == "notify" then
+	elseif filter == "ooc" or filter == "looc" or filter == "pm" or filter == "notify" or filter == "achat" or filter == "mchat" then
 		filter = "ooc"
 	end
 
@@ -206,9 +206,9 @@ function arista.chatbox.chatText(index, name, text, filter)
 		elseif class == "ooc" then
 			arista.chatbox.messageAdd({"(OOC)", color_highred}, {name, teamColor}, {text, color_white}, filtered, icon)
 		elseif class == "achat" then
-			arista.chatbox.messageAdd({"(@Admins)", color_highred}, {name, teamColor}, {text}, filtered, icon)
+			arista.chatbox.messageAdd({"(@Admins)", color_highred}, {name, teamColor}, {text, color_white}, filtered, icon)
 		elseif class == "mchat" then
-			arista.chatbox.messageAdd({"(@Mods)", color_highred}, {name, teamColor}, {text}, filtered, icon)
+			arista.chatbox.messageAdd({"(@Mods)", color_highred}, {name, teamColor}, {text, color_white}, filtered, icon)
 		end
 	else
 		if name == "Console" and class == "chat" then

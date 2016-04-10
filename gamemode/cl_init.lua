@@ -373,7 +373,7 @@ function GM:RenderScreenspaceEffects()
 	if ply:isStunned() then
 		color = 0.4
 		DrawMotionBlur(0.1, 1, 0)
-	elseif hp < 50 and not ply._hideHealthEffects then
+	elseif hp < 50 and not ply:getAristaBool("hideHealthEffects") then
 		if ply:Alive() then
 			color = math.Clamp(color - hpVal, 0, color)
 		else

@@ -26,9 +26,7 @@ end
 function arista.team.get(name)
 	if name == nil then
 		arista.logs.log(arista.logs.E.WARNING, "team.get with nil name?")
-
-		return nil
-	end
+	return nil end
 
 	local team
 
@@ -49,6 +47,20 @@ function arista.team.get(name)
 				team = v
 				break
 			end
+		end
+	end
+
+	-- Return the team that we found.
+	return team
+end
+
+function arista.team.getByMember(name)
+	local team
+
+	for k, v in pairs(arista.team.stored) do
+		if v[name] then
+			team = v
+			break
 		end
 	end
 

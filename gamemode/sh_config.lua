@@ -106,7 +106,54 @@ arista.config.database = {
 	rpname = "",
 }
 
+-- Enums, change only if something real weird happens.
+TYPE_LARGE = "large"
+TYPE_SMALL = "small"
+
+arista.config.timers = {
+	["deploytime"] = {
+		[TYPE_LARGE] = 2,
+		[TYPE_SMALL] = 1
+	},
+	["redeploytime"] = {
+		[TYPE_LARGE] = 30,
+		[TYPE_SMALL] = 20
+	},
+	["reholstertime"] = {
+		[TYPE_LARGE] = 10,
+		[TYPE_SMALL] = 5
+	},
+	["deploymessage"] = { -- 1 gun type, 2 gender
+		[TYPE_LARGE] = "pulls a %s off <P> back",
+		[TYPE_SMALL] = "pulls a %s out of <P> pocket"
+	},
+	["equiptime"] = {
+		[TYPE_LARGE] = 5,
+		[TYPE_SMALL] = 2
+	},
+	["equipmessage"] = {
+		["Start"] = "starts rummaging through <P> backpack",
+		["Final"] = "pulls out a %s gun and puts <P> backpack back on",
+		["Abort"] = "gives up and pulls <P> backpack back on",
+		["Plugh"] = "slides the %s gun back into <P> backpack and puts it back on"
+	},
+	["holstermessage"] = {	 -- 1 gun type, 2 gender
+		[TYPE_LARGE] = "puts the %s back on <P> back",
+		[TYPE_SMALL] = "puts the %s back in <P> pocket"
+	}
+}
+
 arista.config.vars = {
+	-- Weapon types carried on the back.
+	backWeapons =
+	{
+		[TYPE_LARGE] = true
+	},
+	-- Maximum amount of each weapon type.
+	maxWeapons = {
+		[TYPE_LARGE] = 1,
+		[TYPE_SMALL] = 2,
+	},
 	-- Access for donators.
 	donatorAccess = "tpew",
 	-- Use localised voice chat.

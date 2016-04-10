@@ -120,9 +120,11 @@ function SWEP:PrimaryAttack(right)
 	self:EmitSound(self.Primary.Sound)
 
 	local vm = self.Owner:GetViewModel()
-	vm:SendViewModelMatchingSequence(right and vm:LookupSequence("fists_right") or vm:LookupSequence("fists_left"))
+	if vm and vm:IsValid() then
+		vm:SendViewModelMatchingSequence(right and vm:LookupSequence("fists_right") or vm:LookupSequence("fists_left"))
 
-	self:UpdateNextIdle()
+		self:UpdateNextIdle()
+	end
 
 	-- Get an eye trace from the owner.
 	local trace = self.Owner:GetEyeTrace()

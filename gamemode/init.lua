@@ -502,12 +502,13 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:setAristaVar("nextUseItem", 0)
 	ply:setAristaVar("nextHolsterWeapon", 0)
 	ply:setAristaVar("nextOOC", 0)
+	ply:setAristaVar("nextDeploy", 0)
 
 	ply:setAristaVar("nextChangeTeam", {})
 	ply:setAristaVar("nextUse", {})
 	ply:setAristaVar("gunCounts", {})
 	ply:setAristaVar("storedWeapons", {})
-	ply:setAristaVar("freshWeapons", {})
+	ply:setAristaVar("gunCounts", {})
 
 	-- Incase we have changed default database info.
 	if success then

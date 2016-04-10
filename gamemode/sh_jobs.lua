@@ -99,6 +99,24 @@ TEAM_CITIZEN = arista.team.add("Citizen", {
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
 })
 
+TEAM_GUNDEAL = arista.team.add("Gun Dealer", {
+	color = Color(170, 150, 25, 255),
+	description = "The owner of a gun store.",
+
+	salary = 220,
+
+	access = "",
+
+	group = {
+		gang = GANG_CIVILIANS,
+		access = "",
+		level = 2,
+		group = GROUP_CIVILIANS,
+	},
+	canmake = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND, CATEGORY_POLICE_WEAPONS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_AMMO},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_EXPLOSIVES},
+})
+
 if (GM or GAMEMODE):GetPlugin("hungermod") then
 TEAM_CHEF = arista.team.add("Chef", {
 	color = Color(255, 125, 200, 255),

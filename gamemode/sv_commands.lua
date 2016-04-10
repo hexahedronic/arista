@@ -134,85 +134,103 @@ arista.command.add("dropmoney", "", 1, function(ply, amt)
 	arista.item.items["money"]:make(pos, amt):CPPISetOwner(ply)
 end, "AL_COMMAND_CAT_COMMANDS", true)
 
---[[
 -- A command to demote a player.
-cider.command.add("demote", "b", 2, function(ply, target, ...)
-	local victim = player.Get(target);
-	if (not victim) then
-		return false, "Invalid player '"..target.."'!";
+arista.command.add("demote", "", 2, function(ply, target, ...)
+	local victim = arista.player.get(target)
+	if not victim then
+		return false, "AL_INVALID_TARGET"
 	end
-	local reason = table.concat({...}, " "):sub(1,65):Trim();
-	if (not reason or reason == "" or (reason:len() < 5 and not ply:IsSuperAdmin())) then
-		return false, "You must specify a reason!";
+
+	local reason = table.concat({...}, " "):sub(1, 65):Trim()
+	if not reason or reason == "" or (reason:len() < 5 and not ply:IsSuperAdmin()) then
+		return false, "You must specify a reason!"
 	end
-	if (not gamemode.Call("PlayerCanDemote", ply, victim)) then
-		return false;
+
+	if gamemode.Call("PlayerCanDemote", ply, victim) == false then
+		return false
 	end
-	local tid = victim:Team();
-	victim:Demote();
-	player.NotifyAll("%s demoted %s from %s for %q.", nil, ply:Name(), victim:Name(), team.GetName(tid), reason);
-end, "Commands", "<player> <reason>", "Demote a player from their current team.", true);
+
+	local tid = victim:Team()
+	victim:demote()
+
+	arista.player.notifyAll("AL_PLAYER_DEMOTED", nil, ply:Name(), victim:Name(), team.GetName(tid), reason)
+end, "AL_COMMAND_CAT_COMMANDS", true)
 
 do --isolate vars
-	local function conditional(ply,pos)
-		return ply:IsValid() and ply:GetPos() == pos;
+	local function conditional(ply, pos)
+		return ply:IsValid() and ply:GetPos() == pos
 	end
-	local function success(ply,_,class)
-		if (not ply:IsValid()) then return end
-		ply._Equipping = false;
-		local s,f = cider.inventory.update(ply, class, 1);
-		if (not s) then
-			ply:Emote(GM.Config["Weapon Timers"]["Equip Message"]["Abort"]:format(ply._GenderWord));
-			if (f and f ~= "") then
-				ply:Notify(f, 1);
+
+	local function success(ply, _, class)
+		if not ply:IsValid() then return end
+		ply._equipping = false
+
+		local s, f = arista.inventory.update(ply, class, 1)
+		if not s then
+			ply:emote(arista.config.timers["Equip Message"]["Abort"])
+
+			if f and f ~= "" then
+				ply:notify(f)
 			end
+
 			return
 		end
-		ply:StripWeapon(class);
-		GM:Log(EVENT_EVENT, "%s holstered "..ply._GenderWord.." %s.",ply:Name(),GM.Items[class].Name);
-		ply:SelectWeapon("cider_hands");
-		local weptype = GM.Items[class].WeaponType
+
+		ply:StripWeapon(class)
+		ply:SelectWeapon("hands")
+
+		local weptype = arista.item.items[class].weaponType
 		if weptype then
-			ply:Emote(GM.Config["Weapon Timers"]["Equip Message"]["Plugh"]:format( weptype, ply._GenderWord ));
+			ply:emote(arista.config.timers["equipmessage"]["Plugh"]:format(weptype))
+
+			local counts = ply:getAristaVar("gunCounts")
+				counts[weptype] = counts[weptype] - 1
+			ply:setAristaVar("gunCounts", counts)
 		end
 	end
 
 	local function failure(ply)
-		if (not ply:IsValid()) then return end
-		ply:Emote(GM.Config["Weapon Timers"]["Equip Message"]["Abort"]:format(ply._GenderWord));
-		ply._Equipping = false;
+		if not ply:IsValid() then return end
+
+		ply:emote(arista.config.timers["equipmessage"]["Abort"])
+		ply._equipping = false
 	end
 
 	-- A command to holster your current weapon.
-	cider.command.add("holster", "b", 0, function(ply)
-		local weapon = ply:GetActiveWeapon();
-
-		-- Check if they can holster another weapon yet.
-		if ( !ply:IsAdmin() and ply._NextHolsterWeapon and ply._NextHolsterWeapon > CurTime() ) then
-			return false, "You cannot holster this weapon for "..math.ceil( ply._NextHolsterWeapon - CurTime() ).." second(s)!";
-		else
-			ply._NextHolsterWeapon = CurTime() + 2;
-		end
+	arista.command.add("holster", "", 0, function(ply)
+		local weapon = ply:GetActiveWeapon()
 
 		-- Check if the weapon is a valid entity.
-		if not ( ValidEntity(weapon) and GM.Items[weapon:GetClass()] ) then
-			return false, "This is not a valid weapon!";
+		if not (IsValid(weapon) and arista.item.items[weapon:GetClass()]) then
+			return false, "AL_INVALID_WEAPON"
 		end
-		local class = weapon:GetClass();
-		if not ( gamemode.Call("PlayerCanHolster", ply, class) ) then
+
+		local nextHolster = ply:getAristaVar("nextHolsterWeapon")
+
+		-- Check if they can holster another weapon yet.
+		if not ply:IsAdmin() and nextHolster and nextHolster > CurTime() then
+			return false, "AL_CANNOT_HOLSTER", math.ceil(nextHolster - CurTime())
+		else
+			ply:setAristaVar("nextHolsterWeapon", CurTime() + 2)
+		end
+
+		local class = weapon:GetClass()
+		if gamemode.Call("PlayerCanHolster", ply, class) == false then
 			return false
 		end
 
-		ply._Equipping = ply:GetPos()
-		local delay = GM.Config["Weapon Timers"]["equiptime"][GM.Items[class].WeaponType or -1] or 0
-		if not (delay and delay > 0)then
-			success(ply,_,class);
-			return true
-		end
-		timer.Conditional(ply:UniqueID().." holster", delay, conditional, success, failure, ply, ply:GetPos(), class);
-		ply:Emote(GM.Config["Weapon Timers"]["Equip Message"]["Start"]:format(ply._GenderWord));
-	end, "Commands", nil, "Holster your current weapon.");
+		ply._equipping = ply:GetPos()
+		local delay = arista.config.timers["equiptime"][arista.item.items[class].weaponType or -1] or 0
+		if not (delay and delay > 0) then
+			success(ply, nil, class)
+		return true end
+
+		arista.timer.conditional(ply:UniqueID() .. " holster", delay, conditional, success, failure, ply, ply:GetPos(), class)
+		ply:emote(arista.config.timers["equipmessage"]["Start"])
+	end, "AL_COMMAND_CAT_COMMANDS")
 end
+
+--[[
 
 -- A command to drop your current weapon.
 cider.command.add("drop", "b", 0, function()

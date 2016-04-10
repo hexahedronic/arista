@@ -130,6 +130,9 @@ arista.lang.tbl.EN = {
 
 	["AL_CANNOT_LAWS_CHANGE"] = "You may not change the laws.",
 
+	["AL_CANNOT_HOLSTER"] = "You cannot holster this weapon for %d second(s)!",
+	["AL_CANNOT_NOAMMO"] = "You don't have enough ammunition for this weapon!",
+
 	-- INVALID OBJECT
 	["AL_INVALID_ACTION"] = "Invalid action specified!",
 	["AL_INVALID_ITEM"] = "This is not a valid item!",
@@ -147,6 +150,7 @@ arista.lang.tbl.EN = {
 	["AL_INVALID_GANG"] = "That's not a valid gang!",
 	["AL_INVALID_COMMAND"] = "That's not a command!",
 	["AL_INVALID_BLACKLIST"] = "That is not a valid blacklist type! (Valid: team/item/cat/cmd)",
+	["AL_INVALID_WEAPON"]= "That is not a valid weapon!",
 
 	-- PLAYER PERFORMED ACTION
 	["AL_YOU_MANUFACTURED"] = "You manufactured %s.",
@@ -264,6 +268,7 @@ arista.lang.tbl.EN = {
 	["AL_PLAYER_NOTBLACKLISTED"] = "%s is not blacklisted from that!",
 	["AL_PLAYER_YOU_GAVE"] = "You gave %s " .. arista.lang.currency .. "%s.",
 	["AL_PLAYER_GAVE_YOU"] = "%s gave you " .. arista.lang.currency .. "%s.",
+	["AL_PLAYER_DEMOTED"] = "%s demoted %s from %s for %q.",
 
 	-- DONT HAVE ENOUGH / NEED MORE
 	["AL_NEED_ANOTHER_MONEY"] = "You need another " .. arista.lang.currency .. "%d!",
@@ -348,7 +353,13 @@ arista.lang.tbl.EN = {
 	["AL_COMMAND_ACTION_HELP"] = "<text>",
 
 	["AL_COMMAND_DROPMONEY"] = "Drop some money where you are looking.",
-[	"AL_COMMAND_DROPMONEY_HELP"] = "<amount>",
+	["AL_COMMAND_DROPMONEY_HELP"] = "<amount>",
+
+	["AL_COMMAND_DEMOTE"] = "Demote a player from their current team",
+	["AL_COMMAND_DEMOTE_HELP"] = "<player> <reason>",
+
+	["AL_COMMAND_HOLSTER"] = "Holster your current weapon.",
+	["AL_COMMAND_HOLSTER_HELP"] = "",
 
 
 	["AL_COMMAND_CAT_ADMIN"] = "Admin Commands",

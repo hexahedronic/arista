@@ -46,7 +46,7 @@ function arista.team.get(name)
 			local gn = v.name:lower()
 
 			if nm == gn or gn:find(nm, 1, true) then
-				group = v
+				team = v
 				break
 			end
 		end

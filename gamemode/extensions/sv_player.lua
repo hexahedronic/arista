@@ -19,16 +19,13 @@ function arista.player.expireDonator(ply)
 	ply:setAristaVar("donator", 0)
 
 	-- Take away their access and save their data.
-	ply:takeAccess("tpew")
+	ply:setupDonator(false)
 	ply:saveData()
 
 	-- Notify the player about how their Donator status has expired.
 	ply:notify("AL_YOU_DONATOR_REMOVE")
 
 	gamemode.Call("PlayerAdjustSalary", ply)
-
-	ply:setAristaVar("knockOutTime", arista.config:getDefault("knockOutTime"))
-	ply:setAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
 end
 
 ---
@@ -39,7 +36,7 @@ end
 -- @param ... A series of strings to be applied to the message string via string.format().
 function arista.player.notifyAll(message, ...)
 	for _, ply in ipairs(player.GetAll()) do
-		ply:notify(message, ...)
+		ply:notifyChat(message, ...)
 	end
 end
 

@@ -74,6 +74,9 @@ function SWEP:Initialize()
 	self.stamina = GAMEMODE:GetPlugin("stamina")
 end
 
+if CLIENT then
+	CreateClientConVar("arista_drawhands", "1", true, true)
+end
 function SWEP:Deploy()
 	self:SetWeaponHoldType("normal")
 
@@ -81,6 +84,8 @@ function SWEP:Deploy()
 	vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_draw"))
 
 	self:UpdateNextIdle()
+
+	if SERVER then vm:SetNoDraw(self.Owner:GetInfoNum("arista_drawhands", 1) and self.Owner:GetInfoNum("arista_drawhands", 1) == 0) end
 end
 
 
@@ -293,6 +298,7 @@ function SWEP:Reload()
 		end
 
 		self.Primary.NextSwitch = CurTime() + 1
+		return
 	end
 end
 
@@ -352,6 +358,9 @@ function SWEP:Holster()
 
 	self:dropObject()
 	self.Primary.NextSwitch = CurTime() + 1
+
+	local vm = self.Owner:GetViewModel()
+		vm:SetNoDraw(false)
 
 	return true
 end

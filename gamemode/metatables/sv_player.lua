@@ -7,13 +7,29 @@ function player:databaseAristaVar(var)
 end
 
 
-function player:generateDefaultRpName()
+function player:generateDefaultRPName()
 	local names = arista.config:getDefault("rpnames")
 
 	local first = names.first[self:getGender():lower()] or names.first["male"]
 	local sur = names.surnames
 
 	self:setAristaVar("rpname", table.Random(first) .. " " .. table.Random(sur))
+end
+
+function player:setupDonator(bool)
+	if bool then
+		-- Give them their access.
+		self:giveAccess(arista.config.vars.donatorAccess)
+
+		-- Set some Donator only player variables.
+		self:setAristaVar("knockOutTime", arista.config:getDefault("knockOutTime") / 2)
+		self:setAristaVar("spawnTime", arista.config:getDefault("spawnTime") / 2)
+	else
+		self:takeAccess(arista.config.vars.donatorAccess)
+
+		self:setAristaVar("knockOutTime", arista.config:getDefault("knockOutTime"))
+		self:setAristaVar("spawnTime", arista.config:getDefault("spawnTime"))
+	end
 end
 
 ---
@@ -34,6 +50,21 @@ function player:notify(format, ...)
 	local args = {...}
 
 	net.Start("arista_notify")
+		net.WriteBool(false)
+		net.WriteString(format)
+		net.WriteUInt(#args, 8)
+
+		for k, v in ipairs(args) do
+			net.WriteString(v)
+		end
+	net.Send(self)
+end
+
+function player:notifyChat(format, ...)
+	local args = {...}
+
+	net.Start("arista_notify")
+		net.WriteBool(true)
 		net.WriteString(format)
 		net.WriteUInt(#args, 8)
 

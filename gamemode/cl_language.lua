@@ -15,6 +15,8 @@ arista.lang.tbl.EN = {
 
 	["AL_SECONDS"] = "second(s)",
 	["AL_MINS"] = "minute(s)",
+	["AL_HOURS"] = "hour(s)",
+	["AL_DAYS"] = "day(s)",
 
 	["AL_ITEM"] = "item",
 	["AL_PICKUP"] = "pickup",
@@ -27,6 +29,8 @@ arista.lang.tbl.EN = {
 	["AL_NO"] = "No",
 	["AL_MALE"] = "Male",
 	["AL_FEMALE"] = "Female",
+
+	["AL_BLACKLISTDETAILS"] = "Blacklist details have been printed to your console.",
 
 	["AL_A"] = "A ",
 	["AL_A_BUTTON"] = "A Button",
@@ -52,7 +56,13 @@ arista.lang.tbl.EN = {
 	["AL_X_DEAD"] = " (dead)",
 	["AL_CANNOT_X_MAX"] = "You've hit the %s limit!",
 	["AL_CANNOT_X_ENCUMBERED"] = "You cannot %s, you will be over encumbered!",
-	["AL_X_CANNOT_MANUFACTURE_X"] = "%ss cannot manufacture %s",
+	["AL_X_CANNOT_MANUFACTURE_X"] = "%ss cannot manufacture %s.",
+	["AL_X_UNBLACKLIST_X_FROM_X"] = "%s unblacklisted %s from using %s.",
+	["AL_X_BLACKLIST_X_FROM_X_FOR_X_BECAUSE_X"] = "%s blacklisted %s from using %s for %s %s for %q",
+	["AL_X_IS_ALREADY_BLACKLISTED"] = "%s is already blacklisted from that!",
+	["AL_X_NOT_BLACKLISTED_ANYTHING"] = "%s isn't blacklisted from anything!",
+	["AL_X_GIVE_X_DONATOR_X_DAYS"] = "%s has given Donator status to %s for %i day(s).",
+	["AL_X_ISNT_BLACKLISTABLE"] = "%s isn't blacklistable!",
 
 	-- PLAYER CANNOT PERFORM ACTION
 	["AL_CANNOT_GENERIC"] = "You cannot do that to this!",
@@ -62,6 +72,11 @@ arista.lang.tbl.EN = {
 	["AL_CANNOT_RAM"] = "You cannot ram this door!",
 	["AL_CANNOT_RAM_NOAUTH"] = "You do not have the authority to ram this door.",
 	["AL_CANNOT_HOLSTER"] = "You cannot holster this weapon!",
+	["AL_CANNOT_NOREASON"] = "You must specify a reason!",
+	["AL_CANNOT_NOTENOUGHTEXT"] = "You did not specify enough text!",
+
+	["AL_CANNOT_BLACKLIST_LONG"] = "You cannot blacklist for that long!",
+	["AL_CANNOT_BLACKLIST_SHORT"] = "You cannot blacklist for less than 1 minute!",
 
 	["AL_CANNOT_USE_ITEM"] = "You cannot use another item for %d more seconds!",
 	["AL_CANNOT_USE_ITEM_SPECIFIC"] = "You cannot use another %s for %d more seconds!",
@@ -116,6 +131,7 @@ arista.lang.tbl.EN = {
 	-- INVALID OBJECT
 	["AL_INVALID_ACTION"] = "Invalid action specified!",
 	["AL_INVALID_ITEM"] = "This is not a valid item!",
+	["AL_INVALID_CATEGORY"] = "This is not a valid category!",
 	["AL_INVALID_AMOUNT"] = "Invalid amount!",
 	["AL_INVALID_TEAM"] = "Invalid team!",
 	["AL_INVALID_GENDER"] = "That is not a valid gender!",
@@ -126,6 +142,9 @@ arista.lang.tbl.EN = {
 	["AL_INVALID_MESSAGE"] = "You must specify a message!",
 	["AL_INVALID_MODEL"] = "That's not a valid model!",
 	["AL_INVALID_CONTAINER"] = "That's not a valid container!",
+	["AL_INVALID_GANG"] = "That's not a valid gang!",
+	["AL_INVALID_COMMAND"] = "That's not a command!",
+	["AL_INVALID_BLACKLIST"] = "That is not a valid blacklist type! (Valid: team/item/cat/cmd)",
 
 	-- PLAYER PERFORMED ACTION
 	["AL_YOU_MANUFACTURED"] = "You manufactured %s.",
@@ -237,6 +256,7 @@ arista.lang.tbl.EN = {
 	["AL_PLAYER_GIVEACCESS"] = "%s gave %s access to the %q flag%s",
 	["AL_PLAYER_TAKEACCESS"] = "%s took %s's access to the %q flag%s",
 	["AL_PLAYER_UPDATELAWS"] = "%s just updated the city laws.",
+	["AL_PLAYER_NOTBLACKLISTED"] = "%s is not blacklisted from that!",
 
 	-- DONT HAVE ENOUGH / NEED MORE
 	["AL_NEED_ANOTHER_MONEY"] = "You need another " .. arista.lang.currency .. "%d!",
@@ -329,8 +349,37 @@ arista.lang.tbl.EN = {
 	["AL_COMMAND_RESTARTMAP"] = "Restart the map immediately.",
 	["AL_COMMAND_RESTARTMAP_HELP"] = "",
 
+	["AL_COMMAND_CAT_MOD"] = "Moderator Commands",
+
+	["AL_COMMAND_BLACKLIST"] = "Blacklist a player from something.",
+	["AL_COMMAND_BLACKLIST_HELP"] = "<player> <team|item|cat|cmd> <thing> <time> <reason>",
+
+	["AL_COMMAND_UNBLACKLIST"] = "Unblacklist a player from something.",
+	["AL_COMMAND_UNBLACKLIST_HELP"] = "<player> <team|item|cat|cmd> <thing>",
+
+	["AL_COMMAND_BLACKLISTLIST"] = "Print a player's blacklist to your console.",
+	["AL_COMMAND_BLACKLISTLIST_HELP"] = "<player>",
+
+	["AL_COMMAND_GLOBALACTION"] = "Add a global environmental emote.",
+	["AL_COMMAND_GLOBALACTION_HELP"] = "<text>",
+
 
 	["AL_COMMAND_CAT_SADMIN"] = "Super Admin Commands",
+
+	["AL_COMMAND_SETMASTER"] = "Set/Unset an ent's master.",
+	["AL_COMMAND_SETMASTER_HELP"] = "<masterID>",
+
+	["AL_COMMAND_SEAL"] = "Seal/Unseal an entity so it cannot be used.",
+	["AL_COMMAND_SEAL_HELP"] = "[unseal]",
+
+	["AL_COMMAND_SETNAME"] = "Set the name of a door.",
+	["AL_COMMAND_SETNAME_HELP"] = "<name>",
+
+	["AL_COMMAND_SETNAME"] = "Set the owner of a door.",
+	["AL_COMMAND_SETNAME_HELP"] = "<player|team|gang|remove> [identifier] [gang identifier]",
+
+	["AL_COMMAND_DONATOR"] = "Give Donator status to a player.",
+	["AL_COMMAND_DONATOR_HELP"] = "<player> [days]",
 
 	-- BACKWARDS COMPAT
 	["AL_METHOD_UNSUPORTED"] = "This method is no longer supported.",

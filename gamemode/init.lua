@@ -442,7 +442,7 @@ function GM:PlayerInitialized(ply)
 			local seconds = string.format("%02.f", math.floor(expire - hours * 3600 - minutes * 60))
 
 			-- Give them their access.
-			ply:giveAccess("tpew")
+			ply:setupDonator(true)
 
 			-- Check if we still have at least 1 day.
 			if days > 0 then
@@ -450,19 +450,8 @@ function GM:PlayerInitialized(ply)
 			else
 				ply:notify("AL_YOU_DONATOR_EXPIRE_HOURS", hours, minutes, seconds)
 			end
-
-			-- Set some Donator only player variables.
-			ply:setAristaVar("knockOutTime", arista.config:getDefault("knockOutTime") / 2)
-			ply:setAristaVar("spawnTime", arista.config:getDefault("spawnTime") / 2)
 		else
-			ply:setAristaVar("donator", 0)
-
-			-- Take away their access and save their data.
-			ply:takeAccess("tpew")
-			ply:saveData()
-
-			-- Notify the player about how their Donator status has expired.
-			ply:notify("AL_YOU_DONATOR_REMOVE")
+			arista.player.expireDonator(ply)
 		end
 	end
 
@@ -561,7 +550,7 @@ function GM:PlayerDataLoaded(ply, success)
 		net.Send(ply)
 
 		if ply:rpName() == "" then
-			ply:generateDefaultRpName()
+			ply:generateDefaultRPName()
 			arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") was missing their RP Name, giving them a new one.")
 		end
 

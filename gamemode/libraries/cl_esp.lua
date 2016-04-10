@@ -64,7 +64,7 @@ function arista.esp:getAll()
 	return weighted
 end
 
-local fadeDistance = (arista.config.vars.talkRadius * 2)^2
+local fadeDistance = arista.config.vars.talkRadius^2
 local fadeDiv = 255 / fadeDistance
 
 function GM:DrawESPLine(ent, tent, ply)

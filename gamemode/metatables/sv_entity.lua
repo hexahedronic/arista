@@ -1,5 +1,10 @@
 local entity = FindMetaTable("Entity")
 
+function entity:seal(unseal)
+	hook.Run("EntitySealed", self, unseal)
+	self:networkAristaVar("sealed", not unseal)
+end
+
 function entity:lock(delay, override)
 	if not arista.entity.isOwnable(self) then return false end
 	if self:isJammed() and not override then return false end

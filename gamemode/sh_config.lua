@@ -107,6 +107,8 @@ arista.config.database = {
 }
 
 arista.config.vars = {
+	-- Access for donators.
+	donatorAccess = "tpew",
 	-- Use localised voice chat.
 	localVoice = false,
 	-- Amount to multiply donators salary by.

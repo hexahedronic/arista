@@ -96,6 +96,7 @@ net.Receive("arista_sendMapEntities", function()
 end)
 
 net.Receive("arista_notify", function()
+	local inChat = net.ReadBool()
 	local form = net.ReadString()
 	local amt = net.ReadUInt(8)
 
@@ -107,7 +108,7 @@ net.Receive("arista_notify", function()
 	arista.logs.logNoPrefix(arista.logs.E.DEBUG, "Notification string:", form)
 	form = arista.lang:Get(form, unpack(args))
 
-	notification.AddLegacy(form, NOTIFY_GENERIC, 4)
+	if inChat then chat.AddText(color_red, "! ", color_cream, form) else notification.AddLegacy(form, NOTIFY_GENERIC, 4) end
 	surface.PlaySound("ambient/water/drip" .. math.random(1, 4) .. ".wav")
 
 	MsgN(form)

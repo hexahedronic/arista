@@ -337,6 +337,9 @@ arista.lang.tbl.EN = {
 	["AL_COMMAND_M"] = "Say something to the other mods and admins.",
 	["AL_COMMAND_M_HELP"] = "<text>",
 
+	["AL_COMMAND_ACTION"] = "Add an environmental emote.",
+	["AL_COMMAND_ACTION_HELP"] = "<text>",
+
 
 	["AL_COMMAND_CAT_ADMIN"] = "Admin Commands",
 
@@ -380,6 +383,9 @@ arista.lang.tbl.EN = {
 
 	["AL_COMMAND_DONATOR"] = "Give Donator status to a player.",
 	["AL_COMMAND_DONATOR_HELP"] = "<player> [days]",
+
+	["AL_COMMAND_SAVE"] = "Forceably save all profiles",
+	["AL_COMMAND_SAVE_HELP"] = "",
 
 	-- BACKWARDS COMPAT
 	["AL_METHOD_UNSUPORTED"] = "This method is no longer supported.",

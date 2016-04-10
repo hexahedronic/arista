@@ -145,3 +145,14 @@ arista.command.add("m", "m", 1, function(ply, arguments)
 
 	arista.chatbox.add(rp, ply, "mchat", words)
 end, "AL_COMMAND_CAT_MENU")
+
+arista.command.add("action", "", 1, function(ply, arguments)
+	local text = table.concat(arguments, " "):Trim()
+
+	-- Check if the there is enough text.
+	if text == "" then
+		return false, "AL_CANNOT_NOTENOUGHTEXT"
+	end
+
+	arista.chatbox.addInRadius(ply, "action", text, ply:GetPos(), arista.config.vars.talkRadius)
+end, "AL_COMMAND_CAT_MENU")

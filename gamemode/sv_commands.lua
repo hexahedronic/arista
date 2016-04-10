@@ -93,11 +93,6 @@ cider.command.add("demote", "b", 2, function(ply, target, ...)
 	player.NotifyAll("%s demoted %s from %s for %q.", nil, ply:Name(), victim:Name(), team.GetName(tid), reason);
 end, "Commands", "<player> <reason>", "Demote a player from their current team.", true);
 
-cider.command.add("save", "s", 0, function(ply)
-	player.SaveAll()
-	GM:Log(EVENT_PUBLICEVENT,"%s saved everyone's profiles.", ply:Name())
-end, "Super Admin Commands", "", "Forceably save all profiles")
-
 -- A command to give a player some money.
 cider.command.add("givemoney", "b", 1, function(ply, amt)
 	local victim = ply:GetEyeTraceNoCursor().Entity;
@@ -372,14 +367,4 @@ cider.command.add("mutiny","b",1,function(ply,arguments)
 	target:Demote()
 	player.NotifyAll("%s was overthrown as leader.",nil,target:Name())
 end, "Commands","<player>","Try to start a mutiny against your leader")
-
-cider.command.add("action","b",1,function(ply,arguments)
-	local text = table.concat(arguments, " ");
-
-	-- Check if the there is enough text.
-	if (text == "") then
-		return false,"You did not specify enough text!"
-	end
-	cider.chatBox.addInRadius(ply, "action", text, ply:GetPos(), GM.Config["Talk Radius"]);
-end, "Commands", "<text>", "Add an environmental emote")
 ]]

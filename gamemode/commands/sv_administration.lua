@@ -354,6 +354,6 @@ arista.command.add("setowner", "s", 1, function(ply, kind, id, gangid)
 	arista.entity.updateSlaves(entity)
 end, "AL_COMMAND_CAT_SADMIN", true)
 
-cider.command.add("save", "s", 0, function(ply)
+arista.command.add("save", "s", 0, function(ply)
 	arista.player.saveAll()
 end, "AL_COMMAND_CAT_SADMIN")

@@ -9,7 +9,7 @@ arista.config.defaults = {
 	-- Time knocked out for.
 	knockOutTime = 30,
 	-- Time until respawn.
-	spawnTime = 20,
+	spawnTime = 12,
 	-- Time arrested for.
 	arrestTime = 300,
 	-- Access level.

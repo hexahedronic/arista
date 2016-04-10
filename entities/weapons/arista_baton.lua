@@ -172,7 +172,7 @@ function SWEP:PrimaryAttack()
 		elseif not player:isUnconscious() and gamemode.Call("PlayerCanKnockOut", self.Owner, player) ~= false then
 			if player:InVehicle() then player:ExitVehicle() end
 
-			player:knockOut(60)
+			player:knockOut(12)
 
 			if player.ragdoll then
 				player.ragdoll.time = CurTime() + 2

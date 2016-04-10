@@ -498,13 +498,15 @@ function player:wakeUp(reset)
 
 	-- If we're not doing a reset, then there are things we need to do like giving the player stuff back
 	if not reset then
+		local hp = self:Health()
+
 		-- Do a light spawn so basic variables are set up
 		self:lightSpawn()
 		-- Get our weapons back
 		self:returnWeapons()
 
 		-- Set the basic info we stored
-		self:SetHealth(self.ragdoll.health or 100)
+		self:SetHealth((hp > 0 and hp) or self.ragdoll.health or 100)
 
 		-- Duplicate the ragdoll's current state if it exists
 		if IsValid(ragdoll) then

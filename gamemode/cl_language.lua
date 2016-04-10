@@ -75,6 +75,8 @@ arista.lang.tbl.EN = {
 	["AL_CANNOT_NOREASON"] = "You must specify a reason!",
 	["AL_CANNOT_NOTENOUGHTEXT"] = "You did not specify enough text!",
 
+	["AL_CANNOT_DROPMONEY_FAST"] = "You need to wait another %d seconds before dropping more money.",
+
 	["AL_CANNOT_BLACKLIST_LONG"] = "You cannot blacklist for that long!",
 	["AL_CANNOT_BLACKLIST_SHORT"] = "You cannot blacklist for less than 1 minute!",
 
@@ -163,6 +165,9 @@ arista.lang.tbl.EN = {
 
 	["AL_YOU_REMOVE_DETAILS"] = "You have removed your details.",
 	["AL_YOU_REMOVE_CLAN"] = "You have left your clan.",
+
+	["AL_YOU_NOT_ENOUGHMONEY"] = "You do not have enough money!",
+	["AL_YOU_NOT_DROPENOUGH"] = "You cannot drop less than " .. arista.lang.currency .. "%d.",
 
 	["AL_YOU_SEARCH_WARRANT"] = "You have a search warrant which expires in %d %s.",
 	["AL_YOU_ARREST_WARRANT"] = "You have an arrest warrant which expires in %d %s.",
@@ -339,6 +344,9 @@ arista.lang.tbl.EN = {
 
 	["AL_COMMAND_ACTION"] = "Add an environmental emote.",
 	["AL_COMMAND_ACTION_HELP"] = "<text>",
+
+	["AL_COMMAND_DROPMONEY"] = "Drop some money where you are looking.",
+[	"AL_COMMAND_DROPMONEY_HELP"] = "<amount>",
 
 
 	["AL_COMMAND_CAT_ADMIN"] = "Admin Commands",

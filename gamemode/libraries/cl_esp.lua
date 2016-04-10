@@ -216,7 +216,7 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 		addon = arista.lang:Get("AL_X_DEAD")
 	end
 
-	lines:add("Name", player:Name() .. addon .. " (" .. player:UserID() .. ")", team.GetColor(player:Team()), 1)
+	lines:add("RPName", player:rpName() .. addon .. " (" .. player:UserID() .. ")", team.GetColor(player:Team()), 1)
 
 	local statuslines = 0
 
@@ -251,7 +251,7 @@ function GM:DrawPlayerESP(player, lines, pos, distance, lookingat)
 	end
 
 	if lookingat then
-		lines:add("RPName", player:rpName(), color_highpink, 2 + statuslines)
+		lines:add("Name", player:Name(), color_highpink, 2 + statuslines)
 		statuslines = statuslines + 1
 
 		local details = player:getDetails()

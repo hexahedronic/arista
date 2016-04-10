@@ -738,7 +738,7 @@ function GM:HUDPaint()
 	local text = {x = ScrW(), y = 8}
 
 	-- Draw the player's health and ammo bars.
-	if arista.lp:Health() < 90 then
+	if arista.lp:Health() < 100 then
 		self:DrawHealthBar(bar)
 	end
 

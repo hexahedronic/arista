@@ -74,27 +74,8 @@ arista.command.add("details", "", 0, function(ply, arguments)
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.COMMAND, ply:Name(), "(", ply:SteamID(), ") changed their details to '", words, "'.")
 end, "AL_COMMAND_CAT_COMMANDS")
 
---[[
--- A command to demote a player.
-cider.command.add("demote", "b", 2, function(ply, target, ...)
-	local victim = player.Get(target);
-	if (not victim) then
-		return false, "Invalid player '"..target.."'!";
-	end
-	local reason = table.concat({...}, " "):sub(1,65):Trim();
-	if (not reason or reason == "" or (reason:len() < 5 and not ply:IsSuperAdmin())) then
-		return false, "You must specify a reason!";
-	end
-	if (not gamemode.Call("PlayerCanDemote", ply, victim)) then
-		return false;
-	end
-	local tid = victim:Team();
-	victim:Demote();
-	player.NotifyAll("%s demoted %s from %s for %q.", nil, ply:Name(), victim:Name(), team.GetName(tid), reason);
-end, "Commands", "<player> <reason>", "Demote a player from their current team.", true);
-
 -- A command to give a player some money.
-cider.command.add("givemoney", "b", 1, function(ply, amt)
+arista.command.add("givemoney", "z", 1, function(ply, amt)
 	local victim = ply:GetEyeTraceNoCursor().Entity;
 	if (not (IsValid(victim) and victim:IsPlayer())) then
 		return false, "You must look at a player to give them money!";
@@ -118,31 +99,57 @@ cider.command.add("givemoney", "b", 1, function(ply, amt)
 end, "Commands", "<amount>", "Give some money to the player you're looking at.", true);
 
 -- A command to drop money.
-cider.command.add("dropmoney", "b", 1, function(ply, amt)
+local moneyDist = 255^2
+arista.command.add("dropmoney", "", 1, function(ply, amt)
 	-- Prevent fucktards spamming the dropmoney command.
-	ply._NextMoneyDrop = ply._NextMoneyDrop or 0;
-	if ((ply._NextMoneyDrop or 0) > CurTime()) then
-		return false, "You need to wait another " .. (ply._NextMoneyDrop - CurTime()).. " seconds before dropping more money.";
+	ply._nextMoneyDrop = ply._nextMoneyDrop or 0
+
+	if ply._nextMoneyDrop > CurTime() then
+		return false, "AL_CANNOT_DROPMONEY_FAST", ply._nextMoneyDrop - CurTime()
 	end
-	local pos = ply:GetEyeTraceNoCursor().HitPos;
-	if (ply:GetPos():Distance(pos) > 255) then
-		pos = ply:GetShootPos() + ply:GetAimVector() * 255;
+
+	local pos = ply:GetEyeTraceNoCursor().HitPos
+	if ply:GetPos():DistToSqr(pos) > moneyDist then
+		pos = ply:GetShootPos() + ply:GetAimVector() * 255
 	end
-	amt = tonumber(amt);
-	if (not amt or amt < 1) then
+
+	amt = tonumber(amt)
+	if not amt or amt < 1 then
 		return false, "You must specify a valid amount of money!";
 	end
-	amt = math.floor(amt);
-	if (not ply:CanAfford(amt)) then
-		return false, "You do not have enough money!";
-	elseif (amt < 500) then -- Fucking spammers again.
-		return false, "You cannot drop less than $500.";
+
+	amt = math.floor(amt)
+
+	if not ply:canAfford(amt) then
+		return false, "AL_YOU_NOT_ENOUGHMONEY"
+	elseif amt < 100 then -- Fucking spammers again.
+		return false, "AL_YOU_NOT_DROPENOUGH", 100
 	end
-	ply._NextMoneyDrop = CurTime() + 30;
-	ply:GiveMoney(-amt);
-	cider.propprotection.PlayerMakePropOwner(GM.Items["money"]:Make(pos, amt), ply, true);
-	GM:Log(EVENT_EVENT,"%s dropped $%i.", ply:Name(), amt);
-end, "Commands", "<amount>", "Drop some money where you are looking.", true);
+
+	ply._nextMoneyDrop = CurTime() + 10
+	ply:giveMoney(-amt)
+
+	arista.item.items["money"]:make(pos, amt):CPPISetOwner(ply)
+end, "AL_COMMAND_CAT_COMMANDS", true)
+
+--[[
+-- A command to demote a player.
+cider.command.add("demote", "b", 2, function(ply, target, ...)
+	local victim = player.Get(target);
+	if (not victim) then
+		return false, "Invalid player '"..target.."'!";
+	end
+	local reason = table.concat({...}, " "):sub(1,65):Trim();
+	if (not reason or reason == "" or (reason:len() < 5 and not ply:IsSuperAdmin())) then
+		return false, "You must specify a reason!";
+	end
+	if (not gamemode.Call("PlayerCanDemote", ply, victim)) then
+		return false;
+	end
+	local tid = victim:Team();
+	victim:Demote();
+	player.NotifyAll("%s demoted %s from %s for %q.", nil, ply:Name(), victim:Name(), team.GetName(tid), reason);
+end, "Commands", "<player> <reason>", "Demote a player from their current team.", true);
 
 do --isolate vars
 	local function conditional(ply,pos)

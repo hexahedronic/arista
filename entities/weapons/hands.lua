@@ -307,7 +307,7 @@ function SWEP:Think()
 	local curtime = CurTime()
 	local idletime = self:GetNextIdle()
 
-	if idletime > 0 and CurTime() > idletime then
+	if idletime > 0 and CurTime() > idletime and vm and vm:IsValid() then
 		vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_idle_0" .. math.random(1, 2)))
 
 		self:UpdateNextIdle()

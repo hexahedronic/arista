@@ -31,7 +31,7 @@ function arista.entity.isOwned(entity)
 	local owner = arista.entity.getOwner(entity)
 	local ownedByPly = entity:getAristaBool("ownedByPlayer")
 
-	return owner and (ownedByPly or owner ~= "Nobody")
+	return owner and (ownedByPly or (owner ~= "Nobody" and owner ~= ""))
 end
 
 -- Get an entities status

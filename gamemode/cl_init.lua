@@ -84,6 +84,7 @@ color_orange_alpha =	Color(240, 190, 060, 200)
 color_lightblue_alpha =	Color(100, 100, 255, 200)
 color_darkgray_alpha =	Color(025, 025, 025, 150)
 color_black_alpha =		Color(000, 000, 000, 200)
+color_alpha =		Color(000, 000, 000, 000)
 
 net.Receive("arista_sendMapEntities", function()
 	local amt = net.ReadUInt(16)

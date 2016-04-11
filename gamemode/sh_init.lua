@@ -118,9 +118,9 @@ if SERVER then
 	end
 
 	if file.Exists("arista_config/cl_language.lua", "LUA") then
-		include("arista_config/cl_language.lua")
+		AddCSLuaFile("arista_config/cl_language.lua")
 	else
-		include("cl_language.lua")
+		AddCSLuaFile("cl_language.lua")
 	end
 	AddCSLuaFile("derma/qderma.lua") -- submodule from trixter
 else

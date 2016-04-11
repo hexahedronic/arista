@@ -556,7 +556,7 @@ function GM:PlayerDataLoaded(ply, success)
 			arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") was missing their RP Name, giving them a new one.")
 		end
 
-		ply:forceNetworkUpdate()
+		for k, v in ipairs(player.GetAll()) do v:forceNetworkUpdate() end
 	end)
 end
 

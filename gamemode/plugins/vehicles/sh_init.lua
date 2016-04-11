@@ -1,0 +1,3 @@
+AddCSLuaFile()
+
+PLUGIN.name = "Vehicles"

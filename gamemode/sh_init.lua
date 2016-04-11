@@ -103,16 +103,32 @@ function gamemode.Call(name, ...)
 	return hook.Call(name, gm, ...)
 end
 
-include("sh_config.lua")
+if file.Exists("arista_config/sh_config.lua", "LUA") then
+	include("arista_config/sh_config.lua")
+else
+	include("sh_config.lua")
+end
 
 -- Check if we're running on the server.
 if SERVER then
-	include("sv_config.lua")
+	if file.Exists("arista_config/sv_config.lua", "LUA") then
+		include("arista_config/sv_config.lua")
+	else
+		include("sv_config.lua")
+	end
 
-	AddCSLuaFile("cl_language.lua")
+	if file.Exists("arista_config/cl_language.lua", "LUA") then
+		include("arista_config/cl_language.lua")
+	else
+		include("cl_language.lua")
+	end
 	AddCSLuaFile("derma/qderma.lua") -- submodule from trixter
 else
-	include("cl_language.lua")
+	if file.Exists("arista_config/cl_language.lua", "LUA") then
+		include("arista_config/cl_language.lua")
+	else
+		include("cl_language.lua")
+	end
 	include("derma/qderma.lua")
 end
 
@@ -151,7 +167,11 @@ GM:LoadPlugins()
 GM:LoadItems()
 
 --This stuff needs to be after plugins but before everything else
-include("sh_jobs.lua")
+if file.Exists("arista_config/sh_jobs.lua", "LUA") then
+	include("arista_config/sh_jobs.lua")
+else
+	include("sh_jobs.lua")
+end
 
 -- Called when a player attempts to punt an entity with the gravity gun.
 function GM:GravGunPunt(ply, entity)

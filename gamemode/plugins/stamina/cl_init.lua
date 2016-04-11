@@ -8,7 +8,7 @@ function PLUGIN:DrawBottomBars(bar)
 
 	-- Check if the stamina is smaller than 100.
 	if stamina < 100 then
-		GAMEMODE:DrawBar("Default", bar.x, bar.y, bar.width, bar.height, color_lightblue, arista.lang:Get"AL_HUD_STAMINA" .. stamina .. "%", 100, stamina, bar)
+		GAMEMODE:DrawBar("Default", bar.x, bar.y, bar.width, bar.height, color_lightblue, arista.lang:Get"AL_HUD_STAMINA" .. stamina .. "%", 100, stamina, bar, "icon16/cup_go")
 	end
 end
 

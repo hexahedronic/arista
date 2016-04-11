@@ -1,5 +1,3 @@
-include("sh_init.lua")
-
 arista.lang:Add("AL_SPAWNPOINTS_TEAM_ADD", {
 	EN = "You have added a spawnpoint for %s where you are standing.",
 })

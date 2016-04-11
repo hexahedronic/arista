@@ -259,7 +259,8 @@ function GM:AdjustMaximumWidth(font, text, width, addition, extra)
 end
 
 -- A function to draw a bar with a maximum and a variable.
-function GM:DrawBar(font, x, y, width, height, color, text, maximum, variable, bar)
+local icoCache = {}
+function GM:DrawBar(font, x, y, width, height, color, text, maximum, variable, bar, icon)
 	surface.SetDrawColor(color_black_alpha)
 	surface.DrawRect(x, y, width, height)
 
@@ -273,23 +274,35 @@ function GM:DrawBar(font, x, y, width, height, color, text, maximum, variable, b
 	surface.SetFont(font)
 
 	-- Adjust the x and y positions so that they don't screw up.
-	x = math.floor(x + (width / 2))
-	y = math.floor(y + 1)
+	local _x = math.floor(x + (width / 2))
+	local _y = math.floor(y + 2)
 
 	local w, h = surface.GetTextSize(text)
 	w = w / 2
 
 	-- Draw text on the bar.
-	surface.SetTextPos(x - w + 1, y + 1)
+	surface.SetTextPos(_x - w + 1, _y + 1)
 	surface.SetTextColor(color_black)
 	surface.DrawText(text)
 
-	surface.SetTextPos(x - w, y)
+	surface.SetTextPos(_x - w, _y)
 	surface.SetTextColor(color_white)
 	surface.DrawText(text)
 
+	if icon then
+		if not icoCache[icon] then
+			local _icon = Material(icon .. ".png")
+			icoCache[icon] = _icon
+		end
+
+		icon = icoCache[icon]
+		surface.SetMaterial(icon)
+		surface.SetDrawColor(color_white)
+		surface.DrawTexturedRect(x + 4, y + 1, 16, 16)
+	end
+
 	-- Check if a bar table was specified.
-	if bar then bar.y = bar.y - height + 1 end
+	if bar then bar.y = bar.y - height end
 end
 
 -- Get the bouncing position of the screen's center.
@@ -548,7 +561,7 @@ function GM:DrawHealthBar(bar)
 	local health = math.Clamp(arista.lp:Health(), 0, 100)
 
 	-- Draw the health and ammo bars.
-	self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_red_alpha, arista.lang:Get"AL_HUD_HEALTH" .. health, 100, health, bar)
+	self:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_red_alpha, arista.lang:Get"AL_HUD_HEALTH" .. health, 100, health, bar, "icon16/heart")
 end
 
 -- Draw the timer bar.
@@ -734,7 +747,7 @@ function GM:HUDPaint()
 	local width, height = self:DrawPlayerInformation()
 
 	-- A table to store the bar and text information.
-	local bar = {x = width + 16, y = ScrH() - 24, width = 144, height = 16}
+	local bar = {x = width + 16, y = ScrH() - 24, width = 144, height = 18}
 	local text = {x = ScrW(), y = 8}
 
 	-- Draw the player's health and ammo bars.

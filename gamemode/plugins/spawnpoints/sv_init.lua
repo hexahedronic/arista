@@ -1,4 +1,3 @@
-include("sh_init.lua")
 arista.file.makeDir("spawnpoints")
 
 PLUGIN.spawnpoints = {}

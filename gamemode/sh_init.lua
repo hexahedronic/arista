@@ -219,6 +219,11 @@ function GM:OnPhysgunFreeze(weapon, phys, entity, ply)
 	return self.BaseClass:OnPhysgunFreeze(weapon, phys, entity, ply)
 end
 
+-- Horrendous system, never use it.
+function GM:CanDrive()
+	return false
+end
+
 -- Called when a player attempts to use a tool.
 function GM:CanTool(ply, trace, tool)
 	local ent = trace.Entity

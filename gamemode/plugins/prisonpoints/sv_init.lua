@@ -1,3 +1,4 @@
+include("sh_init.lua")
 arista.file.makeDir("prisonpoints")
 
 PLUGIN.prisonpoints = {}

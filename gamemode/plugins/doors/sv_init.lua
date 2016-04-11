@@ -33,51 +33,54 @@ function PLUGIN:LoadDoors()
 		error("["..os.date().."] Doors Plugin: a " .. #results .. " long file exists for " .. game.GetMap() .. " but it has no suitable entities!")
 	end
 
-	local radiusSquared = 4 -- Our SQUARED search radius. A 1r sphere should do the job fine.
 	for i = 1, #results do-- Loop through our results
 		local data = results[i]
 
-		for i = 1, numents do -- Loop through our suitable ents
-			local entity = validents[i]
-
-			if (data.position - entity:GetPos()):LengthSqr() <= radiusSquared then -- Check if the current ent is within a unit of our target
-				-- Now we check if the data has various things set on it, and apply them if so
-				if data.master then -- Does this door have a master entity?
-					for i = 1, numents do -- Loop through our suitable ents (again!)
-						local master = validents[i]
-
-						if (data.master - entity:GetPos()):LengthSqr() <= radiusSquared then -- Check if the current ent is within a unit of our target
-							arista.entity.setMaster(entity, master) -- If it is, set it as the entity's master.
-
-							break -- We can either have the last appropriate entity as the master, or the first. Let's choose the first for speed.
-						end
-					end
-				end
-
-				if data.sealed then -- Is this door sealed?
-					entity:networkAristaVar("sealed", true)
-				end
-
-				if data.preOwned then -- Is this door pre-owned by a team or gang?
-					if data.preOwned == "team" then -- If it's a team that owns it
-						arista.entity.setOwnerTeam(entity, data.owner)
-					else -- Otherwise a gang must own it.
-						arista.entity.setOwnerGang(entity, data.owner[1], data.owner[2])
-					end
-				end
-
-				if data.unownable then -- Is this door unownable?
-					if not data.preOwned then -- If the door doesn't already have an owner
-						arista.entity.setOwnerTeam(entity, TEAM_NONE) -- Give it to the dummy team we set up earlier, so no one else can have it.
-					end
-
-					arista.entity.setName(entity, data.unownable) -- Give it it's custom name.
-					entity._unownable = true -- Let the server know.
-				end
-
-				self.Doors[entity] = data -- Save all this for future usage/saveage
+		local entity
+		for k, v in ipairs(ents.GetAll()) do
+			if v:MapCreationID() == data.mapcreationid then
+				entity = v
+				break
 			end
 		end
+
+		if not entity then continue end
+
+		-- Now we check if the data has various things set on it, and apply them if so
+		if data.master then -- Does this door have a master entity?
+			for k, v in ipairs(ents.GetAll()) do
+				if v:MapCreationID() == data.master then
+					arista.entity.setMaster(entity, v)
+					break
+				end
+			end
+		end
+
+		if data.sealed then -- Is this door sealed?
+			entity:networkAristaVar("sealed", true)
+		end
+
+		if data.preOwned then -- Is this door pre-owned by a team or gang?
+			if data.preOwned == "team" then -- If it's a team that owns it
+				arista.entity.setOwnerTeam(entity, data.owner)
+			else -- Otherwise a gang must own it.
+				arista.entity.setOwnerGang(entity, data.owner[1], data.owner[2])
+			end
+		end
+
+		if data.unownable then -- Is this door unownable?
+			if not data.preOwned then -- If the door doesn't already have an owner
+				arista.entity.setOwnerTeam(entity, TEAM_NONE) -- Give it to the dummy team we set up earlier, so no one else can have it.
+			end
+
+			entity._unownable = true -- Let the server know.
+		end
+
+		if data.name then
+			arista.entity.setName(entity, data.name) -- Give it it's custom name.
+		end
+
+		self.Doors[entity] = data -- Save all this for future usage/saveage
 	end
 end
 
@@ -103,12 +106,14 @@ end
 
 -- Gets the data for the door, either creating it if it doesn't exist or returning a blank table.
 function PLUGIN:GetDoorData(door, create)
+	if door:MapCreationID() == -1 then return {} end
+
 	local ret
 	if self.Doors[door] then
 		ret = self.Doors[door]
 	elseif create then
 		ret = {
-			position = door._startPos or door:GetPos()
+			mapcreationid = door:MapCreationID() or -1
 		}
 		self.Doors[door] = ret
 	else
@@ -175,7 +180,7 @@ function PLUGIN:EntityMasterSet(door,master)
 	if not (IsValid(door) and arista.entity.isOwnable(door) and door._isDoor) then
 		return
 	elseif IsValid(master) then
-		self:GetDoorData(door,true).master = master:GetPos()
+		self:GetDoorData(door,true).master = master:MapCreationID() ~= -1 and master:MapCreationID() or nil
 	else
 		self:GetDoorData(door).master = nil
 	end

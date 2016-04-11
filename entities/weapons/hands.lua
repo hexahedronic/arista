@@ -260,7 +260,7 @@ function SWEP:SecondaryAttack()
 				return
 			elseif arista.entity.isDoor(ent) then
 				self:EmitSound("physics/wood/wood_crate_impact_hard2.wav")
-				if self.Primary.Super and SERVER and arista.utils.isAdmin(self.Owner, true) then
+				if self.Primary.Super and SERVER and self.Owner:IsSuperAdmin() then
 					arista.entity.openDoor(ent, 0, true, true)
 				end
 
@@ -281,7 +281,7 @@ end
 
 function SWEP:Reload()
 	if self.Primary.NextSwitch > CurTime() then return false end
-	if arista.utils.isAdmin(self.Owner) and self.Owner:KeyDown(IN_SPEED) then
+	if self.Owner:IsAdmin() and self.Owner:KeyDown(IN_SPEED) then
 
 		if self.Primary.Super then
 			self.Primary.PunchAcceleration = 150

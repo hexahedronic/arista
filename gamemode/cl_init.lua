@@ -823,7 +823,7 @@ end
 
 -- Stop players bypassing my post proccesses with theirs
 function GM:PostProcessPermitted()
-	return arista.utils.isAdmin(arista.lp)
+	return arista.lp:IsAdmin()
 end
 
 -- Called when a player begins typing.

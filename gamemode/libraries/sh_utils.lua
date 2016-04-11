@@ -9,11 +9,6 @@ function arista.utils.nextFrame(func, ...)
 	timer.Simple(0, function() func(unpack(args)) end)
 end
 
-function arista.utils.isAdmin(ply, super)
-	if not ply or not IsValid(ply) then return end
-	return (super and ply:IsSuperAdmin()) or ply:IsAdmin()
-end
-
 function arista.utils.validModel(mdl)
 	return util.IsValidModel(mdl)
 end

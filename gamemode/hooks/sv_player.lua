@@ -445,7 +445,7 @@ end
 -- @return True if they can, false if they can't.
 function GM:PlayerCanChangeLaws(ply)
 	-- todo: allow mods
-	return arista.utils.isAdmin(ply)
+	return ply:IsAdmin()
 end
 
 ---
@@ -454,7 +454,7 @@ end
 -- @param target The player's intended victim
 -- @return True if they can, false if they can't.
 function GM:PlayerCanUnwarrant(ply, target)
-	return arista.utils.isAdmin(ply)
+	return ply:IsAdmin()
 end
 
 ---
@@ -537,7 +537,7 @@ end
 function GM:PlayerCanSayOOC(ply, text)
 	local nextOOC = ply:getAristaVar("nextOOC") or 0
 
-	if arista.utils.isAdmin(ply) then -- Admins can always use ooc
+	if ply:IsAdmin() then -- Admins can always use ooc
 		return true
 	elseif nextOOC > CurTime() then -- Prevent OOC spam
 		local timeleft = nextOOC - CurTime()

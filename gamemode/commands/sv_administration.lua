@@ -292,7 +292,7 @@ arista.command.add("seal", "s", 0, function(ply, unseal)
 		return false, "AL_INVALID_ENTITY"
 	end
 
-	entity:seal(unseal)
+	entity:seal(unseal ~= nil)
 end, "AL_COMMAND_CAT_SADMIN", true)
 
 arista.command.add("setname", "s", 1, function(ply, arguments)

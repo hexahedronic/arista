@@ -91,11 +91,11 @@ function ENT:updateAmount(add)
 end
 
 function ENT:CanTool(ply)
-	return arista.utils.isAdmin(ply)
+	return ply:IsAdmin()
 end
 
 function ENT:PhysgunPickup(player)
-	return arista.utils.isAdmin(ply)
+	return ply:IsAdmin()
 end
 
 -- Called when the entity is used.
@@ -108,7 +108,7 @@ function ENT:Use(activator, caller)
 	local nextUseItem = activator:getAristaVar("nextUseItem") or 0
 
 	if activator:KeyDown(IN_SPEED) and item.equippable then
-		if not arista.utils.isAdmin(activator) and nextUseItem > CurTime() then
+		if not activator:IsAdmin() and nextUseItem > CurTime() then
 			activator:notify("AL_CANNOT_USE_ITEM_SPECIFIC", "AL_ITEM", nextUseTime - CurTime())
 
 			return false

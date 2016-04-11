@@ -94,7 +94,7 @@ function GM:PlayerCanDemote(ply, target)
 
 		return false
 		-- todo: mod
-	elseif --[[ply:IsModerator()]] arista.utils.isAdmin(ply) then
+	elseif --[[ply:IsModerator()]] ply:IsAdmin() then
 		return true
 	end
 
@@ -138,5 +138,5 @@ function GM:PlayerNoClip(ply)
 		return false
 	end
 
-	return arista.utils.isAdmin(ply)
+	return ply:IsAdmin()
 end

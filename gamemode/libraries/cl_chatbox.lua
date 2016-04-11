@@ -155,11 +155,11 @@ function arista.chatbox.chatText(index, name, text, filter)
 		if filter == "ooc" then name = player:Name() end
 
 		-- Check if the player is a super admin.
-		if arista.utils.isAdmin(player, true) then
+		if player:IsSuperAdmin() then
 			icon = {"icon16/shield.png", "^"}
-		elseif arista.utils.isAdmin(player) then
+		elseif player:IsAdmin() then
 			icon = {"icon16/star.png", "*"}
-		elseif arista.utils.isAdmin(player) then
+		elseif player:IsAdmin() then
 			-- todo: mod
 			icon = {"icon16/emoticon_smile.png", ":)"}
 		elseif player:getAristaBool("donator") then

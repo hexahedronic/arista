@@ -155,7 +155,7 @@ include("sh_jobs.lua")
 
 -- Called when a player attempts to punt an entity with the gravity gun.
 function GM:GravGunPunt(ply, entity)
-	return arista.utils.isAdmin(ply)
+	return ply:IsAdmin()
 end
 
 -- Called when a player attempts to pick up an entity with the physics gun.
@@ -167,11 +167,11 @@ function GM:PhysgunPickup(ply, entity)
 		return entity:PhysgunPickup(ply)
 	elseif entity.PhysgunDisabled then
 		return false
-	elseif arista._internaldata.entities[entity] then--and not arista.utils.isAdmin(ply) then -- Fed up with admins physgunning fucking doors
+	elseif arista._internaldata.entities[entity] then--and not ply:IsAdmin() then -- Fed up with admins physgunning fucking doors
 			return false
 	elseif entity:IsVehicle() and not entity:isTouchable(ply) then
 		return false
-	elseif arista.utils.isAdmin(ply) then
+	elseif ply:IsAdmin() then
 		if entity:IsPlayer() then
 			if entity:InVehicle() then
 				return false
@@ -228,7 +228,7 @@ function GM:CanTool(ply, trace, tool)
 	-- Check if the trace entity is valid.
 	if IsValid(ent) then
 		-- Overwrite certain ents that should not be tooled no matter what
-		if tool ~= "remover" and not arista.utils.isAdmin(ply) and ent:toolForbidden() then
+		if tool ~= "remover" and not ply:IsAdmin() and ent:toolForbidden() then
 			if doLog then arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.USE, ply, " tried (and failed) to use tool ", tool, " on ", ent, " (ent.toolForbbiden).") end
 
 			return false
@@ -298,7 +298,7 @@ function GM:CanTool(ply, trace, tool)
 		end
 
 		-- Check if this entity is a player's ragdoll.
-		if doLog and ent:isPlayerRagdoll() and not arista.utils.isAdmin(ply, true) then
+		if doLog and ent:isPlayerRagdoll() and not ply:IsSuperAdmin() then
 			arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.USE, ply, " tried (and failed) to use tool ", tool, " on ", ent, " (Player Ragdoll).")
 
 			return false

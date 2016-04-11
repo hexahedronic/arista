@@ -59,9 +59,9 @@ end
 
 -- Flags that represent functions.
 arista.flagFunctions = {
-	s = function(ply) return arista.utils.isAdmin(ply, true) end,
-	a = function(ply) return arista.utils.isAdmin(ply, false) end,
-	m = function(ply) return --[[ply:IsModerator()]] arista.utils.isAdmin(ply, false) end,
+	s = function(ply) return ply:IsSuperAdmin() end,
+	a = function(ply) return ply:IsAdmin() end,
+	m = function(ply) return --[[ply:IsModerator()]] ply:IsAdmin() end,
 }
 -- todo: mod
 
@@ -165,7 +165,7 @@ end
 function GM:PlayerSpawnNPC(ply, model)
 	local res = gamemode.Call("PlayerCanDoSomething", ply, nil, true)
 
-	if res ~= false and arista.utils.isAdmin(ply, true) then
+	if res ~= false and ply:IsSuperAdmin() then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned an npc (", model, ").")
 
 		return true
@@ -205,7 +205,7 @@ function GM:PlayerSpawnProp(ply, model)
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a prop (", model, ").")
 
 		return false
-	elseif arista.utils.isAdmin(ply, true) then
+	elseif ply:IsSuperAdmin() then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned a prop (", model, ").")
 
 		return true
@@ -309,7 +309,7 @@ end
 
 -- Called when a player attempts to spawn a ragdoll.
 function GM:PlayerSpawnRagdoll(ply, model)
-	if arista.utils.isAdmin(ply, true) then
+	if ply:IsSuperAdmin() then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned a ragdoll (", model, ").")
 
 		return true
@@ -322,7 +322,7 @@ end
 
 -- Called when a player attempts to spawn an effect.
 function GM:PlayerSpawnEffect(ply, model)
-	if arista.utils.isAdmin(ply, true) then
+	if ply:IsSuperAdmin() then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned a effect (", model, ").")
 
 		return true
@@ -352,7 +352,7 @@ function GM:PlayerSpawnVehicle(ply, model, name, vtable)
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to spawn a ", name, " (", model, ").")
 
 		return false
-	elseif arista.utils.isAdmin(ply, true) then
+	elseif ply:IsSuperAdmin() then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned a ", name, "(", model, ").")
 
 		return true
@@ -1421,7 +1421,7 @@ end
 
 -- Called when a ply attempts to spawn a SWEP.
 function GM:PlayerSpawnSWEP(ply, class, weapon)
-	if arista.utils.isAdmin(ply, true) then
+	if ply:IsSuperAdmin() then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned a weapon (", class, ").")
 
 		return true
@@ -1434,7 +1434,7 @@ end
 
 -- Called when a player is given a SWEP.
 function GM:PlayerGiveSWEP(ply, class, weapon)
-	if arista.utils.isAdmin(ply, true) then
+	if ply:IsSuperAdmin() then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " gave themselves a weapon (", class, ").")
 
 		return true
@@ -1447,7 +1447,7 @@ end
 
 -- Called when attempts to spawn a SENT.
 function GM:PlayerSpawnSENT(ply, class)
-	if arista.utils.isAdmin(ply, true) then
+	if ply:IsSuperAdmin() then
 		arista.logs.event(arista.logs.E.LOG, arista.logs.E.SPAWN, ply, " spawned a ", class, ".")
 
 		return true

@@ -67,7 +67,7 @@ function PANEL:Think()
 		self.itemsList:AddItem(text)
 	end
 
-	if arista.utils.isAdmin(arista.lp) or arista.team.query(arista.lp:Team(), "mayor", false) then
+	if arista.lp:IsAdmin() or arista.team.query(arista.lp:Team(), "mayor", false) then
 		local button = vgui.Create("QButton", self)
 			button:SetText(arista.lang:Get"AL_DERMA_EDIT")
 

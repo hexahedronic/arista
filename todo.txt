@@ -27,6 +27,7 @@
 [X] Access is not returned to rejoining players correctly
 [-] Readd sound to QButtons in derma implementation
 [-] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
+[-] Fix unownable door-groups (master/slaves)
 
 - Update / Improve
 [-] Remake HUD Design
@@ -49,7 +50,7 @@
 [X] Plugin mangement/handling
 
 [ ] Vehicle handling
-[ ] Officals
+[X] Officals
 [X] Hunger
 [X] Flashlight battery
 [X] Door management (saving)

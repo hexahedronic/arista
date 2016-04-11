@@ -157,7 +157,7 @@ arista.config.vars = {
 	-- Access for donators.
 	donatorAccess = "tpew",
 	-- Use localised voice chat.
-	localVoice = false,
+	localVoice = true,
 	-- Amount to multiply donators salary by.
 	donatorMult = 2,
 	-- If you want to stop props killing people.

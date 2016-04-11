@@ -15,5 +15,5 @@ function vehicle:validDriver()
 end
 
 function vehicle:isTouchable(ply)
-	return (CLIENT or not self:validDriver()) and (arista.utils.isAdmin(ply) or self:isChair())
+	return (CLIENT or not self:validDriver()) and (ply:IsAdmin() or self:isChair())
 end

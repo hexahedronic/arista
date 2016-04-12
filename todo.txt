@@ -28,6 +28,7 @@
 [-] Readd sound to QButtons in derma implementation
 [-] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
 [-] Fix unownable door-groups (master/slaves)
+[ ] Name validation, alpha only, length, ect
 
 - Update / Improve
 [-] Remake HUD Design

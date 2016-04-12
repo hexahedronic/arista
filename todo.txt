@@ -63,7 +63,8 @@
 [-] Wandering NPCs
 [-] Guesture menu (hands up, ect)
 [-] Realistic text signs (with actual models)
-[-] Area display (intergrated)
+[ ] Area display (intergrated); people really like this idea
+[-] Pickpocketing GUI (container that shows currently equiped weapons), use on chloroformed/sleeping
 
 - Finalising
 [ ] CLOSED-ALPHA (1 day closed testing for immediate, easily spottable errors) (8 Slots)

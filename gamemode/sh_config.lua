@@ -196,7 +196,7 @@ arista.config.vars = {
 	-- Radius you can talk to people in.
 	talkRadius = 300,
 	-- Server's website.
-	serverWebsite = "arista RolePlay: http://www.hexahedronic.org/",
+	serverWebsite = "arista rp framework",
 	-- Time between 'paydays'.
 	earningInterval = 360,
 	-- Comamnd prefix.
@@ -256,7 +256,7 @@ arista.config.vars = {
 		["models/props_junk/trashbin01a.mdl"] 											= {10,"Bin"},
 		["models/props_wasteland/kitchen_stove001a.mdl"]						= {5, "Oven"},
 		["models/props_wasteland/kitchen_stove002a.mdl"]						= {5, "Oven"},
-		["models/props_c17/furniturewashingmachine001a.mdl"]						= {5, "Washing Machine"},
+		["models/props_c17/furniturewashingmachine001a.mdl"]				= {5, "Washing Machine"},
 	},
 	-- Models that are blocked (if no prop protection addon is suplied).
 	blockedModels = {
@@ -289,6 +289,10 @@ arista.config.plugins = {
 
 	-- OFFICALS: How long should the mayor/president have god mode for?
 	officalsMayorGod = 60,
+	-- OFFICALS: The maximum value tax can be set to.
+	officalsMaxTax = 20,
+	-- OFFICALS: Default amount of tax.
+	officalsDefaultTax = 0,
 }
 
 arista.config.costs = {

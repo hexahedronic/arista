@@ -84,6 +84,7 @@ function arista.eventHooks.earning()
 	for _, ply in ipairs(player.GetAll()) do
 		if ply:Alive() and not ply:isArrested() then
 			local salary = ply:getSalary()
+			salary = hook.Run("AdjustSalaryEarning", ply, salary) or salary or 100
 			ply:giveMoney(salary)
 
 			-- Print a message to the player letting them know they received their salary.

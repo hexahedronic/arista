@@ -92,7 +92,7 @@ function PLUGIN:DrawBottomBars(bar)
 	local speedkph = math.floor(length * multKph)
 	local speedmph = math.floor(length * multMph)
 
-	local petrol = math.Round(vehicle:getAristaInt("petrol") or 100) -- Round is a bit less efficent but it's more appropriate here
+	local petrol = math.floor((vehicle:getAristaInt("petrol") or 100) + 0.5) -- Round is a bit less efficent but it's more appropriate here
 	local hp = vehicle:Health() -- Why network something that allready gets sorted by source?
 
 	-- Draw the stamina bar.

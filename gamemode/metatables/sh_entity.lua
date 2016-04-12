@@ -44,7 +44,7 @@ end
 
 function entity:toolForbidden()
 	local class = self:GetClass()
-	return class:find("camera") or arista.entity.isDoor(class, true) or class:find("vehicle")
+	return class:find("camera") or arista.entity.isDoor(self, true) or class:find("vehicle")
 end
 
 if SERVER then

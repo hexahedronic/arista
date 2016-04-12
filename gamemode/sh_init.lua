@@ -251,7 +251,7 @@ function GM:CanTool(ply, trace, tool)
 	-- todo: maybe config for ignored tools?
 
 	-- Check if the trace entity is valid.
-	if IsValid(ent) then
+	if ent and IsValid(ent) then
 		-- Overwrite certain ents that should not be tooled no matter what
 		if tool ~= "remover" and not ply:IsAdmin() and ent:toolForbidden() then
 			if doLog then arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.USE, ply, " tried (and failed) to use tool ", tool, " on ", ent, " (ent.toolForbbiden).") end

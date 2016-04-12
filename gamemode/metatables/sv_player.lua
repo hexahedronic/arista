@@ -424,7 +424,7 @@ function player:knockOut(time, velocity)
 
 	-- Try to send it flying in the same direction as us.
 	local tid = "Ragdoll Force Application " .. self:UniqueID()
-	timer.Create(tid, 0.05, 5, function()
+	timer.Create(tid, 0.05, 2, function()
 		if not IsValid(self) then timer.Destroy(tid) return end
 		doforce(ragdoll, (velocity or self:GetVelocity()) * 5)
 	end)

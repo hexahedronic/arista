@@ -259,9 +259,9 @@ function GM:PlayerSpawnProp(ply, model)
 	-- gc me please.
 	ent = nil
 
-	if (radius > 100 and not ply:HasAccess("e")) --Only donators go above 100
-	or (radius > 200 and not ply:HasAccess("m")) --Only mods go above 200
-	or (radius > 300 and not ply:HasAccess("a")) then --Only admins go above 300.
+	if (radius > 100 and not ply:hasAccess("e")) --Only donators go above 100
+	or (radius > 200 and not ply:hasAccess("m")) --Only mods go above 200
+	or (radius > 300 and not ply:hasAccess("a")) then --Only admins go above 300.
 		ply:notify("AL_YOU_PROP_TOOBIG")
 
 		return false

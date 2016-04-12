@@ -8,6 +8,6 @@ function PLUGIN:DrawBottomBars(bar)
 
 	-- Check if the hunger is smaller than 100.
 	if hunger < 100 then
-		GAMEMODE:DrawBar("Default", bar.x, bar.y, bar.width, bar.height, color_darkgreen, arista.lang:Get"AL_HUD_HUNGER" .. hunger .. "%", 100, hunger, bar, "icon16/cake")
+		GAMEMODE:DrawBar("Default", bar.x, bar.y, bar.width, bar.height, color_purpleblue, arista.lang:Get"AL_HUD_HUNGER" .. 100 - hunger .. "%", 100, hunger, bar, "icon16/cake")
 	end
 end

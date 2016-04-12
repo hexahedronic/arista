@@ -52,7 +52,7 @@ arista.config.defaults.jobCategories = {CATEGORY_VEHICLES, CATEGORY_MISC}
 if (GM or GAMEMODE):GetPlugin("officals") then
 GROUP_OFFICIALS	= arista.team.addGroup("Officials", "Join the force for 'Public Good', maintaining law and order.", "P")
 
-GANG_OFFICIALS	= arista.team.addGang(GROUP_OFFICIALS, "The Officials", "models/player/breen.mdl", "Enough red tape to drown a continent")
+GANG_OFFICIALS	= arista.team.addGang(GROUP_OFFICIALS, "The Officials", "models/player/breen.mdl", "Enough red tape to drown a continent.")
 GANG_POLICE			= arista.team.addGang(GROUP_OFFICIALS, "The Police", "models/player/riot.mdl", "Less talk, more action!")
 
 TEAM_MAYOR = arista.team.add("Mayor", {
@@ -177,7 +177,7 @@ TEAM_SECRETARY = arista.team.add("Secretary", {
 end
 
 
-GROUP_CIVILIANS	= arista.team.addGroup("Civilians", "Join the ordinary and (generally) law-abiding civilians")
+GROUP_CIVILIANS	= arista.team.addGroup("Civilians", "Join the ordinary and (generally) law-abiding civilians.")
 GANG_CIVILIANS	= arista.team.addGang(GROUP_CIVILIANS, "The Civilians", "models/player/Group01/male_07.mdl", "Keep me out of this!")
 
 TEAM_CITIZEN = arista.team.add("Citizen", {
@@ -211,7 +211,7 @@ TEAM_GUNDEAL = arista.team.add("Gun Dealer", {
 		level = 1,
 		group = GROUP_CIVILIANS,
 	},
-	canmake = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND, CATEGORY_POLICE_WEAPONS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_AMMO},
+	canmake = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND, CATEGORY_POLICE_WEAPONS, CATEGORY_WEAPONS, CATEGORY_AMMO}, -- I might change cop weapons here
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_EXPLOSIVES},
 })
 
@@ -235,6 +235,50 @@ TEAM_CHEF = arista.team.add("Chef", {
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
 })
 end
+
+TEAM_DOCTOR = arista.team.add("Doctor", {
+	color = Color(125, 225, 150, 255),
+	description = "Deals medical supplies to the city's inhabitants.",
+
+	males = "models/player/Group02/male_08.mdl",
+	females = "models/player/Group02/Female_02.mdl",
+
+	salary = 250,
+	limit = 5,
+
+	access = "h",
+
+	group = {
+		gang = GANG_CIVILIANS,
+		access = "",
+		level = 1,
+		group = GROUP_CIVILIANS,
+	},
+	canmake = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND, CATEGORY_FOOD, CATEGORY_ALCOHOL, CATEGORY_DRINKS},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
+})
+
+GROUP_UNDERGROUND	= arista.team.addGroup("The Underground", "Join the underground for more fun, but harsher treatment if caught.")
+GANG_UNDERGROUND	= arista.team.addGang(GROUP_UNDERGROUND, "The Underground", "models/player/Group03/male_07.mdl", "'Fuck the police!'")
+
+TEAM_BLACKMARKETDEALER = arista.team.add("Blackmarket Dealer", {
+	color = Color(125, 125, 125, 255),
+	description = "Supplys people with goods not found in the public market.",
+
+	salary = 100,
+	limit = 4,
+
+	access = "",
+
+	group = {
+		gang = GANG_UNDERGROUND,
+		access = "",
+		level = 1,
+		group = GROUP_UNDERGROUND,
+	},
+	canmake = {CATEGORY_VEHICLES, CATEGORY_EXPLOSIVES, CATEGORY_CONTRABAND, CATEGORY_POLICE_WEAPONS, CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_AMMO},
+})
+
 
 -- Default job.
 TEAM_DEFAULT = TEAM_CITIZEN

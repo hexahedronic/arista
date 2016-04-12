@@ -324,52 +324,6 @@ function PLUGIN:PlayerUnwarrant(ply, target)
 	end
 end
 
---[[
-local doors = {
-	{"prop_dynamic","models/props_lab/elevatordoor.mdl",Angle(000,000,000),Vector(-6866.8232421875,-9445.345703125,73.03125),"Lift Access"},
-	{"prop_dynamic","models/props_lab/elevatordoor.mdl",Angle(000,000,000),Vector(-6768.6274414063,-9500.35546875,841.03125),"Cells + Commander's Office"},
-	{"prop_dynamic","models/props_lab/elevatordoor.mdl",Angle(000,000,000),Vector(-7552.4541015625,-9159.3251953125,841.03125),"Cells"},
-	{"prop_dynamic","models/props_lab/elevatordoor.mdl",Angle(000,090,000),Vector(-6919.013671875,-9440.412109375,1481.03125),"Quartermaster's Office"},
-	{"prop_dynamic","models/props_lab/elevatordoor.mdl",Angle(000,090,000),Vector(-6829.3862304688,-9431.8671875,2617.03125),"Mayor's Suite"},
-	{"prop_dynamic","models/props_lab/elevatordoor.mdl",Angle(000,000,000),Vector(-6965.9765625,-9148.5576171875,2489.03125),"Mayor's Office"},
-}
-function PLUGIN:InitPostEntity()
-	if (game.GetMap():lower() ~= "rp_evocity_v2d") then return end
-	for _,tab in ipairs(doors) do
-		ent = ents.Create(tab[1])
-		if (not IsValid(ent)) then
-			ErrorNoHalt("couldn't create a  "..tab[1].."!")
-		else
-			ent:SetAngles(tab[3])
-			ent:SetModel(tab[2])
-			ent:SetPos(tab[4])
-			if (tab[1] == "prop_dynamic") then
-				ent:SetKeyValue("solid",6)
-				ent:SetKeyValue("MinAnimTime",	1)
-				ent:SetKeyValue("MaxAnimTime",	5)
-			else
-				ent:SetKeyValue("hardware",		1)
-				ent:SetKeyValue("distance",		90)
-				ent:SetKeyValue("speed",		100)
-				ent:SetKeyValue("returndelay",	-1)
-				ent:SetKeyValue("spawnflags",	8192)
-				ent:SetKeyValue("forceclosed",	0)
-			end
-			ent:Spawn()
-			ent:Activate()
-			ent.PhysgunDisabled = true
-			ent.m_tblToolsAllowed = {}
-			ent._DoorState = "closed"
-			ent._Autoclose = 5
-			arista.entity.makeOwnable(ent)
-			arista.entity.setOwnerGang(ent,1,1)
-			arista.entity.setName(ent,tab[5])
-			ent:Lock()
-			ent:SetNWString("Name","GHQ")
-		end
-	end
-end]]
-
 function PLUGIN:PlayerKnockedOut(victim, attacker)
 	if not self.mayor then self:LoadData() end
 
@@ -581,7 +535,7 @@ arista.command.add("unlockdown", "b", 0, function(ply)
 		if self:IsAuthorised(ply) then
 			ply:sayRadio("Mayor, could you end the lockdown please?")
 		else
-			self:SayRequest(ply,"Mayor, I suggest you end the lockdown.")
+			self:SayRequest(ply, "Mayor, I suggest you end the lockdown.")
 		end
 
 		return false -- Only the mayor can fufil our wish.

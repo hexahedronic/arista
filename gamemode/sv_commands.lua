@@ -98,7 +98,7 @@ arista.command.add("givemoney", "", 1, function(ply, amt)
 
 	ply:notify("AL_PLAYER_YOU_GAVE", victim:Name(), amt)
 	victim:notify("AL_PLAYER_GAVE_YOU", ply:Name(), amt)
-end, "Commands", "<amount>", "Give some money to the player you're looking at.", true);
+end, "AL_COMMAND_CAT_COMMANDS", true)
 
 -- A command to drop money.
 local moneyDist = 255^2

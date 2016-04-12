@@ -371,6 +371,15 @@ arista.lang.tbl.EN = {
 	["AL_COMMAND_UNLOCKDOWN"] = "Request the end of or end the current lockdown.",
 	["AL_COMMAND_UNLOCKDOWN_HELP"] = "",
 
+	["AL_COMMAND_DROP"] = "Put in for DarkRP players, do not use.",
+	["AL_COMMAND_DROP_HELP"] = "",
+
+	["AL_COMMAND_WARRANT"] = "Warrant a player.",
+	["AL_COMMAND_WARRANT_HELP"] = "<player> <search|arrest>",
+
+	["AL_COMMAND_UNWARRANT"] = "Unwarrant a player.",
+	["AL_COMMAND_UNWARRANT_HELP"] = "<player>",
+
 
 	["AL_COMMAND_CAT_ADMIN"] = "Admin Commands",
 

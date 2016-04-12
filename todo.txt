@@ -49,7 +49,7 @@
 - Plugins
 [X] Plugin mangement/handling
 
-[ ] Vehicle handling
+[#] Vehicle handling
 [X] Officals
 [X] Hunger
 [X] Flashlight battery

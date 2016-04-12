@@ -70,6 +70,7 @@ function GM:LoadItems()
 				local filePath = path .. filename .. "/" .. item
 
 				if arista.file.valid(item) and item ~= "init.lua" then
+					if arista.config.vars.disabledItems[filename .. "/" .. item] then continue end
 					ITEM = arista.item.meta()
 
 					if SERVER then AddCSLuaFile(filePath) end

@@ -258,6 +258,14 @@ arista.config.vars = {
 		["models/props_wasteland/kitchen_stove002a.mdl"]						= {5, "Oven"},
 		["models/props_c17/furniturewashingmachine001a.mdl"]				= {5, "Washing Machine"},
 	},
+	-- Any default items not to load.
+	disabledItems = {
+		["misc/test"] = true,
+	},
+	-- Any default plugins not to load.
+	disabledPlugins = {
+		["test"] = true,
+	},
 	-- Models that are blocked (if no prop protection addon is suplied).
 	blockedModels = {
 		"models/cranes/crane_frame.mdl",

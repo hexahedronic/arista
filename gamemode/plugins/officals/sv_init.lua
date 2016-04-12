@@ -224,10 +224,10 @@ function PLUGIN:PlayerCanWarrant(ply, target, class)
 		return false
 	end
 
-	local team = arista.team.get(ply:Team())
-	if not team then return end
+	local plyTeam = arista.team.get(ply:Team())
+	if not plyTeam then return end
 
-	if team.mayor or team.vicemayor then -- The mayor can always warrant.
+	if plyTeam.mayor or plyTeam.vicemayor then -- The mayor can always warrant.
 		return true
 	end
 
@@ -255,7 +255,7 @@ function PLUGIN:PlayerCanWarrant(ply, target, class)
 		return false -- Only the mayor can fufil our wish.
 	end
 
-	if team.commander then -- If there's no mayor then the police commander handles warrants.
+	if plyTeam.commander then -- If there's no mayor then the police commander handles warrants.
 		return true
 	end
 
@@ -269,7 +269,7 @@ function PLUGIN:PlayerCanWarrant(ply, target, class)
 		return false -- We still can't do it ourself.
 	end
 
-	if team.officer then -- The cat is away so the mice do play.
+	if plyTeam.officer then -- The cat is away so the mice do play.
 		return true
 	end
 

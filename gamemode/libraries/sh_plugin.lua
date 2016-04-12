@@ -13,6 +13,8 @@ function GM:LoadPlugins()
 
 	for _, id in ipairs(folders) do
 		if not id:find(".", 1, true) then
+			if arista.config.vars.disabledPlugins[id] then continue end
+
 			PLUGIN = {}
 
 			if arista.file.exists(path .. id .. "/sh_init.lua") then

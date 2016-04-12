@@ -143,7 +143,7 @@ arista.command.add("demote", "", 2, function(ply, target, ...)
 
 	local reason = table.concat({...}, " "):sub(1, 65):Trim()
 	if not reason or reason == "" or (reason:len() < 5 and not ply:IsSuperAdmin()) then
-		return false, "You must specify a reason!"
+		return false, "AL_CANNOT_NOREASON"
 	end
 
 	if gamemode.Call("PlayerCanDemote", ply, victim) == false then
@@ -230,59 +230,58 @@ do --isolate vars
 	end, "AL_COMMAND_CAT_COMMANDS")
 end
 
---[[
-
 -- A command to drop your current weapon.
-cider.command.add("drop", "b", 0, function()
-	return false, "Use /holster instead.";
-end, "Commands", nil, "Put in for DarkRP players. Do not use.");
+arista.command.add("drop", "", 0, function()
+	-- todo: lang
+	return false, "Use /holster instead."
+end, "AL_COMMAND_CAT_COMMANDS")
 
 -- A command to warrant a player.
-cider.command.add("warrant", "b", 1, function(ply, arguments)
-	local target = player.Get(arguments[1])
+arista.command.add("warrant", "", 1, function(ply, target, class)
+	local target = arista.player.get(target)
+	if not target then
+		return false, "AL_INVALID_TARGET"
+	end
 
 	-- Get the class of the warrant.
-	local class = string.lower(arguments[2] or "");
+	local class = string.lower(class or "")
 
 	-- Check if a second argument was specified.
-	if (class == "search" or class == "arrest") then
-		if (target) then
-			if ( target:Alive() ) then
-				if (target._Warranted ~= class) then
-					if (!target.cider._Arrested) then
-						if (CurTime() > target._CannotBeWarranted) then
-							if ( hook.Call("PlayerCanWarrant",GAMEMODE, ply, target, class) ) then
-								hook.Call("PlayerWarrant",GAMEMODE, ply, target, class);
+	if class == "search" or class == "arrest" then
+		if target:Alive() then
+			if target:hasWarrant() ~= class then
+				if not target:isArrested() then
+					if CurTime() > target:getAristaVar("cannotBeWarranted") then
+						if hook.Run("PlayerCanWarrant", ply, target, class) ~= false then
+							hook.Run("PlayerWarrant", ply, target, class)
 
-								-- Warrant the player.
-								target:Warrant(class);
-							end
-						else
-							return false, target:Name().." has only just spawned!";
+							-- Warrant the player.
+							target:warrant(class)
 						end
 					else
-						return false, target:Name().." is already arrested!";
+						return false, "%s has only just spawned!", target:Name()
 					end
 				else
-					if (class == "search") then
-						return false, target:Name().." is already warranted for a search!";
-					elseif (class == "arrest") then
-						return false, target:Name().." is already warranted for an arrest!";
-					end
+					return false, "%s is already arrested!", target:Name()
 				end
 			else
-				return false, target:Name().." is dead and cannot be warranted!";
+				if class == "search" then
+					-- todo: lang
+					return false,"%s is already warranted for a search!", target:Name()
+				else
+					return false, "%s is already warranted for an arrest!", target:Name()
+				end
 			end
 		else
-			return false, arguments[1].." is not a valid player!"
+			return false, "%s is dead and cannot be warranted!", target:Name()
 		end
 	else
 		return false, "Invalid warrant type. Use 'search' or 'arrest'"
 	end
-end, "Commands", "<player> <search|arrest>", "Warrant a player.");
+end, "AL_COMMAND_CAT_COMMANDS", true)
 
 -- A command to unwarrant a player.
-cider.command.add("unwarrant", "b", 1, function(ply, arguments)
+arista.command.add("unwarrant", "", 1, function(ply, target)
 	local target = player.Get(arguments[1])
 
 	-- Check to see if we got a valid target.
@@ -300,8 +299,9 @@ cider.command.add("unwarrant", "b", 1, function(ply, arguments)
 	else
 		return false, arguments[1].." is not a valid player!"
 	end
-end, "Commands", "<player>", "Unwarrant a player.");
+end, "AL_COMMAND_CAT_COMMANDS", true)
 
+--[[
 do -- Reduce the upvalues poluting the area.
 	local function conditional(ply, pos)
 		return IsValid(ply) and ply:GetPos() == pos;

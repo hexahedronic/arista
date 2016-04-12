@@ -14,6 +14,8 @@ function PLUGIN:LoadData()
 
 	self.officer = arista.team.getByMember("officer")
 	if not self.officer then error("OFFICALS: No police officer team found!") end
+
+	self.tax = arista.config.plugins.officalsDefaultTax
 end
 
 --Check if they're the right group/gang
@@ -37,7 +39,7 @@ function PLUGIN:SayRequest(ply, text)
 
 	local filter = {ply}
 	for k, v in ipairs(player.GetAll()) do
-		if self:IsAuthorised(v, true) then
+		if self:IsAuthorised(v) then
 			filter[#filter+1] = v
 		end
 	end
@@ -421,13 +423,78 @@ function PLUGIN:PlayerCanChangeLaws(ply)
 end
 
 -- Called when a player attempts to demote another.
-function PLUGIN:PlayerCanDemote(ply,target)
+function PLUGIN:PlayerCanDemote(ply, target)
 	if not self.mayor then self:LoadData() end
 
 	if (ply:Team() == self.mayor.index or (self.vicemayor and ply:Team() == self.vicemayor.index)) and self:IsAuthorised(target) then
 		return true
 	end
 end
+
+-- Taxes
+local _taxCollect = 0
+function PLUGIN:AdjustSalaryEarning(ply, salary)
+	if not self.mayor then self:LoadData() end
+	if team.NumPlayers(self.mayor.index) <= 0 or ply:Team() == self.mayor.index or self.tax < 1 then return end
+
+	local taxes = salary * self.tax
+	_taxCollect = _taxCollect + taxes
+
+	-- todo: language, city bank
+	local f = function()
+		if team.NumPlayers(self.mayor.index) <= 0 then return end
+		local mayor = team.GetPlayers(self.mayor.index)[1]
+
+		mayor:giveMoney(_taxCollect)
+		mayor:notify("You collected £%i in taxes from your citizens!", _taxCollect)
+
+		_taxCollect = 0
+	end
+	timer.Create("Officals_TaxCollect", 0.5, 1, f)
+
+	ply:notify("You paid £%i in taxes!", taxes)
+	return salary - taxes
+end
+
+-- A command to set the tax.
+arista.command.add("tax", "", 1, function(player, amt)
+	local self = GAMEMODE:GetPlugin("officals")
+	if not self.mayor then self:LoadData() end
+
+	if player:Team() == self.mayor.index then
+		if not amt then return false end
+
+		amt = tonumber(amt)
+		if not amt then return false end
+
+		local tax = math.floor(amt)
+
+		if tax < 0 then
+			player:notify("AL_INVALID_AMOUNT")
+		return false end
+
+		local max = arista.config.plugins.officalsMaxTax
+		if tax > max then
+			return false, "The maximum amount of tax is %i%%.", max
+		else
+			player:notify("You've set the tax to %i%%.", tax)
+
+			self.tax = tax / 100
+		end
+
+		if tax == 0 then
+			arista.chatbox.add(nil, player, "broadcast", "I have disabled the taxes!")
+		elseif tax <= (max * 0.5) then
+			arista.chatbox.add(nil, player, "broadcast", "I have set the tax to a low amount of " .. tax .. "% per payday.")
+		elseif tax > (max * 0.5) and tax <= (max * 0.75) then
+			arista.chatbox.add(nil, player, "broadcast", "I have set the tax to a medium amount of " .. tax .. "% per payday.")
+		elseif tax > (max * 0.75) and tax <= max then
+			arista.chatbox.add(nil, player, "broadcast", "I have set the tax to a high amount of " .. tax .. "% per payday.")
+		end
+	else
+		player:notify("You need to be ".. self.mayor.name .. " to change the tax!")
+	end
+end, "AL_COMMAND_CAT_COMMANDS", true)
 
 -- A command to broadcast to all players.
 arista.command.add("broadcast", "", 1, function(ply, args)
@@ -454,6 +521,7 @@ end, "AL_COMMAND_CAT_COMMANDS")
 -- A command to request assistance from the Police and Mayor.
 arista.command.add("request", "", 1, function(ply, args)
 	local self = GAMEMODE:GetPlugin("officals")
+	if not self.mayor then self:LoadData() end
 
 	local words = table.concat(args, " "):Trim()
 
@@ -470,40 +538,54 @@ end, "AL_COMMAND_CAT_COMMANDS")
 
 -- A command to initiate lockdown.
 arista.command.add("lockdown", "", 0, function(ply)
-	if (self.Lockdown) then
+	local self = GAMEMODE:GetPlugin("officals")
+	if not self.mayor then self:LoadData() end
+
+	if self.Lockdown then
 		return false, "There is already a lockdown active!"
-	elseif (ply:Team() == TEAM_MAYOR) then
+	elseif ply:Team() == self.mayor.index then
 		self:SayBroadcast(ply, "A lockdown is in progress. Please return to your homes.")
+
 		self.Lockdown = true
 		SetGlobalBool("lockdown", true)
+
 		return true
-	elseif (team.NumPlayers(TEAM_MAYOR) > 0) then -- If there's a mayor and we're not him, we gotta beg.
-		if (self:IsAuthorised(ply)) then
+	elseif team.NumPlayers(self.mayor.index) > 0 then -- If there's a mayor and we're not him, we gotta beg.
+		if self:IsAuthorised(ply) then
 			ply:sayRadio("Mayor, could you initiate a lockdown please?")
 		else
-			self:SayRequest(ply,"Mayor, I suggest you initiate a lockdown.")
+			self:SayRequest(ply, "Mayor, I suggest you initiate a lockdown.")
 		end
+
 		return false -- Only the mayor can fufil our wish.
 	end
+
 	return false, "Only the Mayor can initiate a lockdown!"
 end, "AL_COMMAND_CAT_COMMANDS")
 
 -- A command to cancel lockdown.
 arista.command.add("unlockdown", "b", 0, function(ply)
-	if (not self.Lockdown) then
+	local self = GAMEMODE:GetPlugin("officals")
+	if not self.mayor then self:LoadData() end
+
+	if not self.Lockdown then
 		return false, "There isn't an active lockdown!"
-	elseif (ply:Team() == TEAM_MAYOR) then
-		self:SayBroadcast(ply, "The lockdown has been cancelled.")
+	elseif ply:Team() == self.mayor.index then
+		self:SayBroadcast(ply, "The lockdown has ended.")
+
 		self.Lockdown = false
 		SetGlobalBool("lockdown", false)
+
 		return true
-	elseif (team.NumPlayers(TEAM_MAYOR) > 0) then -- If there's a mayor and we're not him, we gotta beg.
-		if (self:IsAuthorised(ply)) then
+	elseif team.NumPlayers(self.mayor.index) > 0 then -- If there's a mayor and we're not him, we gotta beg.
+		if self:IsAuthorised(ply) then
 			ply:sayRadio("Mayor, could you end the lockdown please?")
 		else
 			self:SayRequest(ply,"Mayor, I suggest you end the lockdown.")
 		end
+
 		return false -- Only the mayor can fufil our wish.
 	end
+
 	return false, "Critical error 2194" -- Lockdown without a mayor? This is not possible.
 end, "AL_COMMAND_CAT_COMMANDS")

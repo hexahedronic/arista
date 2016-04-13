@@ -445,7 +445,7 @@ function arista.lang.findMissingLocalization()
 
 	arista.logs.logNoPrefix(arista.logs.E.LOG, "Missing calls:")
 	for i, v in ipairs(missing) do
-		print("-", v.s)
+		print("\n-", v.s)
 		print(v.t)
 	end
 end
@@ -461,7 +461,7 @@ function arista.lang:Get(str, ...)
 
 	if not form then
 		form = str
-		missing[#missing+1] = {s = form, t = debug.traceback()}
+		if form:StartWith("AL_") then missing[#missing+1] = {s = form, t = debug.traceback()} end
 	end
 
 	form = form:format(...)

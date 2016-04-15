@@ -19,7 +19,7 @@ arista.lang:Add("AL_COMMAND_ENGINE", {
 })
 
 arista.lang:Add("AL_COMMAND_ENGINE_HELP", {
-	EN = "<on/off>",
+	EN = "<on|off>",
 })
 
 function PLUGIN:PlayerBindPress(ply, bind, pressed)

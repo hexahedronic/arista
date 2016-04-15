@@ -47,6 +47,7 @@ function PLUGIN:makeVehicle(player, pos, ang, model, class, vname, vtable)
 	-- We need to override the class in the case of the Jeep, because it
 	-- actually uses a different class than is reported by GetClass
 	ent.ClassOverride = class
+
 	gamemode.Call("PlayerSpawnedVehicle", player, ent)
 
 	return ent
@@ -127,7 +128,7 @@ function PLUGIN:PlayerSpawnedVehicle(ply, car)
 			arista.logs.log(arista.logs.E.ERROR, "Vehicles: Cannot get passenger seat data!")
 		return end
 
-		for i, v in ipairs(tab.Passengers) do
+		for i, v in pairs(tab.Passengers) do
 			local seat = ents.Create("prop_vehicle_prisoner_pod")
 				if not IsValid(seat) then
 					arista.logs.log(arista.logs.E.ERROR, "Vehicles: Cannot spawn passenger seat entity!")
@@ -145,6 +146,7 @@ function PLUGIN:PlayerSpawnedVehicle(ply, car)
 			seat:SetCollisionGroup(COLLISION_GROUP_WORLD)
 
 			if tab.HideSeats then
+				seat:SetRenderMode(RENDERMODE_TRANSALPHA)
 				seat:SetColor(color_transparent)
 			end
 
@@ -170,7 +172,7 @@ function PLUGIN:PlayerSpawnedVehicle(ply, car)
 	end
 
 	car:networkAristaVar("engineOn", false)
-	car:Fire('turnoff', '', 10)
+	car:Fire('turnoff', '', 0)
 end
 
 function PLUGIN:CanManufactureCar(ply, item)
@@ -305,7 +307,7 @@ end
 function PLUGIN:PlayerUse(ply, ent)
 	if not ent:IsVehicle() then
 		return
-	elseif ply:InVehicle() or ply:isUnconscious() then
+	elseif ply:isUnconscious() then
 		return false
 	elseif ply:isBlacklisted("cat", CATEGORY_VEHICLES) > 0 then
 		ply:blacklistAlert("cat", CATEGORY_VEHICLES, GAMEMODE:GetCategory(CATEGORY_VEHICLES).name)
@@ -351,7 +353,7 @@ function PLUGIN:PlayerUse(ply, ent)
 			return true -- No one's driving? Let's get in!
 		end
 
-		for _, v in ipairs(tab.Passengers) do
+		for _, v in pairs(tab.Passengers) do
 			if IsValid(v.Ent) and not IsValid(v.Ent:GetDriver()) then
 				v.Ent:Fire("unlock", "", 0)
 					ply:EnterVehicle(v.Ent)
@@ -438,7 +440,7 @@ arista.command.add("engine", "", 1, function(player, toggle)
 	else
 		player:notify("You need to be inside a car!")
 	end;
-end, "Commands\", \"<on|off>\", \"Turn engine on or off.", true)
+end, "AL_COMMAND_CAT_COMMANDS", true)
 
 function PLUGIN:KeyPress(ply, key)
 	if key == IN_USE and ply:InVehicle() then

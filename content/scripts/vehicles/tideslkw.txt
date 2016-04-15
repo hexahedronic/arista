@@ -25,13 +25,13 @@
 		"gear"			"0.84"		// 5th gear
 		"shiftuprpm"		"1500"
 		"shiftdownrpm"		"300"
-	
+
 		"boost"
 		{
 //			"force"			"1.2"	// 1.5 car body mass * gravity * inches / second ^ 2
 			"duration"		"1.0"	// 1 second of boost
 			"delay"			"10"	// 15 seconds before you can use it again
-			"torqueboost"	"1"	// enable "sprint" mode of vehicle, not	force type booster			
+			"torqueboost"	"1"	// enable "sprint" mode of vehicle, not	force type booster
 			"maxspeed"		"65"	// maximum turbo speed
 			"force"			"1.5"	// use for value as a boost factor
 		}
@@ -44,7 +44,7 @@
 		"steeringExponent"	"1.4"	// steering function is linear, then raised to this power to be slower at the beginning of the curve, faster at the end
 		"slowcarspeed"		"15"
 		"fastcarspeed"		"30"
-		"slowSteeringRate"	"4.0"		
+		"slowSteeringRate"	"4.0"
 		"fastSteeringRate"	"2.0"
 		"steeringRestRateSlow"	"4.0"
 		"steeringRestRateFast"	"2.0"
@@ -154,110 +154,110 @@
 	"state"
 	{
 		"name"		"SS_START_WATER"
-		"sound"		"truck_start_in_water"
+		"sound"		"ATV_start_in_water"
 	}
 
 	"state"
 	{
 		"name"		"SS_START_IDLE"
-		"sound"		"truck_engine_start"
+		"sound"		"ATV_engine_start"
 	}
 	"state"
 	{
 		"name"		"SS_SHUTDOWN_WATER"
-		"sound"		"truck_stall_in_water"
+		"sound"		"ATV_stall_in_water"
 	}
 	"state"
 	{
 		"name"		"SS_IDLE"
-		"sound"		"truck_engine_idle"
+		"sound"		"ATV_engine_idle"
 	}
 	"state"
 	{
 		"name"		"SS_REVERSE"
-		"sound"		"truck_reverse"
+		"sound"		"ATV_reverse"
 		"min_time"	"0.5"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_0"
-		"sound"		"truck_rev"
+		"sound"		"ATV_rev"
 		"min_time"	"0.75"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_0_RESUME"
-		"sound"		"truck_engine_idle"
+		"sound"		"ATV_engine_idle"
 		"min_time"	"0.75"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_1"
-		"sound"		"truck_firstgear"
+		"sound"		"ATV_firstgear"
 		"min_time"	"0.25"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_1_RESUME"
-		"sound"		"truck_firstgear_noshift"
+		"sound"		"ATV_firstgear_noshift"
 		"min_time"	"0.5"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_2"
-		"sound"		"truck_secondgear"
+		"sound"		"ATV_secondgear"
 		"min_time"	"0.25"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_2_RESUME"
-		"sound"		"truck_secondgear_noshift"
+		"sound"		"ATV_secondgear_noshift"
 		"min_time"	"0.5"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_3"
-		"sound"		"truck_thirdgear"
+		"sound"		"ATV_thirdgear"
 		"min_time"	"0.25"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_3_RESUME"
-		"sound"		"truck_thirdgear_noshift"
+		"sound"		"ATV_thirdgear_noshift"
 		"min_time"	"0.5"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_4"
-		"sound"		"truck_fourthgear"
+		"sound"		"ATV_fourthgear"
 		"min_time"	"0.5"
 	}
 	"state"
 	{
 		"name"		"SS_GEAR_4_RESUME"
-		"sound"		"truck_fourthgear_noshift"
+		"sound"		"ATV_fourthgear_noshift"
 		"min_time"	"0.5"
 	}
 	"state"
 	{
 		"name"		"SS_SLOWDOWN_HIGHSPEED"
-		"sound"		"truck_throttleoff_fastspeed"
+		"sound"		"ATV_throttleoff_fastspeed"
 	}
 	"state"
 	{
 		"name"		"SS_SLOWDOWN"
-		"sound"		"truck_throttleoff_slowspeed"
+		"sound"		"ATV_throttleoff_slowspeed"
 	}
 	"state"
 	{
 		"name"		"SS_TURBO"
-		"sound"		"truck_turbo_on"
+		"sound"		"ATV_turbo_on"
 		"min_time"	"2.5"
 	}
 	"state"
 	{
 		"name"		"SS_SHUTDOWN"
-		"sound"		"truck_engine_stop"
+		"sound"		"ATV_engine_stop"
 	}
 	"crashsound"
 	{
@@ -273,7 +273,7 @@
 		"sound"				"ATV_impact_heavy"
 	}
 
-	
+
 	"skid_lowfriction"		"ATV_skid_lowfriction"
 	"skid_normalfriction"	"ATV_skid_normalfriction"
 	"skid_highfriction"		"ATV_skid_highfriction"

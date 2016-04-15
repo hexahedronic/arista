@@ -25,7 +25,7 @@ end
 
 -- Called every tenth of a second that a player is on the server.
 function PLUGIN:PlayerTenthSecond(player)
-	local stamina = player:getAristaVar("stamina")
+	local stamina = player:getAristaVar("stamina") or 100
 
 	if not (player:isArrested() or player:isTied() or player._holdingEnt or player:GetMoveType() == MOVETYPE_NOCLIP) then
 		if player:KeyDown(IN_SPEED) and player:Alive() and not player:isUnconscious() and not player:getAristaVar("exhaustedCooldown") and not player:isExhausted() and player:GetVelocity():Length() > 1 and player:IsOnGround() then

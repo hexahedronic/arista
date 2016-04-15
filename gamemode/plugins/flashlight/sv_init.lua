@@ -16,7 +16,7 @@ end
 
 -- Called every tenth of a second that a player is on the server.
 function PLUGIN:PlayerTenthSecond(player)
-	local flash = player:getAristaVar("flashlight")
+	local flash = player:getAristaVar("flashlight") or 100
 
 	if not (player:isArrested() or player:isTied()) and flash ~= -1 then
 		if player:FlashlightIsOn() then

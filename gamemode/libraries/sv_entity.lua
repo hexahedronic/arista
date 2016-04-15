@@ -221,7 +221,7 @@ function arista.entity.accessChangedPlayer(entity, player, bool)
 	gamemode.Call("EntityAccessChangedPlayer", entity, player, bool)
 
 	net.Start("arista_incomingAccess")
-		net.WriteEntity(entity)
+		net.WriteUInt(entity:EntIndex(), 16)
 		net.WriteBool(bool)
 	net.Send(player)
 end

@@ -93,12 +93,12 @@ end
 
 -- Does the local player have access to the entity?
 function arista.entity.hasAccess(entity)
-	return arista._internaldata.entity_stored[entity]
+	return arista._internaldata.entity_stored[entity:EntIndex()]
 end
 
 -- Called when the player's access to an entity is changed
 local function incomingAccess(msg)
-	local ent = net.ReadEntity()
+	local ent = net.ReadUInt(16)
 	local access = net.ReadBool()
 
 	arista._internaldata.entity_stored[ent] = access
@@ -108,23 +108,12 @@ net.Receive("arista_incomingAccess", incomingAccess)
 local function wipeAccess(msg)
 	arista._internaldata.entity_stored = {}
 end
-usermessage.Hook("arista_wipeAccess",wipeAccess)
-
---[[
-local function massAccessSystem(msg)
-	local len = msg:ReadShort()
-	for i=1,len do
-		local ent,access = msg:ReadEntity(),msg:ReadBool() or nil
-		arista._internaldata.entity_stored[ent] = access
-	end
-end
-usermessage.Hook("cider_massAccessSystem",massAccessSystem)
-]]
+net.Receive("arista_wipeAccess", wipeAccess)
 
 function arista.entity.cleanTable()
-	for ent, access in pairs(arista._internaldata.entity_stored) do
-		if not IsValid(ent) or not access then
-			arista._internaldata.entity_stored[ent] = nil
+	for entidx, access in pairs(arista._internaldata.entity_stored) do
+		if not IsValid(Entity(entidx)) or not access then
+			arista._internaldata.entity_stored[entidx] = nil
 		end
 	end
 end

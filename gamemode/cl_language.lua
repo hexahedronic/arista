@@ -385,14 +385,14 @@ arista.lang.tbl.EN = {
 	["AL_COMMAND_GIVEMONEY"] = "Give the player you are looking at money.",
 	["AL_COMMAND_GIVEMONEY_HELP"] = "<amount>",
 
-	["AL_COMMANDS_SLEEP"] = "Go to sleep or wake up from sleeping.",
-	["AL_COMMANDS_SLEEP_HELP"] = "",
+	["AL_COMMAND_SLEEP"] = "Go to sleep or wake up from sleeping.",
+	["AL_COMMAND_SLEEP_HELP"] = "",
 
-	["AL_COMMANDS_TRIP"] = "Fall over whilst walking.",
-	["AL_COMMANDS_TRIP_HELP"] = "",
+	["AL_COMMAND_TRIP"] = "Fall over whilst walking.",
+	["AL_COMMAND_TRIP_HELP"] = "",
 
-	["AL_COMMANDS_FALLOVER"] = "Fall over.",
-	["AL_COMMANDS_FALLOVER_HELP"] = "",
+	["AL_COMMAND_FALLOVER"] = "Fall over.",
+	["AL_COMMAND_FALLOVER_HELP"] = "",
 
 	["AL_COMMAND_MUTINY"] = "Try to start a mutiny against your leader.",
 	["AL_COMMAND_MUTINY_HELP"] = "<leader>",

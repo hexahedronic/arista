@@ -201,6 +201,8 @@ arista.lang.tbl.EN = {
 	["AL_YOU_DONATOR_EXPIRE_DAYS"] = "Your Donator status expires in %d day(s).",
 	["AL_YOU_DONATOR_EXPIRE_HOURS"] = "Your Donator status expires in %d hour(s) %d minute(s) and %d second(s).",
 
+	["AL_YOU_DOOR_REFUND"] = "You got " .. arista.lang.currency .. "%d for selling your door.",
+
 	-- DERMA BUTTONS AND SUCH
 	["AL_DERMA_MANUFACTURE"] = "Manufacture",
 	["AL_DERMA_GIVE"] = "Give",

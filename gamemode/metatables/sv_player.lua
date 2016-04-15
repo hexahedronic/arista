@@ -209,7 +209,7 @@ function player:takeDoor(door, norefund)
 		local cost = arista.config.costs.door or 1
 		local ref = cost / 2
 
-		self:notify("You got $%d for selling your door.", ref)
+		self:notify("AL_YOU_DOOR_REFUND", ref)
 
 		self:giveMoney(ref)
 	end

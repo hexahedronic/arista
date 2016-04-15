@@ -4,7 +4,9 @@ arista.derma.door = {}
 local PANEL = {}
 
 -- Called when the panel is initialized.
-function PANEL:ExtraInit()
+function PANEL:Init()
+	QFrame.Init(self)
+
 	self:SetTitle("Door Menu")
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(true)
@@ -62,7 +64,9 @@ function PANEL:ExtraInit()
 end
 
 -- Called when the layout should be performed.
-function PANEL:ExtraPerformLayout()
+function PANEL:PerformLayout()
+	QFrame.PerformLayout(self)
+
 	local width = math.max(180, self.label:GetWide())
 	self:SetSize(8 + width + 8, 28 + self.label:GetTall() + 8 + self.textEntry:GetTall() + 8 + self.purchase:GetTall() + 8)
 

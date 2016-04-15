@@ -1,4 +1,4 @@
--- Created by Trixter, named by Q2F2, inspired by Braxen's design
+-- Created by Trixter & Q2F2, named by Q2F2, inspired by Braxen's design
 
 local matBlurScreen = Material("pp/blurscreen")
 
@@ -26,7 +26,7 @@ qderma.colors = {
 	sheetClr = Color(81, 45, 168, 200),
 }
 
-local QFrame = {}
+QFrame = {}
 
 surface.CreateFont("QFrameTitle", {
 	font = "Roboto Condensed",
@@ -62,12 +62,6 @@ function QFrame:Init()
 	self.IconSize = 16
 
 	self:DockPadding(5, self.TitleBarHeight + 5, 5, 5)
-
-	timer.Simple(0, function()
-		if self.ExtraInit then
-			self:ExtraInit()
-		end
-	end)
 end
 
 local shade = Color(0, 0, 0, 240)
@@ -100,12 +94,10 @@ end
 function QFrame:PerformLayout()
 	local titlePush = 0
 
-	if (IsValid(self.imgIcon)) then
-
+	if IsValid(self.imgIcon) then
 		self.imgIcon:SetPos(self.TitleBarHeight - (self.IconSize * 1.25), self.TitleBarHeight - (self.IconSize * 1.25))
 		self.imgIcon:SetSize(self.IconSize, self.IconSize)
 		titlePush = self.IconSize + (self.IconSize / 10)
-
 	end
 
 	self.btnClose:SetPos(self:GetWide() - 31 - 4 + 1, 0)
@@ -113,25 +105,14 @@ function QFrame:PerformLayout()
 
 	self.lblTitle:SetPos(8 + titlePush, 14 / self.TitleBarHeight)
 	self.lblTitle:SetSize(self:GetWide() - 25 - titlePush, self.TitleBarHeight)
-
-	timer.Simple(0, function()
-		if self.ExtraPerformLayout then
-			self:ExtraPerformLayout()
-		end
-	end)
 end
 
 vgui.Register("QFrame", QFrame, "DFrame")
 
 
-local QPanel = {}
+QPanel = {}
 
 function QPanel:Init()
-	timer.Simple(0, function()
-		if self.ExtraInit then
-			self:ExtraInit()
-		end
-	end)
 end
 
 function QPanel:Paint(w, h)
@@ -140,34 +121,17 @@ function QPanel:Paint(w, h)
 end
 
 function QPanel:PerformLayout()
-	timer.Simple(0, function()
-		if self.ExtraPerformLayout then
-			self:ExtraPerformLayout()
-		end
-	end)
 end
 
 vgui.Register("QPanel", QPanel, "DPanel")
 
 
---[[local QLabel = {} -- Nothing to make cool for it, maybe font only xd
-function QLabel:Paint()
-end
-vgui.Register("QLabel", QLabel, "DLabel")]]
-
-
-local QButton = {}
+QButton = {}
 
 function QButton:Init()
 	self:SetColor(qderma.colors.btnClr)
 	self:SetTall(22)
 	self.BGColor = qderma.colors.btnBg
-
-	timer.Simple(0, function()
-		if self.ExtraInit then
-			self:ExtraInit()
-		end
-	end)
 end
 
 function QButton:Paint(w, h)
@@ -197,29 +161,16 @@ function QButton:PlaySound()
 end
 
 function QButton:PerformLayout()
-	timer.Simple(0, function()
-		if self.ExtraPerformLayout then
-			self:ExtraPerformLayout()
-		end
-	end)
 end
 
 vgui.Register("QButton", QButton, "DButton")
 
 
-local QCollapsibleCategory = {}
+QCollapsibleCategory = {}
 
 function QCollapsibleCategory:Init()
 	self.BGColor = qderma.colors.collapBg
 	self.Tall = 24
-
-	--DCollapsibleCategory.Init(self)
-
-	timer.Simple(0, function()
-		if self.ExtraInit then
-			self:ExtraInit()
-		end
-	end)
 end
 
 function QCollapsibleCategory:Paint(w, h)
@@ -233,14 +184,9 @@ end
 vgui.Register("QCollapsibleCategory", QCollapsibleCategory, "DCollapsibleCategory")
 
 
-local QTextEntry = {}
+QTextEntry = {}
 
 function QTextEntry:Init()
-	timer.Simple(0, function()
-		if self.ExtraInit then
-			self:ExtraInit()
-		end
-	end)
 end
 
 function QTextEntry:Paint(w, h)
@@ -251,24 +197,14 @@ function QTextEntry:Paint(w, h)
 end
 
 function QTextEntry:PerformLayout()
-	timer.Simple(0, function()
-		if self.ExtraPerformLayout then
-			self:ExtraPerformLayout()
-		end
-	end)
 end
 
 vgui.Register("QTextEntry", QTextEntry, "DTextEntry")
 
 
-local QPropertySheet = {}
+QPropertySheet = {}
 
 function QPropertySheet:Init()
-	timer.Simple(0, function()
-		if self.ExtraInit then
-			self:ExtraInit()
-		end
-	end)
 end
 
 function QPropertySheet:Paint(w, h)
@@ -295,7 +231,7 @@ function QPropertySheet:AddSheet(label, panel, material, NoStretchX, NoStretchY,
 	Sheet.Tab.Paint = function()
 
 		surface.SetDrawColor(qderma.colors.sheetClr)
-		surface.DrawRect(0, 0, self:GetWide(), self:GetTall())
+		surface.DrawRect(0, 0, self:GetWide(), 20)
 
 	end
 
@@ -318,16 +254,6 @@ function QPropertySheet:AddSheet(label, panel, material, NoStretchX, NoStretchY,
 	self.tabScroller:AddPanel(Sheet.Tab)
 
 	return Sheet
-end
-
-function QPropertySheet:PerformLayout()
-
-	timer.Simple(0, function()
-		if self.ExtraPerformLayout then
-			self:ExtraPerformLayout()
-		end
-	end)
-
 end
 
 vgui.Register("QPropertySheet", QPropertySheet, "DPropertySheet")

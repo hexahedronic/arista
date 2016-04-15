@@ -22,7 +22,9 @@ arista.derma.menu.height = ScrH() - 40
 local PANEL = {}
 
 -- Called when the panel is initialized.
-function PANEL:ExtraInit()
+function PANEL:Init()
+	QFrame.Init(self)
+
 	self:SetTitle(arista.lang:Get"AL_DERMA_MAINMENU")
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(false)
@@ -63,7 +65,9 @@ function PANEL:Reload()
 end
 
 -- Called when the layout should be performed.
-function PANEL:ExtraPerformLayout()
+function PANEL:PerformLayout()
+	QFrame.PerformLayout(self)
+
 	self:SetVisible(arista.derma.menu.open)
 	self:SetSize(arista.derma.menu.width, arista.derma.menu.height)
 	self:SetPos(ScrW() / 2 - self:GetWide() / 2, ScrH() / 2 - self:GetTall() / 2)

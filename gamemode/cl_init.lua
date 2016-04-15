@@ -476,6 +476,7 @@ function GM:DrawInformation(text, font, x, y, color, alpha, left, callback, shad
 	return y + height + 8
 end
 
+local playerInfo = CreateClientConVar("arista_drawplayerinfo", "1", true, true)
 local matCache = {}
 -- Draw the player's information.
 function GM:DrawPlayerInformation()
@@ -483,6 +484,10 @@ function GM:DrawPlayerInformation()
 
 	local width = 0
 	local height = 0
+
+	if not playerInfo:GetBool() then
+		return width - 8, height
+	end
 
 	-- Create a table to store the text.
 	local text = {}

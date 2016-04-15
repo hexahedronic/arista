@@ -39,6 +39,22 @@ arista.lang:Add("AL_OFFICALS_CANNOT_REQUEST", {
 	EN = "There is no one to hear your request!",
 })
 
+arista.lang:Add("AL_COMMAND_TAX", {
+	EN = "Set the tax rate for the city.",
+})
+
+arista.lang:Add("AL_COMMAND_TAX_HELP", {
+	EN = "<percent>",
+})
+
+arista.lang:Add("AL_COMMAND_BROADCAST", {
+	EN = "Send a global message to everyone.",
+})
+
+arista.lang:Add("AL_COMMAND_BROADCAST_HELP", {
+	EN = "<message>",
+})
+
 -- Called when the top text should be drawn.
 function PLUGIN:DrawTopText(text)
 	if GetGlobalBool("lockdown") then

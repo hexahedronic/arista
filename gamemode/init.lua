@@ -498,6 +498,7 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("scaleDamage", 0, true) -- Floating-point
 	ply:networkAristaVar("jobTimeExpire", 0)
 	ply:networkAristaVar("jobTimeLimit", 0)
+	ply:networkAristaVar("goToSleepTime", 0)
 
 	ply:setAristaVar("nextManufactureItem", 0)
 	ply:setAristaVar("nextUseItem", 0)

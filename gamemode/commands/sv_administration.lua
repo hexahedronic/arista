@@ -69,7 +69,7 @@ local function getnamething(kind, thing)
 		local  cat = GAMEMODE:GetCategory(thing)
 		if not cat then return false, "AL_INVALID_CATEGORY" end
 
-		return cat.Name, cat.index
+		return cat.name, cat.index
 	elseif kind == "cmd" then
 	-- Command blacklist
 		local cmd = arista.command.stored[thing]
@@ -104,6 +104,8 @@ arista.command.add("blacklist", "m", 5, function(ply, target, kind, thing, time,
 
 	local kind, thing, time = string.lower(kind), string.lower(thing), tonumber(time)
 
+	if not time then return false end
+
 	if time < 1 then
 		return false, "AL_CANNOT_BLACKLIST_SHORT"
 	elseif (time > 10080 and not ply:IsSuperAdmin()) or (time > 1440 and not ply:IsAdmin()) then
@@ -135,7 +137,7 @@ arista.command.add("blacklist", "m", 5, function(ply, target, kind, thing, time,
 
 	local timeSuffix
 	time, timeSuffix = getBlacklistTime(time)
-	arista.player.notifyAll("AL_X_BLACKLIST_X_FROM_X_FOR_X_BECAUSE_X.", ply:Name(), victim:Name(), name, time, timeSuffix, reason)
+	arista.player.notifyAll("AL_X_BLACKLIST_X_FROM_X_FOR_X_BECAUSE_X", ply:Name(), victim:Name(), name, time, timeSuffix, reason)
 end, "AL_COMMAND_CAT_MOD", true) -- AL_COMMAND_CAT_MOD
 
 arista.command.add("unblacklist", "m", 3, function(ply, target, kind, thing)
@@ -189,13 +191,13 @@ arista.command.add("blacklistlist", "m", 1, function(ply, target)
 			for thing in pairs(btab) do
 				time, reason, admin = victim:isBlacklisted(kind, thing)
 
-				if time ~= 0 then
+				if tonumber(time) and time ~= 0 then
 					name = getnamething(kind, thing)
 					time = getBlacklistTime(time)
 
 					if name:len() > namelen then namelen = name:len() end
 					if admin:len() > adminlen then adminlen = admin:len() end
-					if time:len() > timelen then timelen = time:len()  end
+					if time > timelen then timelen = time  end
 
 					words[#words + 1] = {name, time, admin, reason}
 				end
@@ -227,7 +229,7 @@ arista.command.add("blacklistlist", "m", 1, function(ply, target)
 		end
 	end
 
-	player:notify("AL_BLACKLISTDETAILS")
+	ply:notify("AL_BLACKLISTDETAILS")
 end, "AL_COMMAND_CAT_MOD", true) -- AL_COMMAND_CAT_MOD
 
 -- A command to give Donator status to a player.

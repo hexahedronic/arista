@@ -237,9 +237,11 @@ function SWEP:SecondaryAttack()
 	if IsValid(ent) and self.Owner:GetPos():DistToSqr(trace.HitPos) <= range then
 		if arista.entity.isOwnable(ent) then
 			local vm = self.Owner:GetViewModel()
-			vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_right"))
+			if vm and IsValid(vm) then
+				vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_right"))
 
-			self:UpdateNextIdle()
+				self:UpdateNextIdle()
+			end
 
 			if self.Owner:KeyDown(IN_SPEED) then
 				self:SetNextPrimaryFire(CurTime() + 0.75)
@@ -281,8 +283,10 @@ end
 
 function SWEP:Reload()
 	if self.Primary.NextSwitch > CurTime() then return false end
-	if self.Owner:IsAdmin() and self.Owner:KeyDown(IN_SPEED) then
 
+	-- I cannot fucking trust anyone to not abuse this but me.
+	-- Change the steamid to your own or make it :IsAdmin() if you want.
+	if self.Owner:SteamID() == "STEAM_0:1:62445445" and self.Owner:KeyDown(IN_SPEED) then
 		if self.Primary.Super then
 			self.Primary.PunchAcceleration = 150
 			self.Primary.ThrowAcceleration = 250
@@ -300,8 +304,7 @@ function SWEP:Reload()
 		end
 
 		self.Primary.NextSwitch = CurTime() + 1
-		return
-	end
+	return end
 end
 
 function SWEP:Think()

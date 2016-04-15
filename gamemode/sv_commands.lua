@@ -49,6 +49,8 @@ arista.command.add("name", "", 0, function(ply, arguments)
 		ply:generateDefaultRPName()
 	return end
 
+	if words:match("%p") or words:match("%d") or words:len() < 7 then return end
+
 	ply:setAristaVar("rpname", words)
 
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.COMMAND, ply:Name(), "(", ply:SteamID(), ") changed their name to '", words, "'.")
@@ -282,116 +284,126 @@ end, "AL_COMMAND_CAT_COMMANDS", true)
 
 -- A command to unwarrant a player.
 arista.command.add("unwarrant", "", 1, function(ply, target)
-	local target = player.Get(arguments[1])
+	local target = arista.player.get(target)
 
 	-- Check to see if we got a valid target.
-	if (target) then
+	if target then
 		if (target._Warranted) then
-			if ( hook.Call("PlayerCanUnwarrant",GAMEMODE, ply, target) ) then
-				hook.Call("PlayerUnwarrant",GAMEMODE, ply, target);
+			if gamemode.Call("PlayerCanUnwarrant", ply, target) then
+				gamemode.Call("PlayerUnwarrant", ply, target)
 
 				-- Warrant the player.
-				target:UnWarrant();
+				target:unWarrant()
 			end
 		else
-			return false, target:Name().." does not have a warrant!"
+			return false, "%s does not have a warrant!", target:Name()
 		end
 	else
-		return false, arguments[1].." is not a valid player!"
+		return false, "AL_INVALID_TARGET"
 	end
 end, "AL_COMMAND_CAT_COMMANDS", true)
 
---[[
 do -- Reduce the upvalues poluting the area.
 	local function conditional(ply, pos)
-		return IsValid(ply) and ply:GetPos() == pos;
+		return IsValid(ply) and ply:GetPos() == pos
 	end
 
 	local function success(ply)
-		ply:KnockOut();
-		GM:Log(EVENT_EVENT, "%s went to sleep.", ply:Name());
-		ply._Sleeping = true;
-		ply:Emote("slumps to the floor, asleep.");
-		ply:SetCSVar(CLASS_LONG, "_GoToSleepTime");
+		ply:knockOut()
+
+		ply:setAristaVar("sleeping", true)
+		ply:emote("slumps to the floor, asleep.")
 	end
 
 	local function failure(ply)
-		ply:SetCSVar(CLASS_LONG, "_GoToSleepTime");
 	end
+
 	-- A command to sleep or wake up.
-	cider.command.add("sleep", "b", 0, function(ply)
-		if (ply._Sleeping and ply:KnockedOut()) then
-			return ply:WakeUp();
+	arista.command.add("sleep", "", 0, function(ply)
+		if ply:getAristaVar("sleeping") and ply:isUnconscious() then
+			return ply:wakeUp()
 		end
-		timer.Conditional(ply:UniqueID().." sleeping timer", GM.Config["Sleep Waiting Time"], conditional, success, failure, ply, ply:GetPos());
-	end, "Commands", nil, "Go to sleep or wake up from sleeping.");
+
+		local time = arista.config.vars.sleepDelay
+		ply:setAristaVar("goToSleepTime", CurTime() + time)
+
+		arista.timer.conditional(ply:UniqueID() .. " sleeping timer", time, conditional, success, failure, ply, ply:GetPos())
+	end, "AL_COMMAND_CAT_COMMANDS")
 end
 
-cider.command.add("trip", "b", 0, function(ply,arguments)
-	if ply:GetVelocity() == Vector(0,0,0) then
-		return false,"You must be moving to trip!"
-	elseif ply:InVehicle() then
-		return false,"There is nothing to trip on in here!";
-	end
-	ply:KnockOut(5)
-	ply._Tripped = true
-	cider.chatBox.addInRadius(ply, "me", "trips and falls heavily to the ground.", ply:GetPos(), GM.Config["Talk Radius"]);
-	GM:Log(EVENT_EVENT,"%s fell over.",ply:GetName())
-end, "Commands", "", "Fall over while walking. (bind key \"say /trip\")");
+arista.command.add("trip", "", 0, function(ply)
+	if ply:isUnconscious() then return end
 
-cider.command.add("fallover", "b", 0, function(ply,arguments)
-	if not (ply:KnockedOut() or ply:InVehicle()) then
-		ply:KnockOut(5)
-		ply._Tripped = true
-		cider.chatBox.addInRadius(ply, "me", "slumps to the ground.", ply:GetPos(), GM.Config["Talk Radius"]);
-		GM:Log(EVENT_EVENT,"%s fell over.",ply:GetName())
+	if ply:GetVelocity():Length() < 2 then
+		return false, "You must be moving to trip!"
+	elseif ply:InVehicle() then
+		return false, "There is nothing to trip on in here!"
 	end
-end, "Commands", "", "Fall over.");
+
+	ply:knockOut(5)
+
+	ply:setAristaVar("tripped", true)
+	ply:emote("trips, falling heavily to the ground.")
+end, "AL_COMMAND_CAT_COMMANDS")
+
+arista.command.add("fallover", "", 0, function(ply)
+	if not (ply:isUnconscious() or ply:InVehicle()) then
+		ply:knockOut(5)
+
+		ply:setAristaVar("tripped", true)
+		ply:emote("falls over.")
+	end
+end, "AL_COMMAND_CAT_COMMANDS")
 
 -- Commit mutiny.
-cider.command.add("mutiny","b",1,function(ply,arguments)
-	local target = player.Get( arguments[1] ) or nil
-	if not (ValidEntity(target) and target:IsPlayer()) then
-		return false, arguments[1].." is not a valid player!"
+arista.command.add("mutiny", "", 1, function(ply, target)
+	local target = arista.player.get(target)
+	if not (target and IsValid(target) and target:IsPlayer()) then
+		return false, "AL_INVALID_TARGET"
 	end
-	local pteam,tteam = ply:Team(),target:Team()
-	if 	cider.team.getGroupByTeam(pteam)	~=	cider.team.getGroupByTeam	(tteam)		or
-		cider.team.getGang		 (pteam) 	~=	cider.team.getGang			(tteam)		or
-		cider.team.getGang		 (tteam)	==	nil										or
-		cider.team.getGroupLevel (pteam)	>=	cider.team.getGroupLevel	(tteam)		or
-		not										cider.team.hasAccessGroup	(tteam,"D")	then
-			return false,"You cannot mutiny against this person"
+
+	local pteam, tteam = ply:Team(), target:Team()
+	if 	arista.team.getGroupByTeam	(pteam)	~=	arista.team.getGroupByTeam	(tteam)		or
+			arista.team.getGang					(pteam) ~=	arista.team.getGang					(tteam)		or
+			arista.team.getGang					(tteam)	==	nil																		or
+			arista.team.getGroupLevel		(pteam)	>=	arista.team.getGroupLevel		(tteam)		or
+			not																			arista.team.hasAccessGroup	(tteam, "D")	then
+			return false, "You cannot mutiny against this person"
 	end
-	target._Depositions = target._Depositions or {}
-	if target._Depositions [ply:UniqueID()] then
-		return false,"You have already tried to mutiny against your leader!"
+
+	target._depositions = target._depositions or {}
+	if target._depositions[ply:UniqueID()] then
+		return false, "You have already tried to mutiny against your leader!"
 	else
-		target._Depositions[ply:UniqueID()] = ply
+		target._depositions[ply:UniqueID()] = ply
 	end
-	for ID,ply in pairs(target._Depositions) do
-		if ValidEntity(ply) then
+
+	for ID, ply in pairs(target._depositions) do
+		if IsValid(ply) then
 			local pteam = ply:Team()
-			if 	cider.team.getGroupByTeam(pteam)	~=	cider.team.getGroupByTeam(tteam)	or
-				cider.team.getGang		 (pteam) 	~=	cider.team.getGang		 (tteam)	or
-				cider.team.getGroupLevel (pteam)	>=	cider.team.getGroupLevel (tteam)	then
-					target._Depositions	 [ID]		 =	nil
+
+			if	arista.team.getGroupByTeam	(pteam)	~=	arista.team.getGroupByTeam	(tteam)	or
+					arista.team.getGang		 			(pteam) ~=	arista.team.getGang					(tteam)	or
+					arista.team.getGroupLevel 	(pteam)	>=	arista.team.getGroupLevel		(tteam)	then
+					target._depositions[ID] = nil
 			end
 		else
-			target._Depositions[ID] = nil
+			target._depositions[ID] = nil
 		end
 	end
-	local count	= table.Count(target._Depositions)
-	local num	=  math.floor( table.Count( cider.team.getGangMembers( cider.team.getGroupByTeam(tteam), cider.team.getGang(tteam) ) ) * GM.Config["Mutiny Percentage"])
-	if  num < GM.Config["Minimum to mutiny"] then
-		num = GM.Config["Minimum to mutiny"]
+
+	local count	= table.Count(target._depositions)
+	local num	= math.floor(table.Count(arista.team.getGangMembers(arista.team.getGroupByTeam(tteam), arista.team.getGang(tteam))) * arista.config.vars.mutinyPercent)
+	if num < arista.config.vars.minimumMutiny then
+		num = arista.config.vars.minimumMutiny
 	end
+
 	if count < num then
-		ply:Notify("Not enough of the gang agrees with you yet to do anything, but they acknowledge your thoughts...")
-		GM:Log(EVENT_EVENT,"%s voted to mutiny against %s. %i/%i",ply:Name(),target:Name(),count,num)
-		return
-	end
-	target:Notify("Your gang has overthrown you!",1)
-	target:Demote()
-	player.NotifyAll("%s was overthrown as leader.",nil,target:Name())
-end, "Commands","<player>","Try to start a mutiny against your leader")
-]]
+		ply:notify("Not enough of the gang agrees with you yet to do anything, but they acknowledge your thoughts...")
+	return end
+
+	target:notify("Your gang has overthrown you!")
+	target:demote()
+
+	arista.player.notifyAll("%s was overthrown as leader.", target:Name())
+end, "AL_COMMAND_CAT_COMMANDS", true)

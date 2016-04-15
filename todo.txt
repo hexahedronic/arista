@@ -9,11 +9,11 @@
 [X] Prop-protection
 	[X] CPPI rather than intergrated
 	[-] Make CPPI fallback work decently without external
-[#] Missing commands (a lot of them)
+[X] Missing commands (a lot of them)
 	[X] Administration
 	[X] Menu Handling
 	[X] Chat Handling
-	[#] General RP Commands
+	[X] General RP Commands
 [X] Containers
 [-] Contraband
 [#] Old Items
@@ -28,7 +28,7 @@
 [-] Readd sound to QButtons in derma implementation
 [-] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
 [-] Fix unownable door-groups (master/slaves)
-[ ] Name validation, alpha only, length, ect
+[X] Name validation, alpha only, length, ect
 [ ] Missing language strings (mainly commands, check using command)
 
 - Update / Improve
@@ -52,6 +52,8 @@
 [X] Plugin mangement/handling
 
 [#] Vehicle handling
+	[X] Main
+	[#] Damage/Health
 [X] Officals
 [X] Hunger
 [X] Flashlight battery

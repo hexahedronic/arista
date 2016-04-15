@@ -122,7 +122,7 @@ function player:useDisallowed()
 end
 
 function player:interactionDisallowed()
-	return self:useDisallowed() or self:isStuck() or self:InVehicle()
+	return self:useDisallowed() or self:isStuck()
 end
 
 function player:getPronouns()

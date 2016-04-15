@@ -14,6 +14,14 @@ arista.lang:Add("AL_VEHICLES_FLIP", {
 	EN = "Press 'use' to flip this car.",
 })
 
+arista.lang:Add("AL_COMMAND_ENGINE", {
+	EN = "Start or stop your car's engine.",
+})
+
+arista.lang:Add("AL_COMMAND_ENGINE_HELP", {
+	EN = "<on/off>",
+})
+
 function PLUGIN:PlayerBindPress(ply, bind, pressed)
 	if not ply:InVehicle() then return end
 
@@ -33,7 +41,7 @@ end
 
 function PLUGIN:AdjustESPLines(lines, tent, pos, distance, lookingat)
 	if tent:GetClass() == "prop_vehicle_jeep" and not arista.lp:InVehicle() then
-		local name, text = tent:GetNW2String("DisplayName"), ""
+		local name, text = tent:getAristaString("displayName"), ""
 
 		if not name or name == "" then
 			name = "car"
@@ -58,7 +66,7 @@ function PLUGIN:AdjustESPLines(lines, tent, pos, distance, lookingat)
 			local text = ""
 
 			if ang.r > 10 or ang.r < -10 then
-				if ent:isLocked() then
+				if tent:isLocked() then
 					text = "AL_VEHICLES_FLIP"
 				else
 					text = "AL_VEHICLES_MUSTLOCK"
@@ -70,12 +78,12 @@ function PLUGIN:AdjustESPLines(lines, tent, pos, distance, lookingat)
 	end
 end
 
-local function getPetrolIcon(petrol)
-	if petrol >= 60 then
+local function getFlagColor(var)
+	if var >= 66 then
 		return "icon16/flag_green"
-	elseif petrol > 30 then
+	elseif var > 33 then
 		return "icon16/flag_orange"
-	elseif petrol < 30 then
+	else
 		return "icon16/flag_red"
 	end
 end
@@ -96,7 +104,7 @@ function PLUGIN:DrawBottomBars(bar)
 	local hp = vehicle:Health() -- Why network something that allready gets sorted by source?
 
 	-- Draw the stamina bar.
-	GAMEMODE:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_red_alpha, arista.lang:Get"AL_HUD_PETROL" .. petrol .. " %", 100, petrol, bar, getPetrolIcon(petrol))
-	GAMEMODE:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_red_alpha, arista.lang:Get"AL_HUD_VEHICLEHP" .. hp .. " %", 100, hp, bar, "icon16/car")
+	GAMEMODE:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_red_alpha, arista.lang:Get"AL_HUD_PETROL" .. petrol .. " %", 100, petrol, bar, getFlagColor(petrol))
+	GAMEMODE:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_darkgreen, arista.lang:Get"AL_HUD_VEHICLEHP" .. hp .. " %", 100, hp, bar, "icon16/car")
 	GAMEMODE:DrawBar("arista_hudSmall", bar.x, bar.y, bar.width, bar.height, color_alpha, speedmph .. " MPH / " .. speedkph .. " KPH", 100, 100, bar, "icon16/arrow_up")
 end

@@ -20,6 +20,8 @@ function arista.inventory.update(player, id, amount, force)
 		return false, "That is not a valid item!"
 	end
 
+	-- todo: lang
+
 	local size = item.size * amount
 	local newAmt = inventory[id] + amount
 
@@ -36,7 +38,7 @@ function arista.inventory.update(player, id, amount, force)
 	end
 
 	if not force and item.max and newAmt > item.max then
-		return false, "You can't carry any more " .. item.plural .. "!"
+		return false, "You can't carry any more %s!", item.plural
 	end
 
 	inventory[id] = math.Clamp(newAmt, 0, 2147483647)

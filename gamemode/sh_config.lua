@@ -154,6 +154,12 @@ arista.config.vars = {
 		[TYPE_LARGE] = 1,
 		[TYPE_SMALL] = 2,
 	},
+	-- How long it takes to fall asleep.
+	sleepDelay = 5,
+	-- How many players are needed as a minimum for a mutiny.
+	minimumMutiny = 5,
+	-- How much of the gang must agree for a mutiny.
+	mutinyPercent = 0.75,
 	-- Access for donators.
 	donatorAccess = "tpew",
 	-- Use localised voice chat.

@@ -112,7 +112,7 @@ net.Receive("arista_wipeAccess", wipeAccess)
 
 function arista.entity.cleanTable()
 	for entidx, access in pairs(arista._internaldata.entity_stored) do
-		if not IsValid(Entity(entidx)) or not access then
+		if not access then
 			arista._internaldata.entity_stored[entidx] = nil
 		end
 	end

@@ -28,20 +28,25 @@ arista.gamemode = {
 	website = "https://github.com/hexahedronic/arista/",
 
 	info = [[
-	A re-write of AppleJack (https://github.com/Lexicality/applejack-old).
-	This gamemode consists mostly of applejack's code (which was built on cider),
-	and we only take credit for the modifications made, not the source material.
+A re-write of AppleJack (https://github.com/Lexicality/applejack-old).
+This gamemode consists mostly of applejack's code (which was built on cider),
+and we only take credit for the modifications made, not the source material.
 
-	The idea of Arista is to provide an open-source, up-to-date, bugfixed version of applejack.
+The idea of Arista is to provide an open-source, up-to-date, bugfixed version of applejack.
 
-	With this idea we hope to give smaller servers the ability to run a gamemode other
-	than DarkRP, due to the saturation of DarkRP's servers.
+With this idea we hope to give smaller servers the ability to run a gamemode other
+than DarkRP, due to the saturation of DarkRP's servers.
 
-	Note: This is not CityRP, I believe at some point in the past CityRP was based on
-	either cider/applejack, but this does not MEAN THEY ARE THE SAME THING.
+Note: This is not CityRP, I believe at some point in the past CityRP was based on
+either cider/applejack, but this does not MEAN THEY ARE THE SAME THING.
 
-	DO NOT REMOVE KURO OR LEXI FROM THE AUTHOR FIELD.
-	]],
+DO NOT REMOVE KURO OR LEXI FROM THE AUTHOR FIELD.
+]],
+
+	modifiedWork = [[
+Work included in modified form:
+	fire extinguisher - Robotboy655
+]],
 
 	folder = GM.Folder .. "/",
 	luaFolder = GM.Folder:sub(11, -1) .. "/",
@@ -60,6 +65,8 @@ GM.Info = arista.gamemode.info
 GM.Folder = arista.gamemode.folder
 GM.LuaFolder = arista.gamemode.luaFolder
 GM.GMFolder = arista.gamemode.gmFolder
+
+GM.ModifiedWork = arista.gamemode.modifiedWork
 
 -- Some enums that need to be shared and global.
 CONTAINER_CAN_PUT = 1

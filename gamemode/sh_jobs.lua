@@ -174,6 +174,28 @@ TEAM_SECRETARY = arista.team.add("Secretary", {
 	},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
 })
+
+TEAM_FIREFIGHTER = arista.team.add("Fire Fighter", {
+	color = Color(25, 150, 150, 255),
+	males = "models/player/ct_sas.mdl",
+	description = "A worker at the fire department, trained to tackle fires.",
+
+	salary = 200,
+	limit = 3,
+
+	access = "",
+	fire = true,
+
+	guns = {"arista_extinguisher"},
+
+	group = {
+		gang = GANG_OFFICIALS,
+		access = "",
+		level = 1,
+		group = GROUP_OFFICIALS,
+	},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
+})
 end
 
 
@@ -194,7 +216,7 @@ TEAM_CITIZEN = arista.team.add("Citizen", {
 		level = 1,
 		group = GROUP_CIVILIANS,
 	},
-	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
+	cantuse = {CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
 })
 
 TEAM_GUNDEAL = arista.team.add("Gun Dealer", {

@@ -280,6 +280,15 @@ arista.config.vars = {
 	forceBlockedModels = true,
 	-- If arrested people can get into cars (eg for being driven to jail).
 	allowArrestedCars = true,
+	-- The maximum amount of fires that can exist at once.
+	maxFires = 25,
+	-- Any props that when burnt 'add fuel to the fire'.
+	fireProps = {
+		["models/props_c17/oildrum001_explosive.mdl"] = 5,
+		["models/props_junk/propanecanister001a.mdl"] = 3,
+		["models/props_junk/propane_tank001a.mdl"] = 4,
+		["models/props_junk/gascan001a.mdl"] = 7,
+	},
 }
 
 arista.config.plugins = {

@@ -342,6 +342,12 @@ function arista.team.add(name, data)
 	data.timelimit = data.timelimit or 0
 	data.waiting = data.waiting or arista.config:getDefault("jobWait")
 
+	for k, v in ipairs(arista.config.defaults.jobCategories) do
+		if not table.HasValue(data.canmake, v) then
+			table.insert(data.canmake, v)
+		end
+	end
+
 	--Make sure there's a group
 	if not data.group then
 		arista.logs.log(arista.logs.E.ERROR, "You cannot create a team without a group! (", tostring(name), ")")

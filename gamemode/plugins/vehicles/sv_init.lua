@@ -204,6 +204,86 @@ function PLUGIN:SellCar(ply, item)
 	return true
 end
 
+function PLUGIN:damageCar(car, dmg, entity)
+	local hp = car:Health()
+		hp = math.Clamp(hp - math.floor(dmg:GetDamage() * 4), 0, 100)
+	car:SetHealth(hp)
+
+	if hp <= 0 and not (car._fire and IsValid(car._fire)) then
+		car:Fire('turnoff', '', 0)
+		car:setAristaVar("engineOn", false)
+
+		local fire = ents.Create("arista_fire")
+		if fire and fire:IsValid() then
+				fire:SetPos(car:GetPos())
+			fire:Spawn()
+			fire:Activate()
+
+			fire:SetPos(car:GetPos())
+			fire:SetParent(car)
+
+			car:DeleteOnRemove(fire)
+			car._fire = fire
+		end
+
+		local effectData = EffectData()
+			effectData:SetStart(car:GetPos())
+			effectData:SetOrigin(car:GetPos())
+			effectData:SetScale(3)
+		util.Effect("Explosion", effectData)
+
+		dmg:SetDamage(10)
+		if not entity then return end
+
+		entity:ExitVehicle()
+		entity:notify("Your car has been destroyed.")
+
+		timer.Simple(0, function()
+			if not (entity and entity:IsValid()) then return end
+			entity:knockOut(20)
+		end)
+	end
+end
+
+function PLUGIN:EntityTakeDamage(entity, dmg)
+	if entity:IsVehicle() then
+		local tbl = entity.VehicleTable
+
+		if tbl then
+			if tbl.Windowlevel then
+				if entity:GetDriver():IsPlayer() then
+					local damageheight = entity:WorldToLocal(dmg:GetDamagePosition())
+
+					if damageheight.z >= tbl.Windowlevel then
+						if dmg:IsBulletDamage() and dmg:GetDamage() < 0.01 then
+							dmg:SetDamage(dmg:GetDamage() * 10000)
+						end
+					end
+				end
+			end
+
+			self:damageCar(entity, dmg)
+		end
+	elseif entity:IsPlayer() then
+		if entity:InVehicle() then
+			if entity:getAristaVar("hunger") == 0 then return end
+
+			local car = entity:GetVehicle()
+			local attacker = dmg:GetAttacker()
+
+			if car.VehicleTable then
+				local damageheight = car:WorldToLocal(dmg:GetDamagePosition())
+
+				if damageheight and damageheight.z >= car.VehicleTable.Windowlevel then
+					dmg:SetDamage(dmg:GetDamage() * 10)
+				else
+					self:damageCar(car, dmg, entity)
+				end
+			end
+		end
+	end
+end
+
 function PLUGIN:PickupCar(ply, item)
 	if arista.config.plugins.vehiclePickupZone then
 		-- todo: this
@@ -413,7 +493,7 @@ arista.command.add("engine", "", 1, function(player, toggle)
 
 					return false
 				elseif player:isArrested() or player:isTied() then
-					player:Notify("Unable to start engine when your hands are handcuffed/tied-up!")
+					player:notify("Unable to start engine when your hands are handcuffed/tied-up!")
 
 					return false
 				else

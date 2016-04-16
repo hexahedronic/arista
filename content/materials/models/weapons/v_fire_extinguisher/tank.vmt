@@ -1,0 +1,12 @@
+"VertexLitGeneric" {
+
+	"$basetexture" "models/weapons/w_fire_extinguisher/w_fire_extinguisher_mask"
+
+	$phong 1
+	$phongexponent			32
+	$phongexponenttexture	"models/weapons/w_fire_extinguisher/w_fire_extinguisher_mask"
+	$phongboost				"1"
+	$phongfresnelranges		"[1 1 1]"
+	$basemapalphaphongmask	1
+
+}

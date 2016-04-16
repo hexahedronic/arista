@@ -263,7 +263,7 @@ TEAM_DOCTOR = arista.team.add("Doctor", {
 	description = "Deals medical supplies to the city's inhabitants.",
 
 	males = "models/player/Group02/male_08.mdl",
-	females = "models/player/Group02/Female_02.mdl",
+	females = "models/player/Group03m/Female_02.mdl",
 
 	salary = 250,
 	limit = 5,

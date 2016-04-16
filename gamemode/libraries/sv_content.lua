@@ -12,7 +12,7 @@ function arista.content.addFiles(path)
 		local files, dirs = arista.file.find(path .. "/" .. v .. "/*")
 
 		for _, f in pairs(files) do
-			if f ~= ".svn" then
+			if f ~= ".svn" and f:sub(-4, -1) ~= ".git" then
 					local fpath = path .. "/" .. v .. "/" .. f
 					fpath = fpath:gsub("content/", "")
 

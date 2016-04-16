@@ -13,7 +13,7 @@ arista.config.defaults = {
 	-- Time arrested for.
 	arrestTime = 300,
 	-- Access level.
-	access = "tp",
+	access = "tpe",
 	-- Playermodels.
 	female = {
 		"models/player/group01/female_01.mdl",

@@ -167,12 +167,12 @@ do --isolate vars
 		if not ply:IsValid() then return end
 		ply._equipping = false
 
-		local s, f = arista.inventory.update(ply, class, 1)
+		local s, f, c, d = arista.inventory.update(ply, class, 1)
 		if not s then
 			ply:emote(arista.config.timers["Equip Message"]["Abort"])
 
 			if f and f ~= "" then
-				ply:notify(f)
+				ply:notify(f, c, d)
 			end
 
 			return

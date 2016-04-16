@@ -180,7 +180,7 @@ function arista.chatbox.chatText(index, name, text, filter)
 		elseif class == "gaction" then
 			arista.chatbox.messageAdd({"(Global)", color_highred}, nil, {"*** " .. text, color_cream}, filtered)
 		elseif class == "advert" then
-			arista.chatbox.messageAdd({"(Advert)"}, nil, {text, color_highpink}, filtered)
+			arista.chatbox.messageAdd({"(Advert)"}, nil, {name .. ": " .. text, color_highpink}, filtered)
 		elseif class == "yell" then
 			arista.chatbox.messageAdd({"(Yell)"}, nil, {name .. ": " .. text, color_cream}, filtered)
 		elseif class == "whisper" then

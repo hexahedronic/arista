@@ -94,7 +94,7 @@ function ENT:CanTool(ply)
 	return ply:IsAdmin()
 end
 
-function ENT:PhysgunPickup(player)
+function ENT:PhysgunPickup(ply)
 	return ply:IsAdmin()
 end
 
@@ -141,9 +141,9 @@ function ENT:Use(activator, caller)
 	local amt = self:GetAmount()
 
 	if self.item.size <= 0 or arista.inventory.canFit(activator, item.size * amt) then
-		local a, b = arista.inventory.update(activator, item.uniqueID, amt)
+		local a, b, c, d = arista.inventory.update(activator, item.uniqueID, amt)
 		if not a then
-			activator:notify(b)
+			activator:notify(b, c, d)
 
 			return
 		end
@@ -151,10 +151,10 @@ function ENT:Use(activator, caller)
 		picked = amt
 	else
 		for i = 1, amt do
-			local s, f = arista.inventory.update(activator, item.uniqueID, 1)
+			local s, f, c, d = arista.inventory.update(activator, item.uniqueID, 1)
 
 			if not s then
-				activator:notify(f)
+				activator:notify(f, c, d)
 
 				break
 			end

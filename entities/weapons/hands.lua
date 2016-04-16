@@ -10,7 +10,7 @@ if CLIENT then
 	SWEP.DrawCrosshair = false
 
 	function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
-		draw.SimpleText(self.IconLetter, "CSSelectIcons", x + 0.56 * wide, y + tall * 0.27, Color(255, 220, 0, 255), TEXT_ALIGN_CENTER )
+		draw.SimpleText(self.IconLetter, "CSSelectIcons", x + 0.56 * wide, y + tall * 0.27, Color(255, 220, 0, 255), TEXT_ALIGN_CENTER)
 		self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)
 	end
 

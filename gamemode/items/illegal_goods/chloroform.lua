@@ -31,7 +31,7 @@ function ITEM:onUse(ply)
 	victim:emote("struggles a bit before slumping to the floor.")
 
 	victim:setAristaVar("sleeping", true)
-	victim:knockOut(victim:getAristaVar("knockOutTime"))
+	victim:knockOut(30)
 
 	--GM:Log(EVENT_EVENT, "%s just chloroformed %s.", ply:Name(), victim:Name());
 

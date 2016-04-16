@@ -274,7 +274,7 @@ function PLUGIN:EntityTakeDamage(entity, dmg)
 			if car.VehicleTable then
 				local damageheight = car:WorldToLocal(dmg:GetDamagePosition())
 
-				if damageheight and damageheight.z >= car.VehicleTable.Windowlevel then
+				if car.VehicleTable.Windowlevel and damageheight and damageheight.z >= car.VehicleTable.Windowlevel then
 					dmg:SetDamage(dmg:GetDamage() * 10)
 				else
 					self:damageCar(car, dmg, entity)

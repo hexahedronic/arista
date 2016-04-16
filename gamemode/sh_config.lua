@@ -9,7 +9,7 @@ arista.config.defaults = {
 	-- Time knocked out for.
 	knockOutTime = 30,
 	-- Time until respawn.
-	spawnTime = 12,
+	spawnTime = 20,
 	-- Time arrested for.
 	arrestTime = 300,
 	-- Access level.
@@ -281,7 +281,7 @@ arista.config.vars = {
 	-- If arrested people can get into cars (eg for being driven to jail).
 	allowArrestedCars = true,
 	-- The maximum amount of fires that can exist at once.
-	maxFires = 25,
+	maxFires = 50,
 	-- Any props that when burnt 'add fuel to the fire'.
 	fireProps = {
 		["models/props_c17/oildrum001_explosive.mdl"] = 5,

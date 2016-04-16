@@ -169,7 +169,7 @@ function ENT:Think()
 					local fireProp = arista.config.vars.fireProps[v:GetModel():lower()]
 
 					if fireProp then
-						print("this shit fire")
+						--print("this shit fire")
 						for i = 1, fireProp do
 							self:SpreadFire()
 						end

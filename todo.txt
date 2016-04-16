@@ -29,7 +29,11 @@
 [X] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
 [-] Fix unownable door-groups (master/slaves)
 [X] Name validation, alpha only, length, ect
-[ ] Missing language strings (mainly commands, check using command)
+[-] Missing language strings (mainly commands, check using command)
+[ ] Make mayor salary change with tax
+[ ] Flipping cars restarts engine even if damaged.
+[ ] Fix car view offsets
+[ ] Disable firespread command
 
 - Update / Improve
 [-] Remake HUD Design
@@ -67,7 +71,7 @@
 [-] Wandering NPCs
 [-] Guesture menu (hands up, ect)
 [-] Realistic text signs (with actual models)
-[ ] Area display (intergrated); people really like this idea
+[-] Area display (intergrated); people really like this idea
 [-] Pickpocketing GUI (container that shows currently equiped weapons), use on chloroformed/sleeping
 
 - Finalising

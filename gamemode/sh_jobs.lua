@@ -280,6 +280,27 @@ TEAM_DOCTOR = arista.team.add("Doctor", {
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
 })
 
+TEAM_MECHANIC = arista.team.add("Mechanic", {
+	color = Color(175, 175, 175, 255),
+	description = "Repairs damaged vehicles.",
+
+	salary = 150,
+	limit = 3,
+
+	access = "",
+
+	guns = {"arista_repair"},
+
+	group = {
+		gang = GANG_CIVILIANS,
+		access = "",
+		level = 1,
+		group = GROUP_CIVILIANS,
+	},
+	canmake = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
+})
+
 GROUP_UNDERGROUND	= arista.team.addGroup("The Underground", "Join the underground for more fun, but harsher treatment if caught.")
 GANG_UNDERGROUND	= arista.team.addGang(GROUP_UNDERGROUND, "The Underground", "models/player/Group03/male_07.mdl", "'Fuck the police!'")
 
@@ -299,6 +320,40 @@ TEAM_BLACKMARKETDEALER = arista.team.add("Blackmarket Dealer", {
 		group = GROUP_UNDERGROUND,
 	},
 	canmake = {CATEGORY_VEHICLES, CATEGORY_EXPLOSIVES, CATEGORY_CONTRABAND, CATEGORY_POLICE_WEAPONS, CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_AMMO},
+})
+
+TEAM_CHAV = arista.team.add("Chav", {
+	color = Color(135, 125, 125, 255),
+	description = "The scum of society, roaming around commiting petty crimes and being a general nuisance.",
+
+	salary = 100,
+	limit = 4,
+
+	access = "",
+
+	group = {
+		gang = GANG_UNDERGROUND,
+		access = "",
+		level = 1,
+		group = GROUP_UNDERGROUND,
+	},
+})
+
+TEAM_GANGSTER = arista.team.add("Gangster", {
+	color = Color(125, 125, 135, 255),
+	description = "Members of a large time organised crime mob.",
+
+	salary = 120,
+	limit = 6,
+
+	access = "",
+
+	group = {
+		gang = GANG_UNDERGROUND,
+		access = "",
+		level = 1,
+		group = GROUP_UNDERGROUND,
+	},
 })
 
 

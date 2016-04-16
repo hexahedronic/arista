@@ -248,7 +248,7 @@ arista.command.add("door", "", 1, function(ply, arguments)
 
 	ply:giveDoor(door, name)
 
-	door:CPPISetOwner(nil)
+	door:CPPISetOwner(game.GetWorld())
 
 	local name = arista.entity.getDoorName(door)
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.COMMAND, ply:Name(), "(", ply:SteamID(), ") bought a door (named '", name, "').")

@@ -1,6 +1,7 @@
 ITEM.name							= "Repair Kit"
 ITEM.size							= 2
 ITEM.cost							= 800
+ITEM.batch						= 1
 ITEM.store						= true
 ITEM.model						= "models/props/cs_militia/circularsaw01.mdl"
 ITEM.plural						= "Repair Kits"

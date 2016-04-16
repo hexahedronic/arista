@@ -310,7 +310,8 @@ vgui.Register("arista_accessColumns", PANEL, "QPanel")
 PANEL = {}
 
 -- Called when the panel is initialized.
-function PANEL:ExtraInit()
+function PANEL:Init()
+	QFrame.Init(self)
 	self:SetTitle("Container")
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(true)
@@ -376,7 +377,9 @@ function PANEL:ExtraInit()
 end
 
 -- Called when the layout should be performed.
-function PANEL:ExtraPerformLayout()
+function PANEL:PerformLayout()
+	QFrame.PerformLayout(self)
+
 	self:SetSize(width, height)
 	self:SetPos((ScrW() - width) / 2, (ScrH() - height) / 2)
 

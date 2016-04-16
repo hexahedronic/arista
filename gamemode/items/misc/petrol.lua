@@ -1,6 +1,7 @@
 ITEM.name							= "Jerry Can"
 ITEM.size							= 3
 ITEM.cost							= 800
+ITEM.batch						= 1
 ITEM.store						= true
 ITEM.model						= "models/props_junk/metalgascan.mdl"
 ITEM.plural						= "Jerry Cans"

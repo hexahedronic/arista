@@ -424,8 +424,6 @@ local function updateContainer(decoded)
 	if not (arista.derma.access.accessmenu and ValidPanel(arista.derma.access.accessmenu)) then return end
 	width, height = ScrW() * 0.75, ScrH() * 0.75
 
-	if not arista.derma.access.accessmenu.players then timer.Simple(0, function() updateContainer(decoded) end) return end
-
 	arista.derma.access.accessmenu:SetTitle(decoded.owner)
 
 	local paccess = {}
@@ -490,7 +488,6 @@ local function updateContainer(decoded)
 	end
 
 	arista.derma.access.accessmenu:InvalidateLayout(true)
-	timer.Simple(0.01, function() arista.derma.access.accessmenu:InvalidateLayout() end)
 
 	arista.derma.access.accessmenu.buttoned = false
 end

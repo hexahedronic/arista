@@ -374,7 +374,6 @@ vgui.Register("arista_container", PANEL, "QFrame")
 
 local function updateContainer(decoded)
 	if not (containermenu and IsValid(containermenu)) then return end
-	if not containermenu.pInventory then timer.Simple(0, function() updateContainer(decoded) end) return end
 
 	containermenu.meta = decoded.meta
 	targetEntity = Entity(decoded.meta.entindex)
@@ -415,7 +414,7 @@ local function newContainer()
 	gui.EnableScreenClicker(true)
 
 	containermenu:MakePopup()
-	timer.Simple(0, function() updateContainer(decoded) end)
+	updateContainer(decoded)
 end
 
 net.Receive("arista_container", newContainer)

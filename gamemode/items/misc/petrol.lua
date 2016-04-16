@@ -8,7 +8,7 @@ ITEM.plural						= "Jerry Cans"
 ITEM.description			= "A tool that allows for you refuel cars on the go."
 
 -- Called when a player drops the item.
-function ITEM:onUse(ply)
+function ITEM:onUse(player)
 	local trace = player:GetEyeTraceNoCursor()
 	local target = trace.Entity
 

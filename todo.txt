@@ -39,6 +39,8 @@
 [-] Remake HUD Design
 [X] Remake Derma Design
 [-] Chatbox (possibly bug ghosty to finish CBox)
+[ ] Engine notification
+[ ] Hunger notification
 
 - CL
 [X] Clientside Inventory GUI

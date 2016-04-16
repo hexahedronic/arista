@@ -288,7 +288,7 @@ arista.command.add("unwarrant", "", 1, function(ply, target)
 
 	-- Check to see if we got a valid target.
 	if target then
-		if (target._Warranted) then
+		if target:hasWarrant() then
 			if gamemode.Call("PlayerCanUnwarrant", ply, target) then
 				gamemode.Call("PlayerUnwarrant", ply, target)
 

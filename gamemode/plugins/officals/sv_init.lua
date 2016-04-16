@@ -220,9 +220,8 @@ function PLUGIN:PlayerCanWarrant(ply, target, class)
 	end
 
 	if (self:IsAuthorised(target) and class ~= "search") then -- You can't arrest police, so don't let them try.
-		ply:Notify("You cannot arrest city officials!", 1)
-		return false
-	end
+		ply:notify("You cannot arrest city officials!")
+	return false end
 
 	local plyTeam = arista.team.get(ply:Team())
 	if not plyTeam then return end

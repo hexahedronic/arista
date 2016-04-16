@@ -26,7 +26,7 @@
 [X] Stamina exhausted might not be networked properly? potential clientside jump prohibiter broken
 [X] Access is not returned to rejoining players correctly
 [-] Readd sound to QButtons in derma implementation
-[-] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
+[X] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
 [-] Fix unownable door-groups (master/slaves)
 [X] Name validation, alpha only, length, ect
 [ ] Missing language strings (mainly commands, check using command)
@@ -51,9 +51,9 @@
 - Plugins
 [X] Plugin mangement/handling
 
-[#] Vehicle handling
+[X] Vehicle handling
 	[X] Main
-	[#] Damage/Health
+	[X] Damage/Health
 [X] Officals
 [X] Hunger
 [X] Flashlight battery
@@ -71,6 +71,6 @@
 [-] Pickpocketing GUI (container that shows currently equiped weapons), use on chloroformed/sleeping
 
 - Finalising
-[ ] CLOSED-ALPHA (1 day closed testing for immediate, easily spottable errors) (8 Slots)
+[ ] CLOSED-ALPHA (1 day closed testing for immediate, easily spottable errors) (12 Slots)
 [ ] ALPHA (2 days open testing for not so easily spottable errors) (16 Slots)
 [ ] BETA (5 days open testing for underlying issues, small bugs, improvements ect) (24 Slots)

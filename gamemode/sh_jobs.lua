@@ -177,7 +177,7 @@ TEAM_SECRETARY = arista.team.add("Secretary", {
 
 TEAM_FIREFIGHTER = arista.team.add("Fire Fighter", {
 	color = Color(25, 150, 150, 255),
-	males = "models/player/ct_sas.mdl",
+	males = "models/player/gasmask.mdl",
 	description = "A worker at the fire department, trained to tackle fires.",
 
 	salary = 200,

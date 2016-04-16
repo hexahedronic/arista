@@ -303,6 +303,7 @@ function PANEL:Init()
 end
 
 -- Called every frame.
+local done = false
 function PANEL:Think()
 	local gender = arista.lp:getAristaString("nextGender") or ""
 
@@ -311,17 +312,21 @@ function PANEL:Think()
 	if gender == "" then gender = "Male" end
 
 	-- Check if our gender is different.
-	if self.gender ~= gender then
+	if self.gender ~= gender or not done then
 		local gender, name = gender:lower(), arista.team.query(self.team, "index", 1)
 
 		local models = arista.team.stored[self.team].models[gender]
-		local model = models[arista.client._modelChoices[gender][name]]
+		local genModel = arista.client._modelChoices[gender]
+		if not models or not genModel then return end
+
+		local model = models[genModel[name]]
 
 		-- Set the model to our randomly selected one.
 		self.spawnIcon:SetModel(model)
 
 		-- We've changed our gender now so set it to this one.
 		self.gender = gender
+		done = true
 	end
 end
 

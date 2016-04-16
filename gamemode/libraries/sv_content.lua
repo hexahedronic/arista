@@ -14,9 +14,10 @@ function arista.content.addFiles(path)
 		for _, f in pairs(files) do
 			if f ~= ".svn" then
 					local fpath = path .. "/" .. v .. "/" .. f
+					fpath = fpath:gsub("content/", "")
 
 					arista.logs.logNoPrefix(arista.logs.E.DEBUG, "Adding '" .. fpath .. "' to download.")
-					resource.AddSingleFile(path .. "/" .. v .. "/" .. f)
+					resource.AddSingleFile(fpath)
 			end
 		end
 

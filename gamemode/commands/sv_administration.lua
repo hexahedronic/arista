@@ -360,6 +360,8 @@ arista.command.add("save", "s", 0, function(ply)
 	arista.player.saveAll()
 end, "AL_COMMAND_CAT_SADMIN")
 
-arista.command.add("firespread","s", 1, function(ply, b)
-	arista.config.vars.fireSpread = tobool(b)
+arista.command.add("firespread", "s", 0, function(ply, b)
+	b = tobool(b)
+	arista.config.vars.fireSpread = b
+	ply:notify("AL_COMMAND_FIRESPREAD_" .. (b and "ENABLE" or "DISABLE"))
 end, "AL_COMMAND_CAT_SADMIN")

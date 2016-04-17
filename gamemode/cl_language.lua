@@ -451,6 +451,9 @@ arista.lang.tbl.EN = {
 	["AL_COMMAND_FIRESPREAD"] = "Enables/disables fire spreading.",
 	["AL_COMMAND_FIRESPREAD_HELP"] = "<enable>",
 
+	["AL_COMMAND_FIRESPREAD_ENABLE"] = "Fire spreading enabled.",
+	["AL_COMMAND_FIRESPREAD_DISABLE"] = "Fire spreading disabled.",
+
 	-- BACKWARDS COMPAT
 	["AL_METHOD_UNSUPORTED"] = "This method is no longer supported.",
 }

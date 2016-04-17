@@ -198,7 +198,7 @@ function arista.chatbox.chatText(index, name, text, filter)
 		elseif class == "radio" then
 			arista.chatbox.messageAdd({"(Radio)"}, nil, {name .. ": " .. text, color_highgreen}, filtered)
 		elseif class == "loudradio" then
-			arista.chatbox.messageAdd({"(Radio)"}, nil, {name .. ": " .. text, color_cream}, filtered)
+			arista.chatbox.messageAdd(nil, nil, {"*** " .. name .. " radios in: " .. text, color_cream}, filtered)
 		elseif class == "pm" then
 			arista.chatbox.messageAdd({"(PM)", color_highred}, {name, color_cream}, {text, color_white}, filtered)
 		elseif class == "achievement" then

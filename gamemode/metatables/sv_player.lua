@@ -770,6 +770,7 @@ end
 function player:sayRadio(words)
 	local iteam = self:Team()
 	local gang = arista.team.getGang(iteam)
+	local group = arista.team.getGroupByTeam(iteam)
 
 	-- If we're in a gang, send the message to them, otherwise just to our teammates.
 	if gang then
@@ -792,6 +793,11 @@ function player:sayRadio(words)
 
 	-- Tell everyone nearby that we just spoke on a radio.
 	arista.chatbox.addInRadius(self, "loudradio", words, self:GetPos(), nil, nohear)
+
+	if group.index == GROUP_OFFICIALS then
+		local sound = table.Random(arista.config.vars.combineJibberish)
+		self:EmitSound(sound)
+	end
 end
 
 ---

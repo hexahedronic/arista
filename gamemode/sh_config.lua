@@ -289,6 +289,16 @@ arista.config.vars = {
 		["models/props_junk/propane_tank001a.mdl"] = 4,
 		["models/props_junk/gascan001a.mdl"] = 7,
 	},
+	-- Sounds played when using the radio.
+	combineJibberish = {
+		"npc/metropolice/vo/get11-44inboundcleaningup.wav",
+		"npc/metropolice/vo/dispreportssuspectincursion.wav",
+		"npc/metropolice/vo/clearno647no10-107.wav",
+		"npc/metropolice/vo/possible10-103alerttagunits.wav",
+		"npc/metropolice/vo/malcompliant10107my1020.wav",
+		"npc/metropolice/vo/Ivegot408hereatlocation.wav",
+		"npc/metropolice/vo/Ihave10-30my10-20responding.wav",
+	},
 }
 
 arista.config.plugins = {

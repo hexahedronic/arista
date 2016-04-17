@@ -549,10 +549,15 @@ function player:takeWeapons(noitems)
 	for _, weapon in ipairs(self:GetWeapons()) do
 		local class = weapon:GetClass()
 
-		--if not (noitems and GM.Items[class]) then
+		if not (noitems and arista.item.items[class]) then
 			stored[class] = true
-		--end
+		end
 	end
+
+	local curSaved = self:getAristaVar("storedWeapons")
+	if table.Count(curSaved) > 0 and table.Count(stored) == 0 then
+		self:StripWeapons()
+	return end
 
 	self:setAristaVar("storedWeapons", stored)
 

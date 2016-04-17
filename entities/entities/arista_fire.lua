@@ -83,6 +83,7 @@ function ENT:Initialize()
 end
 
 function ENT:SpreadFire()
+	if not arista.config.vars.fireSpread then return false end
 	if numberOfFires >= arista.config.vars.maxFires then return false end
 
 	for i = 1, 5 do

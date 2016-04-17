@@ -448,6 +448,9 @@ arista.lang.tbl.EN = {
 	["AL_COMMAND_SETOWNER"] = "Set an entity's owner.",
 	["AL_COMMAND_SETOWNER_HELP"] = "<kind> <id> [gang]",
 
+	["AL_COMMAND_FIRESPREAD"] = "Enables/disables fire spreading.",
+	["AL_COMMAND_FIRESPREAD_HELP"] = "<enable>",
+
 	-- BACKWARDS COMPAT
 	["AL_METHOD_UNSUPORTED"] = "This method is no longer supported.",
 }

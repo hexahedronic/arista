@@ -280,6 +280,8 @@ arista.config.vars = {
 	forceBlockedModels = true,
 	-- If arrested people can get into cars (eg for being driven to jail).
 	allowArrestedCars = true,
+	-- Should fire spread?
+	fireSpread = true,
 	-- The maximum amount of fires that can exist at once.
 	maxFires = 50,
 	-- Any props that when burnt 'add fuel to the fire'.

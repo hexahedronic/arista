@@ -359,3 +359,7 @@ end, "AL_COMMAND_CAT_SADMIN", true)
 arista.command.add("save", "s", 0, function(ply)
 	arista.player.saveAll()
 end, "AL_COMMAND_CAT_SADMIN")
+
+arista.command.add("firespread","s", 1, function(ply, b)
+	arista.config.vars.fireSpread = tobool(b)
+end, "AL_COMMAND_CAT_SADMIN")

@@ -47,7 +47,7 @@ Old format:
 
 -- This has to be hear due to the load-order.
 -- Anything in this will be given to groups with default store access.
-arista.config.defaults.jobCategories = {CATEGORY_VEHICLES, CATEGORY_MISC}
+arista.config.defaults.jobCategories = {CATEGORY_VEHICLES, CATEGORY_MISC, CATEGORY_CONTRABAND}
 
 if (GM or GAMEMODE):GetPlugin("officals") then
 GROUP_OFFICIALS	= arista.team.addGroup("Officials", "Join the force for 'Public Good', maintaining law and order.", "P")

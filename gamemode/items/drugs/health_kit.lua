@@ -1,7 +1,7 @@
 ITEM.name					= "Health Kit"
 ITEM.size					= 1
 ITEM.cost					= 400
-ITEM.model				= "models/healthvial.mdl"
+ITEM.model				= "models/items/healthkit.mdl"
 ITEM.batch				= 5
 ITEM.store				= true
 ITEM.plural				= "Health Kits"

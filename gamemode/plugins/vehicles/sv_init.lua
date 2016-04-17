@@ -464,9 +464,9 @@ function PLUGIN:PlayerTenthSecond(player, item)
 		if petrol > 0 then
 			if vehicle:getAristaVar("engineOn") then
 				if vehicle:GetVelocity():Length() <= 0 then
-					petrol = math.Clamp(petrol - 0.003, 0, 100)
+					petrol = math.Clamp(petrol - 0.0015, 0, 100)
 				else
-					petrol = math.Clamp(petrol - 0.02, 0, 100)
+					petrol = math.Clamp(petrol - 0.01, 0, 100)
 				end
 
 				vehicle:setAristaVar("petrol", petrol)

@@ -1,0 +1,9 @@
+ITEM.name					= "Bitcoin Miner"
+ITEM.plural				= "Bitcoin Miners"
+ITEM.cost					= 750
+ITEM.model				= "models/props_lab/reciever_cart.mdl"
+ITEM.batch				= 1
+ITEM.store				= true
+ITEM.description	= "A bitcoin miner that earns you money over time."
+ITEM.base					= "contraband"
+ITEM.max					= 2

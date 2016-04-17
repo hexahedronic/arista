@@ -15,7 +15,7 @@
 	[X] Chat Handling
 	[X] General RP Commands
 [X] Containers
-[ ] Contraband
+[X] Contraband
 [#] Old Items
 [ ] SQL
 
@@ -44,7 +44,7 @@
 [-] Make mayor salary change with tax
 [ ] Move to NW3 or some other improved networking system
 [ ] Petrol + garage for cars, locations per map
-[ ] Lockpicking
+[#] Lockpicking
 
 - CL
 [X] Clientside Inventory GUI

@@ -16,8 +16,8 @@
 	[X] General RP Commands
 [X] Containers
 [X] Contraband
-[#] Old Items
-[ ] SQL
+[X] Old Items
+[X] SQL
 
 - Fix
 [X] Find issue with job string
@@ -30,9 +30,9 @@
 [-] Fix unownable door-groups (master/slaves)
 [X] Name validation, alpha only, length, ect
 [-] Missing language strings (mainly commands, check using command)
-[ ] Flipping cars restarts engine even if damaged.
+[X] Flipping cars restarts engine even if damaged.
 [ ] Fix car view offsets
-[ ] Disable firespread command
+[X] Disable firespread command
 [ ] Setowner for entire groups
 
 - Update / Improve

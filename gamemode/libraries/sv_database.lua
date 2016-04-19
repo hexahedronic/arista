@@ -1,4 +1,5 @@
 arista.database = {}
+arista.database.spam = true
 
 function arista.database.initialize()
 	if arista.config.storage_type == "sql" then
@@ -63,18 +64,22 @@ function arista.database.savePlayer(ply, create)
 		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") has been saved to the database.")
 	elseif arista.config.storage_type == "sql" then
 		if create then
+			arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") has been created for the database.")
+
 			local datavars, columns, values = arista.database.formatColumnsFromTable(arista.config.database, ply)
 			local q = "INSERT INTO `" .. arista.config.sql.table .. "` (" .. columns .. ") VALUES (" .. values .. ");"
-			print("create", q)
+			if arista.database.spam then print("create", q) end
 
 			_arista_database:Query(q, arista.database.genericCallback(q))
 		else
 			local datavars, columns, values = arista.database.formatColumnsFromTable(data, ply)
 			local q = "UPDATE `" .. arista.config.sql.table .. "` SET " .. datavars .. " WHERE steamID64='" .. ply:SteamID64() .. "';"
-			print("update", q)
+			if arista.database.spam then print("update", q) end
 
 			_arista_database:Query(q, arista.database.genericCallback(q))
 		end
+
+		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") has been saved to the database.")
 	end
 end
 
@@ -109,9 +114,11 @@ function arista.database.fetchPlayer(ply, callback)
 				arista.database.savePlayer(ply, true)
 			end
 
-			PrintTable(data)
+			if arista.database.spam then PrintTable(data) end
 
 			if not data.data[1] then
+				arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") has joined for the first time and has been inserted into the database.")
+
 				gamemode.Call("PlayerAddedToDatabase", ply)
 			end
 

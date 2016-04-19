@@ -81,31 +81,6 @@ Tying people up without their explicit consent is illegal.
 	}
 }
 
--- Stuff that's saved in the database, if you want to fuck with it, then
--- fuck with it before your first run (pdata self-corrects, SQL is likely to break).
-arista.config.database = {
-	-- The money that each player starts with.
-	money = 2500,
-	-- The clan that each player belongs to by default.
-	clan = "",
-	-- The default inventory size.
-	inventorySize = 40,
-	-- The detailed information each player begins with.
-	details = "",
-	-- This is so if they rejoin they are still in jail.
-	arrested = false,
-	-- Donator time.
-	donator = 0,
-	-- Gender.
-	gender = "Male",
-	-- Used to block players from certain jobs and whatnot, don't touch it.
-	blacklist = {},
-	-- Used to store items, don't touch it.
-	inventory = {},
-	-- Used for IC chat and stuff.
-	rpname = "",
-}
-
 -- Enums, change only if something real weird happens.
 TYPE_LARGE = "large"
 TYPE_SMALL = "small"

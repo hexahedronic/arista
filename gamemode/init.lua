@@ -1207,6 +1207,8 @@ function GM:ShutDown()
 		v:holsterAll()
 		v:saveData()
 	end
+
+	arista.database.shutdown()
 end
 
 function GM:PlayerSwitchFlashlight(ply, on)

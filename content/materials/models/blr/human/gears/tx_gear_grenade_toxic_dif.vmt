@@ -1,0 +1,22 @@
+"vertexLitGeneric"
+{
+	"$basetexture" "models/BLR/human/gears/TX_Gear_Grenade_Toxic_Dif"
+        "$bumpmap" "models/BLR/human/gears/TX_Gear_Grenade_Toxic_Nor"
+     "$surfaceprop" "metal"
+	"$envmap"	env_cubemap
+	"$envmaptint" "[.10  .10  .10 ]"
+	"$envmapconstrast" "1"
+	"$phong" "1"
+	"$phongboost"   "5.5"
+	"$phongfresnelranges" "[0.04 0.4 1]"
+	"$phongexponent" "5"
+	"$phongalbedotint" "1"
+	"$normalmapalphaenvmapmask" "1"
+	"$selfillum" 1
+
+// Rim lighting parameters
+	"$rimlight" "0"												// To enable rim lighting (requires phong)
+	"$rimlightexponent" "3"										// Exponent for phong component of rim lighting	
+	"$rimlightboost" "0.5"										// Boost for ambient cube component of rim lighting
+
+}

@@ -1,0 +1,9 @@
+VertexLitGeneric
+{
+	"$basetexture" "models/BLR/human/gears/TX_Gear_GrenadeB_HE_Dif"
+     "$bumpmap" "models/BLR/human/gears/TX_Gear_Grenade_HE_Nor"
+     "$phong" "1"
+     "$phongexponent" "5"
+     "$phongboost"   "5.5"
+     "$phongfresnelranges"	"[0.04 0.4 1]"
+}

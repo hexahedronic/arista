@@ -1,0 +1,5 @@
+"vertexLitGeneric"
+{
+	"$basetexture" "models/BLR/human/common/face_dif"
+        "$bumpmap" "models/BLR/human/common/face_Nor"
+}

@@ -146,14 +146,16 @@ function arista.database.loadPlayer(ply)
 			for k, v in pairs(tbl) do
 				arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") had database key '", k, "' loaded as '", v, "'.")
 
-				-- stores tables as serialized strings
-				if istable(arista.config.database[k]) then
-					v = arista.utils.deSerialize(v) or v
-				end
+				if arista.config.storage_type == "sql" then
+					-- stores tables as serialized strings
+					if istable(arista.config.database[k]) then
+						v = arista.utils.deSerialize(v) or v
+					end
 
-				-- stores bools as int
-				if isbool(arista.config.database[k]) then
-					v = tobool(v)
+					-- stores bools as int
+					if isbool(arista.config.database[k]) then
+						v = tobool(v)
+					end
 				end
 
 				if istable(v) then ply:setAristaVar(k, v) else ply:networkAristaVar(k, v) end

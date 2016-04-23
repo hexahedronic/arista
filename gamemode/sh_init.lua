@@ -18,7 +18,7 @@ internal = nil
 derma = nil
 
 -- Derive functionality from sandbox
-DeriveGamemode("Sandbox")
+DeriveGamemode("sandbox")
 
 -- This replaces GM/GAMEMODE.
 arista.gamemode = {

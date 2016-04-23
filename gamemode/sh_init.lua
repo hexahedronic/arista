@@ -72,6 +72,7 @@ GM.ModifiedWork = arista.gamemode.modifiedWork
 CONTAINER_CAN_PUT = 1
 CONTAINER_CAN_TAKE = 2
 
+include("libraries/network.lua")
 include("libraries/logs.lua")
 include("libraries/file.lua")
 

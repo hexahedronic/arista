@@ -74,7 +74,7 @@ function entity:setAristaVar(var, val)
 			return
 		end
 
-		self["SetNW2" .. netType](self, "arista_" .. var, val)
+		self["SetNW3" .. netType](self, "arista_" .. var, val)
 	end
 
 	self._aristaVars[var] = val
@@ -104,7 +104,7 @@ function entity:forceNetworkUpdate()
 
 		self:setAristaVar(k, def)
 
-		timer.Simple(0.1, function()
+		timer.Simple(FrameTime(), function()
 			if not (self and self:IsValid()) then return end
 			self:setAristaVar(k, val)
 		end)
@@ -117,7 +117,7 @@ local function createTypeNetworker(class)
 	arista.logs.logNoPrefix(arista.logs.E.DEBUG, "Creating networker for '", class, "' (player.getArista", class, ").")
 
 	entity["getArista" .. class] = function(self, key)
-		return self["GetNW2" .. class](self, "arista_" .. key)
+		return self["GetNW3" .. class](self, "arista_" .. key)
 	end
 end
 

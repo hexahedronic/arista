@@ -1,5 +1,5 @@
 arista.database = {}
-arista.database.spam = true
+arista.database.spam = false
 
 function arista.database.initialize()
 	if arista.config.storage_type == "sql" then
@@ -51,6 +51,10 @@ end
 
 function arista.database.savePlayer(ply, create)
 	local data = ply._databaseVars
+	if not data then
+		ErrorNoHalt("Player was missing database table -> " .. tostring(ply) .. "\n")
+	end
+
 	if arista.config.storage_type == "pdata" then
 		if create then
 			arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") has been recreated for the database.")
@@ -71,7 +75,7 @@ function arista.database.savePlayer(ply, create)
 			if arista.database.spam then print("create", q) end
 
 			_arista_database:Query(q, arista.database.genericCallback(q))
-		else
+		elseif data then
 			local datavars, columns, values = arista.database.formatColumnsFromTable(data, ply)
 			local q = "UPDATE `" .. arista.config.sql.table .. "` SET " .. datavars .. " WHERE steamID64='" .. ply:SteamID64() .. "';"
 			if arista.database.spam then print("update", q) end
@@ -101,6 +105,11 @@ function arista.database.fetchPlayer(ply, callback)
 
 		callback(data)
 	elseif arista.config.storage_type == "sql" then
+		-- sometimes it doesnt load?
+		if not _arista_database then
+			arista.database.initialize()
+		end
+
 		_arista_database:Query("SELECT * FROM `" .. arista.config.sql.table .. "` WHERE steamID64='" .. ply:SteamID64() .. "';", function(res)
 			if not (ply and ply:IsValid()) then return end
 			local data = res[1]

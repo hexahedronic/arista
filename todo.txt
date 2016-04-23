@@ -42,7 +42,7 @@
 [X] Engine notification
 [X] Hunger notification
 [-] Make mayor salary change with tax
-[ ] Move to NW3 or some other improved networking system
+[X] Move to NW3 or some other improved networking system
 [ ] Petrol + garage for cars, locations per map
 [#] Lockpicking
 
@@ -82,5 +82,5 @@
 
 - Finalising
 [X] CLOSED-ALPHA (1 day closed testing for immediate, easily spottable errors) (12 Slots)
-[#] ALPHA (2 days open testing for not so easily spottable errors) (16 Slots)
+[X] ALPHA (2 days open testing for not so easily spottable errors) (16 Slots)
 [ ] BETA (5 days open testing for underlying issues, small bugs, improvements ect) (24 Slots)

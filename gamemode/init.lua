@@ -15,8 +15,8 @@ game.ConsoleCommand("sbox_godmode 0\n")
 if arista.config.vars.localVoice then
 	game.ConsoleCommand("sv_voiceenable 1\n")
 	game.ConsoleCommand("sv_alltalk 1\n")
-	game.ConsoleCommand("sv_voicecodec voice_speex\n")
-	game.ConsoleCommand("sv_voicequality 5\n")
+	--game.ConsoleCommand("sv_voicecodec voice_speex\n")
+	--game.ConsoleCommand("sv_voicequality 5\n")
 end
 
 -- Net Messages, seems like a lot since they also replace umsgs (umsg is deprecated)
@@ -92,14 +92,8 @@ function GM:Initialize()
 	ErrorNoHalt(os.date() .. " - Server starting up\n")
 	ErrorNoHalt("----------------------\n")
 
-	--local host = self.Config["MySQL Host"]
-	--local username = self.Config["MySQL Username"]
-	--local password = self.Config["MySQL Password"]
-	--local database = self.Config["MySQL Database"]
-
 	-- Initialize a connection to the MySQL database.
-	--tmysql.initialize(self.Config["MySQL Host"], self.Config["MySQL Username"], self.Config["MySQL Password"], self.Config["MySQL Database"], 3306, 5, 5)
-	arista.database.initialize() -- todo, implement
+	arista.database.initialize()
 
 	-- Call the base class function.
 	return self.BaseClass:Initialize()
@@ -467,6 +461,12 @@ function GM:PlayerInitialized(ply)
 	arista.logs.event(arista.logs.E.LOG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") finished connecting.")
 end
 
+function GM:NW3PlayerActuallySpawned(ply)
+	timer.Simple(1, function()
+		for k, v in ipairs(player.GetAll()) do v:forceNetworkUpdate() end
+	end)
+end
+
 -- Called when a player's data is loaded.
 function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("job", arista.config:getDefault("job"))
@@ -556,8 +556,6 @@ function GM:PlayerDataLoaded(ply, success)
 			ply:generateDefaultRPName()
 			arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.NETEVENT, ply:Name(), "(", ply:SteamID(), ") was missing their RP Name, giving them a new one.")
 		end
-
-		for k, v in ipairs(player.GetAll()) do v:forceNetworkUpdate() end
 	end)
 end
 

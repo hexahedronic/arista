@@ -1,0 +1,7 @@
+"vertexLitGeneric"
+{
+	"$basetexture" "models/BLR/human/common/hand"
+        "$bumpmap" "models/BLR/human/common/hand_n"
+	"$phong" "1"
+	"$phongboost"   "5.5"
+}

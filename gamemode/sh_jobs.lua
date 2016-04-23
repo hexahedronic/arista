@@ -204,7 +204,7 @@ GANG_CIVILIANS	= arista.team.addGang(GROUP_CIVILIANS, "The Civilians", "models/p
 
 TEAM_CITIZEN = arista.team.add("Citizen", {
 	color = Color(25, 150, 25, 255),
-	description = "A regular Citizen living in the city.",
+  description = "A regular Citizen living in the city.",
 
 	salary = 200,
 
@@ -221,7 +221,8 @@ TEAM_CITIZEN = arista.team.add("Citizen", {
 
 TEAM_GUNDEAL = arista.team.add("Gun Dealer", {
 	color = Color(170, 150, 25, 255),
-	description = "The owner of a gun store.",
+	males = "models/player/leet.mdl",
+  description = "The owner of a gun store.",
 
 	salary = 220,
 
@@ -282,7 +283,8 @@ TEAM_DOCTOR = arista.team.add("Doctor", {
 
 TEAM_MECHANIC = arista.team.add("Mechanic", {
 	color = Color(175, 175, 175, 255),
-	description = "Repairs damaged vehicles.",
+	males = "models/mechanic/mechanic_m_01.mdl",
+  description = "Repairs damaged vehicles.",
 
 	salary = 150,
 	limit = 3,
@@ -303,6 +305,7 @@ TEAM_MECHANIC = arista.team.add("Mechanic", {
 
 GROUP_UNDERGROUND	= arista.team.addGroup("The Underground", "Join the underground for more fun, but harsher treatment if caught.")
 GANG_UNDERGROUND	= arista.team.addGang(GROUP_UNDERGROUND, "The Underground", "models/player/Group03/male_07.mdl", "'Fuck the police!'")
+GANG_MAFIA = arista.team.addGang(GROUP_UNDERGROUND, "The Mafia", "models/player/Group03/male_07.mdl", "'Wherever there's opportunity, the mafia will be there.'")
 
 TEAM_BLACKMARKETDEALER = arista.team.add("Blackmarket Dealer", {
 	color = Color(125, 125, 125, 255),
@@ -355,6 +358,41 @@ TEAM_GANGSTER = arista.team.add("Gangster", {
 		group = GROUP_UNDERGROUND,
 	},
 })
+
+TEAM_MAFIABOSS = arista.team.add("Mafia Boss", {
+	color = Color(102, 0, 0, 255),
+	description = "Leader of a large time organised crime mob.",
+
+	salary = 175,
+	limit = 1,
+
+	access = "dgeD",
+
+	group = {
+		gang = GANG_MAFIA,
+		access = "",
+		level = 1,
+		group = GROUP_UNDERGROUND,
+	},
+})
+
+TEAM_MAFIA = arista.team.add("Mafia Goon", {
+	color = Color(102, 0, 0, 255),
+	description = "Member of a large time organised crime mob.",
+
+	salary = 125,
+	limit = 6,
+
+	access = "",
+
+	group = {
+		gang = GANG_MAFIA,
+		access = "",
+		level = 1,
+		group = GROUP_UNDERGROUND,
+	},
+})
+
 
 
 -- Default job.

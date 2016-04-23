@@ -1,0 +1,22 @@
+"vertexLitGeneric"
+{
+	"$basetexture" "models\BLR\human\Head\Helmet_004\TX_Helmet_002_Dif"
+        "$bumpmap" "models\BLR\human\Head\Helmet_004\TX_Helmet_002_Nor"
+     "$surfaceprop" "metal"
+	"$envmap"	env_cubemap
+	"$envmaptint" "[.025  .0250  .0250 ]"
+	"$envmapconstrast" "1"
+	"$phong" "1"
+	"$phongboost"   "0.01"
+	"$phongfresnelranges" "[0.04 0.04 0.04]"
+	"$phongexponent" "5"
+	"$phongalbedotint" "1"
+	"$normalmapalphaenvmapmask" "1"
+	"$selfillum" 1
+
+// Rim lighting parameters
+	"$rimlight" "0"												// To enable rim lighting (requires phong)
+	"$rimlightexponent" "0.01"										// Exponent for phong component of rim lighting	
+	"$rimlightboost" "0.01"										// Boost for ambient cube component of rim lighting
+
+}

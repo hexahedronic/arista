@@ -551,7 +551,7 @@ function GM:PlayerCanSayOOC(ply, text)
 			timeType = "AL_SECONDS"
 		end
 
-		ply:notify("UL_CANNOT_OOC_COOLDOWN", timeleft, timeType)
+		ply:notify("AL_CANNOT_OOC_COOLDOWN", timeleft, timeType)
 
 		return false
 	end

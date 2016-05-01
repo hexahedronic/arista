@@ -88,6 +88,10 @@ M = main				- All group-to-group transitions must go through this
 
 -- Called when the server initializes.
 function GM:Initialize()
+	if ulx or ULib then
+		while true do ErrorNoHalt("R T F M") end
+	end
+	
 	ErrorNoHalt("----------------------\n")
 	ErrorNoHalt(os.date() .. " - Server starting up\n")
 	ErrorNoHalt("----------------------\n")

@@ -37,6 +37,7 @@
 [ ] Doors dont seem to network their name properly upon rejoining
 [ ] Client networking blows up on cl/sh reload, rejoining fixes it
 [ ] Chat handler is completely hacky, please fix
+[ ] You can see your own 'typing' text
 
 [ ] Remake QDerma because trixter ripped off someone else's designs
 [X] Fists seem to be a bit (completely) borked

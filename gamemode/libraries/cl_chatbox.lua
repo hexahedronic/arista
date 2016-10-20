@@ -243,9 +243,14 @@ function arista.chatbox.messageAdd(title, name, text, filtered, icon)
 	end
 
 	if not filtered then
-		local ic = (icon and chathud and "<texture=" .. icon[1] .. ">") or ""
-		chat.AddText(tc, tt, color_white, ic, nc, nm, xc, tx)
+		local ic = ""
+		if icon and icon[1] and ChatHUD then
+			ic = icon[1]:gsub("icon16/", ""):gsub("%.png", "")
+			ic = ":"..ic..":"
+		end
+		
+		chat.AddText(tc or "", tt or "", color_white, ic or "", nc or "", nm or "", xc or "", tx or "")
 	else
-		MsgN("FILTERED - ", icon and icon[2] .. " " or "", tt or "", nm  or "", tx  or "")
+		MsgN("FILTERED - ", icon and icon[2] .. " " or "", tt or "", nm or "", tx or "")
 	end
 end

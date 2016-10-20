@@ -467,7 +467,9 @@ end
 
 function GM:NW3PlayerActuallySpawned(ply)
 	timer.Simple(1, function()
-		for k, v in ipairs(player.GetAll()) do v:forceNetworkUpdate() end
+		for k, v in next, ents.GetAll() do
+			if v:IsPlayer() or arista.entity.isOwnable(v) then v:forceNetworkUpdate() end
+		end
 	end)
 end
 

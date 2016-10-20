@@ -112,7 +112,7 @@ if SERVER then
 	local function network(ent, var, type, val, ply)
 		local eid = ent:EntIndex()
 		local oldval = vars[eid][var]
-		--if val == oldval then return end -- this has to be disabled to fix some issues
+		if val == oldval then return end
 		types[eid][var] = type
 		vars[eid][var] = val
 		if proxy[eid][var] then proxy[eid][var](ent, var, oldval, val) end

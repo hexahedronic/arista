@@ -285,5 +285,5 @@ arista.command.add("unownable", "s", 0, function(ply, action, ...)
 		ply:notify("AL_X_NOW_UNOWNABLE", name)
 	end
 
-	plugin:SaveData(force_update)
+	plugin:SaveData()
 end, "AL_COMMAND_CAT_SADMIN", true)

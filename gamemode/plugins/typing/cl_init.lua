@@ -4,7 +4,7 @@ include("sh_init.lua")
 function PLUGIN:AdjustESPLines(lines, tent, pos, distance, lookingat)
 	local player = tent:isPlayerRagdoll() and tent:getRagdollPlayer() or tent
 
-	if player:IsPlayer() and player:GetNW2Bool("arista_typing") then
+	if player:IsPlayer() and player:GetNW2Bool("arista_typing") and player ~= arista.lp then
 		lines:shiftWeightDown(1, 1) -- Make everything under the player's name drop by one
 		lines:add("Typing", "Typing", color_white, 2)
 	end

@@ -246,7 +246,7 @@ function arista.chatbox.messageAdd(title, name, text, filtered, icon)
 		local ic = ""
 		if icon and icon[1] and ChatHUD then
 			ic = icon[1]:gsub("icon16/", ""):gsub("%.png", "")
-			ic = ":"..ic..":"
+			ic = ":"..ic..": "
 		end
 		
 		chat.AddText(tc or "", tt or "", color_white, ic or "", nc or "", nm or "", xc or "", tx or "")

@@ -38,6 +38,7 @@
 [X] Client networking blows up on cl/sh reload, rejoining fixes it
 [X] Chat handler is completely hacky, please fix
 [X] You can see your own 'typing' text
+[ ] A lot of the time you die in third person
 
 [ ] Remake QDerma because trixter ripped off someone else's designs
 [X] Fists seem to be a bit (completely) borked

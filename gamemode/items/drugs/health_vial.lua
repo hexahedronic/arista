@@ -13,7 +13,7 @@ ITEM.base					= "item"
 function ITEM:onUse(player)
 	-- todo: lang
 	if player:Health() >= 100 then
-		player:Notify("You do not need any more health!")
+		player:notify("You do not need any more health!")
 	return false end
 
 	player:SetHealth(math.Clamp(player:Health() + 25, 0, 100))

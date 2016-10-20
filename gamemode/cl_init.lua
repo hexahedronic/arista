@@ -362,7 +362,7 @@ function GM:Tick()
 	arista.client.vehiclelist = {}
 
 	for _,v in ipairs(ents.GetAll()) do
-		if not (v and IsValid(v) and v:EntIndex() > 0) then return end
+		if not (v and IsValid(v) and v:EntIndex() > 0) then continue end
 
 		if v:IsVehicle() then
 			arista.client.vehiclelist[#arista.client.vehiclelist+1] = v

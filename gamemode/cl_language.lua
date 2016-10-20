@@ -453,9 +453,12 @@ arista.lang.tbl.EN = {
 
 	["AL_COMMAND_FIRESPREAD_ENABLE"] = "Fire spreading enabled.",
 	["AL_COMMAND_FIRESPREAD_DISABLE"] = "Fire spreading disabled.",
+	
+	-- Derf
+	["AL_RAISE_FISTS"] = "You must first raise your fists. (RELOAD)",
 
 	-- BACKWARDS COMPAT
-	["AL_METHOD_UNSUPORTED"] = "This method is no longer supported.",
+	["AL_METHOD_UNSUPPORTED"] = "This method is no longer supported.",
 }
 
 local missing = {}

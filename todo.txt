@@ -34,10 +34,14 @@
 [ ] Fix car view offsets
 [X] Disable firespread command
 [ ] Setowner for entire groups
+[ ] Doors dont seem to network their name properly upon rejoining
+
+[ ] Remake QDerma because trixter ripped off someone else's designs
+[X] Fists seem to be a bit (completely) borked
 
 - Update / Improve
-[-] Remake HUD Design
-[X] Remake Derma Design
+[ ] Remake HUD Design
+[ ] Remake Derma Design
 [-] Chatbox (possibly bug ghosty to finish CBox)
 [X] Engine notification
 [X] Hunger notification
@@ -79,8 +83,10 @@
 [-] Realistic text signs (with actual models)
 [-] Area display (intergrated); people really like this idea
 [-] Pickpocketing GUI (container that shows currently equiped weapons), use on chloroformed/sleeping
+[-] Base voice radius off magnitude of volume
+[-] Stability, you can be knocked over if you get shot whilst running+gunning
 
-- Finalising
-[X] CLOSED-ALPHA (1 day closed testing for immediate, easily spottable errors) (12 Slots)
-[X] ALPHA (2 days open testing for not so easily spottable errors) (16 Slots)
+- Finalising, project reopened, testing reset
+[ ] CLOSED-ALPHA (1 day closed testing for immediate, easily spottable errors) (12 Slots)
+[ ] ALPHA (2 days open testing for not so easily spottable errors) (16 Slots)
 [ ] BETA (5 days open testing for underlying issues, small bugs, improvements ect) (24 Slots)

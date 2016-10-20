@@ -7,7 +7,7 @@ if arista then
 	internal = table.Copy(arista._internaldata)
 end
 
--- arista: RolePlay FrameWork --
+-- arista: RolePlay --
 arista = {}
 arista.registry = debug.getregistry()
 
@@ -22,7 +22,7 @@ DeriveGamemode("sandbox")
 
 -- This replaces GM/GAMEMODE.
 arista.gamemode = {
-	name = "arista Framework",
+	name = "arista",
 	author = "kuromeku, Lexi, Q2F2, et al.",
 	email = "N/A",
 	website = "https://github.com/hexahedronic/arista/",

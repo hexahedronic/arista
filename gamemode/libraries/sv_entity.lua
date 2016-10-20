@@ -964,7 +964,7 @@ function arista.entity.restoreAccess(player)
 
 			arista.entity.updateSlaves(entity)
 
-			arista.entity.accessChangedPlayerMulti(entity,arista.entity.getAllAccessors(entity),true)
+			arista.entity.accessChangedPlayerMulti(entity,arista.entity.getAllAccessors(entity), true)
 		end
 	end
 

@@ -34,9 +34,9 @@
 [ ] Fix car view offsets
 [X] Disable firespread command
 [ ] Setowner for entire groups
-[ ] Doors dont seem to network their name properly upon rejoining
-[ ] Client networking blows up on cl/sh reload, rejoining fixes it
-[ ] Chat handler is completely hacky, please fix
+[X] Doors dont seem to network their name properly upon rejoining
+[X] Client networking blows up on cl/sh reload, rejoining fixes it
+[#] Chat handler is completely hacky, please fix
 [ ] You can see your own 'typing' text
 
 [ ] Remake QDerma because trixter ripped off someone else's designs
@@ -88,6 +88,7 @@
 [-] Pickpocketing GUI (container that shows currently equiped weapons), use on chloroformed/sleeping
 [-] Base voice radius off magnitude of volume
 [-] Stability, you can be knocked over if you get shot whilst running+gunning
+[-] Day night cycle + purchasable lights
 
 - Finalising, project reopened, testing reset
 [ ] CLOSED-ALPHA (1 day closed testing for immediate, easily spottable errors) (12 Slots)

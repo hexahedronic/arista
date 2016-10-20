@@ -45,7 +45,7 @@ Old format:
 (name,color,males,females,group,description,salary,limit,access,blacklist,canmake,cantuse,time,guns,ammo)
 ]]
 
--- This has to be hear due to the load-order.
+-- This has to be here due to the load-order.
 -- Anything in this will be given to groups with default store access.
 arista.config.defaults.jobCategories = {CATEGORY_VEHICLES, CATEGORY_MISC, CATEGORY_CONTRABAND}
 

@@ -1472,3 +1472,10 @@ function GM.ClearDecals()
 	end
 end
 timer.Create("Cleanup Decals", 60, 0, GM.ClearDecals)
+
+function GM:OnReloaded()
+	for k, v in ipairs(player.GetAll()) do
+		v:forceNetworkUpdate()
+	end
+end
+

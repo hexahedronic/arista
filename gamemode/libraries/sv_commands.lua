@@ -65,18 +65,17 @@ function arista.command.consoleCommand(player, _, arguments)
 							ErrorNoHalt(os.date() .. " callback for 'arista " .. command .. " " .. concat .. "' failed: " .. fail .. "\n")
 						end
 					else
-						-- todo: lang
-						player:notify("You do not have access to this command, %s.", player:Name())
+						player:notify("AL_CANNOT_COMMAND", player:Name())
 					end
 				else
-					player:notify("This command requires %d arguments!", arista.command.stored[command].arguments)
+					player:notify("AL_CANNOT_COMMAND_ARGS", arista.command.stored[command].arguments)
 				end
 			end
 		else
-			player:notify("This is not a valid command!")
+			player:notify("AL_INVALID_COMMAND")
 		end
 	else
-		player:notify("This is not a valid command!")
+		player:notify("AL_INVALID_COMMAND")
 	end
 end
 

@@ -55,6 +55,7 @@ SWEP.Primary.ThrowAcceleration = 200
 SWEP.Primary.Super = false
 SWEP.Primary.Refire = 1
 SWEP.Primary.Sound = Sound("WeaponFrag.Throw")
+SWEP.Primary.HolsterTime = 1.75
 
 -- Set the secondary fire settings.
 SWEP.Secondary.ClipSize = -1
@@ -69,7 +70,7 @@ SWEP.NoIronSightFovChange = true
 SWEP.NoIronSightAttack = true
 SWEP.heldEnt = NULL
 
---To determine holster--
+-- To determine holster
 SWEP.NextHolster = 0
 
 -- Called when the SWEP is initialized.
@@ -128,7 +129,7 @@ function SWEP:Reload()
 			self.Owner:PrintMessage(HUD_PRINTCENTER, "LANGUAGEME You lower your fists")
 			self.Owner:SetNWBool("raisedFists", false)
 			
-			self.NextHolster = CurTime() + 0.75
+			self.NextHolster = CurTime() + self.Primary.HolsterTime
 		else
 			if SERVER then
 				vm:SetNoDraw(false)
@@ -141,7 +142,7 @@ function SWEP:Reload()
 			self.Owner:PrintMessage(HUD_PRINTCENTER, "LANGUAGEME You raise your fists")
 			self.Owner:SetNWBool("raisedFists", true)
 			
-			self.NextHolster = CurTime() + 0.75
+			self.NextHolster = CurTime() + self.Primary.HolsterTime
 		end
 	else
 		return false

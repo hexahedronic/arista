@@ -133,6 +133,9 @@ arista.lang.tbl.EN = {
 
 	["AL_CANNOT_HOLSTER"] = "You cannot holster this weapon for %d second(s)!",
 	["AL_CANNOT_NOAMMO"] = "You don't have enough ammunition for this weapon!",
+	
+	["AL_CANNOT_COMMAND"] = "You do not have access to this command, %s.",
+	["AL_CANNOT_COMMAND_ARGS"] = "This command requires %d arguments!",
 
 	-- INVALID OBJECT
 	["AL_INVALID_ACTION"] = "Invalid action specified!",
@@ -151,7 +154,8 @@ arista.lang.tbl.EN = {
 	["AL_INVALID_GANG"] = "That's not a valid gang!",
 	["AL_INVALID_COMMAND"] = "That's not a command!",
 	["AL_INVALID_BLACKLIST"] = "That is not a valid blacklist type! (Valid: team/item/cat/cmd)",
-	["AL_INVALID_WEAPON"]= "That is not a valid weapon!",
+	["AL_INVALID_WEAPON"] = "That is not a valid weapon!",
+	["AL_INVALID_COMMAND"] = "This is not a valid command!",
 
 	-- PLAYER PERFORMED ACTION
 	["AL_YOU_MANUFACTURED"] = "You manufactured %s.",

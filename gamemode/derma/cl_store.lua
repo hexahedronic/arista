@@ -122,9 +122,9 @@ function PANEL:Init()
 
 	-- Check if it is not a single batch.
 	if item.batch > 1 then
-		self.label:SetText(item.batch .. " " .. item.plural.." (" .. arista.lang.currency .. cost .. ")")
+		self.label:SetText(item.batch .. " " .. item.plural.." (" .. arista.lang.currency .. string.Comma(cost) .. ")")
 	else
-		self.label:SetText(item.batch .. " " .. item.name .. " (" .. arista.lang.currency .. cost .. ")")
+		self.label:SetText(item.batch .. " " .. item.name .. " (" .. arista.lang.currency .. string.Comma(cost) .. ")")
 	end
 
 	-- The description of the item.

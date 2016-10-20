@@ -496,8 +496,8 @@ function GM:DrawPlayerInformation()
 	-- Insert the player's information into the text table.
 	text[#text+1] = {arista.lang:Get"AL_HUD_RPNAME" .. ply:rpName(), "icon16/user"}
 	text[#text+1] = {arista.lang:Get"AL_HUD_GENDER" .. ply:getGender(), ply:getGender() == "Female" and "icon16/female" or "icon16/male"}
-	text[#text+1] = {arista.lang:Get"AL_HUD_SALARY" .. ply:getSalary(), "icon16/folder_go"}
-	text[#text+1] = {arista.lang:Get"AL_HUD_MONEY" .. ply:getMoney(), "icon16/star"}
+	text[#text+1] = {arista.lang:Get"AL_HUD_SALARY" .. string.Comma(ply:getSalary()), "icon16/folder_go"}
+	text[#text+1] = {arista.lang:Get"AL_HUD_MONEY" .. string.Comma(ply:getMoney()), "icon16/star"}
 	text[#text+1] = {arista.lang:Get"AL_HUD_DETAILS" .. ply:getDetails(), "icon16/status_offline"}
 	text[#text+1] = {arista.lang:Get"AL_HUD_CLAN" .. ply:getClan(), "icon16/group"}
 	text[#text+1] = {arista.lang:Get"AL_HUD_JOB" .. ply:getJob(), "icon16/wrench"}

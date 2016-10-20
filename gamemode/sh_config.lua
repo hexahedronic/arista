@@ -280,13 +280,13 @@ arista.config.vars = {
 
 arista.config.plugins = {
 	-- STAMINA: How much stamina to restore per interval.
-	staminaRestore = 0.5,
+	staminaRestore = 0.4,
 	-- STAMINA: How much stamina to drain per interval.
 	staminaDrain = 0.3,
 	-- STAMINA: How much stamina to drain for a punch.
-	staminaPunch = 5,
+	staminaPunch = 8,
 	-- STAMINA: How much stamina to drain for a jump.
-	staminaJump = 5,
+	staminaJump = 8,
 
 	-- HUNGERMOD: How much hunger to drain per second.
 	hungerDrain = 0.05,

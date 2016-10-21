@@ -1446,7 +1446,7 @@ function GM:PlayerGiveSWEP(ply, class, weapon)
 
 		return true
 	else
-		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to sgive themselves a weapon (", class, ").")
+		arista.logs.event(arista.logs.E.DEBUG, arista.logs.E.SPAWN, ply, " tried (and failed) to give themselves a weapon (", class, ").")
 
 		return false
 	end

@@ -52,7 +52,7 @@
 [-] Make mayor salary change with tax
 [X] Move to NW3 or some other improved networking system
 [X] Petrol + garage for cars, locations per map
-[#] Lockpicking
+[X] Lockpicking
 [ ] Weapons should appear attached to player
 
 - CL

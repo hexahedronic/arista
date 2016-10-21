@@ -162,6 +162,8 @@ arista.config.vars = {
 	arrestWarrantTime = 360,
 	-- Time taken to tie up a player.
 	tyingTime = 5,
+	-- Time taken to pick a lock.
+	pickingTime = 4,
 	-- Time taken to untie a player.
 	untyingTime = 8,
 	-- If we should clear decals every 60 seconds.

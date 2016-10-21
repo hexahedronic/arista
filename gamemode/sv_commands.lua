@@ -155,7 +155,7 @@ arista.command.add("demote", "", 2, function(ply, target, ...)
 	local tid = victim:Team()
 	victim:demote()
 
-	arista.player.notifyAll("AL_PLAYER_DEMOTED", nil, ply:Name(), victim:Name(), team.GetName(tid), reason)
+	arista.player.notifyAll("AL_PLAYER_DEMOTED", ply:Name(), victim:Name(), team.GetName(tid), reason)
 end, "AL_COMMAND_CAT_COMMANDS", true)
 
 do --isolate vars

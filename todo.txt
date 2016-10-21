@@ -25,28 +25,26 @@
 [X] E + Shift doesnt work on deployed items
 [X] Stamina exhausted might not be networked properly? potential clientside jump prohibiter broken
 [X] Access is not returned to rejoining players correctly
-[-] Readd sound to QButtons in derma implementation
 [X] Find a better way to do ExtraInit that doesn't require timers (fucking garry)
 [-] Fix unownable door-groups (master/slaves)
 [X] Name validation, alpha only, length, ect
 [-] Missing language strings (mainly commands, check using command)
 [X] Flipping cars restarts engine even if damaged.
-[ ] Fix car view offsets
+[X] Fix car view offsets
 [X] Disable firespread command
-[ ] Setowner for entire groups
+[-] Setowner for entire groups
 [X] Doors dont seem to network their name properly upon rejoining
 [X] Client networking blows up on cl/sh reload, rejoining fixes it
 [X] Chat handler is completely hacky, please fix
 [X] You can see your own 'typing' text
 [ ] A lot of the time you die in third person
-
-[ ] Remake QDerma because trixter ripped off someone else's designs
+[ ] /engine on message duplicates
 [X] Fists seem to be a bit (completely) borked
 
 - Update / Improve
-[ ] Remake HUD Design
-[ ] Remake Derma Design
-[-] Chatbox (possibly bug ghosty to finish CBox)
+[-] Remake HUD Design
+[-] Remake Derma Design
+[X] Chatbox (possibly bug ghosty to finish CBox)
 [X] Engine notification
 [X] Hunger notification
 [-] Make mayor salary change with tax

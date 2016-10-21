@@ -104,7 +104,7 @@ function entity:forceNetworkUpdate()
 
 		self:setAristaVar(k, def)
 
-		timer.Simple(FrameTime(), function()
+		timer.Simple(0, function()
 			if not (self and self:IsValid()) then return end
 			self:setAristaVar(k, val)
 		end)

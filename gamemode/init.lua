@@ -1481,3 +1481,8 @@ function GM:OnReloaded()
 	end
 end
 
+concommand.Add("arista_force_reload", function(p)
+	if p:IsValid() and not p:IsSuperAdmin() then return false end
+	GAMEMODE:OnReloaded()
+end)
+

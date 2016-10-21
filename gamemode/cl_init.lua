@@ -314,7 +314,11 @@ end
 -- Give the player a first-person view of their corpse
 function GM:CalcView(pl, origin, angles, fov)
 	if not IsValid(arista.lp) then arista.lp = LocalPlayer() return end
-
+	
+	if pl:InVehicle() and pl:GetVehicle():getAristaInt("fpView") then
+		origin = origin + Vector(0, 0, pl:GetVehicle():getAristaInt("fpView"))
+	end
+	
 	-- Get their ragdoll
 	local ragdoll = arista.lp:getAristaEntity("ragdoll")
 

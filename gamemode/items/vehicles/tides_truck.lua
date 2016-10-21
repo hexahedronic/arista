@@ -32,10 +32,7 @@ local v = {
 	},
 
 	SeatType = "Seat_Jeep",
-	ModView = {
-		ThirdPerson = {Out = 300 , Up = 25},
-		FirstPerson = Vector(0, 0, 12),
-	},
+	ModView = 12,
 	KeyValues = {
 		vehiclescript	=	"scripts/vehicles/" .. ITEM.vehicleName .. ".txt"
 	},

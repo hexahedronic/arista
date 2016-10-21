@@ -87,7 +87,7 @@ function GM:PlayerCanDemote(ply, target)
 		end
 
 		return false
-	elseif (target:Arrested() or target:Tied()) then
+	elseif (target:isArrested() or target:isTied()) then
 		if SERVER then
 			ply:notify("AL_CANNOT_DEMOTE_GENERIC", target:Name())
 		end

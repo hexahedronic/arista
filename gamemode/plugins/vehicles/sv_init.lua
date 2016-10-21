@@ -54,6 +54,10 @@ function PLUGIN:makeVehicle(player, pos, ang, model, class, vname, vtable)
 
 	ent:Spawn()
 	ent:Activate()
+	
+	if vtable.ModView then
+		ent:networkAristaVar("fpView", vtable.ModView)
+	end
 
 	local p = ent:GetPhysicsObject()
 	if not IsValid(p) then
@@ -458,10 +462,10 @@ function PLUGIN:PlayerUse(ply, ent)
 
 	if tab.Passengers then
 		if not IsValid(ent:GetDriver()) then
-			if not ent:getAristaVar("engineOn") then
+			if not ent:getAristaVar("engineOn") and ply:InVehicle() then
 				ply:notify("Type '/engine on' to start the car's engine!")
 			end
-
+			
 			return true -- No one's driving? Let's get in!
 		end
 

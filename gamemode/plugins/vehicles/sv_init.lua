@@ -14,6 +14,16 @@ PLUGIN.PumpLocations = {
 			p = Vector(298, 4118, 606.75),
 			a = Angle(0, 90, 0),
 		},
+		{
+			m = "models/statua/shell/shellpump1.mdl",
+			p = Vector(-13910, 2806, 454.75),
+			a = Angle(0, 90, 0),
+		},
+		{
+			m = "models/statua/shell/shellpump1.mdl",
+			p = Vector(-13910, 2474, 454.75),
+			a = Angle(0, 90, 0),
+		},
 	},
 }
 

@@ -496,7 +496,7 @@ function arista.entity.setOwnerPlayer(entity, player)
 	entity = arista.entity.getMaster(entity) or entity
 
 	arista.entity.clearOwner(entity)
-		entity._owner.name = player:Name()
+		entity._owner.name = player:rpName()
 		entity._owner.owner = player
 	arista.entity.network(entity)
 

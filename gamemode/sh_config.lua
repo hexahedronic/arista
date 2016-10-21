@@ -303,6 +303,13 @@ arista.config.plugins = {
 	officalsMaxTax = 20,
 	-- OFFICALS: Default amount of tax.
 	officalsDefaultTax = 0,
+	
+	-- VEHICLES: How much petrol should be added per 0.5 seconds by fuel pumps?
+	vehiclesPumpAmt = 1,
+	-- VEHICLES: How much petrol should be consumed while stationary?
+	vehiclesUseSt = 0.0015,
+	-- VEHICLES: How much petrol should be consumed while moving?
+	vehiclesUseMv = 0.01,
 }
 
 arista.config.costs = {

@@ -22,6 +22,18 @@ arista.lang:Add("AL_COMMAND_ENGINE_HELP", {
 	EN = "<on|off>",
 })
 
+arista.lang:Add("AL_VEHICLES_MAX", {
+	EN = "You may not have two cars out at once. Go find your %s!",
+})
+
+arista.lang:Add("AL_VEHICLES_WAIT", {
+	EN = "You must wait another %s minutes before you can spawn your car again.",
+})
+
+arista.lang:Add("AL_VEHICLES_SKY", {
+	EN = "You must spawn your %s under open sky!",
+})
+
 function PLUGIN:PlayerBindPress(ply, bind, pressed)
 	if not ply:InVehicle() then return end
 

@@ -2,6 +2,34 @@ function PLUGIN:getNewPos(pos, ang, apos)
 	return pos + ang:Forward() * apos.x + ang:Right() * apos.y + ang:Up() * apos.z
 end
 
+PLUGIN.PumpLocations = {
+	rp_rockford_v2b = {
+		{
+			m = "models/statua/shell/shellpump1.mdl",
+			p = Vector(298, 3786, 606.75),
+			a = Angle(0, 90, 0),
+		},
+		{
+			m = "models/statua/shell/shellpump1.mdl",
+			p = Vector(298, 4118, 606.75),
+			a = Angle(0, 90, 0),
+		},
+	},
+}
+
+function PLUGIN:LoadData()
+	local pumps = self.PumpLocations[game.GetMap()]
+	if not pumps or #pumps == 0 then return end
+	
+	for k, v in ipairs(pumps) do
+		local ent = ents.Create("arista_fuelpump")
+			ent:SetPos(v.p)
+			ent:SetAngles(v.a)
+			ent:SetModel(v.m)
+		ent:Spawn()
+	end
+end
+
 local vu_enablehorn = CreateConVar("arista_enable_horn", "1")
 function PLUGIN:makeVehicle(player, pos, ang, model, class, vname, vtable)
 	local ent = ents.Create(class)
@@ -63,11 +91,11 @@ function PLUGIN:SpawnCar(ply, item)
 	end
 
 	if IsValid(ply._vehicle) then
-		ply:notify("You may not have two cars out at once. Go find your %s!", ply._vehicle.DisplayName)
+		ply:notify("AL_VEHICLES_MAX", ply._vehicle.DisplayName)
 
 		return false
 	elseif (ply._nextVehicleSpawn or 0) > CurTime() then
-		ply:notify("You must wait another %s minutes before you can spawn your car again.", string.ToMinutesSeconds(ply._nextVehicleSpawn - CurTime()))
+		ply:notify("AL_VEHICLES_WAIT", string.ToMinutesSeconds(ply._nextVehicleSpawn - CurTime()))
 	return false end
 
 	local car = list.Get("Vehicles")[item.vehicleName]
@@ -81,7 +109,7 @@ function PLUGIN:SpawnCar(ply, item)
  	local trace = util.QuickTrace(tr.HitPos, sky)
 
 	if trace.Hit and not trace.HitSky then
-		ply:notify("You must spawn your %s under open sky!", name)
+		ply:notify("AL_VEHICLES_SKY", name)
 	return false end
 
 	ang.yaw = ply:GetAngles().yaw + 180
@@ -464,9 +492,9 @@ function PLUGIN:PlayerTenthSecond(player, item)
 		if petrol > 0 then
 			if vehicle:getAristaVar("engineOn") then
 				if vehicle:GetVelocity():Length() <= 0 then
-					petrol = math.Clamp(petrol - 0.0015, 0, 100)
+					petrol = math.Clamp(petrol - (arista.config.plugins.vehiclesUseSt or 0.0015), 0, 100)
 				else
-					petrol = math.Clamp(petrol - 0.01, 0, 100)
+					petrol = math.Clamp(petrol - (arista.config.plugins.vehiclesUseMv or 0.01), 0, 100)
 				end
 
 				vehicle:setAristaVar("petrol", petrol)
@@ -489,11 +517,11 @@ arista.command.add("engine", "", 1, function(player, toggle)
 		if vehicle.VehicleTable and vehicle.VehicleTable.Passengers then -- Security first
 			if toggle == "on" then
 				if vehicle:Health() <= 0 then
-					player:notify("Engine can't start due to damage")
+					player:notify("Engine cannot start due to damage.")
 
 					return false
 				elseif vehicle:getAristaVar("petrol") <= 0 then
-					player:notify("Engines can't start without petrol.")
+					player:notify("Engines cannot start without petrol.")
 
 					return false
 				elseif player:isArrested() or player:isTied() then

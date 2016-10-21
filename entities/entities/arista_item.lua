@@ -12,6 +12,14 @@ function ENT:SetupDataTables()
 	self:NetworkVar("String", 0, "Item")
 end
 
+function ENT:CanTool(ply)
+	return ply:IsAdmin()
+end
+
+function ENT:PhysgunPickup(ply)
+	return ply:IsAdmin()
+end
+
 if CLIENT then
 	function ENT:espPaint(lines, pos, distance, lookingat)
 		local item = self:GetItem()
@@ -63,7 +71,7 @@ function ENT:Initialize()
 
 	-- Check if the physics object is a valid entity.
 	if IsValid(physicsObject) then
-		physicsObject:Wake();
+		physicsObject:Wake()
 		physicsObject:EnableMotion(true)
 	end
 end
@@ -88,14 +96,6 @@ function ENT:updateAmount(add)
 	if self:GetAmount() <= 0 then
 		self:Remove()
 	end
-end
-
-function ENT:CanTool(ply)
-	return ply:IsAdmin()
-end
-
-function ENT:PhysgunPickup(ply)
-	return ply:IsAdmin()
 end
 
 -- Called when the entity is used.

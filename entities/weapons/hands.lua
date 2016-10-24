@@ -4,7 +4,7 @@ SWEP.PrintName = "Hands"
 -- Check if we're running on the client.
 if CLIENT then
 	SWEP.Slot = 1
-	SWEP.SlotPos = -100
+	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
 	SWEP.IconLetter = "H"
 	SWEP.DrawCrosshair = false

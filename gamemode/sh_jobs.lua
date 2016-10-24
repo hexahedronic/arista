@@ -72,7 +72,7 @@ TEAM_MAYOR = arista.team.add("Mayor", {
 	group = {
 		gang = GANG_OFFICIALS,
 		access = "D",
-		level = 1,
+		level = 3,
 		group = GROUP_OFFICIALS,
 	},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
@@ -95,7 +95,33 @@ TEAM_VICEMAYOR = arista.team.add("Vice-Mayor", {
 	group = {
 		gang = GANG_OFFICIALS,
 		access = "D",
-		level = 1,
+		level = 2,
+		group = GROUP_OFFICIALS,
+	},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
+})
+
+TEAM_POLICECOMMANDER = arista.team.add("Police Commander", {
+	color = Color(100, 155, 255, 255),
+	males = "models/player/urban.mdl",
+	description = "Maintains the city and arrests criminals.",
+
+	commander = true,
+
+	salary = 350,
+	limit = 1,
+
+	access = "",
+
+	guns = {"arista_baton"},
+	ammo = {
+		pistol = 60,
+	},
+
+	group = {
+		gang = GANG_POLICE,
+		access = "D",
+		level = 2,
 		group = GROUP_OFFICIALS,
 	},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
@@ -122,32 +148,6 @@ TEAM_POLICEOFFICER = arista.team.add("Police Officer", {
 		gang = GANG_POLICE,
 		access = "",
 		level = 1,--2, -- not base group, but we dont have other jobs so for now
-		group = GROUP_OFFICIALS,
-	},
-	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
-})
-
-TEAM_POLICECOMMANDER = arista.team.add("Police Commander", {
-	color = Color(100, 155, 255, 255),
-	males = "models/player/urban.mdl",
-	description = "Maintains the city and arrests criminals.",
-
-	commander = true,
-
-	salary = 350,
-	limit = 1,
-
-	access = "",
-
-	guns = {"arista_baton"},
-	ammo = {
-		pistol = 60,
-	},
-
-	group = {
-		gang = GANG_POLICE,
-		access = "",
-		level = 1,
 		group = GROUP_OFFICIALS,
 	},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},

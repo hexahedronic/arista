@@ -98,8 +98,8 @@ function PLUGIN:PostPlayerDraw(ply)
 		end
 		
 		if v.WModelAttachment and multimodel then
-				multimodel.Draw(v.WModelAttachment, wep, {origin = pos, angles = ang})
-				multimodel.DoFrameAdvance(v.WModelAttachment, CurTime(), wep)
+			multimodel.Draw(v.WModelAttachment, wep, {origin = pos, angles = ang})
+			multimodel.DoFrameAdvance(v.WModelAttachment, CurTime(), wep)
 		end
 		
 		if tbl.DrawFunction then

@@ -1,16 +1,16 @@
 AddCSLuaFile()
+SWEP.PrintName = "Electrical Baton"
 
 -- Check if we're running on the client.
 if CLIENT then
-	SWEP.PrintName = "Electrical Baton"
-	SWEP.Slot = 0
-	SWEP.SlotPos = 0
+	SWEP.Slot = 1
+	SWEP.SlotPos = -1
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = true
 	SWEP.IconLetter = "!"
 
 	function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
-		draw.SimpleText(self.IconLetter, "HL2MPTypeDeath", x + 0.5 * wide, y + tall * 0.3, Color(255, 220, 0, 255), TEXT_ALIGN_CENTER )
+		draw.SimpleText(self.IconLetter, "HL2MPTypeDeath", x + 0.5 * wide, y + tall * 0.3, Color(255, 220, 0, 255), TEXT_ALIGN_CENTER)
 		self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)
 	end
 	killicon.AddFont("arista_baton", "HL2MPTypeDeath", SWEP.IconLetter, Color(255, 80, 0, 255))
@@ -19,7 +19,7 @@ end
 -- Define some shared variables.
 SWEP.Author	= "kuro, Lexi, Q2F2 et al." --Admitedly, mostly made up of kudo's parts.
 SWEP.Instructions = "Primary Fire: Knock Out. Use+Primary Fire: Damage\nSecondary Fire: Arrest/breach door."
-SWEP.Purpose = "General Purpous Electrical Baton"
+SWEP.Purpose = "General purpous electrical baton."
 
 -- Set the view model and the world model to nil.
 SWEP.ViewModel = "models/weapons/c_stunstick.mdl"

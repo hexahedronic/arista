@@ -1,10 +1,8 @@
 AddCSLuaFile()
-
---Gidz fucked this up. If it doesn't work. Blame him. He is still working on it though. Plz no kill
+SWEP.PrintName = "Hands"
 
 -- Check if we're running on the client.
 if CLIENT then
-	SWEP.PrintName = "Hands"
 	SWEP.Slot = 1
 	SWEP.SlotPos = -100
 	SWEP.DrawAmmo = false
@@ -139,7 +137,7 @@ function SWEP:Reload()
 			end
 			
 			self:SetWeaponHoldType("fist")
-			self.Owner:PrintMessage(HUD_PRINTCENTER, "LANGUAGEME You raise your fists")
+			self.Owner:PrintMessage(HUD_PRINTCENTER, "You raise your fists")
 			self.Owner:SetNWBool("raisedFists", true)
 			
 			self.NextHolster = CurTime() + self.Primary.HolsterTime

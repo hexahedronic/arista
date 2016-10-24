@@ -44,7 +44,7 @@ PLUGIN.weapons["weapon_slam"].BoneOffset = {Vector(-9, 0, -7), Angle(270, 90, -2
 PLUGIN.weapons["weapon_crowbar"] = {}
 PLUGIN.weapons["weapon_crowbar"].Model = "models/weapons/w_crowbar.mdl"
 PLUGIN.weapons["weapon_crowbar"].Bone = "ValveBiped.Bip01_Spine1"
-PLUGIN.weapons["weapon_crowbar"].BoneOffset = {Vector(3, 0, 0), Angle(0, 0, 45)}
+PLUGIN.weapons["weapon_crowbar"].BoneOffset = {Vector(5, 0, 0), Angle(0, 0, 45)}
  
 PLUGIN.weapons["weapon_stunstick"] = {}
 PLUGIN.weapons["weapon_stunstick"].Model = "models/weapons/w_stunbaton.mdl"
@@ -77,3 +77,4 @@ PLUGIN.weapons["weapon_crossbow"].Bone = "ValveBiped.Bip01_L_Clavicle"
 PLUGIN.weapons["weapon_crossbow"].BoneOffset = {Vector(0, 5, -5), Angle(180, 90, 0)}
 
 PLUGIN.weapons["arista_baton"] = PLUGIN:alias"weapon_stunstick"
+PLUGIN.weapons["arista_repair"] = PLUGIN:alias"weapon_crowbar"

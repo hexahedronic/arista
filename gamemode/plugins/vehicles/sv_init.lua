@@ -426,6 +426,12 @@ function PLUGIN:doExit(ply, _car)
 	end
 end
 
+function PLUGIN:PlayerEnteredVehicle(ply, ent)
+	if not ent:getAristaVar("engineOn")then
+		ply:notify("Type '/engine on' to start the car's engine!")
+	end
+end
+
 function PLUGIN:PlayerUse(ply, ent)
 	if not ent:IsVehicle() then
 		return
@@ -472,10 +478,6 @@ function PLUGIN:PlayerUse(ply, ent)
 
 	if tab.Passengers then
 		if not IsValid(ent:GetDriver()) then
-			if not ent:getAristaVar("engineOn") and ply:InVehicle() then
-				ply:notify("Type '/engine on' to start the car's engine!")
-			end
-			
 			return true -- No one's driving? Let's get in!
 		end
 

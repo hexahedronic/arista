@@ -41,7 +41,15 @@ end
 
 ENTITY.GetNW3Angle = get(Angle())
 ENTITY.GetNW3Bool = get(false)
-ENTITY.GetNW3Entity = get(NULL)
+local get_ent = get(0/0)
+ENTITY.GetNW3Entity = function(...)
+	local idx = get_ent(...)
+	if idx ~= idx then
+		return NULL
+	else
+		return Entity(idx)
+	end
+end
 ENTITY.GetNW3Float = get(0)
 ENTITY.GetNW3Int = get(0)
 ENTITY.GetNW3String = get""
@@ -233,8 +241,7 @@ else
 		elseif vt == "vector" then
 			nv = net.ReadVector()
 		elseif vt == "entity" then
-			local eid = net.ReadInt(32)
-			nv = Entity(eid)
+			nv = net.ReadInt(32)
 		end
 
 		local oldval = vars[ent][var]

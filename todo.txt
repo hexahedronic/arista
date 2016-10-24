@@ -37,8 +37,8 @@
 [X] Client networking blows up on cl/sh reload, rejoining fixes it
 [X] Chat handler is completely hacky, please fix
 [X] You can see your own 'typing' text
-[ ] A lot of the time you die in third person
-[ ] /engine on message duplicates
+[X] A lot of the time you die in third person
+[X] /engine on message duplicates
 [X] Fists seem to be a bit (completely) borked
 [X] Steam name on a lot of rp stuff like cars
 

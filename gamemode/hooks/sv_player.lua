@@ -576,8 +576,8 @@ end
 -- @param args A table of all the arguments the player passed
 function GM:PlayerCanUseCommand(ply, cmd, args)
 	-- Stop the player using the command if they're blacklisted from it
-	if ply:isBlacklisted("cmd", command) > 0 then
-		ply:blacklistAlert("cmd", command, command)
+	if ply:isBlacklisted("cmd", cmd) > 0 then
+		ply:blacklistAlert("cmd", cmd, cmd)
 
 		return false
 	end

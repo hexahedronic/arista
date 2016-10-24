@@ -139,9 +139,7 @@ function arista.team.getGroupLevel(teamID)
 end
 
 function arista.team.hasAccessGroup(teamID, access)
-	local team = arista.team.get(teamID)
-
-	local query = arista.team.query(team, "group", {}).access
+	local query = arista.team.query(teamID, "group", {}).access
 	local success = false
 
 	-- Check to see if the team has access.

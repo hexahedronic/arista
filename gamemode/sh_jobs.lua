@@ -71,7 +71,7 @@ TEAM_MAYOR = arista.team.add("Mayor", {
 
 	group = {
 		gang = GANG_OFFICIALS,
-		access = "",
+		access = "D",
 		level = 1,
 		group = GROUP_OFFICIALS,
 	},
@@ -94,7 +94,7 @@ TEAM_VICEMAYOR = arista.team.add("Vice-Mayor", {
 
 	group = {
 		gang = GANG_OFFICIALS,
-		access = "",
+		access = "D",
 		level = 1,
 		group = GROUP_OFFICIALS,
 	},
@@ -342,6 +342,7 @@ TEAM_CHAV = arista.team.add("Chav", {
 	},
 })
 
+--[[
 TEAM_GANGSTER = arista.team.add("Gangster", {
 	color = Color(125, 125, 135, 255),
 	description = "Members of a large time organised crime mob.",
@@ -357,10 +358,10 @@ TEAM_GANGSTER = arista.team.add("Gangster", {
 		level = 1,
 		group = GROUP_UNDERGROUND,
 	},
-})
+})]]
 
 TEAM_MAFIABOSS = arista.team.add("Mafia Boss", {
-	color = Color(102, 0, 0, 255),
+	color = Color(112, 0, 0, 255),
 	description = "Leader of a large time organised crime mob.",
 
 	salary = 175,
@@ -370,8 +371,8 @@ TEAM_MAFIABOSS = arista.team.add("Mafia Boss", {
 
 	group = {
 		gang = GANG_MAFIA,
-		access = "",
-		level = 1,
+		access = "D",
+		level = 2,
 		group = GROUP_UNDERGROUND,
 	},
 })
@@ -392,7 +393,6 @@ TEAM_MAFIA = arista.team.add("Mafia Goon", {
 		group = GROUP_UNDERGROUND,
 	},
 })
-
 
 
 -- Default job.

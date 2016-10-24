@@ -124,7 +124,7 @@ function SWEP:Reload()
 			end
 			
 			self:SetWeaponHoldType("normal")
-			self.Owner:PrintMessage(HUD_PRINTCENTER, "LANGUAGEME You lower your fists")
+			self.Owner:PrintMessage(HUD_PRINTCENTER, "You lower your fists")
 			self.Owner:SetNWBool("raisedFists", false)
 			
 			self.NextHolster = CurTime() + self.Primary.HolsterTime

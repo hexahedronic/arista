@@ -4,7 +4,7 @@ SWEP.PrintName = "Electrical Baton"
 -- Check if we're running on the client.
 if CLIENT then
 	SWEP.Slot = 1
-	SWEP.SlotPos = -1
+	SWEP.SlotPos = 0
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = true
 	SWEP.IconLetter = "!"

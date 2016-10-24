@@ -427,7 +427,7 @@ function PLUGIN:doExit(ply, _car)
 end
 
 function PLUGIN:PlayerEnteredVehicle(ply, ent)
-	if not ent:getAristaVar("engineOn")then
+	if not ent:getAristaVar("engineOn") and ent.VehicleTable and ent.VehicleTable.Passengers then
 		ply:notify("Type '/engine on' to start the car's engine!")
 	end
 end

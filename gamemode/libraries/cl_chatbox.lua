@@ -159,10 +159,9 @@ function arista.chatbox.chatText(index, name, text, filter)
 			icon = {"icon16/shield.png", "^"}
 		elseif player:IsAdmin() then
 			icon = {"icon16/star.png", "*"}
-		elseif player:IsAdmin() then
-			-- todo: mod
+		elseif player:isModerator() then
 			icon = {"icon16/emoticon_smile.png", ":)"}
-		elseif player:getAristaBool("donator") then
+		elseif player:getAristaInt("donator") and player:getAristaInt("donator") > 0 then
 			icon = {"icon16/heart.png", "<3"}
 		end
 

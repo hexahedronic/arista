@@ -6,7 +6,7 @@ AddCSLuaFile()
 if CLIENT then
 	SWEP.PrintName = "Hands"
 	SWEP.Slot = 1
-	SWEP.SlotPos = 1
+	SWEP.SlotPos = -100
 	SWEP.DrawAmmo = false
 	SWEP.IconLetter = "H"
 	SWEP.DrawCrosshair = false

@@ -61,7 +61,7 @@ end
 arista.flagFunctions = {
 	s = function(ply) return ply:IsSuperAdmin() end,
 	a = function(ply) return ply:IsAdmin() end,
-	m = function(ply) return --[[ply:IsModerator()]] ply:IsAdmin() end,
+	m = function(ply) return ply:isModerator() end,
 }
 -- todo: mod
 
@@ -817,11 +817,6 @@ function GM:DoPlayerDeath(ply, attacker, damageInfo)
 	-- Fixes issues.
 	if ply:InVehicle() then
 		ply:ExitVehicle()
-	end
-
-	local backGun = ply:getAristaVar("backGun")
-	if IsValid(backGun) then
-		backGun:Remove()
 	end
 
 	for k, v in ipairs(ply:GetWeapons()) do

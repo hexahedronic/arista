@@ -41,6 +41,7 @@
 [X] /engine on message duplicates
 [X] Fists seem to be a bit (completely) borked
 [X] Steam name on a lot of rp stuff like cars
+[ ] Re-implement ply.isModerator
 
 - Update / Improve
 [-] Remake HUD Design
@@ -52,7 +53,8 @@
 [X] Move to NW3 or some other improved networking system
 [X] Petrol + garage for cars, locations per map
 [X] Lockpicking
-[ ] Weapons should appear attached to player
+[X] Weapons should appear attached to player
+[-] Notes
 
 - CL
 [X] Clientside Inventory GUI

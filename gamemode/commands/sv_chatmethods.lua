@@ -137,8 +137,7 @@ arista.command.add("m", "m", 1, function(ply, arguments)
 
 	local rp = {}
 	for _, ply in ipairs(player.GetAll()) do
-		if ply:IsAdmin() then
-			-- todo: mod
+		if ply:isModerator() then
 			rp[#rp+1] = ply
 		end
 	end

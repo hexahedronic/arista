@@ -93,8 +93,7 @@ function GM:PlayerCanDemote(ply, target)
 		end
 
 		return false
-		-- todo: mod
-	elseif --[[ply:IsModerator()]] ply:IsAdmin() then
+	elseif ply:isModerator() then
 		return true
 	end
 

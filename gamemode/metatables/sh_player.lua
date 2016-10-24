@@ -2,6 +2,11 @@ AddCSLuaFile()
 
 local player = FindMetaTable("Player")
 
+function player:isModerator()
+	-- TODO: Moderator
+	return self:IsAdmin()
+end
+
 function player:rpName()
 	if CLIENT then return self:getAristaString("rpname") or "" end
 	return self:getAristaVar("rpname") or ""

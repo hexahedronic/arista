@@ -1,0 +1,10 @@
+ITEM.name					= "RPG Rocket"
+ITEM.plural				= "RPG Rockets"
+ITEM.size					= 2
+ITEM.cost					= 3500
+ITEM.model				= "models/weapons/w_missile_closed.mdl"
+ITEM.batch				= 5
+ITEM.store				= true
+ITEM.description	= "Explosive rockets designed for deployment with an RPG."
+ITEM.base					= "ammo"
+ITEM.ammo					= {"rpg_round", 1}

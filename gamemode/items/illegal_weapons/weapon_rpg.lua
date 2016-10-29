@@ -1,0 +1,11 @@
+ITEM.name					= "RPG"
+ITEM.plural				= "RPGs"
+ITEM.size					= 5
+ITEM.cost					= 45000
+ITEM.model				= "models/weapons/w_rpg.mdl"
+ITEM.batch				= 1
+ITEM.store				= true
+ITEM.description	= "A large rocket launcher fitted with a laser targetting system."
+ITEM.ammo					= "rpg_round"
+ITEM.weaponType		= TYPE_LARGE
+ITEM.base					= "weapon"

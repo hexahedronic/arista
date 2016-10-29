@@ -1,0 +1,11 @@
+ITEM.name					= "Shotgun"
+ITEM.plural				= "Shotguns"
+ITEM.size					= 3
+ITEM.cost					= 4500
+ITEM.model				= "models/weapons/w_shotgun.mdl"
+ITEM.batch				= 5
+ITEM.store				= true
+ITEM.description	= "A bulky semi-auto shotgun."
+ITEM.ammo					= "buckshot"
+ITEM.weaponType		= TYPE_LARGE
+ITEM.base					= "weapon"

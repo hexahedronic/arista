@@ -1,0 +1,10 @@
+ITEM.name					= "Buckshot Cartridges"
+ITEM.plural				= "Buckshot Cartridges"
+ITEM.size					= 1
+ITEM.cost					= 2000
+ITEM.model				= "models/items/boxbuckshot.mdl"
+ITEM.batch				= 5
+ITEM.store				= true
+ITEM.description	= "Standard buckshot rounds for shotguns."
+ITEM.base					= "ammo"
+ITEM.ammo					= {"buckshot", 30}

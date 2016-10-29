@@ -1,0 +1,10 @@
+ITEM.name					= "Revolver Rounds"
+ITEM.plural				= "Revolver Rounds"
+ITEM.size					= 1
+ITEM.cost					= 1000
+ITEM.model				= "models/items/boxmrounds.mdl"
+ITEM.batch				= 10
+ITEM.store				= true
+ITEM.description	= "Rounds for revolvers and other .357 weapons."
+ITEM.base					= "ammo"
+ITEM.ammo					= {"357", 30}

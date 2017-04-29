@@ -179,7 +179,7 @@ arista.config.vars = {
 	-- Radius you can talk to people in.
 	talkRadius = 300,
 	-- Server's website.
-	serverWebsite = "arista rp framework",
+	serverWebsite = "",
 	-- Time between 'paydays'.
 	earningInterval = 360,
 	-- Comamnd prefix.
@@ -217,8 +217,8 @@ arista.config.vars = {
 		["models/props/cs_office/file_cabinet2.mdl"]	 							= {20,"Filing Cabinet"},
 		["models/props/cs_office/file_cabinet3.mdl"] 								= {15,"Filing Cabinet"},
 		["models/props/de_nuke/file_cabinet1_group.mdl"] 						= {50,"Filing Cabinet"},
-		["models/props_wasteland/controlroom_storagecloset001a.mdl"]= {60,"Storage Closet"},
-		["models/props_wasteland/controlroom_storagecloset001b.mdl"]= {60,"Storage Closet"},
+		["models/props_wasteland/controlroom_storagecloset001a.mdl"] = {60,"Storage Closet"},
+		["models/props_wasteland/controlroom_storagecloset001b.mdl"] = {60,"Storage Closet"},
 		["models/props_interiors/furniture_vanity01a.mdl"] 					= {5,"Dressing Table"},
 		["models/props/cs_militia/footlocker01_closed.mdl"] 				= {40,"Foot Locker"},
 		["models/props/de_prodigy/ammo_can_02.mdl"] 								= {20,"Foot Locker"},
@@ -305,7 +305,7 @@ arista.config.plugins = {
 	officalsMaxTax = 20,
 	-- OFFICALS: Default amount of tax.
 	officalsDefaultTax = 0,
-	
+
 	-- VEHICLES: How much petrol should be added per 0.5 seconds by fuel pumps?
 	vehiclesPumpAmt = 1,
 	-- VEHICLES: How much petrol should be consumed while stationary?

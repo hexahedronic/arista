@@ -204,7 +204,7 @@ GANG_CIVILIANS	= arista.team.addGang(GROUP_CIVILIANS, "The Civilians", "models/p
 
 TEAM_CITIZEN = arista.team.add("Citizen", {
 	color = Color(25, 150, 25, 255),
-  description = "A regular Citizen living in the city.",
+	description = "A regular Citizen living in the city.",
 
 	salary = 200,
 
@@ -222,7 +222,7 @@ TEAM_CITIZEN = arista.team.add("Citizen", {
 TEAM_GUNDEAL = arista.team.add("Gun Dealer", {
 	color = Color(170, 150, 25, 255),
 	males = "models/player/leet.mdl",
-  description = "The owner of a gun store.",
+	description = "The owner of a gun store.",
 
 	salary = 220,
 
@@ -284,7 +284,7 @@ TEAM_DOCTOR = arista.team.add("Doctor", {
 TEAM_MECHANIC = arista.team.add("Mechanic", {
 	color = Color(175, 175, 175, 255),
 	males = "models/mechanic/mechanic_m_01.mdl",
-  description = "Repairs damaged vehicles.",
+	description = "Repairs damaged vehicles.",
 
 	salary = 150,
 	limit = 3,

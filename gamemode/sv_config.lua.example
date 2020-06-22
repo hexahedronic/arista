@@ -3,9 +3,9 @@ arista.config.storage_type = "pdata"
 arista.config.sql = {}
 
 -- SQL Table or pdata string, depending on what you use.
-arista.config.sql.database = "dkb_arista_dev"
+arista.config.sql.database = "s2_wildwest"
 arista.config.sql.table = "arista_data"
-arista.config.sql.host = ""
+arista.config.sql.host = "148.251.228.74"
 arista.config.sql.port = 3306
 arista.config.sql.user = ""
 arista.config.sql.pass = ""

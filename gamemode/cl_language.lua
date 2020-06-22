@@ -1,6 +1,6 @@
 arista.lang = {}
 
-arista.lang.currency = "£"
+arista.lang.currency = "$"
 arista.lang.selected = "EN"
 
 -- Don't edit EN or I will rip your throat out. If you want to

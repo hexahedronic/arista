@@ -89,7 +89,7 @@ end
 function entity:networkAristaVar(var, val, precision)
 	local type = arista.utils.typeToNet(val)
 	if type == "Int" and precision then type = "Float" end
-
+	if var == "money" or var == "salary" then type = "Float" end
 	self._varsToNetwork = self._varsToNetwork or {}
 	self._varsToNetwork[var] = type
 

@@ -52,31 +52,33 @@ Tying people up without their explicit consent is illegal.
 	rpnames = {
 		first = {
 			male = {
+				"Cornelius",
+				"Francis",
+				"Anthon",
+				"Roland",
 				"John",
-				"Henry",
-				"Michael",
-				"Paul",
-				"Andrew",
-				"Dean",
+				"Lee",
+				"Chris",
 			},
 			female = {
-				"Ann",
-				"Stacey",
-				"Sue",
-				"Ava",
-				"Wendy",
-				"Mary",
-				"Sarah",
-				"Felicity",
+				"Rose",
+				"Charlotte",
+				"Tillie",
+				"Rosa",
+				"Anne",
+				"May",
+				"Sadie",
 			},
 		},
 		surnames = {
+			"Thompson",
+			"Wallace",
+			"Morgan",
+			"Williamson",
+			"Raymond",
+			"Taylor",
 			"Smith",
-			"Doe",
-			"Cors",
-			"Clark",
-			"Johnson",
-			"Goodeve",
+			"Brown"
 		},
 	}
 }
@@ -179,9 +181,9 @@ arista.config.vars = {
 	-- Radius you can talk to people in.
 	talkRadius = 300,
 	-- Server's website.
-	serverWebsite = "",
-	-- Time between 'paydays'.
-	earningInterval = 360,
+	serverWebsite = "https://jaggedsprings.com",
+	-- Time between 'paydays', 20 minutes.
+	earningInterval = 20 * 60,
 	-- Comamnd prefix.
 	commandPrefix = "/",
 	-- Commands you can allways use.

@@ -202,11 +202,11 @@ end
 GROUP_CIVILIANS	= arista.team.addGroup("Civilians", "Join the ordinary and (generally) law-abiding civilians.")
 GANG_CIVILIANS	= arista.team.addGang(GROUP_CIVILIANS, "The Civilians", "models/player/Group01/male_07.mdl", "Keep me out of this!")
 
-TEAM_CITIZEN = arista.team.add("Citizen", {
+TEAM_WESTERNER = arista.team.add("Westerner", {
 	color = Color(25, 150, 25, 255),
-	description = "A regular Citizen living in the city.",
+	description = "The default role players obtain when joining the server. This job has the lowest of all salaries.",
 
-	salary = 200,
+	salary = 0.35,
 
 	access = "",
 
@@ -396,4 +396,4 @@ TEAM_MAFIA = arista.team.add("Mafia Goon", {
 
 
 -- Default job.
-TEAM_DEFAULT = TEAM_CITIZEN
+TEAM_DEFAULT = TEAM_WESTERNER

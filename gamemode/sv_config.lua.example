@@ -13,11 +13,11 @@ arista.config.sql.pass = ""
 -- Stuff that's saved in the database, do not add any extra members unless you have also added them to your SQL!
 arista.config.database = {
 	-- The money that each player starts with.
-	money = 2500,
+	money = 10,
 	-- The clan that each player belongs to by default.
 	clan = "",
 	-- The default inventory size.
-	inventorySize = 40,
+	inventorySize = 50,
 	-- The detailed information each player begins with.
 	details = "",
 	-- This is so if they rejoin they are still in jail.

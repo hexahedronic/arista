@@ -345,7 +345,7 @@ function formatNum(amount, decimal, prefix, neg_prefix)
 	famount = math.floor(famount)
 	remain = math.Round(math.abs(amount) - famount, decimal)
 	-- comma to separate the thousands
-	formatted = comma_value(famount)
+	formatted = string.Comma(famount)
 
 	-- attach the decimal portion
 	if (decimal > 0) then

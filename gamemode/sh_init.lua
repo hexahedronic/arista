@@ -341,7 +341,7 @@ function formatNum(amount, decimal, prefix, neg_prefix)
 	local formatted, famount, remain
 	decimal = decimal or 2 -- default 2 decimal places
 	neg_prefix = neg_prefix or "-" -- default negative sign
-	famount = math.abs(round(amount, decimal))
+	famount = math.abs(math.Round(amount, decimal))
 	famount = math.floor(famount)
 	remain = math.Round(math.abs(amount) - famount, decimal)
 	-- comma to separate the thousands

@@ -107,7 +107,7 @@ TEAM_FEDERALMARSHALL = arista.team.add("Federal Marshall", {
 	males = "models/player/urban.mdl",
 	description = "An out of state trooper with the ability to obtain high calibre firearms from the weapons locker.",
 
-	commander = true,
+	officer = true,
 
 	donatorOnly = true,
 

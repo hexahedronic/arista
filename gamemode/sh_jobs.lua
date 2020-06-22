@@ -60,11 +60,11 @@ TEAM_MAYOR = arista.team.add("Mayor", {
 	males = "models/player/breen.mdl",
 	females = "models/player/mossman.mdl",
 
-	description = "Runs the city and keeps it in shape.",
+	description = "The top of the frontier's government.",
 
 	mayor = true,
 
-	salary = 500,
+	salary = 1,
 	limit = 1,
 
 	access = "bdgeD",
@@ -78,7 +78,7 @@ TEAM_MAYOR = arista.team.add("Mayor", {
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
 })
 
-TEAM_VICEMAYOR = arista.team.add("Vice-Mayor", {
+--[[ TEAM_VICEMAYOR = arista.team.add("Vice-Mayor", {
 	color = Color(0, 0, 255, 255),
 	males = "models/player/breen.mdl",
 	females = "models/player/mossman.mdl",
@@ -99,16 +99,16 @@ TEAM_VICEMAYOR = arista.team.add("Vice-Mayor", {
 		group = GROUP_OFFICIALS,
 	},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
-})
+}) ]]
 
-TEAM_POLICECOMMANDER = arista.team.add("Police Commander", {
+TEAM_SHERIFF = arista.team.add("Sheriff", {
 	color = Color(100, 155, 255, 255),
 	males = "models/player/urban.mdl",
-	description = "Maintains the city and arrests criminals.",
+	description = "The highest in-state officer enacting lawful procedures throughout the frontier.",
 
 	commander = true,
 
-	salary = 350,
+	salary = 0.7,
 	limit = 1,
 
 	access = "",
@@ -127,14 +127,14 @@ TEAM_POLICECOMMANDER = arista.team.add("Police Commander", {
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
 })
 
-TEAM_POLICEOFFICER = arista.team.add("Police Officer", {
+TEAM_SHERIFFDEPUTY = arista.team.add("Sheriff's Deputy", {
 	color = Color(100, 155, 255, 255),
 	males = "models/player/riot.mdl",
-	description = "Controls the police and criminal justice.",
+	description = "A member of the sheriffs posse enacting lawful procedures throughout the frontier.",
 
 	officer = true,
 
-	salary = 250,
+	salary = 0.65,
 	limit = 15,
 
 	access = "deD",
@@ -153,7 +153,7 @@ TEAM_POLICEOFFICER = arista.team.add("Police Officer", {
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
 })
 
-TEAM_SECRETARY = arista.team.add("Secretary", {
+--[[ TEAM_SECRETARY = arista.team.add("Secretary", {
 	color = Color(50, 200, 200, 255),
 	males = {
 		"models/player/Hostage/Hostage_01.mdl",
@@ -195,7 +195,7 @@ TEAM_FIREFIGHTER = arista.team.add("Fire Fighter", {
 		group = GROUP_OFFICIALS,
 	},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
-})
+}) ]]
 end
 
 
@@ -219,12 +219,12 @@ TEAM_WESTERNER = arista.team.add("Westerner", {
 	cantuse = {CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
 })
 
-TEAM_GUNDEAL = arista.team.add("Gun Dealer", {
+TEAM_ARMSDEALER = arista.team.add("Arms Dealer", {
 	color = Color(170, 150, 25, 255),
 	males = "models/player/leet.mdl",
-	description = "The owner of a gun store.",
+	description = "Providing firearms to the public of a greater calibre than what can be provided in the General Store.",
 
-	salary = 220,
+	salary = 0.6,
 
 	access = "",
 
@@ -239,11 +239,11 @@ TEAM_GUNDEAL = arista.team.add("Gun Dealer", {
 })
 
 if (GM or GAMEMODE):GetPlugin("hungermod") then
-TEAM_CHEF = arista.team.add("Chef", {
+TEAM_COOK = arista.team.add("Cook", {
 	color = Color(255, 125, 200, 255),
-	description = "Sells food to the city's inhabitants.",
+	description = "Able to take the already caught fish and meat and cook it for the civilians to make the meals more nutritious.",
 
-	salary = 220,
+	salary = 0.65,
 	limit = 5,
 
 	access = "",
@@ -261,12 +261,12 @@ end
 
 TEAM_DOCTOR = arista.team.add("Doctor", {
 	color = Color(125, 225, 150, 255),
-	description = "Deals medical supplies to the city's inhabitants.",
+	description = "Providing medical supplies to the civilians.",
 
 	males = "models/player/Group02/male_08.mdl",
 	females = "models/player/Group03m/Female_02.mdl",
 
-	salary = 250,
+	salary = 0.6,
 	limit = 5,
 
 	access = "h",
@@ -281,7 +281,7 @@ TEAM_DOCTOR = arista.team.add("Doctor", {
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
 })
 
-TEAM_MECHANIC = arista.team.add("Mechanic", {
+--[[ TEAM_MECHANIC = arista.team.add("Mechanic", {
 	color = Color(175, 175, 175, 255),
 	males = "models/mechanic/mechanic_m_01.mdl",
 	description = "Repairs damaged vehicles.",
@@ -301,13 +301,14 @@ TEAM_MECHANIC = arista.team.add("Mechanic", {
 	},
 	canmake = {CATEGORY_VEHICLES, CATEGORY_CONTRABAND},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
-})
+}) ]]
 
 GROUP_UNDERGROUND	= arista.team.addGroup("The Underground", "Join the underground for more fun, but harsher treatment if caught.")
-GANG_UNDERGROUND	= arista.team.addGang(GROUP_UNDERGROUND, "The Underground", "models/player/Group03/male_07.mdl", "'Fuck the police!'")
+--[[ GANG_UNDERGROUND	= arista.team.addGang(GROUP_UNDERGROUND, "The Underground", "models/player/Group03/male_07.mdl", "'Fuck the police!'") ]]
 GANG_MAFIA = arista.team.addGang(GROUP_UNDERGROUND, "The Mafia", "models/player/Group03/male_07.mdl", "'Wherever there's opportunity, the mafia will be there.'")
+GANG_NATIVES = arista.team.addGang(GROUP_UNDERGROUND, "The Native Tribe", "models/player/Group03/male_07.mdl", "'Native Tribe'")
 
-TEAM_BLACKMARKETDEALER = arista.team.add("Blackmarket Dealer", {
+--[[ TEAM_BLACKMARKETDEALER = arista.team.add("Blackmarket Dealer", {
 	color = Color(125, 125, 125, 255),
 	description = "Supplys people with goods not found in the public market.",
 
@@ -323,9 +324,9 @@ TEAM_BLACKMARKETDEALER = arista.team.add("Blackmarket Dealer", {
 		group = GROUP_UNDERGROUND,
 	},
 	canmake = {CATEGORY_VEHICLES, CATEGORY_EXPLOSIVES, CATEGORY_CONTRABAND, CATEGORY_POLICE_WEAPONS, CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_AMMO},
-})
+}) ]]
 
-TEAM_CHAV = arista.team.add("Chav", {
+--[[ TEAM_CHAV = arista.team.add("Chav", {
 	color = Color(135, 125, 125, 255),
 	description = "The scum of society, roaming around commiting petty crimes and being a general nuisance.",
 
@@ -340,7 +341,7 @@ TEAM_CHAV = arista.team.add("Chav", {
 		level = 1,
 		group = GROUP_UNDERGROUND,
 	},
-})
+}) ]]
 
 --[[
 TEAM_GANGSTER = arista.team.add("Gangster", {
@@ -360,11 +361,11 @@ TEAM_GANGSTER = arista.team.add("Gangster", {
 	},
 })]]
 
-TEAM_MAFIABOSS = arista.team.add("Mafia Boss", {
+TEAM_MCLOUISLEADER = arista.team.add("McLouis Gang Leader", {
 	color = Color(112, 0, 0, 255),
-	description = "Leader of a large time organised crime mob.",
+	description = "The leader of a band of disgruntled immigrants of the frontier causing havoc within the towns.",
 
-	salary = 175,
+	salary = 0.5,
 	limit = 1,
 
 	access = "dgeD",
@@ -377,11 +378,11 @@ TEAM_MAFIABOSS = arista.team.add("Mafia Boss", {
 	},
 })
 
-TEAM_MAFIA = arista.team.add("Mafia Goon", {
+TEAM_MCLOUISMEMBER = arista.team.add("McLouis Gang Member", {
 	color = Color(102, 0, 0, 255),
-	description = "Member of a large time organised crime mob.",
+	description = "The disgruntled immigrants of the frontier causing havoc within the towns.",
 
-	salary = 125,
+	salary = 0.4,
 	limit = 6,
 
 	access = "",
@@ -394,6 +395,39 @@ TEAM_MAFIA = arista.team.add("Mafia Goon", {
 	},
 })
 
+TEAM_NATIVECHIEFTAIN = arista.team.add("Mafia Boss", {
+	color = Color(112, 0, 0, 255),
+	description = "Leader of a large time organised crime mob.",
+
+	salary = 0.5,
+	limit = 1,
+
+	access = "dgeD",
+
+	group = {
+		gang = GANG_NATIVES,
+		access = "D",
+		level = 2,
+		group = GROUP_UNDERGROUND,
+	},
+})
+
+TEAM_NATIVEWARRIOR = arista.team.add("Mafia Goon", {
+	color = Color(102, 0, 0, 255),
+	description = "Member of a large time organised crime mob.",
+
+	salary = 0.4,
+	limit = 6,
+
+	access = "",
+
+	group = {
+		gang = GANG_NATIVES,
+		access = "",
+		level = 1,
+		group = GROUP_UNDERGROUND,
+	},
+})
 
 -- Default job.
 TEAM_DEFAULT = TEAM_WESTERNER

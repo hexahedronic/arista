@@ -318,7 +318,7 @@ arista.config.plugins = {
 
 arista.config.costs = {
 	-- How much doors cost to buy (/2 for refund).
-	door = 100,
+	door = 0.1,
 	-- How much do props cost to buy (for builders).
 	prop = 100,
 	-- How much does an advert cost.

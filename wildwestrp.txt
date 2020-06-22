@@ -1,0 +1,5 @@
+"wildwestrp"
+{
+	"title"			"Wild West RP"
+	"version"		"1.0.0"
+}

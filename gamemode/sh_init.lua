@@ -22,30 +22,16 @@ DeriveGamemode("sandbox")
 
 -- This replaces GM/GAMEMODE.
 arista.gamemode = {
-	name = "arista",
-	author = "kuromeku, Lexi, Q2F2, et al.",
-	email = "N/A",
-	website = "https://github.com/hexahedronic/arista/",
+	name = "Wild West RP",
+	author = "Jaggedsprings Development, Kuro, Lexi",
+	email = "jaggedsprings@gmail.com",
+	website = "https://jaggedsprings.com",
 
 	info = [[
-A re-write of AppleJack (https://github.com/Lexicality/applejack-old).
-This gamemode consists mostly of applejack's code (which was built on cider),
-and we only take credit for the modifications made, not the source material.
-
-The idea of Arista is to provide an open-source, up-to-date, bugfixed version of applejack.
-
-With this idea we hope to give smaller servers the ability to run a gamemode other
-than DarkRP, due to the saturation of DarkRP's servers.
-
-Note: This is not CityRP, I believe at some point in the past CityRP was based on
-either cider/applejack, but this does not MEAN THEY ARE THE SAME THING.
-
-DO NOT REMOVE KURO OR LEXI FROM THE AUTHOR FIELD.
+Based on Applejack/Arista. Wild West RP by Jaggedsprings' Development team
 ]],
 
 	modifiedWork = [[
-Work included in modified form:
-	fire extinguisher - Robotboy655
 ]],
 
 	folder = GM.Folder .. "/",

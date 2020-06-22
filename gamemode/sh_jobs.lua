@@ -334,7 +334,7 @@ TEAM_DOCTOR = arista.team.add("Doctor", {
 
 GROUP_UNDERGROUND	= arista.team.addGroup("The Underground", "Join the underground for more fun, but harsher treatment if caught.")
 --[[ GANG_UNDERGROUND	= arista.team.addGang(GROUP_UNDERGROUND, "The Underground", "models/player/Group03/male_07.mdl", "'Fuck the police!'") ]]
-GANG_MAFIA = arista.team.addGang(GROUP_UNDERGROUND, "The Mafia", "models/player/Group03/male_07.mdl", "'Wherever there's opportunity, the mafia will be there.'")
+GANG_MCLOUIS = arista.team.addGang(GROUP_UNDERGROUND, "The McLouis Gang", "models/player/Group03/male_07.mdl", "'A band of disgruntled immigrants of the frontier causing havoc within the towns.'")
 GANG_NATIVES = arista.team.addGang(GROUP_UNDERGROUND, "The Native Tribe", "models/player/Group03/male_07.mdl", "'Native Tribe'")
 
 --[[ TEAM_BLACKMARKETDEALER = arista.team.add("Blackmarket Dealer", {
@@ -400,7 +400,7 @@ TEAM_MCLOUISLEADER = arista.team.add("McLouis Gang Leader", {
 	access = "dgeD",
 
 	group = {
-		gang = GANG_MAFIA,
+		gang = GANG_MCLOUIS,
 		access = "D",
 		level = 2,
 		group = GROUP_UNDERGROUND,
@@ -417,16 +417,16 @@ TEAM_MCLOUISMEMBER = arista.team.add("McLouis Gang Member", {
 	access = "",
 
 	group = {
-		gang = GANG_MAFIA,
+		gang = GANG_MCLOUIS,
 		access = "",
 		level = 1,
 		group = GROUP_UNDERGROUND,
 	},
 })
 
-TEAM_NATIVECHIEFTAIN = arista.team.add("Mafia Boss", {
+TEAM_NATIVECHIEFTAIN = arista.team.add("Native Chieftain", {
 	color = Color(112, 0, 0, 255),
-	description = "Leader of a large time organised crime mob.",
+	description = "Leader of the local native tribes.",
 
 	salary = 0.5,
 	limit = 1,
@@ -441,9 +441,9 @@ TEAM_NATIVECHIEFTAIN = arista.team.add("Mafia Boss", {
 	},
 })
 
-TEAM_NATIVEWARRIOR = arista.team.add("Mafia Goon", {
+TEAM_NATIVEWARRIOR = arista.team.add("Native Warrior", {
 	color = Color(102, 0, 0, 255),
-	description = "Member of a large time organised crime mob.",
+	description = "A warrior within the local native tribes.",
 
 	salary = 0.4,
 	limit = 6,

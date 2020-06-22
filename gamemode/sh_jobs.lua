@@ -52,8 +52,9 @@ arista.config.defaults.jobCategories = {CATEGORY_VEHICLES, CATEGORY_MISC, CATEGO
 if (GM or GAMEMODE):GetPlugin("officals") then
 GROUP_OFFICIALS	= arista.team.addGroup("Officials", "Join the force for 'Public Good', maintaining law and order.", "P")
 
-GANG_OFFICIALS	= arista.team.addGang(GROUP_OFFICIALS, "The Officials", "models/player/breen.mdl", "Enough red tape to drown a continent.")
-GANG_POLICE			= arista.team.addGang(GROUP_OFFICIALS, "The Police", "models/player/riot.mdl", "Less talk, more action!")
+GANG_OFFICIALS 	= arista.team.addGang(GROUP_OFFICIALS, "The Officials", "models/player/breen.mdl", "Enough red tape to drown a continent.")
+GANG_POLICE 	= arista.team.addGang(GROUP_OFFICIALS, "The Police", "models/player/riot.mdl", "Less talk, more action!")
+GANG_FEDERALS 	= arista.team.addGang(GROUP_OFFICIALS, "The Federals", "models/player/riot.mdl", "Out of state people.")
 
 TEAM_MAYOR = arista.team.add("Mayor", {
 	color = Color(0, 0, 255, 255),
@@ -100,6 +101,34 @@ TEAM_MAYOR = arista.team.add("Mayor", {
 	},
 	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
 }) ]]
+
+TEAM_FEDERALMARSHALL = arista.team.add("Federal Marshall", {
+	color = Color(100, 155, 255, 255),
+	males = "models/player/urban.mdl",
+	description = "An out of state trooper with the ability to obtain high calibre firearms from the weapons locker.",
+
+	commander = true,
+
+	donatorOnly = true,
+
+	salary = 0.8,
+	limit = 3,
+
+	access = "",
+
+	guns = {"arista_baton"},
+	ammo = {
+		pistol = 60,
+	},
+
+	group = {
+		gang = GANG_FEDERALS,
+		access = "D",
+		level = 1,
+		group = GROUP_OFFICIALS,
+	},
+	cantuse = {CATEGORY_ILLEGAL_GOODS, CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES},
+})
 
 TEAM_SHERIFF = arista.team.add("Sheriff", {
 	color = Color(100, 155, 255, 255),

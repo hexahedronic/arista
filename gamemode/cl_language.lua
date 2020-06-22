@@ -87,6 +87,7 @@ arista.lang.tbl.EN = {
 
 	["AL_CANNOT_JOIN_SAME"] = "You are already in that team!",
 	["AL_CANNOT_JOIN_FULL"] = "That team is full.",
+	["AL_CANNOT_JOIN_FULL"] = "You must be a donator to join this team.",
 
 	["AL_CANNOT_GENDER_SAME"] = "You are already %s!",
 

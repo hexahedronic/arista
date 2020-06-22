@@ -13,6 +13,8 @@ arista.command.add("team", "", 1, function(ply, identifier)
 		return false, "AL_CANNOT_JOIN_SAME"
 	elseif team.NumPlayers(teamid) >= teamdata.limit then
 		return false, "AL_CANNOT_JOIN_FULL"
+	elseif teamdata.donatorOnly == true and !ply:isDonator() then
+		return false, "AL_CANNOT_JOIN_DONATOR"
 	elseif gamemode.Call("PlayerCanJoinTeam", ply, teamid) == false then
 		return false
 	end

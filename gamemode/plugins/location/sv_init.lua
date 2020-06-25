@@ -1,4 +1,5 @@
 util.AddNetworkString("LocationData")
+util.AddNetworkString("LocationHook")
 
 local postable = {}
 
@@ -59,6 +60,10 @@ local function LocationGet()
                     p:setAristaVar("Location", v[3])
                     p._Location = v[3];
                     hook.Run( "LocationChange", p, v[3], v[4] or false ) // ply, location string, display now entering
+                    net.Start("LocationHook")
+                        net.WriteString(v[3])
+                        net.WriteBool(v[4] or false)
+                    net.Send(p)
                     break
                 else
                 	p:setAristaVar("Location", "Wilderness")

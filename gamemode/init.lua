@@ -492,6 +492,8 @@ function GM:PlayerDataLoaded(ply, success)
 	ply:networkAristaVar("exhausted", false)
 	ply:networkAristaVar("hideHealthEffects", false)
 
+	ply:networkAristaVar("Location", "Wilderness")
+
 	ply:networkAristaVar("warrant", "")
 	ply:networkAristaVar("nextGender", "")
 

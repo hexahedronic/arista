@@ -502,7 +502,7 @@ function GM:DrawPlayerInformation()
 	text[#text+1] = {arista.lang:Get"AL_HUD_GENDER" .. ply:getGender(), ply:getGender() == "Female" and "icon16/female" or "icon16/male"}
 	text[#text+1] = {arista.lang:Get"AL_HUD_SALARY" .. formatNum(ply:getSalary(), 2), "icon16/folder_go"}
 	text[#text+1] = {arista.lang:Get"AL_HUD_MONEY" .. formatNum(ply:getMoney(), 2), "icon16/star"}
-	text[#text+1] = {arista.lang:Get"AL_HUD_LOCATION" .. "Test" or ply:getAristaString("Location"), "icon16/map"}
+	text[#text+1] = {arista.lang:Get"AL_HUD_LOCATION" .. ply:getAristaString("Location") or "Wilderness", "icon16/map"}
 	text[#text+1] = {arista.lang:Get"AL_HUD_DETAILS" .. ply:getDetails(), "icon16/status_offline"}
 	text[#text+1] = {arista.lang:Get"AL_HUD_CLAN" .. ply:getClan(), "icon16/group"}
 	text[#text+1] = {arista.lang:Get"AL_HUD_JOB" .. ply:getJob(), "icon16/wrench"}

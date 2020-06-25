@@ -18,19 +18,19 @@ arista.command.add("setlocation", "s", 1, function(ply, arguments)
 	table.insert(postable, 3, text)
 	ply:notify("The location: "..text.." has been set.")
 
-	locationdata = util.JSONToTable(file.Read("locationdata.txt"))
+	locationdata = util.JSONToTable(file.Read("locations/" .. game.GetMap() .. ".txt"))
 	OrderVectors(postable[1], postable[2])
 	table.insert(locationdata, postable)
-	file.Write("locationdata.txt", util.TableToJSON(locationdata, true))
+	file.Write("locations/" .. game.GetMap() .. ".txt", util.TableToJSON(locationdata, true))
 	net.Start("LocationData")
-		net.WriteTable(util.JSONToTable(file.Read("locationdata.txt")))
+		net.WriteTable(util.JSONToTable(file.Read("locations/" .. game.GetMap() .. ".txt")))
 	net.Broadcast()
 end, "AL_COMMAND_CAT_SADMIN")
 
 local function deleteLocation()
-	file.Write("locationdata.txt", util.TableToJSON(locationdata, true))
+	file.Write("locations/" .. game.GetMap() .. ".txt", util.TableToJSON(locationdata, true))
 	net.Start("LocationData")
-		net.WriteTable(util.JSONToTable(file.Read("locationdata.txt")))
+		net.WriteTable(util.JSONToTable(file.Read("locations/" .. game.GetMap() .. ".txt")))
 	net.Broadcast()
 
 	postable = {}
@@ -38,7 +38,7 @@ end
 
 arista.command.add("dellocation", "s", 1, function(ply, arguments)
 	local text = table.concat(arguments, " ");
-	locationdata = util.JSONToTable(file.Read("locationdata.txt"))
+	locationdata = util.JSONToTable(file.Read("locations/" .. game.GetMap() .. ".txt"))
 
 	for k, v in pairs(locationdata) do
 		if v[3] == text then
@@ -50,7 +50,7 @@ arista.command.add("dellocation", "s", 1, function(ply, arguments)
 end, "AL_COMMAND_CAT_SADMIN")
 
 local function LocationGet()
-        local locationtable = util.JSONToTable(file.Read("locationdata.txt"));
+        local locationtable = util.JSONToTable(file.Read("locations/" .. game.GetMap() .. ".txt"));
 
         for _, p in ipairs(player.GetAll()) do
             for k, v in pairs(locationtable) do

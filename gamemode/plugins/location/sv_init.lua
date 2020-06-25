@@ -59,7 +59,7 @@ local function LocationGet()
                     p:setAristaVar("Location", v[3])
                     p._Location = v[3];
                     hook.Run( "LocationChange", p, v[3], v[4] or false ) // ply, location string, display now entering
-                    //break
+                    break
                 else
                 	p:setAristaVar("Location", "Wilderness")
                 	p._Location = "Wilderness";

@@ -56,6 +56,7 @@ local function locationDisplay(location)
     local y = ScrH() * 0.1
     surface.SetMaterial(HUDMaterial)
     surface.SetDrawColor( 255, 255, 255 )
+    surface.SetTextColor( 255, 255, 255 )
     surface.DrawTexturedRect(x - 50, y, width + 100, height)
     surface.SetFont("CopperplateNow")
     surface.SetTextPos(xt , y * 1.2)

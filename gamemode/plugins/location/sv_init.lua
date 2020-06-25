@@ -60,9 +60,9 @@ local function LocationGet()
                     p._Location = v[3];
                     hook.Run( "LocationChange", p, v[3], v[4] or false ) // ply, location string, display now entering
                     //break
-                //else
-                //	p:SetNWString("Location", "GPS Signal Lost")
-                //	p._Location = "GPS Signal Lost";
+                else
+                	p:setAristaVar("Location", "Wilderness")
+                	p._Location = "Wilderness";
                 end
             end
         end

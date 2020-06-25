@@ -73,4 +73,4 @@ local function LocationGet()
         end
 end
 
-timer.Create("LocationTimer", 1, 0, LocationGet)
+timer.Create("LocationTimer", 0.5, 0, LocationGet)

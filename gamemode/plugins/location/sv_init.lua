@@ -54,7 +54,7 @@ local function LocationGet()
 
         for _, p in ipairs(player.GetAll()) do
             for k, v in pairs(locationtable) do
-                print(v[3] or "false" .. p:getAristaVar("Location") or "false2")
+                //print(v[3] or "false" .. p:getAristaVar("Location") or "false2")
                 if (p:GetPos():WithinAABox(v[1], v[2])) and v[3] != p:getAristaVar("Location") then
                     p:setAristaVar("Location", v[3])
                     p._Location = v[3];

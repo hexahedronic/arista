@@ -127,7 +127,7 @@ function arista.chatbox.chatText(index, name, text, filter)
 	 or filter == "advert" or filter == "request"
 	 or filter == "radio" or filter == "loudradio"
 	 or filter == "tied" or filter == "action"
-	 or filter == "gaction" then
+	 or filter == "gaction" or filter == "it" then
 		filter = "ic"
 	elseif filter == "ooc" or filter == "looc" or filter == "pm" or filter == "notify" or filter == "achat" or filter == "mchat" then
 		filter = "ooc"
@@ -172,6 +172,8 @@ function arista.chatbox.chatText(index, name, text, filter)
 			arista.chatbox.messageAdd(nil, nil, {name .. ": " .. text, color_cream}, filtered)
 		elseif class == "me" then
 			arista.chatbox.messageAdd(nil, nil, {"*** " .. name .. " " .. text, color_cream}, filtered)
+		elseif class == "it" then
+			arista.chatbox.messageAdd(nil, nil, {"** " .. text, color_cream}, filtered)
 		elseif class == "action" and name == nil then
 			arista.chatbox.messageAdd(nil, nil, {"*** " .. text, color_cream}, filtered)
 		elseif class == "action" then

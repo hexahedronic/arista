@@ -818,6 +818,20 @@ function player:emote(words, other)
 	arista.chatbox.addInRadius(self, "me", words, self:GetPos())
 end
 
+function player:itemote(words, other)
+	local pronoun = self:getPronouns()
+	words = words:gsub("<P>", pronoun)
+
+	if other and IsValid(other) then
+		words = words:gsub("<N>", other:rpName())
+
+		local oPronoun = other:getPronouns()
+		words = words:gsub("<O>", oPronoun)
+	end
+
+	arista.chatbox.addInRadius(self, "it", words, self:GetPos())
+end
+
 function player:setMoney(amount)
 	local amt = math.Clamp(amount, 0, arista.config.vars.maxMoney)
 	self:setAristaVar("money", amt)

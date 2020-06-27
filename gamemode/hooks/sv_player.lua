@@ -585,7 +585,7 @@ function GM:PlayerCanUseCommand(ply, cmd, args)
 	-- Some commands need to be usable when they normally wouldn't be.
 	if (cmd == "sleep" and ply:Alive() and not ply:isArrested() and ply:isSleeping()) --So they can wake up
 	or ((cmd == "dropmoney" or cmd == "givemoney") and ply:Alive() and not ply:isUnconscious()) -- So you can bribe your way out of being arrested/tied up
-	or ((cmd == "me" or cmd == "y" or cmd == "w") and ply:Alive() and not (ply:isUnconscious() and not ply:hasTripped())) -- So you can emote while arrested/tripped
+	or ((cmd == "me" or cmd == "it" or cmd == "y" or cmd == "w") and ply:Alive() and not (ply:isUnconscious() and not ply:hasTripped())) -- So you can emote while arrested/tripped
 	or (cmd == "team" and not (ply:isArrested() or ply:isTied())) -- So you can't change job while arrested or tied, but can while dead or unconsious
 	or table.HasValue(arista.config.vars.persistantCommands, cmd) then -- Or if it's one of the persistant commands
 		return true

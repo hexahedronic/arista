@@ -40,6 +40,16 @@ arista.command.add("me", "", 1, function(ply, arguments)
 	ply:emote(words)
 end, "AL_COMMAND_CAT_MENU")
 
+-- A command to do 'it' style text.
+arista.command.add("it", "", 1, function(ply, arguments)
+	local words = table.concat(arguments, " "):Trim()
+	if not words or words == "" then
+		return false, "AL_INVALID_MESSAGE"
+	end
+
+	ply:itemote(words)
+end, "AL_COMMAND_CAT_MENU")
+
 -- A command to whisper in character.
 arista.command.add("w", "", 1, function(ply, arguments)
 	local words = table.concat(arguments, " "):Trim()

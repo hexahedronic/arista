@@ -1,7 +1,7 @@
 -- phpMyAdmin SQL Dump
 -- version 4.6.0
 -- http://www.phpmyadmin.net
---
+
 -- Host: localhost
 -- Generation Time: Apr 19, 2016 at 08:19 AM
 -- Server version: 5.6.28

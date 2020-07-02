@@ -174,6 +174,8 @@ end
 
 -- Called when a player attempts to pick up an entity with the physics gun.
 function GM:PhysgunPickup(ply, entity)
+
+	if ply:IsSuperAdmin() return true end;
 	if not entity:IsValid() then return false end
 
 	-- Ugly casing, nothing I can do to hack this without overcomplicating everything.

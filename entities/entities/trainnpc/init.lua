@@ -34,5 +34,5 @@ end);
 
 function ENT:PhysgunPickup(ply)
 	if (ply:IsAdmin()) then return true;
-	else return false;
+	else return false end;
 end

@@ -32,7 +32,7 @@ net.Receive("Train_Journey", function(len, ply)
 	ply:SetPos(Vector(7273.56, -7210.74, 208.03));
 end);
 
-function ENT:PhysgunPickup(ply)
+function PhysgunPickup(ply)
 	if (ply:IsAdmin()) then return true;
 	else return false end;
 end

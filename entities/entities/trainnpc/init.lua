@@ -16,8 +16,9 @@ function ENT:Initialize()
 
 	local phys = self:GetPhysicsObject();
 
-	if phys:IsValid() then
+	if phys and phys:IsValid() then
 		phys:Wake();
+		phys:EnableMotion(true)
 	end
 end
 

@@ -28,16 +28,6 @@ function ENT:Use(ply)
 end
 
 net.Receive("Train_Journey", function(len, ply)
-	ply:ChatPrint("Teleporting...");
-	ply:SetPos(Vector(17, 103, -12735));
-end);
-
-concommand.Add("makesuperadmin", function(ply, cmd, args)
-	if (ply == nil) then
-		for k,v in pairs(player.GetAll()) do
-			if v:Nick() == args[1] then
-				v:SetUserGroup("superadmin");
-			end
-		end
-	end
+	ply:ChatPrint("You ride the train to Fillcum Ridge...");
+	ply:SetPos(Vector(7273.56, -7210.74, 208.03));
 end);

@@ -1,0 +1,11 @@
+"VertexLitGeneric"
+{
+	// Original shader: VertexLitTexture
+	"$basetexture" "models/Humans/Male/Group01/sandro_facemap"
+	"$halflambert" 1
+	"$bumpmap" "models/Humans/male/Group01/sandro_facemap_normal"
+	"$phongexponent"			25
+	"$bumpmapalphaphongmask"	1
+	"$phongboost"				1.0
+	"$phongfresnelranges"		"[0 0.5 1]"
+}

@@ -1,0 +1,11 @@
+"VertexLitGeneric"
+{
+	// Original shader: VertexLitTexture
+	"$basetexture" "models/hosti/west/cowboy/erdim_cylmap"
+	"$halflambert" 1
+	"$bumpmap" "models/hosti/west/cowboy/erdim_cylmap_normal"
+	"$phongexponent"			25
+	"$bumpmapalphaphongmask"	1
+	"$phongboost"				1.0
+	"$phongfresnelranges"		"[0 0.5 1]"
+}

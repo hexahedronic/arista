@@ -1,0 +1,11 @@
+"VertexLitGeneric"
+{
+	// Original shader: VertexLitTexture
+	"$basetexture" "models/hosti/west/cowboy/citizen_sheet1"
+	"$halflambert" 0
+	"$bumpmap" "models/hosti/west/cowboy/citizen_sheet_normal"
+	"$phongexponent"			5
+	"$bumpmapalphaphongmask"	1
+	"$phongboost"				1.0
+	"$phongfresnelranges"		"[0 0.5 1]"
+}

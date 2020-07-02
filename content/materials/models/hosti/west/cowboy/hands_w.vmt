@@ -1,0 +1,13 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/hosti/west/cowboy/hands_w"
+                "$bumpmap" "models/hosti/west/cowboy/hands_n"
+	"$halflambert" 1
+	"$nocull" 1
+
+                "$phong" "1"
+	"$phongexponent" "5"
+	"$phongboost" "2"	
+	"$phongfresnelranges"	"[.1 0.2 1]"
+	"$halflambert" "1"
+}

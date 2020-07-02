@@ -176,9 +176,10 @@ end
 function GM:PhysgunPickup(ply, entity)
 
 	if ply:IsAdmin() then 
-		return true;
 		print("PICKING UP!!!");
-	end;
+		return true;
+	end
+
 	if not entity:IsValid() then return false end
 
 	-- Ugly casing, nothing I can do to hack this without overcomplicating everything.

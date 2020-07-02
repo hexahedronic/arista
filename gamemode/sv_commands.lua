@@ -410,6 +410,11 @@ end, "AL_COMMAND_CAT_COMMANDS", true)
 
 concommand.Add("testtrainent", function()
 	local ent = ents.Create("train_npc");
+	if(IsValid(ent)) then
+		print("Success!!!");
+	else
+		print("Failed!!! :(((");
+	end
 	ent:SetPos(player.GetAll()[1]:GetPos());
 	ent:Spawn();
 end);

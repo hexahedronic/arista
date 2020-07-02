@@ -9,7 +9,7 @@ util.AddNetworkString("Train_Journey");
 util.AddNetworkString("Open_Train_Vgui");
 
 function ENT:Initialize()
-	self:SetModel("content/models/hosti/cowboy_01.mdl");
+	self:SetModel("models/hosti/cowboy_02.mdl");
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS);
 	self:SetSolid(SOLID_VPHYSICS);

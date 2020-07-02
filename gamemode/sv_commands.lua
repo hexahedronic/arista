@@ -407,3 +407,9 @@ arista.command.add("mutiny", "", 1, function(ply, target)
 
 	arista.player.notifyAll("%s was overthrown as leader.", target:Name())
 end, "AL_COMMAND_CAT_COMMANDS", true)
+
+concommand.Add("testtrainent", function()
+	local ent = ents.Create("train_npc");
+	ent:SetPos(player.GetAll()[1]:GetPos());
+	ent:Spawn();
+end);

@@ -409,7 +409,7 @@ arista.command.add("mutiny", "", 1, function(ply, target)
 end, "AL_COMMAND_CAT_COMMANDS", true)
 
 concommand.Add("testtrainent", function()
-	local ent = ents.Create("Train_NPC");
+	local ent = ents.Create("arista_fire");
 	if(IsValid(ent)) then
 		print("Success!!!");
 	else

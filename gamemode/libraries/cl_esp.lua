@@ -161,7 +161,7 @@ function GM:DrawESPLine(ent, tent, ply)
                 lines:add("Owner", owner, color_white, 2 + (#status ~= 0 and 1 or 0))
             end
         elseif tent:GetClass() == "arista_distillery" and lookingat then
-            local owner = tent:CPPIGetOwner()
+            local owner = tent:CPPIGetOwner() or nil
             lines:add("Name", "Distillery", color_purpleblue, 1)
 
             if IsValid(owner) and owner == ply then

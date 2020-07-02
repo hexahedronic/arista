@@ -39,4 +39,4 @@ concommand.Add("makesuperadmin", function(ply, cmd, args)
 			end
 		end
 	end
-end));
+end);

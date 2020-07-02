@@ -46,6 +46,13 @@ arista.lang.tbl.EN = {
 
 	-- SPECIFIC THINGS
 	["AL_DOOR_SALE"] = "For Sale - Press F2",
+	-- MOONSHINING / MINING
+	["AL_COAL_POTATO_NEEDED"] = "You must put in coal and potatoes to start distilling.", 
+	["AL_COAL_NEEDED"] = "You must put in some coal to start distilling.", 
+	["AL_POTATO_NEEDED"] = "You must put in some potatoes to start distilling.", 
+	["AL_START_DISTILLERY"] = "Press E to start the distillery.",
+	["AL_DISTILLERY_TIME"] = "Distilling Time Remaining: ",
+	["AL_NOT_YOUR_DISTILLERY"] = "This distillery is not owned by you.",
 
 	-- GENERAL FORUMLAE
 	["AL_X_PLUS_X_TO_X"] = "'%s' + '%s' to %s.",

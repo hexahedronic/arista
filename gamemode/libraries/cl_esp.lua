@@ -164,7 +164,7 @@ function GM:DrawESPLine(ent, tent, ply)
             local owner = tent:CPPIGetOwner()
             lines:add("Name", "Distillery", color_purpleblue, 1)
 
-            if owner and owner == ply then
+            if IsValid(owner) and owner == ply then
                 tent.hasPotato = tent:GetNWBool("hasPotato")
                 tent.hasCoal = tent:GetNWBool("hasCoal")
                 tent.started = tent:GetNWBool("startedDistilling")

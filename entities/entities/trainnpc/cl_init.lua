@@ -1,4 +1,4 @@
-include("shared.lua");
+include("sh_init.lua");
 include("vgui.lua");
 
 function ENT:Draw()

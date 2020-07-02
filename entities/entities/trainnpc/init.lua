@@ -1,8 +1,8 @@
 AddCSLuaFile("cl_init.lua");
-AddCSLuaFile("shared.lua");
+AddCSLuaFile("sh_init.lua");
 AddCSLuaFile("vgui.lua");
 
-include("shared.lua");
+include("sh_init.lua");
 
 
 util.AddNetworkString("Train_Journey");

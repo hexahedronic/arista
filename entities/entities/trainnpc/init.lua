@@ -32,6 +32,6 @@ net.Receive("Train_Journey", function(len, ply)
 	ply:SetPos(Vector(7273.56, -7210.74, 208.03));
 end);
 
-function ENT:PhysgunPickup(ply)
+function ENT.PhysgunPickup(ply)
 	return true;
 end

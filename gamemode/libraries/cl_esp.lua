@@ -162,7 +162,7 @@ function GM:DrawESPLine(ent, tent, ply)
             end
         elseif tent:GetClass() == "arista_distillery" and lookingat then
             local owner = tent:CPPIGetOwner() or nil
-            lines:add("Name", "Distillery", color_purpleblue, 1)
+            lines:add("Name", "Distillery", color_yellow, 1)
 
             if IsValid(owner) and owner == ply then
                 tent.hasPotato = tent:GetNWBool("hasPotato")
@@ -171,23 +171,23 @@ function GM:DrawESPLine(ent, tent, ply)
 
                 if tent.hasPotato and tent.hasCoal and not tent.started then
                     local status = arista.lang:Get"AL_START_DISTILLERY"
-                    lines:add("Status", status, color_yellow, 2)
+                    lines:add("Status", status, color_white, 2)
                 elseif tent.hasPotato and tent.hasCoal and tent.started then
                     local status = arista.lang:Get"AL_DISTILLERY_TIME"
-                    lines:add("Status", status, color_yellow, 2)
+                    lines:add("Status", status, color_white, 2)
                 elseif tent.hasPotato and not tent.hasCoal then
                     local status = arista.lang:Get"AL_COAL_NEEDED"
-                    lines:add("Status", status, color_yellow, 2)
+                    lines:add("Status", status, color_white, 2)
                 elseif not tent.hasPotato and tent.hasCoal then
                     local status = arista.lang:Get"AL_POTATO_NEEDED"
-                    lines:add("Status", status, color_yellow, 2)
+                    lines:add("Status", status, color_white, 2)
                 elseif not tent.hasPotato and not tent.hasCoal then
                     local status = arista.lang:Get"AL_COAL_POTATO_NEEDED"
-                    lines:add("Status", status, color_yellow, 2)
+                    lines:add("Status", status, color_white, 2)
                 end
             else
 			    local status = arista.lang:Get"AL_NOT_YOUR_DISTILLERY"
-                lines:add("Status", status, color_yellow, 2)
+                lines:add("Status", status, color_red, 2)
 			end
         elseif class == "C_BaseEntity" and lookingat then
             --[[elseif ( class == "cider_note" ) then

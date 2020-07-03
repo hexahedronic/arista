@@ -16,9 +16,46 @@ function ENT:Initialize()
     end
 
     -- Initialise the various variables for the distillery
-    timer.Simple(1, function() 
+    timer.Simple(1, function()
         self:SetNWBool("hasCoal", false)
         self:SetNWBool("hasPotato", false)
         self:SetNWBool("startedDistilling", false)
     end)
+end
+
+function ENT:Use(ply)
+    if ply ~= self:CPPIGetOwner() or not IsValid(ply) or not ply:IsPlayer() then return end
+    
+    -- Pickup the entity to put in your inventory
+    if ply:KeyDown(IN_WALK) then
+        if self:GetNWBool("startedDistilling") then
+            ply:notify("Your distillery is currently distilling! Wait until it has finished.")
+        else
+            if arista.inventory.canFit(ply, 1) and self:GetNWBool("hasPotato") then
+                self:SetNWBool("hasPotato", false)
+                arista.inventory.update(ply, "potato", 1, false)
+                ply:notify("Returned potatoes to your inventory.")
+            elseif self:GetNWBool("hasPotato") then
+                ply:notify("There is not enough room to return the potatoes to your inventory!")
+                return
+            end
+
+            if arista.inventory.canFit(ply, 1) and self:GetNWBool("hasCoal") then
+                self:SetNWBool("hasCoal", false)
+                arista.inventory.update(ply, "coal", 1, false)
+                ply:notify("Returned coal to your inventory.")
+            elseif self:GetNWBool("hasCoal") then
+                ply:notify("There is not enough room to return the coal to your inventory!")
+                return
+            end
+            if arista.inventory.canFit(ply, 5) then
+                arista.inventory.update(ply, "distillery", 1, false)
+                self:Remove()
+                ply:notify("Returned your distillery to your inventory.")
+            else
+                ply:notify("There is not enough room to return your distillery to your inventory!")
+                return
+            end
+        end
+    end
 end

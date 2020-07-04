@@ -136,7 +136,7 @@ net.Receive("Open_Train_Vgui", function(len)
 		local body = vgui.Create("DLabel", BGPanel);
 		body:SetFont("TangoBtn");
 		body:Dock(TOP);
-		body:SetText("Take Train to Fillcum Ridge?");
+		body:SetText("Take Train to Greenwood?");
 		body:SizeToContents();
 		body:SetContentAlignment(5);
 

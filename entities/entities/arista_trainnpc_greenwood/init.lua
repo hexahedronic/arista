@@ -30,6 +30,7 @@ end
 net.Receive("Train_Journey", function(len, ply)
 	ply:ChatPrint("You ride the train to Fillcum Ridge...");
 	ply:SetPos(Vector(7273.56, -7210.74, 208.03));
+	ply:giveMoney(-0.25);
 end);
 
 function ENT.PhysgunPickup(ply)

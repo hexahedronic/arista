@@ -28,11 +28,11 @@ function ENT:Use(ply)
 end
 
 net.Receive("Train_Journey", function(len, ply)
-	ply:ChatPrint("You ride the train to Fillcum Ridge...");
-	ply:SetPos(Vector(7273.56, -7210.74, 208.03));
 	print(ply:getMoney());
 	if(ply:getMoney() >= 0.25) then
 		ply:giveMoney(-0.25);
+		ply:ChatPrint("You ride the train to Fillcum Ridge...");
+		ply:SetPos(Vector(7273.56, -7210.74, 208.03));
 	else
 		ply:ChatPrint("You have insufficient funds!")
 	end

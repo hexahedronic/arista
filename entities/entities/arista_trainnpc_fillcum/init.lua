@@ -28,7 +28,7 @@ function ENT:Use(ply)
 end
 
 net.Receive("Train_Journey", function(len, ply)
-	ply:ChatPrint("You ride the train to Fillcum Ridge...");
+	ply:ChatPrint("You ride the train to Greenwood...");
 	ply:SetPos(Vector(-12090.67, -5358.60, 112.05));
 end);
 

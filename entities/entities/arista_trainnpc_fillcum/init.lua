@@ -30,7 +30,11 @@ end
 net.Receive("Train_Journey", function(len, ply)
 	ply:ChatPrint("You ride the train to Greenwood...");
 	ply:SetPos(Vector(-12090.67, -5358.60, 112.05));
-	ply:giveMoney(-0.25);
+	if(ply:GetMoney() >= 0.25) then
+		ply:giveMoney(-0.25);
+	else
+		ply:ChatPrint("You have insufficient funds!")
+	end
 end);
 
 function ENT.PhysgunPickup(ply)

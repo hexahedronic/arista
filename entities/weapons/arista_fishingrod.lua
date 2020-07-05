@@ -34,7 +34,6 @@ SWEP.Primary.Automatic 		= 	false;
 SWEP.ShouldDropOnDie 		=	false;
 
 
-baitEnt = nil;
 catchIterator = 0;
 RPresses = 0;
 
@@ -83,19 +82,20 @@ end
 if SERVER then
 	
 	function SWEP:PrimaryAttack()
-		if(baitEnt) then
-			baitEnt:Remove();
-			baitEnt = nil;
+		if(self.Owner.baitEnt) then
+			self.Owner.baitEnt:Remove();
+			self.Owner.baitEnt = nil;
 		end
-		baitEnt = ents.Create("prop_physics");
-		baitEnt:SetModel("models/hunter/blocks/cube025x025x025.mdl");
-		baitEnt:SetPos(self.Owner:EyePos() + self.Owner:EyeAngles():Forward() * 20 + Vector(0, 0, 100));
+		self.Owner.baitEnt = ents.Create("prop_physics");
+		self.Owner.baitEnt:SetOwner(self.Owner);
+		self.Owner.baitEnt:SetModel("models/hunter/blocks/cube025x025x025.mdl");
+		self.Owner.baitEnt:SetPos(self.Owner:EyePos() + self.Owner:EyeAngles():Forward() * 20 + Vector(0, 0, 100));
 		--baitEnt:SetNoDraw(true);
-		baitEnt:Spawn();
-		baitEnt:AddCallback("PhysicsCollide", BaitCollide);
-		local phys = baitEnt:GetPhysicsObject();
+		self.Owner.baitEnt:Spawn();
+		self.Owner.baitEnt:AddCallback("PhysicsCollide", BaitCollide);
+		local phys = self.Owner.baitEnt:GetPhysicsObject();
 		phys:SetBuoyancyRatio(0.05);
-		constraint.Rope(self.Owner, baitEnt, 0, 0, Vector(0, -1, 75), Vector(0, 0, 0), 600, 10, 0, 0.2, "cable/cable2", false);
+		constraint.Rope(self.Owner, self.Owner.baitEnt, 0, 0, Vector(0, -1, 75), Vector(0, 0, 0), 600, 10, 0, 0.2, "cable/cable2", false);
 		phys:SetVelocity(self.Owner:EyeAngles():Forward() * 1000 + self.Owner:EyeAngles():Up() * 500);
 	end
 
@@ -109,17 +109,17 @@ if SERVER then
 	end
 
 	function SWEP:Think()
-		if(baitEnt) then
-			if(baitEnt:WaterLevel() > 0) then
-				baitEnt:GetPhysicsObject():EnableMotion(false);
+		if(self.Owner.baitEnt) then
+			if(self.Owner.baitEnt:WaterLevel() > 0) then
+				self.Owner.baitEnt:GetPhysicsObject():EnableMotion(false);
 				if(math.random(0, 10000) < 10) then
 					self.Owner:ChatPrint("Caught a fish, spam R to catch!");
 					catchIterator = (1/FrameTime() * 2);
 					self.Owner:EmitSound("ambient/water/water_splash1.wav");
-					util.ScreenShake( self.Owner:GetPos(), 2, 5, 2, 5000 )
+					util.ScreenShake(self.Owner:GetPos(), 2, 5, 2, 5000 )
 				end
 			end
-			if(baitEnt:GetPos():DistToSqr(self.Owner:GetPos()) > 500000) then
+			if(self.Owner.baitEnt:GetPos():DistToSqr(self.Owner:GetPos()) > 500000) then
 				ResetCast(self);
 			end
 		end
@@ -145,9 +145,10 @@ if SERVER then
 	end
 
 	function BaitCollide(data, collider)
-		if(baitEnt) then
-			if(baitEnt:WaterLevel() == 0) then
-				ResetCast(baitEnt:GetOwner());
+		local ent = collider.PhysObject:GetEntity()
+		if(ent) then
+			if(ent:WaterLevel() == 0) then
+				ResetCast(ent);
 			end
 		end
 	end
@@ -156,7 +157,7 @@ if SERVER then
 		if SERVER then
 			constraint.RemoveAll(self);
 		end
-		if baitEnt then baitEnt:Remove(); baitEnt = nil; end
+		if self.Owner.baitEnt then self.Owner.baitEnt:Remove(); self.Owner.baitEnt = nil; end
 		catchIterator = 0;
 	end
 

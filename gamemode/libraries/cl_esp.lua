@@ -168,12 +168,17 @@ function GM:DrawESPLine(ent, tent, ply)
                 tent.hasPotato = tent:GetNWBool("hasPotato")
                 tent.hasCoal = tent:GetNWBool("hasCoal")
                 tent.started = tent:GetNWBool("startedDistilling")
+                tent.finished = tent:GetNWBool("finishedDistilling")
+                tent.finishedTime = tent:GetNWBool("finishedDistillingTime")
 
-                if tent.hasPotato and tent.hasCoal and not tent.started then
+                if tent.finished then
+                    local status = arista.lang:Get"AL_DISTILLERY_FINISHED"
+                    lines:add("Status", status, color_white, 2)
+                elseif tent.hasPotato and tent.hasCoal and not tent.started then
                     local status = arista.lang:Get"AL_START_DISTILLERY"
                     lines:add("Status", status, color_white, 2)
                 elseif tent.hasPotato and tent.hasCoal and tent.started then
-                    local status = arista.lang:Get"AL_DISTILLERY_TIME"
+                    local status = arista.lang:Get"AL_DISTILLERY_TIME" .. math.Round(tent.finishedTime - CurTime(), 0)
                     lines:add("Status", status, color_white, 2)
                 elseif tent.hasPotato and not tent.hasCoal then
                     local status = arista.lang:Get"AL_COAL_NEEDED"

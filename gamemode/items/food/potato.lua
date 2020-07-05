@@ -11,5 +11,15 @@ ITEM.description			= "A potato for brewing moonshine."
 function ITEM:onUse(ply)
 	local trace = ply:GetEyeTrace()
 	local ent = trace.Entity
-
+	if ent:GetClass() != "arista_distillery" then
+		ply:notify("You must look at a distillery to put in potato!")
+		return
+	end
+	if !ent:GetNWBool("hasPotato") then
+		ent:SetNWBool("hasPotato", true)
+		arista.inventory.update(ply, "potato", -1, false)
+		ply:notify("You have put potato into the distillery.")
+	else
+		ply:notify("This distillery already has potato in it!")
+	end
 end

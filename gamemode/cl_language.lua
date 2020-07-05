@@ -53,6 +53,7 @@ arista.lang.tbl.EN = {
 	["AL_START_DISTILLERY"] = "Press E to start the distillery.",
 	["AL_DISTILLERY_TIME"] = "Distilling Time Remaining: ",
 	["AL_NOT_YOUR_DISTILLERY"] = "This distillery is not owned by you.",
+	["AL_DISTILLERY_FINISHED"] = "Distilling Finished. Use a barrel to get the moonshine.",
 
 	-- GENERAL FORUMLAE
 	["AL_X_PLUS_X_TO_X"] = "'%s' + '%s' to %s.",

@@ -1,0 +1,20 @@
+"VertexlitGeneric"
+{
+	"$baseTexture"			"models\hosti\frob\frob"
+	"$bumpmap" 			"models\hosti\frob\frob_n"
+//	"$basemapalphaphongmask"	"1"
+	"$phong"			"1"
+	"$phongexponent"		"1"
+	"$phongboost"			"3"	
+	"$phongfresnelranges"		"[0 .2 1]"
+
+	"$nodecal"			"1"
+
+	"$envmap"			"env_cubemap"
+	"$envmaptint"			"[.01 .01 .02]"
+
+	"$rimlight"			"1"
+	"$rimlightboost"		"4"
+	"$rimlightexponent"		"15"
+
+}

@@ -38,27 +38,6 @@ baitEnt = nil;
 catchIterator = 0;
 RPresses = 0;
 
-function SWEP:PrimaryAttack()
-	if(baitEnt) then
-		baitEnt:Remove();
-		baitEnt = nil;
-	end
-	baitEnt = ents.Create("prop_physics");
-	baitEnt:SetModel("models/hunter/blocks/cube025x025x025.mdl");
-	baitEnt:SetPos(self.Owner:EyePos() + self.Owner:EyeAngles():Forward() * 20 + Vector(0, 0, 100));
-	--baitEnt:SetNoDraw(true);
-	baitEnt:Spawn();
-	baitEnt:AddCallback("PhysicsCollide", BaitCollide);
-	local phys = baitEnt:GetPhysicsObject();
-	phys:SetBuoyancyRatio(0.05);
-	constraint.Rope(self.Owner, baitEnt, 0, 0, Vector(0, -1, 75), Vector(0, 0, 0), 600, 10, 0, 0.2, "cable/cable2", false);
-	phys:SetVelocity(self.Owner:EyeAngles():Forward() * 1000 + self.Owner:EyeAngles():Up() * 500);
-end
-
-function SWEP:SecondaryAttack()
-	ResetCast(self);
-end
-
 if CLIENT then
 	local WorldModel = ClientsideModel(SWEP.WorldModel)
 
@@ -93,65 +72,92 @@ if CLIENT then
 
 		WorldModel:DrawModel()
 	end
+
+	function SWEP:GetViewModelPosition(EyePos, EyeAng)
+		self:SetRenderOrigin(self.Owner:EyePos());
+		return self:LocalToWorld(Vector(11, -10, 12)), EyeAng + Angle(50, 0, 0);
+	end
+
 end
 
+if SERVER then
+	
+	function SWEP:PrimaryAttack()
+		if(baitEnt) then
+			baitEnt:Remove();
+			baitEnt = nil;
+		end
+		baitEnt = ents.Create("prop_physics");
+		baitEnt:SetModel("models/hunter/blocks/cube025x025x025.mdl");
+		baitEnt:SetPos(self.Owner:EyePos() + self.Owner:EyeAngles():Forward() * 20 + Vector(0, 0, 100));
+		--baitEnt:SetNoDraw(true);
+		baitEnt:Spawn();
+		baitEnt:AddCallback("PhysicsCollide", BaitCollide);
+		local phys = baitEnt:GetPhysicsObject();
+		phys:SetBuoyancyRatio(0.05);
+		constraint.Rope(self.Owner, baitEnt, 0, 0, Vector(0, -1, 75), Vector(0, 0, 0), 600, 10, 0, 0.2, "cable/cable2", false);
+		phys:SetVelocity(self.Owner:EyeAngles():Forward() * 1000 + self.Owner:EyeAngles():Up() * 500);
+	end
 
-function SWEP:GetViewModelPosition(EyePos, EyeAng)
-	self:SetRenderOrigin(self.Owner:EyePos());
-	return self:LocalToWorld(Vector(11, -10, 12)), EyeAng + Angle(50, 0, 0);
-end
+	function SWEP:SecondaryAttack()
+		ResetCast(self);
+	end
 
-function SWEP:Holster()
-	ResetCast(self);
-	return true;
-end
+	function SWEP:Holster()
+		ResetCast(self);
+		return true;
+	end
 
-function SWEP:Think()
-
-	if(baitEnt) then
-		if(baitEnt:WaterLevel() > 0) then
-			if(math.random(0, 10000) < 10) then
-				self.Owner:ChatPrint("Caught a fish, spam R to catch!");
-				catchIterator = (1/FrameTime() * 1.2);
-				self.Owner:EmitSound("ambient/water/water_splash1.wav");
-				util.ScreenShake( Vector(0,0,0), 2, 5, 2, 5000 )
+	function SWEP:Think()
+		if(baitEnt) then
+			if(baitEnt:WaterLevel() > 0) then
+				baitEnt:GetPhysicsObject():EnableMotion(false);
+				if(math.random(0, 10000) < 10) then
+					self.Owner:ChatPrint("Caught a fish, spam R to catch!");
+					catchIterator = (1/FrameTime() * 2);
+					self.Owner:EmitSound("ambient/water/water_splash1.wav");
+					util.ScreenShake( Vector(0,0,0), 2, 5, 2, 5000 )
+				end
+			end
+			if(baitEnt:GetPos():DistToSqr(self.Owner:GetPos()) > 500000) then
+				ResetCast(self);
+			end
+		end
+		if(catchIterator > 0) then
+			if(self.Owner:KeyPressed(8192)) then
+				RPresses = RPresses + 1;
+			else
+				catchIterator = catchIterator - 1;
+			end
+		elseif(RPresses > 0) then
+			if(RPresses > 5) then
+				self.Owner:ChatPrint("You caught the fish!");
+				ResetCast(self);
+				catchIterator = 0;
+				RPresses = 0;
+			else
+				self.Owner:ChatPrint("You didn't manage to catch the fish.");
+				ResetCast(self);
+				catchIterator = 0;
+				RPresses = 0;
 			end
 		end
 	end
-	if(catchIterator > 0) then
-		if(self.Owner:KeyPressed(8192)) then
-			RPresses = RPresses + 1;
-		else
-			catchIterator = catchIterator - 1;
-		end
-	elseif(RPresses > 0) then
-		if(RPresses > 5) then
-			self.Owner:ChatPrint("You caught the fish!");
-			ResetCast(self);
-			catchIterator = 0;
-			RPresses = 0;
-		else
-			self.Owner:ChatPrint("You didn't manage to catch the fish.");
-			ResetCast(self);
-			catchIterator = 0;
-			RPresses = 0;
+
+	function BaitCollide(data, collider)
+		if(baitEnt) then
+			if(baitEnt:WaterLevel() == 0) then
+				ResetCast(baitEnt:GetOwner());
+			end
 		end
 	end
 
-end
-
-function BaitCollide(data, collider)
-	if(baitEnt) then
-		if(baitEnt:WaterLevel() == 0) then
-			ResetCast(baitEnt:GetOwner());
+	function ResetCast(self)
+		if SERVER then
+			constraint.RemoveAll(self);
 		end
+		if baitEnt then baitEnt:Remove(); baitEnt = nil; end
+		catchIterator = 0;
 	end
-end
 
-function ResetCast(self)
-	if SERVER then
-		constraint.RemoveAll(self);
-	end
-	if baitEnt then baitEnt:Remove(); baitEnt = nil; end
-	catchIterator = 0;
 end

@@ -90,7 +90,7 @@ if SERVER then
 		end
 		self.Owner.baitEnt = ents.Create("prop_physics");
 		self.Owner.baitEnt:SetOwner(self.Owner);
-		self.Owner.baitEnt:SetModel("models/hosti/frob.mdl");
+		self.Owner.baitEnt:SetModel("models/oldprops/fishing_rod.mdl");
 		self.Owner.baitEnt:SetPos(self.Owner:EyePos() + self.Owner:EyeAngles():Forward() * 20 + Vector(0, 0, 100));
 		--baitEnt:SetNoDraw(true);
 		self.Owner.baitEnt:Spawn();

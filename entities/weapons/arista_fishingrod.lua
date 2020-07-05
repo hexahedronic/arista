@@ -109,6 +109,7 @@ if SERVER then
 		if(self.Owner.baitEnt) then
 			if(self.Owner.baitEnt:WaterLevel() > 0) then
 				self.Owner.baitEnt:GetPhysicsObject():EnableMotion(false);
+				math.randomseed(self.Owner:UserID());
 				if(math.random(0, 10000) < 10) then
 					self.Owner:ChatPrint("Caught a fish, spam R to catch!");
 					catchIterator = (1/FrameTime() * 2);

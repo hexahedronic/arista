@@ -30,7 +30,7 @@ end
 net.Receive("Train_Journey_Fillcum", function(len, ply)
 	if(ply:getMoney() >= 0.25) then
 		ply:giveMoney(-0.25);
-		ply:ChatPrint("You ride the train to Greenwood Ridge...");
+		ply:ChatPrint("You ride the train to Greenwood...");
 		ply:SetPos(Vector(-12125.03, -5315.12, 112.03));
 	else
 		ply:ChatPrint("You have insufficient funds!")

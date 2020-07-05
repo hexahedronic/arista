@@ -52,13 +52,13 @@ surface.CreateFont( "CopperNums", {
 })
 
 function TeleportPlayer()
-	net.Start("Train_Journey");
+	net.Start("Train_Journey_Fillcum");
 	net.SendToServer();
 end
 
 opened = false;
 
-net.Receive("Open_Train_Vgui", function(len)
+net.Receive("Open_Train_Vgui_Fillcum", function(len)
 	if(opened == false) then
 		opened = true;
 		BGPanel = vgui.Create("DPanel");

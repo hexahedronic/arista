@@ -5,8 +5,8 @@ AddCSLuaFile("vgui.lua");
 include("sh_init.lua");
 
 
-util.AddNetworkString("Train_Journey");
-util.AddNetworkString("Open_Train_Vgui");
+util.AddNetworkString("Train_Journey_Fillcum");
+util.AddNetworkString("Open_Train_Vgui_Fillcum");
 
 function ENT:Initialize()
 	self:SetModel("models/hosti/cowboy_01.mdl");

@@ -80,6 +80,7 @@ if SERVER then
 	function SWEP:Initialize()
 		self.Owner.RPresses = 0;
 		self.Owner.catchIterator = 0;
+		print("sdgdsdsgsdgsdgsdgsdgsdgsdgsdgsdg");
 	end
 
 
@@ -126,23 +127,25 @@ if SERVER then
 				ResetCast(self);
 			end
 		end
-		if(self.Owner.catchIterator > 0) then
-			if(self.Owner:KeyPressed(8192)) then
-				self.Owner.RPresses = self.Owner.RPresses + 1;
-			else
-				self.Owner.catchIterator = self.Owner.catchIterator - 1;
-			end
-		elseif(self.Owner.RPresses > 0) then
-			if(self.Owner.RPresses > 5) then
-				self.Owner:ChatPrint("You caught the fish!");
-				ResetCast(self);
-				self.Owner.catchIterator = 0;
-				self.Owner.RPresses = 0;
-			else
-				self.Owner:ChatPrint("You didn't manage to catch the fish.");
-				ResetCast(self);
-				self.Owner.catchIterator = 0;
-				self.Owner.RPresses = 0;
+		if(self.Owner.RPresses and self.Owner.catchIterator) then
+			if(self.Owner.catchIterator > 0) then
+				if(self.Owner:KeyPressed(8192)) then
+					self.Owner.RPresses = self.Owner.RPresses + 1;
+				else
+					self.Owner.catchIterator = self.Owner.catchIterator - 1;
+				end
+			elseif(self.Owner.RPresses > 0) then
+				if(self.Owner.RPresses > 5) then
+					self.Owner:ChatPrint("You caught the fish!");
+					ResetCast(self);
+					self.Owner.catchIterator = 0;
+					self.Owner.RPresses = 0;
+				else
+					self.Owner:ChatPrint("You didn't manage to catch the fish.");
+					ResetCast(self);
+					self.Owner.catchIterator = 0;
+					self.Owner.RPresses = 0;
+				end
 			end
 		end
 	end

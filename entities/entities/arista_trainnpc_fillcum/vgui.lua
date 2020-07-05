@@ -53,7 +53,6 @@ surface.CreateFont( "CopperNums", {
 
 function TeleportPlayer()
 	net.Start("Train_Journey_Fillcum");
-	print("GOT TO HERE!!!!!!!!!!!!");
 	net.SendToServer();
 end
 
@@ -114,6 +113,7 @@ net.Receive("Open_Train_Vgui_Fillcum", function(len)
 
 		okayBtn.DoClick = function()
 			BGPanel:Hide();
+			print("GOT TO HERE!!!!!!!!!!!!");
 			TeleportPlayer();
 			opened = false;
 		end;

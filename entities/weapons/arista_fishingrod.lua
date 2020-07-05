@@ -116,7 +116,7 @@ if SERVER then
 					self.Owner:ChatPrint("Caught a fish, spam R to catch!");
 					catchIterator = (1/FrameTime() * 2);
 					self.Owner:EmitSound("ambient/water/water_splash1.wav");
-					util.ScreenShake( Vector(0,0,0), 2, 5, 2, 5000 )
+					util.ScreenShake( self.Owner.GetPos(), 2, 5, 2, 5000 )
 				end
 			end
 			if(baitEnt:GetPos():DistToSqr(self.Owner:GetPos()) > 500000) then

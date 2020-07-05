@@ -23,11 +23,11 @@ function ENT:Initialize()
 end
 
 function ENT:Use(ply)
-	net.Start("Open_Train_Vgui");
+	net.Start("Open_Train_Vgui_Fillcum");
 	net.Send(ply);
 end
 
-net.Receive("Train_Journey", function(len, ply)
+net.Receive("Train_Journey_Fillcum", function(len, ply)
 	if(ply:getMoney() >= 0.25) then
 		ply:giveMoney(-0.25);
 		ply:ChatPrint("You ride the train to Greenwood Ridge...");

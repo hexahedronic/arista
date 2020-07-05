@@ -53,6 +53,7 @@ surface.CreateFont( "CopperNums", {
 
 function TeleportPlayer()
 	net.Start("Train_Journey_Fillcum");
+	print("GOT TO HERE!!!!!!!!!!!!");
 	net.SendToServer();
 end
 

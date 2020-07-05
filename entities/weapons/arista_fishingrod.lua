@@ -77,7 +77,12 @@ if CLIENT then
 end
 
 if SERVER then
-	
+	function SWEP:Initialize()
+		self.Owner.RPresses = 0;
+		self.Owner.catchIterator = 0;
+	end
+
+
 	function SWEP:PrimaryAttack()
 		if(self.Owner.baitEnt) then
 			self.Owner.baitEnt:Remove();

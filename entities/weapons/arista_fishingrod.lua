@@ -34,9 +34,6 @@ SWEP.Primary.Automatic 		= 	false;
 SWEP.ShouldDropOnDie 		=	false;
 
 
-catchIterator = 0;
-RPresses = 0;
-
 if CLIENT then
 	local WorldModel = ClientsideModel(SWEP.WorldModel)
 
@@ -123,23 +120,23 @@ if SERVER then
 				ResetCast(self);
 			end
 		end
-		if(catchIterator > 0) then
+		if(self.Owner.catchIterator > 0) then
 			if(self.Owner:KeyPressed(8192)) then
-				RPresses = RPresses + 1;
+				self.Owner.RPresses = self.Owner.RPresses + 1;
 			else
-				catchIterator = catchIterator - 1;
+				self.Owner.catchIterator = self.Owner.catchIterator - 1;
 			end
-		elseif(RPresses > 0) then
-			if(RPresses > 5) then
+		elseif(self.Owner.RPresses > 0) then
+			if(self.Owner.RPresses > 5) then
 				self.Owner:ChatPrint("You caught the fish!");
 				ResetCast(self);
-				catchIterator = 0;
-				RPresses = 0;
+				self.Owner.catchIterator = 0;
+				self.Owner.RPresses = 0;
 			else
 				self.Owner:ChatPrint("You didn't manage to catch the fish.");
 				ResetCast(self);
-				catchIterator = 0;
-				RPresses = 0;
+				self.Owner.catchIterator = 0;
+				self.Owner.RPresses = 0;
 			end
 		end
 	end
@@ -158,7 +155,7 @@ if SERVER then
 			constraint.RemoveAll(self);
 		end
 		if self.Owner.baitEnt then self.Owner.baitEnt:Remove(); self.Owner.baitEnt = nil; end
-		catchIterator = 0;
+		self.Owner.catchIterator = 0;
 	end
 
 end

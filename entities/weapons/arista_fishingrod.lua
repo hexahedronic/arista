@@ -1,3 +1,5 @@
+AddCSLuaFile();
+
 SWEP.Author					=	"Chai_Latte";
 SWEP.Base 					=	"weapon_base";
 SWEP.PrintName 				= 	"Fishing Rod";
@@ -92,7 +94,6 @@ if SERVER then
 		self.Owner.baitEnt:SetOwner(self.Owner);
 		self.Owner.baitEnt:SetModel("models/hosti/frob/frob.mdl");
 		self.Owner.baitEnt:SetPos(self.Owner:EyePos() + self.Owner:EyeAngles():Forward() * 20 + Vector(0, 0, 100));
-		--baitEnt:SetNoDraw(true);
 		self.Owner.baitEnt:Spawn();
 		self.Owner.baitEnt:AddCallback("PhysicsCollide", BaitCollide);
 		local phys = self.Owner.baitEnt:GetPhysicsObject();
@@ -114,10 +115,10 @@ if SERVER then
 		if(self.Owner.baitEnt) then
 			if(self.Owner.baitEnt:WaterLevel() > 0) then
 				self.Owner.baitEnt:GetPhysicsObject():EnableMotion(false);
-				math.randomseed(self.Owner:UserID());
 				if(math.random(0, 10000) < 10) then
 					self.Owner:ChatPrint("Caught a fish, spam R to catch!");
-					catchIterator = (1/FrameTime() * 2);
+					self.Owner.catchIterator = (1/FrameTime() * 2);
+					self.Owner.RPresses = 0;
 					self.Owner:EmitSound("ambient/water/water_splash1.wav");
 					util.ScreenShake(self.Owner:GetPos(), 2, 5, 2, 5000 )
 				end

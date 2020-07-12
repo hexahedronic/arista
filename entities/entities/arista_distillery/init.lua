@@ -70,7 +70,7 @@ function ENT:Use(ply)
         self.distillingTime = 20 * 60
         self:SetNWInt("finishedDistillingTime", self.distillingTime)
         local distillingSound = CreateSound(self, Sound("ambient/creatures/leech_water_churn_loop2.wav"))
-        distillingSound:SetSoundLevel(20)
+        distillingSound:SetSoundLevel(50)
         distillingSound:Play()
         timer.Create("SteamEffectDistillery", 4, math.Round(self.distillingTime / 4, 0), function()
             if self then

@@ -2,7 +2,7 @@ ITEM.name					= "Coal"
 ITEM.size					= 1
 ITEM.cost					= 0.10
 ITEM.batch					= 1
-ITEM.store					= false
+ITEM.store					= true
 ITEM.model					= "models/props_phx/games/chess/black_dama.mdl"
 ITEM.plural					= "Coal"
 ITEM.description			= "Coal to burn."
@@ -17,7 +17,6 @@ function ITEM:onUse(ply)
 	end
 	if !ent:GetNWBool("hasCoal") then
 		ent:SetNWBool("hasCoal", true)
-		arista.inventory.update(ply, "coal", -1, false)
 		ply:notify("You have put coal into the distillery.")
 	else
 		ply:notify("This distillery already has coal in it!")

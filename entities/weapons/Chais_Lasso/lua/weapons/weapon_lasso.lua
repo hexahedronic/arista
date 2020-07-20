@@ -1,3 +1,5 @@
+AddCSLuaFile();
+
 SWEP.Author					=	"Chai_Latte";
 SWEP.Base 					=	"weapon_base";
 SWEP.PrintName 				= 	"Lasso";

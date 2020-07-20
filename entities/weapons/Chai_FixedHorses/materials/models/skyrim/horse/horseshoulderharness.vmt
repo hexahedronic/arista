@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/skyrim/horse/horseshoulderharness"
+	"$bumpmap" 	"models/skyrim/horse/horseshoulderharness_n"
+}

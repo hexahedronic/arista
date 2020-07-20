@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$basetexture" "particle/particle_icespray"
+	"$vertexcolor" "1"
+	"$vertexalpha" "1"
+	"$translucent" "1"
+	"$no_fullbright" 1	
+}

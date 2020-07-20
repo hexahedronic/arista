@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/skyrim/horse/saddleshadowmere"
+	"$bumpmap" 	"models/skyrim/horse/saddleimperial_n"
+}

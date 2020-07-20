@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/skyrim/horse/horse03"
+	"$bumpmap" 	"models/skyrim/horse/horse01_n"
+	"$translucent" "1"
+}

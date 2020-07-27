@@ -118,7 +118,7 @@ arista.command.add("dropmoney", "", 1, function(ply, amt)
 	end
 
 	amt = tonumber(amt)
-	if not amt or amt < 1 then
+	if not amt or amt < 0.01 then
 		return false, "AL_INVALID_AMOUNT"
 	end
 
@@ -126,8 +126,8 @@ arista.command.add("dropmoney", "", 1, function(ply, amt)
 
 	if not ply:canAfford(amt) then
 		return false, "AL_YOU_NOT_ENOUGHMONEY"
-	elseif amt < 50 then -- Fucking spammers again.
-		return false, "AL_YOU_NOT_DROPENOUGH", 50
+	elseif amt < 0.1 then -- Fucking spammers again.
+		return false, "AL_YOU_NOT_DROPENOUGH", 0.1
 	end
 
 	ply._nextMoneyDrop = CurTime() + 10

@@ -12,13 +12,13 @@ function ITEM:onUse(ply)
 	local trace = ply:GetEyeTraceNoCursor()
 	local target = trace.Entity
 
-	ply:notify("test")
-
 	if not (target and target:IsValid() and target:GetClass() != "arista_distillery") then
+		ply:notify("a")
 		return false, "AL_INVALID_TARGET"
 	end
 
 	if not (target:GetNWBool("finishedDistilling", false)) then
+		ply:notify("b")
 		return false, "AL_DISTILLERY_NOT_FINISHED"
 	end
 

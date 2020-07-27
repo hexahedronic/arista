@@ -21,13 +21,17 @@ function ITEM:onUse(ply)
 	end
 
 	ply:notify("Please wait whilst the moonshine is extracted.")
-	timer.Simple(5, function()
+	timer.Simple(10, function()
 		if ply:GetEyeTraceNoCursor().Entity == target then
 			arista.inventory.update(ply, "moonshine_barrel", 1, true)
 			ply:notify("The barrel has been filled.")
+			target:SetNWBool("hasCoal", false)
+        	target:SetNWBool("hasPotato", false)
+        	target:SetNWBool("startedDistilling", false)
+			target:SetNWBool("finishedDistilling", false)
 		else
 			ply:notify("You are not looking at the distillery!")
-			arista.inventory.update(ply, "empty_barrel", -1, true)
+			arista.inventory.update(ply, "empty_barrel", 1, true)
 		end
 	end)
 	return true

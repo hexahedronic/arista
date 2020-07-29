@@ -85,3 +85,13 @@ function ENT:Use(ply)
         end)
     end
 end
+
+function ENT:OnTakeDamage( dmginfo )
+	-- Make sure we're not already applying damage a second time
+	-- This prevents infinite loops
+	if ( not self.m_bApplyingDamage ) then
+		self.m_bApplyingDamage = true
+		self:TakeDamageInfo( dmginfo )
+		self.m_bApplyingDamage = false
+	end
+end

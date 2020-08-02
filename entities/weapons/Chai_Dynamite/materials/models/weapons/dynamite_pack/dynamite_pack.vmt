@@ -1,0 +1,5 @@
+VertexLitGeneric
+{
+	$basetexture			"models/weapons/dynamite_pack/dynamite_pack_base"
+	$bumpmap				"models/weapons/dynamite_pack/dynamite_pack_normal"
+}

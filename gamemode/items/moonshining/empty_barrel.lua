@@ -8,13 +8,31 @@ ITEM.plural					= "Empty Barrels"
 ITEM.description			= "A barrel for moonshine."
 
 -- Called when a player drops the item.
-function ITEM:onUse(player)
-	local trace = player:GetEyeTraceNoCursor()
+function ITEM:onUse(ply)
+	local trace = ply:GetEyeTraceNoCursor()
 	local target = trace.Entity
 
-	if not (target and target:IsValid() and target:IsVehicle() and target:getAristaVar("petrol") < 100) then
+	if not (target and target:IsValid() and target:GetClass() == "arista_distillery") then
 		return false, "AL_INVALID_TARGET"
 	end
 
-	target:setAristaVar("petrol", math.min(target:getAristaVar("petrol") + 50, 100))
+	if not (target:GetNWBool("finishedDistilling", false)) then
+		return false, "AL_DISTILLERY_NOT_FINISHED"
+	end
+
+	ply:notify("Please wait whilst the moonshine is extracted.")
+	timer.Simple(10, function()
+		if ply:GetEyeTraceNoCursor().Entity == target then
+			arista.inventory.update(ply, "moonshine_barrel", 1, true)
+			ply:notify("The barrel has been filled.")
+			target:SetNWBool("hasCoal", false)
+        	target:SetNWBool("hasPotato", false)
+        	target:SetNWBool("startedDistilling", false)
+			target:SetNWBool("finishedDistilling", false)
+		else
+			ply:notify("You are not looking at the distillery!")
+			arista.inventory.update(ply, "empty_barrel", 1, true)
+		end
+	end)
+	return true
 end

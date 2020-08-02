@@ -54,6 +54,7 @@ arista.lang.tbl.EN = {
 	["AL_DISTILLERY_TIME"] = "Distilling Time Remaining: ",
 	["AL_NOT_YOUR_DISTILLERY"] = "This distillery is not owned by you.",
 	["AL_DISTILLERY_FINISHED"] = "Distilling Finished. Use a barrel to get the moonshine.",
+	["AL_DISTILLERY_NOT_FINISHED"] = "The distillery has not finished.",
 
 	-- GENERAL FORUMLAE
 	["AL_X_PLUS_X_TO_X"] = "'%s' + '%s' to %s.",
@@ -268,6 +269,7 @@ arista.lang.tbl.EN = {
 	["AL_HUD_CLAN"] = "Clan: ",
 	["AL_HUD_MONEY"] = "Balance: " .. arista.lang.currency,
 	["AL_HUD_SALARY"] = "Salary: " .. arista.lang.currency,
+	["AL_HUD_BONDS"] = "Bonds: ",
 	["AL_HUD_NAME"] = "Name: ",
 	["AL_HUD_LOCATION"] = "Location: ",
 	["AL_HUD_NODESC"] = "No Description",

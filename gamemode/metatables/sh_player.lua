@@ -17,6 +17,11 @@ function player:getMoney()
 	return self:getAristaVar("money") or 0
 end
 
+function player:getBonds()
+	if CLIENT then return self:getAristaInt("bonds") or 0 end
+	return self:getAristaVar("bonds") or 0
+end
+
 ---
 -- Convienence function: Checks if a player has more (or equal) money than the amount specified.
 -- @param amount The amount of money to compare the player's against

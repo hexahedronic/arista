@@ -8,6 +8,7 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
+    self:SetHealth(100)
     local phys = self:GetPhysicsObject()
 
     if phys and phys:IsValid() then

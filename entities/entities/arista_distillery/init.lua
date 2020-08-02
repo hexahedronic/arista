@@ -30,7 +30,6 @@ function ENT:Use(ply)
     if ply:KeyDown(IN_WALK) then
         if self:GetNWBool("startedDistilling") then
             ply:notify("Your distillery is currently distilling! Wait until it has finished.")
-
             return
         else
             if arista.inventory.canFit(ply, 1) and self:GetNWBool("hasPotato") then
@@ -54,7 +53,7 @@ function ENT:Use(ply)
             end
 
             if arista.inventory.canFit(ply, 5) then
-                arista.inventory.update(ply, "distillery", 1, false)
+                arista.inventory.update(ply, "arista_distillery", 1, false)
                 self:Remove()
                 ply:notify("Returned your distillery to your inventory.")
             else
@@ -86,12 +85,16 @@ function ENT:Use(ply)
     end
 end
 
-function ENT:OnTakeDamage( dmginfo )
-	-- Make sure we're not already applying damage a second time
-	-- This prevents infinite loops
-	if ( not self.m_bApplyingDamage ) then
-		self.m_bApplyingDamage = true
-		self:TakeDamageInfo( dmginfo )
-		self.m_bApplyingDamage = false
-	end
+function ENT:OnTakeDamage(dmginfo)
+    self:SetHealth(math.Clamp(self:Health() - dmginfo:GetDamage() * 0.5, 0, 100))
+    if self:Health() <= 0 then -- Destroy entity on 0 HP
+        if self:GetNWBool("startedDistilling", false) then
+            util.BlastDamage( self, ply, self:GetPos(), 300, 500)
+
+            local effectdata = EffectData()
+            effectdata:SetOrigin( self:GetPos() )
+            util.Effect( "Explosion", effectdata, true, true )
+        end
+        self:Remove()
+    end
 end

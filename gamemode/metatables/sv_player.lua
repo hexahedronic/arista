@@ -846,7 +846,7 @@ end
 -- Adds an amount of money to the player's money count and triggers an alert on the client.
 -- @param amount How much money to add (can be negative)
 function player:giveMoney(amount)
-	local amount = tonumber(amount)
+	amount = tonumber(amount)
 
 	if not amount then return end
 
@@ -860,7 +860,7 @@ function player:giveMoney(amount)
 end
 
 function player:giveBonds(amount)
-	local amount = tonumber(amount)
+	amount = tonumber(amount)
 
 	if not amount then return end
 

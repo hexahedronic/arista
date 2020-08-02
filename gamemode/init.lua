@@ -42,6 +42,7 @@ do
 	util.AddNetworkString("arista_buyDoor")
 
 	util.AddNetworkString("arista_moneyAlert")
+	util.AddNetworkString("arista_bondsAlert")
 
 	util.AddNetworkString("arista_teamChange")
 

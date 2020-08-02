@@ -89,7 +89,7 @@ function ENT:OnTakeDamage(dmginfo)
     self:SetHealth(math.Clamp(self:Health() - dmginfo:GetDamage() * 0.5, 0, 100))
     if self:Health() <= 0 then -- Destroy entity on 0 HP
         if self:GetNWBool("startedDistilling", false) then
-            util.BlastDamage( self, ply, self:GetPos(), 300, 500)
+            util.BlastDamage( self, self, self:GetPos(), 300, 500)
 
             local effectdata = EffectData()
             effectdata:SetOrigin( self:GetPos() )

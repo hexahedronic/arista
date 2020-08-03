@@ -442,9 +442,9 @@ WestHUD.barBackgroundTexture = Material("hud/backgroundlong.png", "noclamp smoot
 WestHUD.barHealthTexture = Material("hud/health bar.png", "noclamp smooth")
 WestHUD.barHungerTexture = Material("hud/hunger bar.png", "noclamp smooth")
 WestHUD.barStaminaTexture = Material("hud/stamina bar.png", "noclamp smooth")
-WestHUD.barTexture = Material("hud/button_active.png", "noclamp smooth")
 WestHUD.barShortTexture = Material("hud/backgroundshort.png", "noclamp smooth")
 WestHUD.logoBarTexture = Material("hud/server banner bar top.png", "noclamp smooth")
+WestHUD.dbTexture = Material("hud/donator bonds icon.png", "noclamp smooth")
 
 WestHUD.Colors = {}
 WestHUD.Colors.White = Color(255, 255, 255)
@@ -539,16 +539,16 @@ function WestHUD:DrawHUD()
 
 	local ply = LocalPlayer()
 
-	/////////////////////////////////Server Banner/////////////////////////////////
+	/////////////////////////////////Server Banner///////////////////////////////// 
 
 		surface.SetDrawColor(self.Colors.White)
 		surface.SetMaterial(self.logoBarTexture)
-		surface.DrawTexturedRect(0, -self.topBarHeight*0.28, self.topBarWidth, self.topBarHeight)
+		surface.DrawTexturedRect(0, -self.topBarHeight*0.29, self.topBarWidth, self.topBarHeight)
 
 		surface.SetFont("WestHUD.Bars")
 		surface.SetTextColor(self.Colors.White)
 		local tWidth, tHeight = surface.GetTextSize(self.logo)
-		surface.SetTextPos(self.topBarWidth/2 - tWidth/2, tHeight/2)
+		surface.SetTextPos(self.topBarWidth/2 - tWidth/2, self.topBarHeight/3 - tHeight/2)
 		surface.DrawText(self.logo)
 
 	/////////////////////////////////End Banner/////////////////////////////////
@@ -558,7 +558,7 @@ function WestHUD:DrawHUD()
 
 		surface.SetDrawColor(self.Colors.Black)
 		surface.SetMaterial(self.highlightTexture)
-		surface.DrawTexturedRect(self.headerX, self.headerY, self.barWidth, self.barHeight)
+		surface.DrawTexturedRect(self.headerX, self.headerY, self.barWidth, self.barHeight) 
 
 	/////////////////////////////////End Header/////////////////////////////////
 
@@ -568,34 +568,40 @@ function WestHUD:DrawHUD()
 		surface.SetMaterial(self.barShortTexture)
 
 		local moneyX = self.infoStartX
-		surface.DrawTexturedRect(moneyX, self.infoStartY, self.barShortWidth, self.barShortHeight)
+		surface.DrawTexturedRect(moneyX, self.infoStartY, self.barShortWidth, self.barShortHeight) 
 
 		local money = "$"..formatNum(ply:getMoney(), 2)
 
 		surface.SetFont(self.font)
 		local tWidth, tHeight = surface.GetTextSize(money)
-		surface.SetTextPos(moneyX + self.barShortWidth/2 - tWidth/2, self.infoStartY + tHeight/2)
+		surface.SetTextPos(moneyX + self.barShortWidth/2 - tWidth/2, self.infoStartY + self.barShortHeight/2 - tHeight/2)
 		surface.DrawText(money)
 
 		local specialMoneyX = moneyX + self.barShortWidth + self.barShortGap
 		surface.DrawTexturedRect(specialMoneyX, self.infoStartY, self.barShortWidth, self.barShortHeight)
 
+		surface.SetMaterial(self.dbTexture)
+
+		local dbSize = self.barShortHeight*0.6
+		surface.DrawTexturedRect(specialMoneyX + self.barShortHeight/2, self.infoStartY + self.barShortHeight/2 - dbSize/2, dbSize, dbSize)
+
 		local specialMoney = ply:getBonds()
 
 		surface.SetFont(self.font)
-		local tWidth, tHeight = surface.GetTextSize(money)
-		surface.SetTextPos(specialMoneyX + self.barShortWidth/2 - tWidth/2, self.infoStartY + tHeight/2)
-		surface.DrawText(money)
+		local tWidth, tHeight = surface.GetTextSize(specialMoney)
+		surface.SetTextPos(specialMoneyX + self.barShortWidth/2 - tWidth/2, self.infoStartY + self.barShortHeight/2 - tHeight/2)
+		surface.DrawText(specialMoney)
 
+		surface.SetMaterial(self.barShortTexture)
 		local hoursPlayedX = specialMoneyX + self.barShortWidth + self.barShortGap
 		surface.DrawTexturedRect(hoursPlayedX, self.infoStartY, self.barShortWidth, self.barShortHeight)
 
-		local money = "$"..formatNum(ply:getMoney(), 2)
+		local hoursPlayed = "like 2 IDK"
 
 		surface.SetFont(self.font)
-		local tWidth, tHeight = surface.GetTextSize(money)
-		surface.SetTextPos(hoursPlayedX + self.barShortWidth/2 - tWidth/2, self.infoStartY + tHeight/2)
-		surface.DrawText(money)
+		local tWidth, tHeight = surface.GetTextSize(hoursPlayed)
+		surface.SetTextPos(hoursPlayedX + self.barShortWidth/2 - tWidth/2, self.infoStartY + self.barShortHeight/2 - tHeight/2)
+		surface.DrawText(hoursPlayed)
 	/////////////////////////////////End Money and Hours/////////////////////////////////
 
 

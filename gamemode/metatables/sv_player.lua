@@ -837,11 +837,16 @@ function player:setMoney(amount)
 	self:setAristaVar("money", amt)
 end
 
+function player:setBonds(amount)
+	local amt = math.Clamp(amount, 0, arista.config.vars.maxMoney)
+	self:setAristaVar("bonds", amt)
+end
+
 ---
 -- Adds an amount of money to the player's money count and triggers an alert on the client.
 -- @param amount How much money to add (can be negative)
 function player:giveMoney(amount)
-	local amount = tonumber(amount)
+	amount = tonumber(amount)
 
 	if not amount then return end
 
@@ -849,6 +854,20 @@ function player:giveMoney(amount)
 	self:setMoney(money + amount)
 
 	net.Start("arista_moneyAlert")
+		net.WriteBool(amount >= 0)
+		net.WriteUInt(math.abs(amount), 32) -- Full 32 bit range by sending sign then a uint
+	net.Send(self)
+end
+
+function player:giveBonds(amount)
+	amount = tonumber(amount)
+
+	if not amount then return end
+
+	local money = self:getBonds()
+	self:setBonds(money + amount)
+
+	net.Start("arista_bondsAlert")
 		net.WriteBool(amount >= 0)
 		net.WriteUInt(math.abs(amount), 32) -- Full 32 bit range by sending sign then a uint
 	net.Send(self)

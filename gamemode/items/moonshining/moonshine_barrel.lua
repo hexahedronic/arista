@@ -13,6 +13,3 @@ ITEM.description			= "A barrel of moonshine."
 	local target = trace.Entity
 end
 ]]--
-
-function ITEM:onDrop(ply)
-end

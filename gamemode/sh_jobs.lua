@@ -246,6 +246,7 @@ TEAM_WESTERNER = arista.team.add("Westerner", {
 		group = GROUP_CIVILIANS,
 	},
 	cantuse = {CATEGORY_ILLEGAL_WEAPONS, CATEGORY_EXPLOSIVES, CATEGORY_POLICE_WEAPONS},
+	canmake = {CATEGORY_MOONSHINING}
 })
 
 TEAM_ARMSDEALER = arista.team.add("Arms Dealer", {
@@ -335,7 +336,7 @@ TEAM_DOCTOR = arista.team.add("Doctor", {
 GROUP_UNDERGROUND	= arista.team.addGroup("The Underground", "Join the underground for more fun, but harsher treatment if caught.")
 --[[ GANG_UNDERGROUND	= arista.team.addGang(GROUP_UNDERGROUND, "The Underground", "models/player/Group03/male_07.mdl", "'Fuck the police!'") ]]
 GANG_MCLOUIS = arista.team.addGang(GROUP_UNDERGROUND, "The McLouis Gang", "models/player/Group03/male_07.mdl", "'A band of disgruntled immigrants of the frontier causing havoc within the towns.'")
-GANG_NATIVES = arista.team.addGang(GROUP_UNDERGROUND, "The Native Tribe", "models/player/Group03/male_07.mdl", "'Native Tribe'")
+GANG_CARTEL = arista.team.addGang(GROUP_UNDERGROUND, "The Mexican Cartel", "models/player/Group03/male_07.mdl", "'AAAA'")
 
 --[[ TEAM_BLACKMARKETDEALER = arista.team.add("Blackmarket Dealer", {
 	color = Color(125, 125, 125, 255),
@@ -424,7 +425,7 @@ TEAM_MCLOUISMEMBER = arista.team.add("McLouis Gang Member", {
 	},
 })
 
-TEAM_NATIVECHIEFTAIN = arista.team.add("Native Chieftain", {
+TEAM_NATIVECHIEFTAIN = arista.team.add("Mexican Cartel Leader", {
 	color = Color(112, 0, 0, 255),
 	description = "Leader of the local native tribes.",
 
@@ -434,14 +435,16 @@ TEAM_NATIVECHIEFTAIN = arista.team.add("Native Chieftain", {
 	access = "dgeD",
 
 	group = {
-		gang = GANG_NATIVES,
+		gang = GANG_CARTEL,
 		access = "D",
 		level = 2,
 		group = GROUP_UNDERGROUND,
 	},
+	canmake = {CATEGORY_MOONSHINING}
+
 })
 
-TEAM_NATIVEWARRIOR = arista.team.add("Native Warrior", {
+TEAM_NATIVEWARRIOR = arista.team.add("Mexican Cartel Member", {
 	color = Color(102, 0, 0, 255),
 	description = "A warrior within the local native tribes.",
 
@@ -451,11 +454,12 @@ TEAM_NATIVEWARRIOR = arista.team.add("Native Warrior", {
 	access = "",
 
 	group = {
-		gang = GANG_NATIVES,
+		gang = GANG_CARTEL,
 		access = "",
 		level = 1,
 		group = GROUP_UNDERGROUND,
 	},
+	canmake = {CATEGORY_MOONSHINING}
 })
 
 -- Default job.

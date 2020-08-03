@@ -42,6 +42,7 @@ do
 	util.AddNetworkString("arista_buyDoor")
 
 	util.AddNetworkString("arista_moneyAlert")
+	util.AddNetworkString("arista_bondsAlert")
 
 	util.AddNetworkString("arista_teamChange")
 
@@ -547,6 +548,9 @@ function GM:PlayerDataLoaded(ply, success)
 
 	arista.utils.nextFrame(function()
 		if not ply:IsValid() then return end
+
+		-- Sets the player rank
+		ply:SetUserGroup(ply:getAristaVar("rank"))
 
 		-- Check if the player is arrested.
 		if ply:getAristaVar("arrested") then

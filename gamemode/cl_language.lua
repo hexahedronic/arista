@@ -269,6 +269,7 @@ arista.lang.tbl.EN = {
 	["AL_HUD_CLAN"] = "Clan: ",
 	["AL_HUD_MONEY"] = "Balance: " .. arista.lang.currency,
 	["AL_HUD_SALARY"] = "Salary: " .. arista.lang.currency,
+	["AL_HUD_BONDS"] = "Bonds: ",
 	["AL_HUD_NAME"] = "Name: ",
 	["AL_HUD_LOCATION"] = "Location: ",
 	["AL_HUD_NODESC"] = "No Description",

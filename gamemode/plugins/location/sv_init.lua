@@ -53,7 +53,6 @@ function arista.location.locationGet()
 
     for _, p in ipairs(player.GetAll()) do
         p._OldLocation = p._Location or "Wilderness"
-		print(p._OldLocation .. " test " .. p._Location)
         p._Location = nil
 
         for k, v in pairs(locationtable) do

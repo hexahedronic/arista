@@ -8,6 +8,8 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
+    self:SetHealth(100)
+    self.ignited = false
     local phys = self:GetPhysicsObject()
 
     if phys and phys:IsValid() then
@@ -30,7 +32,6 @@ function ENT:Use(ply)
     if ply:KeyDown(IN_WALK) then
         if self:GetNWBool("startedDistilling") then
             ply:notify("Your distillery is currently distilling! Wait until it has finished.")
-
             return
         else
             if arista.inventory.canFit(ply, 1) and self:GetNWBool("hasPotato") then
@@ -54,7 +55,7 @@ function ENT:Use(ply)
             end
 
             if arista.inventory.canFit(ply, 5) then
-                arista.inventory.update(ply, "distillery", 1, false)
+                arista.inventory.update(ply, "arista_distillery", 1, false)
                 self:Remove()
                 ply:notify("Returned your distillery to your inventory.")
             else
@@ -83,5 +84,20 @@ function ENT:Use(ply)
             self:SetNWBool("startedDistilling", false)
             self:SetNWBool("finishedDistilling", true)
         end)
+    end
+end
+
+function ENT:OnTakeDamage(dmginfo)
+    self:SetHealth(math.Clamp(self:Health() - dmginfo:GetDamage() * 0.5, 0, 100))
+    if self:Health() <= 0 and not self.ignited then -- Destroy entity on 0 HP
+        self.ignited = true
+        if self:GetNWBool("startedDistilling", false) then
+            util.BlastDamage( self, self, self:GetPos(), 300, 500)
+
+            local effectdata = EffectData()
+            effectdata:SetOrigin( self:GetPos() )
+            util.Effect( "Explosion", effectdata, true, true )
+        end
+        self:Remove()
     end
 end
